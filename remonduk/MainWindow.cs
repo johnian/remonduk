@@ -31,9 +31,10 @@ namespace remonduk
             while (IsApplicationIdle()) //keep going while we're still idle. idle event is fired once when the queue is emptied
             {
                 this.CreateGraphics().Clear(System.Drawing.Color.Gray);
-                leader.setV(6.0F, 0);
+                leader.setV(20.0F, 0);
                 leader.update();
                 leader.draw(this.CreateGraphics());
+                sheep.leash(leader);
                 sheep.setV(5.0F, 0);
                 sheep.update();
                 sheep.draw(this.CreateGraphics());

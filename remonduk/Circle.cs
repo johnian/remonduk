@@ -14,6 +14,7 @@ namespace remonduk
         double direction;
 
         bool following;
+        bool leashed;
 
         float min_leash;
         float max_leash;
@@ -41,6 +42,12 @@ namespace remonduk
             max_leash = 3 * r;
 
             turn_radius = DEFAULT_TURN_RADIUS;
+        }
+
+        public void leash(Circle target)
+        {
+            this.target = target;
+            leashed = true;
         }
 
         public void follow(Circle target)
@@ -79,11 +86,28 @@ namespace remonduk
 
         public void move()
         {
+            float delta_y = 0.0F;
+            float delta_x = 0.0F;
+            double dist = 0.0F;
+            if (target != null)
+            {
+                delta_y = target.y - y;
+                delta_x = target.x - x;
+                dist = Math.Sqrt(delta_y * delta_y + delta_x * delta_x);
+            }
+            if (leashed && dist > max_leash)
+            {
+                setV(target.speed, target.direction);
+            }
             if (following)
             {
-                float delta_y = target.y - y;
-                float delta_x = target.x - x;
                 direction = Math.Atan2(delta_y, delta_x);
+                double tau = 2.0 * Math.PI;
+                double diff = (direction % (tau)) - (target.direction % (tau));
+                if (dist < min_leash && (diff > Math.PI) || (diff < -1 * Math.PI))
+                {
+                    speed = 0; // eventually, we'll use momentum
+                }
 
                 //double tau = 2.0 * Math.PI;
                 //double diff = (direction % (tau)) - (target.direction % (tau));
