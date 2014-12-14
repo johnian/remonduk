@@ -10,11 +10,20 @@ namespace remonduk
     class Circle
     {
         float x, y, r;
-        float vx, vy, s;
-        double heading;
+        float vx, vy, speed;
+        double direction;
 
-        Circle target;
+        bool following;
 
+        float min_leash;
+        float max_leash;
+
+        const float DEFAULT_S = 5;
+        const double DEFAULT_TURN_RADIUS = Math.PI / 12.0;
+
+        double turn_radius;
+        
+        Circle target; // following this target
 
         public Circle(float x, float y, float r)
         {
@@ -22,33 +31,76 @@ namespace remonduk
             this.y = y;
             this.r = r;
 
-            s = 5;
+            speed = 0;
             vx = 0;
             vy = 0;
-            heading = Math.PI;
+            direction = 0;
             target = null;
+
+            min_leash = 2 * r;
+            max_leash = 3 * r;
+
+            turn_radius = DEFAULT_TURN_RADIUS;
+        }
+
+        public void follow(Circle target)
+        {
+            following = true;
+            this.target = target;
+        }
+
+        public void setDirection(double direction)
+        {
+            this.direction = direction;
+        }
+
+        public void setV(float speed, double direction)
+        {
+            setDirection(direction);
+            setVx(speed, direction);
+            setVy(speed, direction);
+            this.speed = speed;
+        }
+
+        public void setVx(float speed, double direction)
+        {
+            vx = speed * (float)Math.Cos(direction);
+        }
+
+        public void setVy(float speed, double direction)
+        {
+            vy = speed * (float)Math.Sin(direction);
         }
 
         public void update()
         {
-            if(target != null)
+            move();
+        }
+
+        public void move()
+        {
+            if (following)
             {
-                double diff = (heading % (2.0 * Math.PI)) - (target.heading % (2.0 * Math.PI));
-                if (diff > Math.PI / 12.0)
-                {
-                    heading -= Math.PI / 12.0;
-                }
-                else if (diff < Math.PI / 12.0)
-                {
-                    heading += Math.PI / 12.0;
-                }
-                else
-                {
-                    heading = target.heading;
-                }
+                float delta_y = target.y - y;
+                float delta_x = target.x - x;
+                direction = Math.Atan2(delta_y, delta_x);
+
+                //double tau = 2.0 * Math.PI;
+                //double diff = (direction % (tau)) - (target.direction % (tau));
+                //if (diff > turn_radius)
+                //{
+                //    direction -= turn_radius;
+                //}
+                //else if (diff < turn_radius)
+                //{
+                //    direction += turn_radius;
+                //}
+                //else
+                //{
+                //    direction = target.direction;
+                //}
             }
-            vx = (float)Math.Cos(heading) * s;
-            vy = (float)Math.Sin(heading) * s;
+            setV(speed, direction);
             x += vx;
             y += vy;
         }

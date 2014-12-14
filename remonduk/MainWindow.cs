@@ -13,11 +13,16 @@ namespace remonduk
 {
     public partial class MainWindow : Form
     {
+        Circle leader;
+        Circle sheep;
+
         public MainWindow()
         {
             InitializeComponent();
             Application.Idle += HandleApplicationIdle;  //adds the HandleApplicationIdle method to the Application.Idle event
-
+            leader = new Circle(200.0F, 150.0F, 10.0F);
+            sheep = new Circle(100.0F, 500.0F, 10.0F);
+            sheep.follow(leader);
         }
 
         //this method is added to the Idle event in the constructor
@@ -25,7 +30,14 @@ namespace remonduk
         {
             while (IsApplicationIdle()) //keep going while we're still idle. idle event is fired once when the queue is emptied
             {
-
+                this.CreateGraphics().Clear(System.Drawing.Color.Gray);
+                leader.setV(6.0F, 0);
+                leader.update();
+                leader.draw(this.CreateGraphics());
+                sheep.setV(5.0F, 0);
+                sheep.update();
+                sheep.draw(this.CreateGraphics());
+                System.Threading.Thread.Sleep(50);
             }
         }
 

@@ -1,48 +1,61 @@
-2D
-	stage 1:
-		circles
-			group circles
-				following "leader"
-				moving synchronously
+implementation / gui cycle
+
+2D {
+	1 {
+		circles {
+			group circles {
+				follow "leader"
+				move synchronously
+			}
 			fuse circles
-		physics
-			motion
+		}
+		physics {
+			motion {
 				position
 				velocity
-				acceleration (gravity / friction)
+				acceleration {
+					gravity
+					friction
+				}
+			}
 			collision detection
+		}
 		basic i/o
+	}
 
-	stage 2:
+	2 {
 		development gui
 		data
-		state manager
-			windows / menus	
+		state manager {
+			windows
+			menus
+		}
+	}
 		
-	// stage 3:
-	// 	physics
-	// 		mass
-	// 		density
-	// 		momentum / inertia
-	// 		elasticity
-	// 	color
-	// 	stroke width
-	// 	intermediate i/o
-	// 	
-	// stage 4:
-	// 	development gui
-	// 
-	// stage 5:
-	// 	prettification
-	// 	
-	// stage :
-	// 	advanced i/o
-	// 		hotkey rebinding
-	// 		"self" selection
-	// 
-	// 
-	// stage :
-
+	3 {
+		physics {
+			mass
+			density
+			momentum
+			inertia
+			elasticity
+		}
+		color
+		stroke width
+		intermediate i/o
+	}
+		
+	4:
+		development gui
+	
+	5:
+		prettification
+		
+	:
+		advanced i/o
+			hotkey rebinding
+			"self" selection
+}
 
 
 content management
@@ -115,3 +128,7 @@ game engine {
 		online multiplayer
 		add ons / downloads
 }
+
+
+moveRoute class to store following information
+	and handle following movement
