@@ -7,12 +7,6 @@
 *.userosscache
 *.sln.docstates
 
-*.v12.suo
-*/bin/Debug/*.exe
-*/bin/Debug/*.pdb
-*/obj/Debug/*.pdb
-*/obj/Debug/*.exe
-
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
