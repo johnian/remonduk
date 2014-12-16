@@ -8,9 +8,9 @@ using System.Diagnostics;
 
 namespace remonduk
 {
-    class Circle
+    public class Circle
     {
-        const float GRAVITY_CONSTANT = 9.8F; // should maybe move to global location?
+        public const float GRAVITY_CONSTANT = 9.8F; // should maybe move to global location?
 
         const float DEFAULT_VELOCITY = 0;
         const float DEFAULT_VELOCITY_ANGLE = 0F;
@@ -20,10 +20,10 @@ namespace remonduk
         const double DEFAULT_TURN_RADIUS = Math.PI / 12.0;
         const double DEFAULT_MASS = 1.0;
 
-        public float r, x, y;
-        float velocity, vx, vy;
-        float acceleration, ax, ay;
-        double velocity_angle, acceleration_angle;
+        public float x, y, r;
+        public float velocity, vx, vy;
+        public float acceleration, ax, ay;
+        public double velocity_angle, acceleration_angle;
 
         double mass;
 
