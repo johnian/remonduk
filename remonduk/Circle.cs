@@ -10,10 +10,21 @@ namespace remonduk
 {
     class Circle
     {
-        public float x, y, r;
-        float ax, ay, vx, vy, speed;
-        float magnitude; // CHANGE ME
-        double direction_velocity, direction_acceleration;
+        const float GRAVITY_CONSTANT = 9.8F; // should maybe move to global location?
+
+        const float DEFAULT_VELOCITY = 0;
+        const float DEFAULT_VELOCITY_ANGLE = 0F;
+        const float DEFAULT_ACCELERATION = 0;
+        const float DEFAULT_ACCELERATION_ANGLE = 0F;
+
+        const double DEFAULT_TURN_RADIUS = Math.PI / 12.0;
+        const double DEFAULT_MASS = 1.0;
+
+        public float r, x, y;
+        float velocity, vx, vy;
+        float acceleration, ax, ay;
+        double velocity_angle, acceleration_angle;
+
         double mass;
 
         bool following;
@@ -22,38 +33,35 @@ namespace remonduk
         float min_leash;
         float max_leash;
 
-        const float DEFAULT_SPEED = 0;
-        const double DEFAULT_TURN_RADIUS = Math.PI / 12.0;
-        const float GRAVITY_CONSTANT = 9.8F;
-        const double DEFAULT_MASS = 1.0;
-
         double turn_radius;
 
         Circle target; // following this target
 
-        public Circle(float x, float y, float r)
+        public Circle(float x, float y, float r) : this(x, y, r,
+            DEFAULT_VELOCITY, DEFAULT_VELOCITY_ANGLE) { }
+
+        public Circle(float x, float y, float r, float velocity, double velocity_angle) : this(x, y, r, velocity, velocity_angle,
+            DEFAULT_ACCELERATION, DEFAULT_ACCELERATION_ANGLE) { }
+
+        public Circle(float x, float y, float r, float velocity, double velocity_angle, float acceleration, double acceleration_angle)
         {
             this.x = x;
             this.y = y;
             this.r = r;
-            this.mass = DEFAULT_MASS;
-            speed = DEFAULT_SPEED;
-            magnitude = 0;
-            vx = 0;
-            vy = 0;
-            direction_velocity = 0;
-            direction_acceleration = 0;
+
+            setV(velocity, velocity_angle);
+            setA(acceleration, acceleration_angle);
+
+            mass = DEFAULT_MASS;
+
             target = null;
+            leashed = false;
+            following = false;
 
             min_leash = 2 * r;
             max_leash = 3 * r;
 
             turn_radius = DEFAULT_TURN_RADIUS;
-        }
-
-        public Circle(float x, float y, float r, float speed)  : this(x, y, r)
-        {
-            this.speed = speed;
         }
 
         public void leash(Circle target)
@@ -68,96 +76,101 @@ namespace remonduk
             this.target = target;
         }
 
-
-        public void setA(float magnitude, double direction_acceleration)
+        public void setA(float acceleration, double acceleration_angle)
         {
-            this.magnitude = magnitude;
-            this.direction_acceleration = direction_acceleration;
-            ax = magnitude * (float)Math.Cos(direction_acceleration);
-            ay = -1 * magnitude * (float)Math.Sin(direction_acceleration) + GRAVITY_CONSTANT;
+            this.acceleration = acceleration;
+            this.acceleration_angle = acceleration_angle;
+            ax = acceleration * (float)Math.Cos(acceleration_angle);
+            ay = -1 * acceleration * (float)Math.Sin(acceleration_angle) + GRAVITY_CONSTANT;
+            Debug.WriteLine("" + ax + ", " + ay);
         }
 
-        public void setV(float speed, double direction_velocity)
+        public void setV(float velocity, double velocity_angle)
         {
-            this.speed = speed + magnitude;
-            this.direction_velocity = direction_velocity;
-            vx = speed * (float)Math.Cos(direction_velocity) + ax;
-            vy = speed * (float)Math.Sin(direction_velocity) + ay;
+            this.velocity = velocity + acceleration;
+            this.velocity_angle = velocity_angle;
+            vx = velocity * (float)Math.Cos(velocity_angle) + ax;
+            vy = velocity * (float)Math.Sin(velocity_angle) + ay;
         }
 
-        public void update(List<Circle> circles) //revisit List for refactorization!!!!! rar i like my keyboard this
-            //is fun kbye
+        public void updatePosition()
         {
-            move(circles);
+            setA(acceleration, acceleration_angle);
+            setV(velocity, velocity_angle);
+            x += vx;
+            y += vy;
         }
 
         public Circle collide(Circle other)
         {
             //WE NEED TO REMEMBER VELOCITY EXISTS
-            float distx = x - other.x;
-            float disty = y - other.y;
-            double dist = Math.Sqrt(disty*disty + distx * distx);
-
             if (other.GetHashCode() == this.GetHashCode())
             {
                 return null;
             }
-
+            double dist = distance(other);
             if(dist <= r+other.r)
             {
                 return other;
             }
-
             return null;
         }
 
-
         public void move(List<Circle> circles)
         {
-            float delta_y = 0.0F;
             float delta_x = 0.0F;
+            float delta_y = 0.0F;
             double dist = 0.0F;
             if (target != null)
             {
-                delta_y = target.y - y;
                 delta_x = target.x - x;
-                dist = Math.Sqrt(delta_y * delta_y + delta_x * delta_x);
+                delta_y = target.y - y;
+                dist = distance(target);
             }
-            if (leashed && dist > max_leash && target.speed > speed)
+            if (leashed && dist > max_leash && target.velocity > velocity)
             {
-                setV(target.speed, target.direction_velocity);
+                setV(target.velocity, target.velocity_angle);
             }
             if (following)
             {
-                direction_velocity = Math.Atan2(delta_y, delta_x);
+                velocity_angle = Math.Atan2(delta_y, delta_x);
                 double tau = 2.0 * Math.PI;
-                double diff = (direction_velocity % (tau)) - (target.direction_velocity % (tau));
+                double diff = (velocity_angle % (tau)) - (target.velocity_angle % (tau));
                 //if (dist < min_leash && ((diff > Math.PI) || (diff < -1 * Math.PI)))
                 //{
                 //    return;
                 //}
             }
 
-            setA(magnitude, direction_acceleration);
-            setV(speed, direction_velocity);
-            x += vx;
-            y += vy;
-            //speed = temp_speed;
+            updatePosition();
+            //velocity = temp_speed;
             foreach(Circle c in circles)
             {
                 if (collide(c) != null)
                 {
-                    double kinetic = mass * speed * speed/2;
-                    Debug.WriteLine(kinetic);
+                    double kinetic = mass * velocity * velocity / 2;
+                    //Debug.WriteLine(kinetic);
                 }
             }
+        }
 
+        public void update(List<Circle> circles) //revisit List for refactorization!!!!! rar i like my keyboard this
+        //is fun kbye
+        {
+            move(circles);
         }
 
         public void draw(Graphics g)
         {
             Brush brush = new SolidBrush(Color.Chartreuse);
             g.FillEllipse(brush, x, y, r, r);
+        }
+
+        private double distance(Circle other)
+        {
+            float distx = other.x - x;
+            float disty = other.y - y;
+            return Math.Sqrt(distx * distx + disty * disty);
         }
     }
 }
