@@ -5,14 +5,14 @@ implementation / gui / refactor & optimize / testing
 Flewis
 Floid
 
-[basic graphics and i/o] (#1)
-[basic physics] (#2)
-[intermediate graphics and i/o] (#3)
-[intermediate physics] (#4)
-[advanced graphics and i/o] (#5)
-[advanced physics] (#6)
-[networking] (#7)
-[sound] (#8)
+[basic graphics and i/o] (#1)  
+[basic physics] (#2)  
+[intermediate graphics and i/o] (#3)  
+[intermediate physics] (#4)  
+[advanced graphics and i/o] (#5)  
+[advanced physics] (#6)  
+[networking] (#7)  
+[sound] (#8)  
 
 should not be hyper realistic
 
