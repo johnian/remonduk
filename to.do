@@ -1,24 +1,64 @@
-implementation / gui cycle
+implementation / gui cycle / refactor & optimize
+
+# FLUID
+=======
+Flewis
+Floid
+
+should not be hyper realistic
+
+rolling versus sliding -- tell the engine which way to render it
+gravity
+normal force versus surface tension
+
+rotation should be purely graphical?
+	doesn't affect any drawing calculations
+		only roll when object is a single circle
+		
+gravitational point -- can be a specific point
+	can be the boundaries -- should not inherently be a built in feature because
+	it assumes the world will be drawn a certain way
+	
+	-- gravity calculator can be given a new function so you can make custom gravity
+	-- decreases as cubic, decreases as linear, increases with distance
+	
+	attracting (gravity)
+	repelling
+	
+	orbital platformer
+	
+	line of sight
+	flag for whether the stage wraps around or has hard boundaries
 
 2D {
 	1 {
-		circles {
+-		circles {
 			group circles {
-				follow "leader"
+				// linked list - set a short leash for synchronous motion
+-				chasing "leader"
+-				tail "leader"
 				move synchronously
 			}
-			fuse circles
+			fuse circles {
+				add masses together
+					percentage parameter to determine how much mass is absorbed
+			}
 		}
 		physics {
 			motion {
 				position
 				velocity
 				acceleration {
-					gravity
+					gravity {
+						how to handle gravity - like to handle in the most organic way possible
+					}
 					friction
 				}
 			}
-			collision detection
+			collision detection {
+				normal force
+				surface tension
+			}
 		}
 		basic i/o
 	}
@@ -70,10 +110,6 @@ animating sprites
 lighting
 shadows
 particle effects
-
-
-**Fluid
-**Flircle
 
 game engine {
 	graphics {
