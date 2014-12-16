@@ -132,10 +132,10 @@ namespace remonduk
                 direction_velocity = Math.Atan2(delta_y, delta_x);
                 double tau = 2.0 * Math.PI;
                 double diff = (direction_velocity % (tau)) - (target.direction_velocity % (tau));
-                if (dist < min_leash && ((diff > Math.PI) || (diff < -1 * Math.PI)))
-                {
-                    return;
-                }
+                //if (dist < min_leash && ((diff > Math.PI) || (diff < -1 * Math.PI)))
+                //{
+                //    return;
+                //}
             }
 
             setA(magnitude, direction_acceleration);
