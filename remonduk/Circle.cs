@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,7 +24,7 @@ namespace remonduk
 
         const float DEFAULT_SPEED = 0;
         const double DEFAULT_TURN_RADIUS = Math.PI / 12.0;
-        const double GRAVITY_CONSTANT = 9.8;
+        const float GRAVITY_CONSTANT = 9.8F;
         const double DEFAULT_MASS = 1.0;
 
         double turn_radius;
@@ -71,34 +71,18 @@ namespace remonduk
 
         public void setA(float magnitude, double direction_acceleration)
         {
-            this.direction_acceleration = direction_acceleration;
             this.magnitude = magnitude;
-            ax = (float)Math.Cos(direction_acceleration) * magnitude;
-            ay = (float)(-1 * Math.Sin(direction_acceleration) * magnitude + GRAVITY_CONSTANT);
-        }
-
-
-        public void setdirection_velocity(double direction_velocity)
-        {
-            this.direction_velocity = direction_velocity;
+            this.direction_acceleration = direction_acceleration;
+            ax = magnitude * (float)Math.Cos(direction_acceleration);
+            ay = -1 * magnitude * (float)Math.Sin(direction_acceleration) + GRAVITY_CONSTANT;
         }
 
         public void setV(float speed, double direction_velocity)
         {
-            setdirection_velocity(direction_velocity);
-            setVx(speed, direction_velocity);
-            setVy(speed, direction_velocity);
-            this.speed = speed;
-        }
-
-        public void setVx(float speed, double direction_velocity)
-        {
-            vx = speed * (float)Math.Cos(direction_velocity);
-        }
-
-        public void setVy(float speed, double direction_velocity)
-        {
-            vy = speed * (float)Math.Sin(direction_velocity);
+            this.speed = speed + magnitude;
+            this.direction_velocity = direction_velocity;
+            vx = speed * (float)Math.Cos(direction_velocity) + ax;
+            vy = speed * (float)Math.Sin(direction_velocity) + ay;
         }
 
         public void update(List<Circle> circles) //revisit List for refactorization!!!!! rar i like my keyboard this
@@ -133,7 +117,6 @@ namespace remonduk
             float delta_y = 0.0F;
             float delta_x = 0.0F;
             double dist = 0.0F;
-            float temp_speed = speed;
             if (target != null)
             {
                 delta_y = target.y - y;
@@ -151,34 +134,15 @@ namespace remonduk
                 double diff = (direction_velocity % (tau)) - (target.direction_velocity % (tau));
                 if (dist < min_leash && ((diff > Math.PI) || (diff < -1 * Math.PI)))
                 {
-
-                    temp_speed = speed; // eventually, we'll use momentum
-                    speed = 0; //and make this less fucky
+                    return;
                 }
-
-                //double tau = 2.0 * Math.PI;
-                //double diff = (direction_velocity % (tau)) - (target.direction_velocity % (tau));
-                //if (diff > turn_radius)
-                //{
-                //    direction_velocity -= turn_radius;
-                //}
-                //else if (diff < turn_radius)
-                //{
-                //    direction_velocity += turn_radius;
-                //}
-                //else
-                //{
-                //    direction_velocity = target.direction_velocity;
-                //}
             }
 
-            setV(speed, direction_velocity);
             setA(magnitude, direction_acceleration);
-            vx += ax;
-            vy += ay;
+            setV(speed, direction_velocity);
             x += vx;
             y += vy;
-            speed = temp_speed;
+            //speed = temp_speed;
             foreach(Circle c in circles)
             {
                 if (collide(c) != null)

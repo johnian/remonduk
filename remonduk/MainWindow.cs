@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -27,11 +27,17 @@ namespace remonduk
             Point pos = Control.MousePosition;
             pos = this.PointToClient(pos);
             mouse = new Circle(pos.X-5, pos.Y-5, 10.0F);
+
             circles.Add(leader);
             circles.Add(sheep);
+            circles.Add(mouse);
+
+            leader.follow(sheep);
+
             sheep.leash(mouse);
             sheep.follow(mouse);
-            sheep.setA(.5F, 0);
+
+            sheep.setA(.05F, Math.PI / 2.0);
         }
 
         //this method is added to the Idle event in the constructor
@@ -46,10 +52,13 @@ namespace remonduk
                 mouse.x = pos.X - 5;
                 mouse.y = pos.Y - 5;
                 mouse.draw(this.CreateGraphics());
+
                 leader.update(circles);
                 leader.draw(this.CreateGraphics());
-                leader.follow(sheep);
+
                 sheep.update(circles);
+                sheep.draw(this.CreateGraphics());
+
                 System.Threading.Thread.Sleep(50);
             }
         }
