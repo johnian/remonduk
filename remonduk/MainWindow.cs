@@ -22,22 +22,21 @@ namespace remonduk
         {
             InitializeComponent();
             Application.Idle += HandleApplicationIdle;  //adds the HandleApplicationIdle method to the Application.Idle event
-            leader = new Circle(200.0F, 150.0F, 10.0F,12.0F);
-            sheep = new Circle(100.0F, 500.0F, 10.0F, 10.0F);
+
             Point pos = Control.MousePosition;
             pos = this.PointToClient(pos);
-            mouse = new Circle(pos.X-5, pos.Y-5, 10.0F);
+            mouse = new Circle(pos.X - 5, pos.Y - 5, 10.0F);
+            leader = new Circle(200.0F, 150.0F, 10.0F, 12.0F, 0F, .1F, Math.PI / 2.0);
+            sheep = new Circle(100.0F, 500.0F, 10.0F, 10.0F, 0F, .01F, Math.PI / 2.0);
 
+            circles.Add(mouse);
             circles.Add(leader);
             circles.Add(sheep);
-            circles.Add(mouse);
 
-            leader.follow(sheep);
+            leader.follow(mouse);
 
-            sheep.leash(mouse);
-            sheep.follow(mouse);
-
-            sheep.setA(.05F, Math.PI / 2.0);
+            //sheep.leash(mouse);
+            sheep.follow(leader);
         }
 
         //this method is added to the Idle event in the constructor
