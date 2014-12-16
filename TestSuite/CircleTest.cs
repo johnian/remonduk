@@ -7,24 +7,61 @@ namespace TestSuite
 	[TestClass]
 	public class CircleTest
 	{
+		int PRECISION = 6;
 		[TestMethod]
 		public void ConstructorTest()
 		{
 			Circle circle = new Circle(2, 3, 5);
 
-			Assert.AreEqual(circle.x, 2);
-			Assert.AreEqual(circle.y, 3);
-			Assert.AreEqual(circle.r, 5);
+			Assert.AreEqual(2, circle.x);
+			Assert.AreEqual(3, circle.y);
+			Assert.AreEqual(5, circle.r);
 
-			Assert.AreEqual(circle.velocity, 0);
-			Assert.AreEqual(circle.vx, 0);
-			Assert.AreEqual(circle.vy, 0);
-			Assert.AreEqual(circle.velocity_angle, 0);
+			Assert.AreEqual(0, circle.velocity);
+			Assert.AreEqual(0, circle.velocity_angle);
+			Assert.AreEqual(0, circle.vx);
+			Assert.AreEqual(0, circle.vy);
 
-			Assert.AreEqual(circle.acceleration, 0);
-			Assert.AreEqual(circle.ax, 0);
-			Assert.AreEqual(circle.ay, Circle.GRAVITY_CONSTANT);
-			Assert.AreEqual(circle.acceleration_angle, 0);
+			Assert.AreEqual(0, circle.acceleration);
+			Assert.AreEqual(0, circle.acceleration_angle);
+			Assert.AreEqual(0, circle.ax);
+			Assert.AreEqual(Circle.GRAVITY_CONSTANT, circle.ay);
+
+			circle = new Circle(2, 3, 5, 8, Math.PI / 4);
+
+			Assert.AreEqual(8, circle.velocity);
+			Assert.AreEqual(Math.PI / 4, circle.velocity_angle);
+			AreClose(4 * Math.Sqrt(2), circle.vx);
+			AreClose(4 * Math.Sqrt(2), circle.vy);
+
+			Assert.AreEqual(0, circle.acceleration);
+			Assert.AreEqual(0, circle.acceleration_angle);
+			Assert.AreEqual(0, circle.ax);
+			Assert.AreEqual(Circle.GRAVITY_CONSTANT, circle.ay);
+
+			circle = new Circle(2, 3, 5, 8, Math.PI / 4, 13, -1 * Math.PI / 4);
+
+			Assert.AreEqual(2, circle.x);
+			Assert.AreEqual(3, circle.y);
+			Assert.AreEqual(5, circle.r);
+
+			Assert.AreEqual(8, circle.velocity);
+			Assert.AreEqual(circle.velocity_angle, Math.PI / 4);
+			AreClose(4 * Math.Sqrt(2), circle.vx);
+			AreClose(4 * Math.Sqrt(2), circle.vy);
+
+			Assert.AreEqual(13, circle.acceleration);
+			Assert.AreEqual(-1 * Math.PI / 4, circle.acceleration_angle);
+			AreClose(6.5 * Math.Sqrt(2), circle.ax);
+			AreClose(-1 * 6.5 * Math.Sqrt(2) + Circle.GRAVITY_CONSTANT, circle.ay);
+		}
+
+		private void AreClose(double expected, double actual) {
+			Assert.AreEqual(round(expected), round(actual));
+		}
+
+		private double round(double value) {
+			return Math.Round(value, PRECISION);
 		}
 	}
 }
