@@ -15,8 +15,8 @@ namespace remonduk
 
 		public const float VELOCITY = 0;
 		public const float VELOCITY_ANGLE = 0F;
-		public const float ACCELERATION = 0;
-		public const float ACCELERATION_ANGLE = 0F;
+		public const float ACCELERATION = Constants.GRAVITY;
+		public const float ACCELERATION_ANGLE = Constants.GRAVITY_ANGLE;
 
 		public const bool FOLLOWING = false;
 		public const Circle TARGET = null;
@@ -52,8 +52,8 @@ namespace remonduk
 			setRadius(r);
 			setMass(mass);
 
-			setV(velocity, velocity_angle);
-			setA(acceleration, acceleration_angle);
+			setVelocity(velocity, velocity_angle);
+			updateAcceleration(acceleration, acceleration_angle);
 
 			target = TARGET;
 			following = FOLLOWING;
@@ -85,27 +85,39 @@ namespace remonduk
 			}
 		}
 
-        public void setV(float velocity, double velocity_angle)
+        public void setVelocity(float velocity, double velocity_angle)
         {
-            this.velocity = velocity + acceleration;
-            this.velocity_angle = velocity_angle;
-            vx = velocity * (float)Math.Cos(velocity_angle) + ax;
-            vy = velocity * (float)Math.Sin(velocity_angle) + ay;
+			//this.velocity_angle = velocity_angle;
+            vx = velocity * (float)Math.Cos(velocity_angle);
+            vy = velocity * (float)Math.Sin(velocity_angle);
         }
 
-        public void setA(float acceleration, double acceleration_angle)
-        {
-            this.acceleration = acceleration;
-            this.acceleration_angle = acceleration_angle;
-            ax = acceleration * (float)Math.Cos(acceleration_angle);
-            ay = -1 * acceleration * (float)Math.Sin(acceleration_angle) + Constants.GRAVITY;
-            Debug.WriteLine("" + ax + ", " + ay);
-        }
+		public void updateVelocity() {
+			vx += ax;
+			vy += vy;
+		}
+
+		public void updateAcceleration(float acceleration, double acceleration_angle) {
+			// should we update velocity here?
+			ax += acceleration * (float)Math.Cos(acceleration_angle);
+			ay += acceleration * (float)Math.Sin(acceleration_angle);
+		}
+
+		public float getAcceleration() {
+			return magnitude(ax, ay);
+		}
+
+		public float getVelocity() {
+			return magnitude(vx, vy);
+		}
+
+		public float magnitude(float x, float y) {
+			return (float)Math.Sqrt(x * x + y * y);
+		}
 
         public void updatePosition()
         {
-            setA(acceleration, acceleration_angle);
-            setV(velocity, velocity_angle);
+            updateVelocity();
             x += vx;
             y += vy;
         }
@@ -175,7 +187,7 @@ namespace remonduk
             g.FillEllipse(brush, x, y, r, r);
         }
 
-        private double distance(Circle other)
+        public double distance(Circle other)
         {
             float distx = other.x - x;
             float disty = other.y - y;
