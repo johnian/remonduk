@@ -11,6 +11,7 @@ namespace TestSuite
 		[TestMethod]
 		public void ConstructorTest()
 		{
+			// check that all other fields are set correctly
 			Circle circle = new Circle(2, 3, 5);
 
 			Assert.AreEqual(2, circle.x);
@@ -28,6 +29,10 @@ namespace TestSuite
 			Assert.AreEqual(Circle.GRAVITY_CONSTANT, circle.ay);
 
 			circle = new Circle(2, 3, 5, 8, Math.PI / 4);
+			
+			Assert.AreEqual(2, circle.x);
+			Assert.AreEqual(3, circle.y);
+			Assert.AreEqual(5, circle.r);
 
 			Assert.AreEqual(8, circle.velocity);
 			Assert.AreEqual(Math.PI / 4, circle.velocity_angle);
@@ -39,7 +44,7 @@ namespace TestSuite
 			Assert.AreEqual(0, circle.ax);
 			Assert.AreEqual(Circle.GRAVITY_CONSTANT, circle.ay);
 
-			circle = new Circle(2, 3, 5, 8, Math.PI / 4, 13, -1 * Math.PI / 4);
+			circle = new Circle(2, 3, 5, 8, Math.PI / 4, 13, 1 * Math.PI / 4);
 
 			Assert.AreEqual(2, circle.x);
 			Assert.AreEqual(3, circle.y);
@@ -51,9 +56,59 @@ namespace TestSuite
 			AreClose(4 * Math.Sqrt(2), circle.vy);
 
 			Assert.AreEqual(13, circle.acceleration);
-			Assert.AreEqual(-1 * Math.PI / 4, circle.acceleration_angle);
+			Assert.AreEqual(Math.PI / 4, circle.acceleration_angle);
 			AreClose(6.5 * Math.Sqrt(2), circle.ax);
 			AreClose(-1 * 6.5 * Math.Sqrt(2) + Circle.GRAVITY_CONSTANT, circle.ay);
+		}
+		[TestMethod]
+		public void leashTest() {
+
+		}
+
+		[TestMethod]
+		public void followTest() {
+
+		}
+
+		[TestMethod]
+		public void setATest() {
+
+		}
+
+		[TestMethod]
+		public void setVTest() {
+
+		}
+
+		[TestMethod]
+		public void updatePosition() {
+
+		}
+
+		[TestMethod]
+		public void collideTest() {
+
+		}
+
+		[TestMethod]
+
+		public void moveTest() {
+
+		}
+
+		[TestMethod]
+		public void updateTest() {
+
+		}
+
+		[TestMethod]
+		public void drawTest() {
+			// is this even testable?
+		}
+
+		[TestMethod]
+		public void distanceTest() {
+			// gonna have to make the method public to do this
 		}
 
 		private void AreClose(double expected, double actual) {
