@@ -113,10 +113,7 @@ namespace remonduk
                 }
                 if (selected != null)
                 {
-                    new_circle_acceleration_angle_up_down.Value = (Decimal)(selected.acceleration_angle * 180.0 / Math.PI);
-                    new_circle_acceleration_up_down.Value = (Decimal)selected.acceleration;
-                    new_circle_velocity_angle_up_down.Value = (Decimal)(selected.velocity_angle * 180.0 / Math.PI);
-                    new_circle_velocity_up_down.Value = (Decimal)selected.velocity;
+                    
                 }
                 drawNewCircleAngles(this.CreateGraphics());
                 //mouse.draw(this.CreateGraphics());
@@ -207,6 +204,10 @@ namespace remonduk
                     System.Diagnostics.Debug.WriteLine("BOOP");
                     System.Diagnostics.Debug.WriteLine(c.velocity + " " + c.acceleration);
                     selected = c;
+                    new_circle_acceleration_angle_up_down.Value = (Decimal)(selected.acceleration_angle * 180.0 / Math.PI);
+                    new_circle_acceleration_up_down.Value = (Decimal)selected.acceleration;
+                    new_circle_velocity_angle_up_down.Value = (Decimal)(selected.velocity_angle * 180.0 / Math.PI);
+                    new_circle_velocity_up_down.Value = (Decimal)selected.velocity;
                     found = true;
                 }
             }
@@ -268,6 +269,38 @@ namespace remonduk
         private void label2_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void new_circle_velocity_up_down_ValueChanged(object sender, EventArgs e)
+        {
+            if(selected != null)
+            {
+                selected.velocity = ((float)new_circle_velocity_up_down.Value); 
+            }
+        }
+
+        private void new_circle_acceleration_up_down_ValueChanged(object sender, EventArgs e)
+        {
+            if(selected != null)
+            {
+                selected.acceleration = (float)new_circle_acceleration_up_down.Value;
+            }
+        }
+
+        private void new_circle_velocity_angle_up_down_ValueChanged(object sender, EventArgs e)
+        {
+            if(selected != null)
+            {
+                selected.velocity_angle = ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180.0;
+            }
+        }
+
+        private void new_circle_acceleration_angle_up_down_ValueChanged(object sender, EventArgs e)
+        {
+            if (selected != null)
+            {
+                selected.acceleration_angle = ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0;
+            }
         }
     }
 }

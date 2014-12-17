@@ -54,6 +54,7 @@
             this.new_circle_velocity_up_down.Name = "new_circle_velocity_up_down";
             this.new_circle_velocity_up_down.Size = new System.Drawing.Size(70, 20);
             this.new_circle_velocity_up_down.TabIndex = 0;
+            this.new_circle_velocity_up_down.ValueChanged += new System.EventHandler(this.new_circle_velocity_up_down_ValueChanged);
             this.new_circle_velocity_up_down.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.new_circle_velocity_up_down_KeyPress);
             // 
             // new_circle_velocity_label
@@ -89,6 +90,7 @@
             this.new_circle_acceleration_up_down.Name = "new_circle_acceleration_up_down";
             this.new_circle_acceleration_up_down.Size = new System.Drawing.Size(70, 20);
             this.new_circle_acceleration_up_down.TabIndex = 2;
+            this.new_circle_acceleration_up_down.ValueChanged += new System.EventHandler(this.new_circle_acceleration_up_down_ValueChanged);
             this.new_circle_acceleration_up_down.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.new_circle_acceleration_up_down_KeyPress);
             // 
             // new_circle_velocity_angle_up_down
@@ -102,6 +104,7 @@
             this.new_circle_velocity_angle_up_down.Name = "new_circle_velocity_angle_up_down";
             this.new_circle_velocity_angle_up_down.Size = new System.Drawing.Size(70, 20);
             this.new_circle_velocity_angle_up_down.TabIndex = 4;
+            this.new_circle_velocity_angle_up_down.ValueChanged += new System.EventHandler(this.new_circle_velocity_angle_up_down_ValueChanged);
             this.new_circle_velocity_angle_up_down.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.new_circle_velocity_angle_up_down_KeyPress);
             // 
             // new_circle_acceleration_angle_up_down
@@ -115,6 +118,7 @@
             this.new_circle_acceleration_angle_up_down.Name = "new_circle_acceleration_angle_up_down";
             this.new_circle_acceleration_angle_up_down.Size = new System.Drawing.Size(70, 20);
             this.new_circle_acceleration_angle_up_down.TabIndex = 5;
+            this.new_circle_acceleration_angle_up_down.ValueChanged += new System.EventHandler(this.new_circle_acceleration_angle_up_down_ValueChanged);
             this.new_circle_acceleration_angle_up_down.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.new_circle_acceleration_angle_up_down_KeyPress);
             // 
             // label1
