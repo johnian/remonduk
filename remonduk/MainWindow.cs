@@ -140,6 +140,16 @@ namespace remonduk
             float y2 = (float)Math.Sin(theta * (Math.PI / 180.0)) * 25 + y1;
             g.DrawLine(pen, x1, y1, x2, y2);
             g.DrawEllipse(pen, 15, 90, 75, 75);
+
+
+            theta = (double)new_circle_acceleration_angle_up_down.Value;
+            System.Diagnostics.Debug.WriteLine(new_circle_acceleration_angle_up_down.Value);
+            x1 = 162.5F;
+            y1 = 127.5F;
+            x2 = (float)Math.Cos(theta * (Math.PI / 180.0)) * 25 + x1;
+            y2 = (float)Math.Sin(theta * (Math.PI / 180.0)) * 25 + y1;
+            g.DrawLine(pen, x1, y1, x2, y2);
+            g.DrawEllipse(pen, 125, 90, 75, 75);
         }
 
         void drawPlay(Graphics g)
@@ -180,6 +190,7 @@ namespace remonduk
             pos = this.PointToClient(pos);
             Circle click = new Circle(pos.X - 5, pos.Y - 5, 10);
             click.setV((float)new_circle_velocity_up_down.Value, ((double)new_circle_velocity_angle_up_down.Value)*Math.PI/180.0);
+            click.setA((float)new_circle_acceleration_up_down.Value, ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
             circles.Add(click);
         }
 
