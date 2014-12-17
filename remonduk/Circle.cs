@@ -24,9 +24,9 @@ namespace remonduk
 		public const double MAX_DIST = 0F;
 
 		public float x, y, r, mass;
-		public float /*velocity, */vx, vy;
-		public float /*acceleration, */ax, ay;
-		//public double velocity_angle, acceleration_angle;
+		public float velocity, vx, vy;
+		public float acceleration, ax, ay;
+		public double velocity_angle, acceleration_angle;
   
 		public bool following;
 		public Circle target;
@@ -87,35 +87,36 @@ namespace remonduk
 
         public void setVelocity(float velocity, double velocity_angle)
         {
-			//this.velocity_angle = velocity_angle;
+			this.velocity = velocity;
+			this.velocity_angle = velocity_angle;
             vx = velocity * (float)Math.Cos(velocity_angle);
             vy = velocity * (float)Math.Sin(velocity_angle);
         }
-		
-		public float getVelocity() {
-			return magnitude(vx, vy);
+
+		public double getVelocityAngle() {
+			return Math.Atan2(vy, vx);
 		}
 
 		public void updateVelocity() {
 			vx += ax;
 			vy += ay;
-			
-			//Debug.WriteLine("updating: " + ax + " " + ay);
+			velocity = magnitude(vx, vy);
+			velocity_angle = Math.Atan2(vy, vx);
 		}
 
 		public void setAcceleration(float acceleration, double acceleration_angle) {
+			this.acceleration = acceleration;
+			this.acceleration_angle = acceleration_angle;
 			ax = acceleration * (float)Math.Cos(acceleration_angle);
 			ay = acceleration * (float)Math.Sin(acceleration_angle);
-		}
-		
-		public float getAcceleration() {
-			return magnitude(ax, ay);
 		}
 
 		public void updateAcceleration(float acceleration, double acceleration_angle) {
 			// should we update velocity here?
 			ax += acceleration * (float)Math.Cos(acceleration_angle);
 			ay += acceleration * (float)Math.Sin(acceleration_angle);
+			acceleration = magnitude(ax, ay);
+			acceleration_angle = Math.Atan2(ay, ax);
 		}
 
 
