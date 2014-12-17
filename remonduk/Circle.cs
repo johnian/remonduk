@@ -53,7 +53,7 @@ namespace remonduk
 			setMass(mass);
 
 			setVelocity(velocity, velocity_angle);
-			updateAcceleration(acceleration, acceleration_angle);
+			setAcceleration(acceleration, acceleration_angle);
 
 			target = TARGET;
 			following = FOLLOWING;
@@ -91,10 +91,25 @@ namespace remonduk
             vx = velocity * (float)Math.Cos(velocity_angle);
             vy = velocity * (float)Math.Sin(velocity_angle);
         }
+		
+		public float getVelocity() {
+			return magnitude(vx, vy);
+		}
 
 		public void updateVelocity() {
 			vx += ax;
-			vy += vy;
+			vy += ay;
+			
+			//Debug.WriteLine("updating: " + ax + " " + ay);
+		}
+
+		public void setAcceleration(float acceleration, double acceleration_angle) {
+			ax = acceleration * (float)Math.Cos(acceleration_angle);
+			ay = acceleration * (float)Math.Sin(acceleration_angle);
+		}
+		
+		public float getAcceleration() {
+			return magnitude(ax, ay);
 		}
 
 		public void updateAcceleration(float acceleration, double acceleration_angle) {
@@ -103,17 +118,6 @@ namespace remonduk
 			ay += acceleration * (float)Math.Sin(acceleration_angle);
 		}
 
-		public float getAcceleration() {
-			return magnitude(ax, ay);
-		}
-
-		public float getVelocity() {
-			return magnitude(vx, vy);
-		}
-
-		public float magnitude(float x, float y) {
-			return (float)Math.Sqrt(x * x + y * y);
-		}
 
         public void updatePosition()
         {
@@ -139,32 +143,23 @@ namespace remonduk
 
         public void move(List<Circle> circles)
         {
-            float delta_x = 0.0F;
-            float delta_y = 0.0F;
-            double dist = 0.0F;
+            float delta_x = 0F;
+            float delta_y = 0F;
+            double dist = 0F;
             if (target != null)
             {
                 delta_x = target.x - x;
                 delta_y = target.y - y;
                 dist = distance(target);
             }
-			//if (leashed && dist > max_leash && target.velocity > velocity)
-			//{
-			//	setV(target.velocity, target.velocity_angle);
-			//}
             if (following)
             {
                 velocity_angle = Math.Atan2(delta_y, delta_x);
                 double tau = 2.0 * Math.PI;
                 double diff = (velocity_angle % (tau)) - (target.velocity_angle % (tau));
-                //if (dist < min_leash && ((diff > Math.PI) || (diff < -1 * Math.PI)))
-                //{
-                //    return;
-                //}
             }
 
             updatePosition();
-            //velocity = temp_speed;
             foreach(Circle c in circles)
             {
                 if (collide(c) != null)
@@ -187,11 +182,15 @@ namespace remonduk
             g.FillEllipse(brush, x, y, r, r);
         }
 
+		public float magnitude(float x, float y) {
+			return (float)Math.Sqrt(x * x + y * y);
+		}
+
         public double distance(Circle other)
         {
             float distx = other.x - x;
             float disty = other.y - y;
-            return Math.Sqrt(distx * distx + disty * disty);
+            return magnitude(distx, disty);
         }
     }
 }
