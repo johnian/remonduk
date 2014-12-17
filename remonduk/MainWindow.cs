@@ -17,6 +17,7 @@ namespace remonduk
         Circle sheep;
         List<Circle> circles = new List<Circle>();
         Circle mouse;
+        Circle selected;
 
         //Label new_circle_velocity_label;
         //float new_circle_velocity_value = 0;
@@ -69,10 +70,10 @@ namespace remonduk
             mouse = new Circle(pos.X - 5, pos.Y - 5, 10.0F);
             leader = new Circle(200.0F, 150.0F, 10.0F, 12.0F, 0F, .1F, Math.PI / 2.0);
             sheep = new Circle(100.0F, 500.0F, 10.0F, 10.0F, 0F, .01F, Math.PI / 2.0);
-
-            circles.Add(mouse);
-            circles.Add(leader);
-            circles.Add(sheep);
+            selected = null;
+            //circles.Add(mouse);
+            //circles.Add(leader);
+            //circles.Add(sheep);
 
             leader.follow(mouse);
 
@@ -94,7 +95,7 @@ namespace remonduk
                 mouse.x = pos.X - 5;
                 mouse.y = pos.Y - 5;
 
-                foreach(Circle c in circles)
+                foreach (Circle c in circles)
                 {
                     if (!pause)
                     {
@@ -109,6 +110,13 @@ namespace remonduk
                 else
                 {
                     drawPlay(this.CreateGraphics());
+                }
+                if (selected != null)
+                {
+                    new_circle_acceleration_angle_up_down.Value = (Decimal)(selected.acceleration_angle * 180.0 / Math.PI);
+                    new_circle_acceleration_up_down.Value = (Decimal)selected.acceleration;
+                    new_circle_velocity_angle_up_down.Value = (Decimal)(selected.velocity_angle * 180.0 / Math.PI);
+                    new_circle_velocity_up_down.Value = (Decimal)selected.velocity;
                 }
                 drawNewCircleAngles(this.CreateGraphics());
                 //mouse.draw(this.CreateGraphics());
@@ -133,7 +141,7 @@ namespace remonduk
         {
             Pen pen = new Pen(Color.Black);
             double theta = (double)new_circle_velocity_angle_up_down.Value;
-            System.Diagnostics.Debug.WriteLine(new_circle_velocity_angle_up_down.Value);
+            //System.Diagnostics.Debug.WriteLine(new_circle_velocity_angle_up_down.Value);
             float x1 = 52.5F;
             float y1 = 127.5F;
             float x2 = (float)Math.Cos(theta * (Math.PI / 180.0)) * 25 + x1;
@@ -143,7 +151,7 @@ namespace remonduk
 
 
             theta = (double)new_circle_acceleration_angle_up_down.Value;
-            System.Diagnostics.Debug.WriteLine(new_circle_acceleration_angle_up_down.Value);
+            //System.Diagnostics.Debug.WriteLine(new_circle_acceleration_angle_up_down.Value);
             x1 = 162.5F;
             y1 = 127.5F;
             x2 = (float)Math.Cos(theta * (Math.PI / 180.0)) * 25 + x1;
@@ -156,10 +164,10 @@ namespace remonduk
         {
             Brush brush = new SolidBrush(Color.Green);
             Point[] p = new Point[3];
-            p[0] = new Point(this.Size.Width/2 - 15, 24);
-            p[1] = new Point(this.Size.Width/2 - 15, 50);
-            p[2] = new Point(this.Size.Width/2 + 15, 37);
-            g.FillPolygon(brush,p);
+            p[0] = new Point(this.Size.Width / 2 - 15, 24);
+            p[1] = new Point(this.Size.Width / 2 - 15, 50);
+            p[2] = new Point(this.Size.Width / 2 + 15, 37);
+            g.FillPolygon(brush, p);
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -188,15 +196,33 @@ namespace remonduk
         {
             Point pos = Control.MousePosition;
             pos = this.PointToClient(pos);
-            Circle click = new Circle(pos.X - 5, pos.Y - 5, 10);
-            click.setV((float)new_circle_velocity_up_down.Value, ((double)new_circle_velocity_angle_up_down.Value)*Math.PI/180.0);
-            click.setA((float)new_circle_acceleration_up_down.Value, ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
-            circles.Add(click);
+            Circle click = new Circle(pos.X - 5, pos.Y - 5, 25);
+            bool found = false;
+
+            foreach (Circle c in circles)
+            {
+
+                if (click.collide(c) == c)
+                {
+                    System.Diagnostics.Debug.WriteLine("BOOP");
+                    System.Diagnostics.Debug.WriteLine(c.velocity + " " + c.acceleration);
+                    selected = c;
+                    found = true;
+                }
+            }
+            if (!found)
+            {
+                click.r = 10;
+                click.setV((float)new_circle_velocity_up_down.Value, ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180.0);
+                click.setA((float)new_circle_acceleration_up_down.Value, ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
+                circles.Add(click);
+                selected = null;
+            }
         }
 
         private void MainWindow_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if(e.KeyChar == ' ')
+            if (e.KeyChar == ' ')
             {
                 pause = !pause;
             }
