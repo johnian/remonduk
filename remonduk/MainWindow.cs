@@ -18,45 +18,46 @@ namespace remonduk
         List<Circle> circles = new List<Circle>();
         Circle mouse;
 
-        Label new_circle_velocity_label;
-        float new_circle_velocity_value = 0;
-        Label new_circle_velocity_angle_label;
-        double new_circle_velocity_angle_value = 0;
-        Label new_circle_acceleration_label;
-        float new_circle_acceleration_value = 0;
-        Label new_circle_acceleration_angle_label;
-        double new_circle_acceleration_angle_value = 0;
-        Label new_circle_radius_label;
-        float new_circle_radius_value = 5;
+        //Label new_circle_velocity_label;
+        //float new_circle_velocity_value = 0;
+        //Label new_circle_velocity_angle_label;
+        //double new_circle_velocity_angle_value = 0;
+        //Label new_circle_acceleration_label;
+        //float new_circle_acceleration_value = 0;
+        //Label new_circle_acceleration_angle_label;
+        //double new_circle_acceleration_angle_value = 0;
+        //Label new_circle_radius_label;
+        //float new_circle_radius_value = 5;
 
         bool pause;
         public MainWindow()
         {
             InitializeComponent();
 
-            new_circle_velocity_label = new Label();
-            new_circle_velocity_label.Text = "Velocity: " + new_circle_velocity_value;
-            new_circle_velocity_label.Location = new Point(15, 15);
-            this.Controls.Add(new_circle_velocity_label);
+            //new_circle_velocity_label = new Label();
+            //new_circle_velocity_label.Text = "Velocity: " + new_circle_velocity_value;
+            //new_circle_velocity_label.Location = new Point(15, 15);
+            //this.Controls.Add(new_circle_velocity_label);
+            //new_circle_velocity_label.
 
-            new_circle_velocity_angle_label = new Label();
-            new_circle_velocity_angle_label.Text = "Velocity Angle: " + new_circle_velocity_angle_value;
-            new_circle_velocity_angle_label.Location = new Point(15, 45);
-            this.Controls.Add(new_circle_velocity_angle_label);
+            //new_circle_velocity_angle_label = new Label();
+            //new_circle_velocity_angle_label.Text = "Velocity Angle: " + new_circle_velocity_angle_value;
+            //new_circle_velocity_angle_label.Location = new Point(15, 45);
+            //this.Controls.Add(new_circle_velocity_angle_label);
 
-            new_circle_acceleration_label = new Label();
-            new_circle_acceleration_label.Text = "acceleration: " + new_circle_acceleration_value;
-            new_circle_acceleration_label.Location = new Point(15, 75);
-            this.Controls.Add(new_circle_acceleration_label);
+            //new_circle_acceleration_label = new Label();
+            //new_circle_acceleration_label.Text = "acceleration: " + new_circle_acceleration_value;
+            //new_circle_acceleration_label.Location = new Point(15, 75);
+            //this.Controls.Add(new_circle_acceleration_label);
 
-            new_circle_acceleration_angle_label = new Label();
-            new_circle_acceleration_angle_label.Text = "acceleration Angle: " + new_circle_acceleration_angle_value;
-            new_circle_acceleration_angle_label.Location = new Point(15, 105);
-            this.Controls.Add(new_circle_acceleration_angle_label);
-            new_circle_radius_label = new Label();
-            new_circle_radius_label.Text = "Radius: " + new_circle_radius_value;
-            new_circle_radius_label.Location = new Point(15, 135);
-            this.Controls.Add(new_circle_radius_label);
+            //new_circle_acceleration_angle_label = new Label();
+            //new_circle_acceleration_angle_label.Text = "acceleration Angle: " + new_circle_acceleration_angle_value;
+            //new_circle_acceleration_angle_label.Location = new Point(15, 105);
+            //this.Controls.Add(new_circle_acceleration_angle_label);
+            //new_circle_radius_label = new Label();
+            //new_circle_radius_label.Text = "Radius: " + new_circle_radius_value;
+            //new_circle_radius_label.Location = new Point(15, 135);
+            //this.Controls.Add(new_circle_radius_label);
 
 
             Application.Idle += HandleApplicationIdle;  //adds the HandleApplicationIdle method to the Application.Idle event
@@ -100,15 +101,16 @@ namespace remonduk
                         c.update(circles);
                     }
                     c.draw(this.CreateGraphics());
-                    if(pause)
-                    {
-                        drawPause(this.CreateGraphics());
-                    }
-                    else
-                    {
-                        drawPlay(this.CreateGraphics());
-                    }
                 }
+                if (pause)
+                {
+                    drawPause(this.CreateGraphics());
+                }
+                else
+                {
+                    drawPlay(this.CreateGraphics());
+                }
+                drawNewCircleAngles(this.CreateGraphics());
                 //mouse.draw(this.CreateGraphics());
                 //leader.update(circles);
                 //leader.draw(this.CreateGraphics());
@@ -125,6 +127,19 @@ namespace remonduk
             Brush brush = new SolidBrush(Color.Red);
             g.FillRectangle(brush, new Rectangle(this.Size.Width / 2 - 10, 25, 5, 25));
             g.FillRectangle(brush, new Rectangle(this.Size.Width / 2 + 10, 25, 5, 25));
+        }
+
+        void drawNewCircleAngles(Graphics g)
+        {
+            Pen pen = new Pen(Color.Black);
+            double theta = (double)new_circle_velocity_angle_up_down.Value;
+            System.Diagnostics.Debug.WriteLine(new_circle_velocity_angle_up_down.Value);
+            float x1 = 52.5F;
+            float y1 = 127.5F;
+            float x2 = (float)Math.Cos(theta * (Math.PI / 180.0)) * 25 + x1;
+            float y2 = (float)Math.Sin(theta * (Math.PI / 180.0)) * 25 + y1;
+            g.DrawLine(pen, x1, y1, x2, y2);
+            g.DrawEllipse(pen, 15, 90, 75, 75);
         }
 
         void drawPlay(Graphics g)
@@ -163,7 +178,9 @@ namespace remonduk
         {
             Point pos = Control.MousePosition;
             pos = this.PointToClient(pos);
-            circles.Add(new Circle(pos.X - 5, pos.Y - 5, 10));
+            Circle click = new Circle(pos.X - 5, pos.Y - 5, 10);
+            click.setV((float)new_circle_velocity_up_down.Value, ((double)new_circle_velocity_angle_up_down.Value)*Math.PI/180.0);
+            circles.Add(click);
         }
 
         private void MainWindow_KeyPress(object sender, KeyPressEventArgs e)
@@ -172,6 +189,48 @@ namespace remonduk
             {
                 pause = !pause;
             }
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void new_circle_velocity_up_down_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == ' ')
+            {
+                pause = !pause;
+            }
+        }
+
+        private void new_circle_acceleration_up_down_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == ' ')
+            {
+                pause = !pause;
+            }
+        }
+
+        private void new_circle_velocity_angle_up_down_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == ' ')
+            {
+                pause = !pause;
+            }
+        }
+
+        private void new_circle_acceleration_angle_up_down_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == ' ')
+            {
+                pause = !pause;
+            }
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
