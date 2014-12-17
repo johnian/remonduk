@@ -15,3 +15,4 @@ C:\Users\julian\johnian\remonduk\remonduk\obj\Debug\remonduk.csprojResolveAssemb
 C:\Users\julian\johnian\remonduk\remonduk\obj\Debug\remonduk.Properties.Resources.resources
 C:\Users\julian\johnian\remonduk\remonduk\obj\Debug\remonduk.csproj.GenerateResource.Cache
 C:\Users\julian\johnian\remonduk\remonduk\obj\Debug\remonduk.MainWindow.resources
+C:\Users\Sid\Documents\Visual Studio 2013\Projects\remonduk\remonduk\obj\Debug\remonduk.MainWindow.resources
