@@ -26,7 +26,7 @@ namespace TestSuite
 			Assert.AreEqual(0, circle.acceleration);
 			Assert.AreEqual(0, circle.acceleration_angle);
 			Assert.AreEqual(0, circle.ax);
-			Assert.AreEqual(Circle.GRAVITY_CONSTANT, circle.ay);
+			Assert.AreEqual(Constants.GRAVITY, circle.ay);
 
 			circle = new Circle(2, 3, 5, 8, Math.PI / 4);
 			
@@ -42,7 +42,7 @@ namespace TestSuite
 			Assert.AreEqual(0, circle.acceleration);
 			Assert.AreEqual(0, circle.acceleration_angle);
 			Assert.AreEqual(0, circle.ax);
-			Assert.AreEqual(Circle.GRAVITY_CONSTANT, circle.ay);
+			Assert.AreEqual(Constants.GRAVITY, circle.ay);
 
 			circle = new Circle(2, 3, 5, 8, Math.PI / 4, 13, 1 * Math.PI / 4);
 
@@ -58,7 +58,7 @@ namespace TestSuite
 			Assert.AreEqual(13, circle.acceleration);
 			Assert.AreEqual(Math.PI / 4, circle.acceleration_angle);
 			AreClose(6.5 * Math.Sqrt(2), circle.ax);
-			AreClose(-1 * 6.5 * Math.Sqrt(2) + Circle.GRAVITY_CONSTANT, circle.ay);
+			AreClose(-1 * 6.5 * Math.Sqrt(2) + Constants.GRAVITY, circle.ay);
 		}
 		[TestMethod]
 		public void leashTest() {

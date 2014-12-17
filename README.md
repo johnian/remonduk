@@ -14,6 +14,11 @@ Floid
 [networking] (#7)  
 [sound] (#8)  
 
+circles
+forces
+
+everything that happens in the engine is a consequence of the parameters and the engine itself
+
 should not be hyper realistic
 
 gravitational point -- can be a specific point
@@ -24,6 +29,14 @@ gravitational point -- can be a specific point
 	-- decreases as cubic, decreases as linear, increases with distance
 	
 	flag for whether the stage wraps around or has hard boundaries
+	
+3 types of physical interactions:
+	collision (when actual boundaries are crossed)
+	repulsion
+	following
+	
+	grouping - leashing
+		- anchoring (multiple anchoring pairings that connect two circles)
 
 <div id="1"></div>
 # 1 basic graphics and i/o {

@@ -10,64 +10,55 @@ namespace remonduk
 {
     public class Circle
     {
-        public const float GRAVITY_CONSTANT = 9.8F; // should maybe move to global location?
+		public const float RADIUS = 1F;
+		public const float MASS = 1.0F;
 
-        const float DEFAULT_VELOCITY = 0;
-        const float DEFAULT_VELOCITY_ANGLE = 0F;
-        const float DEFAULT_ACCELERATION = 0;
-        const float DEFAULT_ACCELERATION_ANGLE = 0F;
+		public const float VELOCITY = 0;
+		public const float VELOCITY_ANGLE = 0F;
+		public const float ACCELERATION = 0;
+		public const float ACCELERATION_ANGLE = 0F;
 
-        const double DEFAULT_TURN_RADIUS = Math.PI / 12.0;
-        const double DEFAULT_MASS = 1.0;
+		public const bool FOLLOWING = false;
+		public const Circle TARGET = null;
+		public const double MIN_DIST = 0F;
+		public const double MAX_DIST = 0F;
 
-        public float x, y, r;
-        public float velocity, vx, vy;
-        public float acceleration, ax, ay;
-        public double velocity_angle, acceleration_angle;
+		public float x, y, r, mass;
+		public float velocity, vx, vy;
+		public float acceleration, ax, ay;
+		public double velocity_angle, acceleration_angle;
+  
+		public bool following;
+		public Circle target;
+		public double min_dist;
+		public double max_dist;
 
-        double mass;
+		public Circle(float x, float y, float r, float mass = MASS):
+			this(x, y, r,
+				VELOCITY, VELOCITY_ANGLE, mass) { }
 
-        bool following;
-        bool leashed;
+		public Circle(float x, float y, float r,
+			float velocity, double velocity_angle, float mass = MASS):
+			this(x, y, r,
+				velocity, velocity_angle,
+				ACCELERATION, ACCELERATION_ANGLE, mass) { }
 
-        float min_leash;
-        float max_leash;
-
-        double turn_radius;
-
-        Circle target; // following this target
-
-        public Circle(float x, float y, float r) : this(x, y, r,
-            DEFAULT_VELOCITY, DEFAULT_VELOCITY_ANGLE) { }
-
-        public Circle(float x, float y, float r, float velocity, double velocity_angle) : this(x, y, r, velocity, velocity_angle,
-            DEFAULT_ACCELERATION, DEFAULT_ACCELERATION_ANGLE) { }
-
-        public Circle(float x, float y, float r, float velocity, double velocity_angle, float acceleration, double acceleration_angle)
+		public Circle(float x, float y, float r,
+			float velocity, double velocity_angle,
+			float acceleration, double acceleration_angle, float mass = MASS)
         {
-            this.x = x;
-            this.y = y;
-            this.r = r;
+			this.x = x;
+			this.y = y;
+			setRadius(r);
+			setMass(mass);
 
-            setV(velocity, velocity_angle);
-            setA(acceleration, acceleration_angle);
+			setV(velocity, velocity_angle);
+			setA(acceleration, acceleration_angle);
 
-            mass = DEFAULT_MASS;
-
-            target = null;
-            leashed = false;
-            following = false;
-
-            min_leash = 2 * r;
-            max_leash = 3 * r;
-
-            turn_radius = DEFAULT_TURN_RADIUS;
-        }
-
-        public void leash(Circle target)
-        {
-            this.target = target;
-            leashed = true;
+			target = TARGET;
+			following = FOLLOWING;
+			min_dist = MIN_DIST * r;
+			max_dist = MAX_DIST * r;
         }
 
         public void follow(Circle target)
@@ -76,14 +67,23 @@ namespace remonduk
             this.target = target;
         }
 
-        public void setA(float acceleration, double acceleration_angle)
-        {
-            this.acceleration = acceleration;
-            this.acceleration_angle = acceleration_angle;
-            ax = acceleration * (float)Math.Cos(acceleration_angle);
-            ay = -1 * acceleration * (float)Math.Sin(acceleration_angle) + GRAVITY_CONSTANT;
-            Debug.WriteLine("" + ax + ", " + ay);
-        }
+		public void setRadius(float r) {
+			if (r < RADIUS) {
+				this.r = RADIUS;
+			}
+			else {
+				this.r = r;
+			}
+		}
+
+		public void setMass(float mass) {
+			if (mass < MASS) {
+				this.mass = MASS;
+			}
+			else {
+				this.mass = mass;
+			}
+		}
 
         public void setV(float velocity, double velocity_angle)
         {
@@ -91,6 +91,15 @@ namespace remonduk
             this.velocity_angle = velocity_angle;
             vx = velocity * (float)Math.Cos(velocity_angle) + ax;
             vy = velocity * (float)Math.Sin(velocity_angle) + ay;
+        }
+
+        public void setA(float acceleration, double acceleration_angle)
+        {
+            this.acceleration = acceleration;
+            this.acceleration_angle = acceleration_angle;
+            ax = acceleration * (float)Math.Cos(acceleration_angle);
+            ay = -1 * acceleration * (float)Math.Sin(acceleration_angle) + Constants.GRAVITY;
+            Debug.WriteLine("" + ax + ", " + ay);
         }
 
         public void updatePosition()
@@ -127,10 +136,10 @@ namespace remonduk
                 delta_y = target.y - y;
                 dist = distance(target);
             }
-            if (leashed && dist > max_leash && target.velocity > velocity)
-            {
-                setV(target.velocity, target.velocity_angle);
-            }
+			//if (leashed && dist > max_leash && target.velocity > velocity)
+			//{
+			//	setV(target.velocity, target.velocity_angle);
+			//}
             if (following)
             {
                 velocity_angle = Math.Atan2(delta_y, delta_x);
