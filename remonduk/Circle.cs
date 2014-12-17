@@ -24,9 +24,9 @@ namespace remonduk
 		public const double MAX_DIST = 0F;
 
 		public float x, y, r, mass;
-		public float velocity, vx, vy;
-		public float acceleration, ax, ay;
-		public double velocity_angle, acceleration_angle;
+		public float /*velocity, */vx, vy;
+		public float /*acceleration, */ax, ay;
+		//public double velocity_angle, acceleration_angle;
   
 		public bool following;
 		public Circle target;
