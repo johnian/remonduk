@@ -219,7 +219,7 @@ namespace remonduk
 			if (theta < 0) {
 				theta += 2 * Math.PI;
 			}
-			return Math.Atan2(y, x);
+			return theta;
 		}
 		
 		public String toString() {

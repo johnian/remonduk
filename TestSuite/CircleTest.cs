@@ -9,6 +9,8 @@ namespace TestSuite
 	[TestClass]
 	public class CircleTest
 	{
+		Constants constants = Constants.Instance;
+
 		int PRECISION = 6;
 		double EPSILON = .0001;
 		[TestMethod]
@@ -22,15 +24,15 @@ namespace TestSuite
 			AreEqual(5, circle.r);
 			AreEqual(Circle.MASS, circle.mass);
 
-			AreEqual(0, circle.velocity);
-			AreEqual(0, circle.velocity_angle);
-			AreEqual(0, circle.vx);
-			AreEqual(0, circle.vy);
+			AreEqual(Circle.VELOCITY, circle.velocity);
+			AreEqual(Circle.VELOCITY_ANGLE, circle.velocity_angle);
+			AreEqual(Circle.VELOCITY * Math.Cos(Circle.VELOCITY_ANGLE), circle.vx);
+			AreEqual(Circle.VELOCITY * Math.Sin(Circle.VELOCITY_ANGLE), circle.vy);
 
-			AreEqual(Constants.GRAVITY, circle.acceleration);
-			AreEqual(Math.PI / 2, circle.acceleration_angle);
-			AreEqual(0, circle.ax);
-			AreEqual(Constants.GRAVITY, circle.ay);
+			AreEqual(Circle.ACCELERATION, circle.acceleration);
+			AreEqual(Circle.ACCELERATION_ANGLE, circle.acceleration_angle);
+			AreEqual(Circle.ACCELERATION * Math.Cos(Circle.ACCELERATION_ANGLE), circle.ax);
+			AreEqual(Circle.ACCELERATION * Math.Sin(Circle.ACCELERATION_ANGLE), circle.ay);
 
 			AreEqual(null, circle.target);
 			AreEqual(0F, circle.min_dist);
@@ -54,10 +56,10 @@ namespace TestSuite
 			AreEqual(4 * Math.Sqrt(2), circle.vx);
 			AreEqual(4 * Math.Sqrt(2), circle.vy);
 
-			AreEqual(Constants.GRAVITY, circle.acceleration);
-			AreEqual(Math.PI / 2, circle.acceleration_angle);
-			AreEqual(0, circle.ax);
-			AreEqual(Constants.GRAVITY, circle.ay);
+			AreEqual(Circle.ACCELERATION, circle.acceleration);
+			AreEqual(Circle.ACCELERATION_ANGLE, circle.acceleration_angle);
+			AreEqual(Circle.ACCELERATION * Math.Cos(Circle.ACCELERATION_ANGLE), circle.ax);
+			AreEqual(Circle.ACCELERATION * Math.Sin(Circle.ACCELERATION_ANGLE), circle.ay);
 
 			AreEqual(null, circle.target);
 			AreEqual(0F, circle.min_dist);
@@ -245,28 +247,24 @@ namespace TestSuite
 			Circle circle = new Circle(1, 1, 2);
 			HashSet<Circle> circles = new HashSet<Circle>();
 			
-			AreEqual(9.8F, circle.acceleration);
-
-			circle.updateAcceleration(-1 * Constants.GRAVITY, Constants.GRAVITY_ANGLE);
-			AreEqual(0, circle.acceleration);
-			AreEqual(0, circle.acceleration_angle);
+			circle.updateAcceleration(-1 * constants.GRAVITY, constants.GRAVITY_ANGLE);
+			AreEqual(constants.GRAVITY, circle.acceleration);
+			if (constants.GRAVITY_ANGLE + Math.PI > 2 * Math.PI) {
+				AreEqual(constants.GRAVITY_ANGLE - Math.PI, circle.acceleration_angle);
+			}
+			else {
+				AreEqual(constants.GRAVITY_ANGLE + Math.PI, circle.acceleration_angle);
+			}
 			AreEqual(0, circle.ax);
-			AreEqual(0, circle.ay);
+			AreEqual(-1 * constants.GRAVITY, circle.ay);
 
-			circle.updateAcceleration(-1 * Constants.GRAVITY, Math.PI / 4);
-			AreEqual(Constants.GRAVITY, circle.acceleration);
-			AreEqual(-3 * Math.PI / 4, circle.acceleration_angle);
-			AreEqual(-1 * Constants.GRAVITY * Math.Sqrt(2) / 2, circle.ax);
-			AreEqual(-1 * Constants.GRAVITY * Math.Sqrt(2) / 2, circle.ay);
-
-			//circle.updateAcceleration(-1 * Constants.GRAVITY, circle.acceleration_angle);
-			//for (int i = 9; i >= 0; i--) {
-			//	circle.update(circles);
-			//	AreEqual(0, circle.vx);
-			//	AreEqual(i * Constants.GRAVITY, circle.vy);
-			//	AreEqual(0, circle.ax);
-			//	AreEqual(-1 * Constants.GRAVITY, circle.ay);
-			//}
+			double expected_ax = -1 * constants.GRAVITY * Math.Sqrt(2) / 2;
+			double expected_ay = -1 * constants.GRAVITY * Math.Sqrt(2) / 2 - constants.GRAVITY;
+			circle.updateAcceleration(-1 * constants.GRAVITY, Math.PI / 4);
+			AreEqual(circle.magnitude((float)expected_ax, (float)expected_ay), circle.acceleration);
+			AreEqual(circle.angle((float)expected_ay, (float)expected_ax), circle.acceleration_angle);
+			AreEqual(expected_ax, circle.ax);
+			AreEqual(expected_ay, circle.ay);
 		}
 
 		[TestMethod]
@@ -274,31 +272,45 @@ namespace TestSuite
 			Circle circle = new Circle(1, 1, 2);
 			HashSet<Circle> circles = new HashSet<Circle>();
 
+			float velocity = Circle.VELOCITY;
+			double velocity_angle = Circle.VELOCITY_ANGLE;
+			double vx = Circle.VELOCITY * Math.Cos(Circle.VELOCITY_ANGLE);
+			double vy = Circle.VELOCITY * Math.Sin(Circle.VELOCITY_ANGLE);
+
+			for (int i = 0; i < 10; i++) {
+				AreEqual(velocity, circle.velocity);
+				AreEqual(velocity_angle, circle.velocity_angle);
+				AreEqual(vx, circle.vx);
+				AreEqual(vy, circle.vy);
+				circle.update(circles);
+			}
+
+			float gravity = constants.GRAVITY;
+			double gravity_angle = Math.PI / 4;
+			double gx = gravity * Math.Cos(gravity_angle);
+			double gy = gravity * Math.Sin(gravity_angle);
+
+			circle.updateAcceleration(gravity, gravity_angle);
 			for (int i = 1; i <= 10; i++) {
 				circle.update(circles);
-				AreEqual(0, circle.vx);
-				AreEqual(i * Constants.GRAVITY, circle.vy);
-				AreEqual(0, circle.ax);
-				AreEqual(Constants.GRAVITY, circle.ay);
+				AreEqual(i * (velocity + gravity), circle.velocity);
+				AreEqual(circle.angle((float)(vy + gy), (float)(vx + gx)), circle.velocity_angle);
+				AreEqual(i * (vx + gx), circle.vx);
+				AreEqual(i * (vy + gy), circle.vy);
 			}
 
-			circle.updateAcceleration(-1 * Constants.GRAVITY, circle.acceleration_angle);
+			gravity *= -1;
+			gx = gravity * Math.Cos(gravity_angle);
+			gy = gravity * Math.Sin(gravity_angle);
+
+			circle.updateAcceleration(gravity, gravity_angle);
 			for (int i = 10; i > 0; i--) {
+				AreEqual(i * (velocity - gravity), circle.velocity);
+				//AreEqual();
+				//AreEqual(i * (vx + gx), circle.vx);
+				//AreEqual(i * (vy + gy), circle.vy);
 				circle.update(circles);
-				AreEqual(0, circle.vx);
-				AreEqual(10 * Constants.GRAVITY, circle.vy);
-				AreEqual(0, circle.ax);
-				AreEqual(0, circle.ay);
 			}
-
-			//circle.updateAcceleration(-1 * Constants.GRAVITY, circle.acceleration_angle);
-			//for (int i = 9; i >= 0; i--) {
-			//	circle.update(circles);
-			//	AreEqual(0, circle.vx);
-			//	AreEqual(i * Constants.GRAVITY, circle.vy);
-			//	AreEqual(0, circle.ax);
-			//	AreEqual(-1 * Constants.GRAVITY, circle.ay);
-			//}
 		}
 
 		[TestMethod]
