@@ -160,7 +160,7 @@
             this.Name = "MainWindow";
             this.Text = "Form1";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MainWindow_KeyPress);
-            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MainWindow_MouseDown);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MainWindow_MouseDown);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MainWindow_MouseClick);
             ((System.ComponentModel.ISupportInitialize)(this.new_circle_velocity_up_down)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.new_circle_acceleration_up_down)).EndInit();

@@ -78,11 +78,22 @@ namespace remonduk
             Pen pen = new Pen(Color.Black);
             g.DrawEllipse(pen, selected.x-25, selected.y-25, 50, 50);
         }
+
         void drawPause(Graphics g)
         {
             Brush brush = new SolidBrush(Color.Red);
             g.FillRectangle(brush, new Rectangle(this.Size.Width / 2 - 10, 25, 5, 25));
             g.FillRectangle(brush, new Rectangle(this.Size.Width / 2 + 10, 25, 5, 25));
+        }
+
+        void drawPlay(Graphics g)
+        {
+            Brush brush = new SolidBrush(Color.Green);
+            Point[] p = new Point[3];
+            p[0] = new Point(this.Size.Width / 2 - 15, 24);
+            p[1] = new Point(this.Size.Width / 2 - 15, 50);
+            p[2] = new Point(this.Size.Width / 2 + 15, 37);
+            g.FillPolygon(brush, p);
         }
 
         void drawNewCircleAngles(Graphics g)
@@ -105,16 +116,6 @@ namespace remonduk
             y2 = (float)Math.Sin(theta * (Math.PI / 180.0)) * 25 + y1;
             g.DrawLine(pen, x1, y1, x2, y2);
             g.DrawEllipse(pen, 125, 90, 75, 75);
-        }
-
-        void drawPlay(Graphics g)
-        {
-            Brush brush = new SolidBrush(Color.Green);
-            Point[] p = new Point[3];
-            p[0] = new Point(this.Size.Width / 2 - 15, 24);
-            p[1] = new Point(this.Size.Width / 2 - 15, 50);
-            p[2] = new Point(this.Size.Width / 2 + 15, 37);
-            g.FillPolygon(brush, p);
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -146,17 +147,18 @@ namespace remonduk
             pos = this.PointToClient(pos);
             Circle click = new Circle(pos.X - 5, pos.Y - 5, 25);
             bool found = false;
-            //if (drag && selected != null)
-            //{
-            //    selected.x = pos.X;
-            //    selected.y = pos.Y;
-            //}
+            if (drag && selected != null)
+            {
+                selected.x = pos.X;
+                selected.y = pos.Y;
+            }
+            drag = false;
             foreach (Circle c in circles)
             {
 
                 if (click.collide(c) == c)
                 {
-                    System.Diagnostics.Debug.WriteLine("BOOP");
+                    System.Diagnostics.Debug.WriteLine("MOUSEUP");
                     System.Diagnostics.Debug.WriteLine(c.velocity + " " + c.acceleration);
                     selected = c;
                     new_circle_acceleration_angle_up_down.Value = (Decimal)(selected.acceleration_angle * 180.0 / Math.PI);
@@ -179,8 +181,6 @@ namespace remonduk
                 }
                 selected = null;
             }
-
-
         }
 
         private void MainWindow_KeyPress(object sender, KeyPressEventArgs e)
@@ -272,12 +272,13 @@ namespace remonduk
             {
                 Point pos = Control.MousePosition;
                 pos = this.PointToClient(pos);
-                Circle click = new Circle(pos.X - 25, pos.Y - 25, 50);
+                Circle click = new Circle(pos.X, pos.Y, 50);
                 Circle easySelect = new Circle(selected.x, selected.y, 25);
                 if(click.collide(easySelect) == easySelect)
                 {
                     drag = true;
                     System.Diagnostics.Debug.WriteLine("SELECTED");
+                    System.Diagnostics.Debug.WriteLine(String.Concat("MouseX = ", pos.X.ToString(),"  MouseY = ",pos.Y.ToString()));
                 }
             }
         }
