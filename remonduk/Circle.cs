@@ -36,6 +36,9 @@ namespace remonduk
 
         public Color color;
 
+        public Circle()
+        { }
+
 		public Circle(float x, float y, float r, float mass = MASS):
 			this(x, y, r,
 				VELOCITY, VELOCITY_ANGLE, mass) { }
@@ -148,7 +151,7 @@ namespace remonduk
             return null;
         }
 
-        public void move(List<Circle> circles)
+        public void move(HashSet<Circle> circles)
         {
             float delta_x = 0F;
             float delta_y = 0F;
@@ -177,7 +180,7 @@ namespace remonduk
             }
         }
 
-        public void update(List<Circle> circles) //revisit List for refactorization!!!!! rar i like my keyboard this
+        public void update(HashSet<Circle> circles) //revisit List for refactorization!!!!! rar i like my keyboard this
         //is fun kbye
         {
             move(circles);

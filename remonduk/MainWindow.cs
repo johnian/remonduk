@@ -8,12 +8,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace remonduk
 {
     public partial class MainWindow : Form
     {
-        List<Circle> circles = new List<Circle>();
+        HashSet<Circle> circles = new HashSet<Circle>();
         Circle selected;
 
         bool pause;
@@ -68,9 +69,6 @@ namespace remonduk
                 drawSelected(g);
             }
             drawNewCircleAngles(g);
-            Point pos = Control.MousePosition;
-            pos = this.PointToClient(pos);
-            g.DrawEllipse(new Pen(Color.Black), pos.X-25, pos.Y-25, 50, 50);
         }
 
         void drawSelected(Graphics g)
@@ -281,6 +279,18 @@ namespace remonduk
                     System.Diagnostics.Debug.WriteLine(String.Concat("MouseX = ", pos.X.ToString(),"  MouseY = ",pos.Y.ToString()));
                 }
             }
+        }
+
+        private void save_menu_item_Click(object sender, EventArgs e)
+        {
+            using (var writer = new System.IO.StreamWriter("out.xml"))
+            {
+                var serializer = new XmlSerializer(typeof(HashSet<Circle>));
+                serializer.Serialize(writer, circles);
+                writer.Flush();
+            }
+
+
         }
     }
 }
