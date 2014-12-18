@@ -10,7 +10,7 @@ namespace remonduk
 {
     public class Circle
     {
-		public int PRECISION = 5;
+		public int PRECISION = 8;
 
 		public const double RADIUS = 1;
 		public const double MASS = 1.0;
@@ -216,6 +216,10 @@ namespace remonduk
         }
 
 		public double angle(double y, double x) {
+			if (Math.Round(y, PRECISION) == 0 &&
+				Math.Round(x, PRECISION) == 0) {
+				return 0;
+			}
 			double theta = Math.Atan2(y, x);
 			//if (theta > 2 * Math.PI) {
 			//	theta -= 2 * Math.PI;

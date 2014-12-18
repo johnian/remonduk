@@ -279,10 +279,10 @@ namespace TestSuite
 
 			for (int i = 1; i <= 10; i++) {
 				circle.updateVelocity();
-				//AreEqual(i * acceleration, circle.velocity);
-				//AreEqual(acceleration_angle, circle.velocity_angle);
-				//AreEqual(i * ax, circle.vx);
-				//AreEqual(i * ay, circle.vy);
+				AreEqual(i * acceleration, circle.velocity);
+				AreEqual(acceleration_angle, circle.velocity_angle);
+				AreEqual(i * ax, circle.vx);
+				AreEqual(i * ay, circle.vy);
 			}
 
 			double gravity = constants.GRAVITY;
@@ -293,10 +293,12 @@ namespace TestSuite
 			circle.updateAcceleration(gravity, gravity_angle);
 			for (int i = 1; i <= 10; i++) {
 				circle.updateVelocity();
-				//AreEqual(i * (acceleration + gravity), circle.velocity);
-				//AreEqual(circle.angle((ay + gy), (ax + gx)), circle.velocity_angle);
-				//AreEqual(i * (ax + gx), circle.vx);
-				//AreEqual(i * (ay + gy), circle.vy);
+				AreEqual(i * (acceleration + gravity), circle.velocity);
+				double vx = i * (ax + gx);
+				double vy = i * (ay + gy);
+				AreEqual(circle.angle(vy, vx), circle.velocity_angle);
+				AreEqual(vx, circle.vx);
+				AreEqual(vy, circle.vy);
 			}
 
 			gravity *= -1;
@@ -306,10 +308,12 @@ namespace TestSuite
 			circle.updateAcceleration(2 * gravity, gravity_angle);
 			for (int i = 9; i >= 0; i--) {
 				circle.updateVelocity();
-				//AreEqual(i * (acceleration - gravity), circle.velocity);
-				//AreEqual(circle.angle((ay - gy), (ax - gx)), circle.velocity_angle);
-				//AreEqual(i * (ax - gx), circle.vx);
-				//AreEqual(i * (ay - gy), circle.vy);
+				AreEqual(i * (acceleration - gravity), circle.velocity);
+				double vx = i * (ax - gx);
+				double vy = i * (ay - gy);
+				AreEqual(circle.angle(vy, vx), circle.velocity_angle);
+				AreEqual(vx, circle.vx);
+				AreEqual(vy, circle.vy);
 			}
 		}
 
