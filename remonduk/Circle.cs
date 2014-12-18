@@ -212,6 +212,13 @@ namespace remonduk
         }
 
 		public double angle(float y, float x) {
+			double theta = Math.Atan2(y, x);
+			if (theta > 2 * Math.PI) {
+				theta -= 2 * Math.PI;
+			}
+			if (theta < 0) {
+				theta += 2 * Math.PI;
+			}
 			return Math.Atan2(y, x);
 		}
 		
