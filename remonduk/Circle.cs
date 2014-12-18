@@ -17,6 +17,7 @@ namespace remonduk
 		public const float VELOCITY_ANGLE = 0F;
 		public const float ACCELERATION = Constants.GRAVITY;
 		public const float ACCELERATION_ANGLE = Constants.GRAVITY_ANGLE;
+        public Color DEFAULT_COLOR = Color.Chartreuse;
 
 		public const bool FOLLOWING = false;
 		public const Circle TARGET = null;
@@ -32,6 +33,8 @@ namespace remonduk
 		public Circle target;
 		public double min_dist;
 		public double max_dist;
+
+        public Color color;
 
 		public Circle(float x, float y, float r, float mass = MASS):
 			this(x, y, r,
@@ -59,6 +62,9 @@ namespace remonduk
 			following = FOLLOWING;
 			min_dist = MIN_DIST * r;
 			max_dist = MAX_DIST * r;
+
+            //add me somewhere else
+            this.color = DEFAULT_COLOR;
         }
 
         public void follow(Circle target)
@@ -179,8 +185,8 @@ namespace remonduk
 
         public void draw(Graphics g)
         {
-            Brush brush = new SolidBrush(Color.Chartreuse);
-            g.FillEllipse(brush, x, y, r, r);
+            Brush brush = new SolidBrush(color);
+            g.FillEllipse(brush, x-r/2, y-r/2, r, r);
         }
 
 		public float magnitude(float x, float y) {

@@ -13,13 +13,13 @@ namespace remonduk
 {
     public partial class MainWindow : Form
     {
-        Circle leader;
-        Circle sheep;
         List<Circle> circles = new List<Circle>();
-        Circle mouse;
         Circle selected;
 
         bool pause;
+
+        bool drag;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -28,6 +28,7 @@ namespace remonduk
 
             pause = false;
             selected = null;
+            drag = false;
         }
 
         //this method is added to the Idle event in the constructor
@@ -46,21 +47,37 @@ namespace remonduk
                     c.draw(this.CreateGraphics());
                 }
 
-                if (pause)
-                {
-                    drawPause(this.CreateGraphics());
-                }
-                else
-                {
-                    drawPlay(this.CreateGraphics());
-                }
-
-                drawNewCircleAngles(this.CreateGraphics());
+                drawHUD(this.CreateGraphics());
 
                 System.Threading.Thread.Sleep(50);
             }
         }
 
+        void drawHUD(Graphics g)
+        {
+            if(pause)
+            {
+                drawPause(g);
+            }
+            else
+            {
+                drawPlay(g);
+            }
+            if(selected != null)
+            {
+                drawSelected(g);
+            }
+            drawNewCircleAngles(g);
+            Point pos = Control.MousePosition;
+            pos = this.PointToClient(pos);
+            g.DrawEllipse(new Pen(Color.Black), pos.X-25, pos.Y-25, 50, 50);
+        }
+
+        void drawSelected(Graphics g)
+        {
+            Pen pen = new Pen(Color.Black);
+            g.DrawEllipse(pen, selected.x-25, selected.y-25, 50, 50);
+        }
         void drawPause(Graphics g)
         {
             Brush brush = new SolidBrush(Color.Red);
@@ -129,7 +146,11 @@ namespace remonduk
             pos = this.PointToClient(pos);
             Circle click = new Circle(pos.X - 5, pos.Y - 5, 25);
             bool found = false;
-
+            //if (drag && selected != null)
+            //{
+            //    selected.x = pos.X;
+            //    selected.y = pos.Y;
+            //}
             foreach (Circle c in circles)
             {
 
@@ -143,6 +164,7 @@ namespace remonduk
                     new_circle_velocity_angle_up_down.Value = (Decimal)(selected.velocity_angle * 180.0 / Math.PI);
                     new_circle_velocity_up_down.Value = (Decimal)selected.velocity;
                     found = true;
+                    selected.color = Color.CornflowerBlue;
                 }
             }
             if (!found)
@@ -151,8 +173,14 @@ namespace remonduk
                 click.setVelocity((float)new_circle_velocity_up_down.Value, ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180.0);
                 click.updateAcceleration((float)new_circle_acceleration_up_down.Value, ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
                 circles.Add(click);
+                if(selected != null)
+                {
+                    selected.color = Color.Chartreuse;
+                }
                 selected = null;
             }
+
+
         }
 
         private void MainWindow_KeyPress(object sender, KeyPressEventArgs e)
@@ -244,11 +272,12 @@ namespace remonduk
             {
                 Point pos = Control.MousePosition;
                 pos = this.PointToClient(pos);
-                Circle click = new Circle(pos.X - 5, pos.Y - 5, 25);
-                if(click.collide(selected) == selected)
+                Circle click = new Circle(pos.X - 25, pos.Y - 25, 50);
+                Circle easySelect = new Circle(selected.x, selected.y, 25);
+                if(click.collide(easySelect) == easySelect)
                 {
-                    selected.x = pos.X;
-                    selected.y = pos.Y;
+                    drag = true;
+                    System.Diagnostics.Debug.WriteLine("SELECTED");
                 }
             }
         }
