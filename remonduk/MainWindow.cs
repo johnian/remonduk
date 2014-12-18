@@ -283,6 +283,12 @@ namespace remonduk
 
         private void save_menu_item_Click(object sender, EventArgs e)
         {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Title = "SAVE YOUR CIRCLES FOR FUTURE CIRCLES TO BE THE SAME AS YOUR CURRENT CIRCLES";
+            sfd.AddExtension = true;
+            sfd.DefaultExt = ".xml";
+            sfd.Filter = "XML|.xml";
+            sfd.ShowDialog();
             using (var writer = new System.IO.StreamWriter("out.xml"))
             {
                 var serializer = new XmlSerializer(typeof(HashSet<Circle>));
