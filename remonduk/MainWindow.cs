@@ -8,18 +8,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace remonduk
 {
     public partial class MainWindow : Form
     {
-        Circle leader;
-        Circle sheep;
-        List<Circle> circles = new List<Circle>();
-        Circle mouse;
+        HashSet<Circle> circles = new HashSet<Circle>();
         Circle selected;
 
         bool pause;
+
+        bool drag;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -28,6 +29,7 @@ namespace remonduk
 
             pause = false;
             selected = null;
+            drag = false;
         }
 
         //this method is added to the Idle event in the constructor
@@ -46,19 +48,33 @@ namespace remonduk
                     c.draw(this.CreateGraphics());
                 }
 
-                if (pause)
-                {
-                    drawPause(this.CreateGraphics());
-                }
-                else
-                {
-                    drawPlay(this.CreateGraphics());
-                }
-
-                drawNewCircleAngles(this.CreateGraphics());
+                drawHUD(this.CreateGraphics());
 
                 System.Threading.Thread.Sleep(50);
             }
+        }
+
+        void drawHUD(Graphics g)
+        {
+            if(pause)
+            {
+                drawPause(g);
+            }
+            else
+            {
+                drawPlay(g);
+            }
+            if(selected != null)
+            {
+                drawSelected(g);
+            }
+            drawNewCircleAngles(g);
+        }
+
+        void drawSelected(Graphics g)
+        {
+            Pen pen = new Pen(Color.Black);
+            g.DrawEllipse(pen, selected.x-25, selected.y-25, 50, 50);
         }
 
         void drawPause(Graphics g)
@@ -66,6 +82,16 @@ namespace remonduk
             Brush brush = new SolidBrush(Color.Red);
             g.FillRectangle(brush, new Rectangle(this.Size.Width / 2 - 10, 25, 5, 25));
             g.FillRectangle(brush, new Rectangle(this.Size.Width / 2 + 10, 25, 5, 25));
+        }
+
+        void drawPlay(Graphics g)
+        {
+            Brush brush = new SolidBrush(Color.Green);
+            Point[] p = new Point[3];
+            p[0] = new Point(this.Size.Width / 2 - 15, 24);
+            p[1] = new Point(this.Size.Width / 2 - 15, 50);
+            p[2] = new Point(this.Size.Width / 2 + 15, 37);
+            g.FillPolygon(brush, p);
         }
 
         void drawNewCircleAngles(Graphics g)
@@ -88,16 +114,6 @@ namespace remonduk
             y2 = (float)Math.Sin(theta * (Math.PI / 180.0)) * 25 + y1;
             g.DrawLine(pen, x1, y1, x2, y2);
             g.DrawEllipse(pen, 125, 90, 75, 75);
-        }
-
-        void drawPlay(Graphics g)
-        {
-            Brush brush = new SolidBrush(Color.Green);
-            Point[] p = new Point[3];
-            p[0] = new Point(this.Size.Width / 2 - 15, 24);
-            p[1] = new Point(this.Size.Width / 2 - 15, 50);
-            p[2] = new Point(this.Size.Width / 2 + 15, 37);
-            g.FillPolygon(brush, p);
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -129,13 +145,18 @@ namespace remonduk
             pos = this.PointToClient(pos);
             Circle click = new Circle(pos.X - 5, pos.Y - 5, 25);
             bool found = false;
-
+            if (drag && selected != null)
+            {
+                selected.x = pos.X;
+                selected.y = pos.Y;
+            }
+            drag = false;
             foreach (Circle c in circles)
             {
 
                 if (click.colliding(c))
                 {
-                    System.Diagnostics.Debug.WriteLine("BOOP");
+                    System.Diagnostics.Debug.WriteLine("MOUSEUP");
                     System.Diagnostics.Debug.WriteLine(c.velocity + " " + c.acceleration);
                     selected = c;
                     new_circle_acceleration_angle_up_down.Value = (Decimal)(selected.acceleration_angle * 180.0 / Math.PI);
@@ -143,6 +164,7 @@ namespace remonduk
                     new_circle_velocity_angle_up_down.Value = (Decimal)(selected.velocity_angle * 180.0 / Math.PI);
                     new_circle_velocity_up_down.Value = (Decimal)selected.velocity;
                     found = true;
+                    selected.color = Color.CornflowerBlue;
                 }
             }
             if (!found)
@@ -151,6 +173,10 @@ namespace remonduk
                 click.setVelocity((float)new_circle_velocity_up_down.Value, ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180.0);
                 click.updateAcceleration((float)new_circle_acceleration_up_down.Value, ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
                 circles.Add(click);
+                if(selected != null)
+                {
+                    selected.color = Color.Chartreuse;
+                }
                 selected = null;
             }
         }
@@ -244,13 +270,27 @@ namespace remonduk
             {
                 Point pos = Control.MousePosition;
                 pos = this.PointToClient(pos);
-                Circle click = new Circle(pos.X - 5, pos.Y - 5, 25);
-                if(click.colliding(selected))
+                Circle click = new Circle(pos.X, pos.Y, 50);
+                Circle easySelect = new Circle(selected.x, selected.y, 25);
+                if(click.colliding(easySelect))
                 {
-                    selected.x = pos.X;
-                    selected.y = pos.Y;
+                    drag = true;
+                    System.Diagnostics.Debug.WriteLine("SELECTED");
+                    System.Diagnostics.Debug.WriteLine(String.Concat("MouseX = ", pos.X.ToString(),"  MouseY = ",pos.Y.ToString()));
                 }
             }
+        }
+
+        private void save_menu_item_Click(object sender, EventArgs e)
+        {
+            using (var writer = new System.IO.StreamWriter("out.xml"))
+            {
+                var serializer = new XmlSerializer(typeof(HashSet<Circle>));
+                serializer.Serialize(writer, circles);
+                writer.Flush();
+            }
+
+
         }
     }
 }

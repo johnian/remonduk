@@ -243,7 +243,7 @@ namespace TestSuite
 		[TestMethod]
 		public void updateAccelerationTest() {
 			Circle circle = new Circle(1, 1, 2);
-			List<Circle> circles = new List<Circle>();
+			HashSet<Circle> circles = new HashSet<Circle>();
 
 			AreEqual(0, circle.vx);
 			AreEqual(0, circle.vy);

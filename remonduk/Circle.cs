@@ -17,6 +17,7 @@ namespace remonduk
 		public const float VELOCITY_ANGLE = 0F;
 		public const float ACCELERATION = Constants.GRAVITY;
 		public const float ACCELERATION_ANGLE = Constants.GRAVITY_ANGLE;
+        public Color DEFAULT_COLOR = Color.Chartreuse;
 
 		public const Circle TARGET = null;
 		public float MIN_DIST = 0F;
@@ -31,6 +32,8 @@ namespace remonduk
 		public float min_dist;
 		public float max_dist;
 
+		public Color color;
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -39,6 +42,9 @@ namespace remonduk
 		/// <param name="r"></param>
 		/// <param name="mass"></param>
 		///
+
+		public Circle() { }
+
 		public Circle(float x, float y, float r, float mass = MASS):
 			this(x, y, r,
 				VELOCITY, VELOCITY_ANGLE, mass) { }
@@ -62,6 +68,7 @@ namespace remonduk
 			setAcceleration(acceleration, acceleration_angle);
 
 			follow(TARGET);
+            this.color = DEFAULT_COLOR;
         }
 
 		/// <summary>
@@ -154,7 +161,7 @@ namespace remonduk
             return distance(other) <= r + other.r;
         }
 
-        public void move(List<Circle> circles)
+        public void move(HashSet<Circle> circles)
         {
             if (target != null)
             {
@@ -176,7 +183,7 @@ namespace remonduk
             }
         }
 
-        public void update(List<Circle> circles) //revisit List for refactorization!!!!! rar i like my keyboard this
+        public void update(HashSet<Circle> circles) //revisit List for refactorization!!!!! rar i like my keyboard this
         //is fun kbye
         {
             move(circles);
@@ -188,8 +195,8 @@ namespace remonduk
 		/// <param name="g"></param>
         public void draw(Graphics g)
         {
-            Brush brush = new SolidBrush(Color.Chartreuse);
-            g.FillEllipse(brush, x, y, r, r);
+            Brush brush = new SolidBrush(color);
+            g.FillEllipse(brush, x-r/2, y-r/2, r, r);
         }
 
 		public float magnitude(float x, float y) {
