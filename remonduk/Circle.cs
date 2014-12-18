@@ -118,6 +118,10 @@ namespace remonduk
 			if (target == null) {
 				follow();
 			}
+            else if(this == target)
+            {
+                follow();
+            }
 			else {
 				this.target = target;
 				this.min_dist = min_dist;

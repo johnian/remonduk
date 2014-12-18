@@ -22,6 +22,8 @@ namespace remonduk
 
         bool drag;
 
+        bool targeting;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -31,6 +33,7 @@ namespace remonduk
             pause = false;
             selected = null;
             drag = false;
+            targeting = false;
             frame_count = 0;
         }
 
@@ -148,7 +151,7 @@ namespace remonduk
         {
             Point pos = Control.MousePosition;
             pos = this.PointToClient(pos);
-            Circle click = new Circle(pos.X - 5, pos.Y - 5, 25);
+            Circle click = new Circle(pos.X, pos.Y, 5);
             bool found = false;
             if (drag && selected != null)
             {
@@ -158,8 +161,12 @@ namespace remonduk
             drag = false;
             foreach (Circle c in circles)
             {
-
-                if (click.colliding(c))
+                if(click.colliding(c) && selected != null)
+                {
+                    selected.follow(c, 25, 100);
+                    found = true;
+                }
+                else if (click.colliding(c))
                 {
                     System.Diagnostics.Debug.WriteLine("MOUSEUP");
                     System.Diagnostics.Debug.WriteLine(c.velocity + " " + c.acceleration);
@@ -168,13 +175,14 @@ namespace remonduk
                     new_circle_acceleration_up_down.Value = (Decimal)selected.acceleration;
                     new_circle_velocity_angle_up_down.Value = (Decimal)(selected.velocity_angle * 180.0 / Math.PI);
                     new_circle_velocity_up_down.Value = (Decimal)selected.velocity;
+                    circle_radius_up_down.Value = (Decimal)selected.r;
                     found = true;
                     selected.color = Color.CornflowerBlue;
                 }
             }
             if (!found)
             {
-                click.r = 10;
+                click.r = (float)circle_radius_up_down.Value;
                 click.setVelocity((float)new_circle_velocity_up_down.Value, ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180.0);
                 click.updateAcceleration((float)new_circle_acceleration_up_down.Value, ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
                 circles.Add(click);
@@ -240,7 +248,7 @@ namespace remonduk
         {
             if(selected != null)
             {
-                selected.velocity = ((float)new_circle_velocity_up_down.Value); 
+                selected.setVelocity((float)new_circle_velocity_up_down.Value, ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180);
             }
         }
 
@@ -248,7 +256,7 @@ namespace remonduk
         {
             if(selected != null)
             {
-                selected.acceleration = (float)new_circle_acceleration_up_down.Value;
+                selected.setAcceleration((float)new_circle_acceleration_up_down.Value, ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
             }
         }
 
@@ -256,7 +264,7 @@ namespace remonduk
         {
             if(selected != null)
             {
-                selected.velocity_angle = ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180.0;
+                selected.setVelocity((float)new_circle_velocity_up_down.Value, ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180);
             }
         }
 
@@ -264,7 +272,7 @@ namespace remonduk
         {
             if (selected != null)
             {
-                selected.acceleration_angle = ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0;
+                selected.setAcceleration((float)new_circle_acceleration_up_down.Value, ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
             }
         }
 
@@ -275,13 +283,12 @@ namespace remonduk
             {
                 Point pos = Control.MousePosition;
                 pos = this.PointToClient(pos);
-                Circle click = new Circle(pos.X, pos.Y, 50);
-                Circle easySelect = new Circle(selected.x, selected.y, 25);
-                if(click.colliding(easySelect))
+                Circle click = new Circle(pos.X, pos.Y, 5);
+                if(click.colliding(selected))
                 {
                     drag = true;
-                    System.Diagnostics.Debug.WriteLine("SELECTED");
-                    System.Diagnostics.Debug.WriteLine(String.Concat("MouseX = ", pos.X.ToString(),"  MouseY = ",pos.Y.ToString()));
+                    //System.Diagnostics.Debug.WriteLine("SELECTED");
+                    //System.Diagnostics.Debug.WriteLine(String.Concat("MouseX = ", pos.X.ToString(),"  MouseY = ",pos.Y.ToString()));
                 }
             }
         }
@@ -311,11 +318,39 @@ namespace remonduk
             {
                 var serializer = new XmlSerializer(typeof(HashSet<Circle>));
                 circles = serializer.Deserialize(stream) as HashSet<Circle>;
-                System.Diagnostics.Debug.WriteLine(circles.Count);
-                Circle c1 = circles.ElementAt(0);
-                c1.draw(this.CreateGraphics());
-                System.Diagnostics.Debug.WriteLine("X: " + c1.x + " Y: " + c1.y);
-                System.Diagnostics.Debug.WriteLine("R: " + c1.r);
+                //System.Diagnostics.Debug.WriteLine(circles.Count);
+                //Circle c1 = circles.ElementAt(0);
+                //c1.draw(this.CreateGraphics());
+                //System.Diagnostics.Debug.WriteLine("X: " + c1.x + " Y: " + c1.y);
+                //System.Diagnostics.Debug.WriteLine("R: " + c1.r);
+            }
+        }
+
+        private void circle_radius_up_down_ValueChanged(object sender, EventArgs e)
+        {
+            if(selected != null)
+            {
+                selected.r = (float)circle_radius_up_down.Value;
+            }
+        }
+
+        private void onToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(gravity_toggle_menu_item.Checked)
+            {
+                foreach(Circle c in circles)
+                {
+                    c.updateAcceleration(Constants.Instance.GRAVITY, Constants.Instance.GRAVITY_ANGLE);
+                }
+                Constants.Instance.GRAVITY_ACTIVE = true;
+            }
+            else
+            {
+                foreach (Circle c in circles)
+                {
+                    c.updateAcceleration(Constants.Instance.GRAVITY, -1*Constants.Instance.GRAVITY_ANGLE);
+                }
+                Constants.Instance.GRAVITY_ACTIVE = false;
             }
         }
     }
