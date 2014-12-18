@@ -244,11 +244,35 @@ namespace TestSuite
 		public void updateAccelerationTest() {
 			Circle circle = new Circle(1, 1, 2);
 			HashSet<Circle> circles = new HashSet<Circle>();
+			
+			AreEqual(9.8F, circle.acceleration);
 
-			AreEqual(0, circle.vx);
-			AreEqual(0, circle.vy);
+			circle.updateAcceleration(-1 * Constants.GRAVITY, Constants.GRAVITY_ANGLE);
+			AreEqual(0, circle.acceleration);
+			AreEqual(0, circle.acceleration_angle);
 			AreEqual(0, circle.ax);
-			AreEqual(Constants.GRAVITY, circle.ay);
+			AreEqual(0, circle.ay);
+
+			circle.updateAcceleration(-1 * Constants.GRAVITY, Math.PI / 4);
+			AreEqual(Constants.GRAVITY, circle.acceleration);
+			AreEqual(Math.PI / 4, circle.acceleration_angle);
+			AreEqual(Constants.GRAVITY * Math.Sqrt(2) / 2, circle.ax);
+			AreEqual(Constants.GRAVITY * Math.Sqrt(2) / 2, circle.ay);
+
+			//circle.updateAcceleration(-1 * Constants.GRAVITY, circle.acceleration_angle);
+			//for (int i = 9; i >= 0; i--) {
+			//	circle.update(circles);
+			//	AreEqual(0, circle.vx);
+			//	AreEqual(i * Constants.GRAVITY, circle.vy);
+			//	AreEqual(0, circle.ax);
+			//	AreEqual(-1 * Constants.GRAVITY, circle.ay);
+			//}
+		}
+
+		[TestMethod]
+		public void updateVelocity() {
+			Circle circle = new Circle(1, 1, 2);
+			HashSet<Circle> circles = new HashSet<Circle>();
 
 			for (int i = 1; i <= 10; i++) {
 				circle.update(circles);
@@ -256,6 +280,24 @@ namespace TestSuite
 				AreEqual(i * Constants.GRAVITY, circle.vy);
 				AreEqual(0, circle.ax);
 				AreEqual(Constants.GRAVITY, circle.ay);
+			}
+
+			circle.updateAcceleration(-1 * Constants.GRAVITY, circle.acceleration_angle);
+			for (int i = 10; i > 0; i--) {
+				circle.update(circles);
+				AreEqual(0, circle.vx);
+				AreEqual(10 * Constants.GRAVITY, circle.vy);
+				AreEqual(0, circle.ax);
+				AreEqual(0, circle.ay);
+			}
+
+			circle.updateAcceleration(-1 * Constants.GRAVITY, circle.acceleration_angle);
+			for (int i = 9; i >= 0; i--) {
+				circle.update(circles);
+				AreEqual(0, circle.vx);
+				AreEqual(i * Constants.GRAVITY, circle.vy);
+				AreEqual(0, circle.ax);
+				AreEqual(-1 * Constants.GRAVITY, circle.ay);
 			}
 		}
 
