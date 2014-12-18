@@ -11,7 +11,7 @@ namespace remonduk {
 
         public float DEFAULT_RADIUS = 5F;
         public float MIN_RADIUS = 1F;
-        public float MAX_RADIUS = 20F;
+        public float MAX_RADIUS = 40F;
         public bool STATIC_RADIUS = false;
 
         public Constants()

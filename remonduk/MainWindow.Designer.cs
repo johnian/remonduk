@@ -45,11 +45,14 @@
             this.load_menu_item = new System.Windows.Forms.ToolStripMenuItem();
             this.save_menu_item = new System.Windows.Forms.ToolStripMenuItem();
             this.new_menu_item = new System.Windows.Forms.ToolStripMenuItem();
+            this.circle_radius_up_down = new System.Windows.Forms.NumericUpDown();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.new_circle_velocity_up_down)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.new_circle_acceleration_up_down)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.new_circle_velocity_angle_up_down)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.new_circle_acceleration_angle_up_down)).BeginInit();
             this.menu.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.circle_radius_up_down)).BeginInit();
             this.SuspendLayout();
             // 
             // new_circle_velocity_up_down
@@ -211,7 +214,7 @@
             this.load_menu_item.Name = "load_menu_item";
             this.load_menu_item.ShortcutKeyDisplayString = "";
             this.load_menu_item.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.load_menu_item.Size = new System.Drawing.Size(152, 22);
+            this.load_menu_item.Size = new System.Drawing.Size(137, 22);
             this.load_menu_item.Text = "Load";
             this.load_menu_item.Click += new System.EventHandler(this.load_menu_item_Click);
             // 
@@ -220,7 +223,7 @@
             this.save_menu_item.Name = "save_menu_item";
             this.save_menu_item.ShortcutKeyDisplayString = "";
             this.save_menu_item.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.save_menu_item.Size = new System.Drawing.Size(152, 22);
+            this.save_menu_item.Size = new System.Drawing.Size(137, 22);
             this.save_menu_item.Text = "Save";
             this.save_menu_item.Click += new System.EventHandler(this.save_menu_item_Click);
             // 
@@ -229,8 +232,40 @@
             this.new_menu_item.Name = "new_menu_item";
             this.new_menu_item.ShortcutKeyDisplayString = "";
             this.new_menu_item.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.new_menu_item.Size = new System.Drawing.Size(152, 22);
+            this.new_menu_item.Size = new System.Drawing.Size(137, 22);
             this.new_menu_item.Text = "New";
+            // 
+            // circle_radius_up_down
+            // 
+            this.circle_radius_up_down.Location = new System.Drawing.Point(92, 253);
+            this.circle_radius_up_down.Maximum = new decimal(new int[] {
+            40,
+            0,
+            0,
+            0});
+            this.circle_radius_up_down.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.circle_radius_up_down.Name = "circle_radius_up_down";
+            this.circle_radius_up_down.Size = new System.Drawing.Size(46, 20);
+            this.circle_radius_up_down.TabIndex = 9;
+            this.circle_radius_up_down.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.circle_radius_up_down.ValueChanged += new System.EventHandler(this.circle_radius_up_down_ValueChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 255);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(74, 13);
+            this.label3.TabIndex = 10;
+            this.label3.Text = "R(but really D)";
             // 
             // MainWindow
             // 
@@ -238,6 +273,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(791, 606);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.circle_radius_up_down);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.new_circle_acceleration_angle_up_down);
@@ -260,6 +297,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.new_circle_acceleration_angle_up_down)).EndInit();
             this.menu.ResumeLayout(false);
             this.menu.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.circle_radius_up_down)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -284,6 +322,8 @@
         private System.Windows.Forms.ToolStripMenuItem save_menu_item;
         private System.Windows.Forms.ToolStripMenuItem new_menu_item;
         private System.Windows.Forms.ToolStripMenuItem groupToolStripMenuItem;
+        private System.Windows.Forms.NumericUpDown circle_radius_up_down;
+        private System.Windows.Forms.Label label3;
     }
 }
 

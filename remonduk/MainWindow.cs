@@ -240,7 +240,7 @@ namespace remonduk
         {
             if(selected != null)
             {
-                selected.velocity = ((float)new_circle_velocity_up_down.Value); 
+                selected.setVelocity((float)new_circle_velocity_up_down.Value, ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180);
             }
         }
 
@@ -248,7 +248,7 @@ namespace remonduk
         {
             if(selected != null)
             {
-                selected.acceleration = (float)new_circle_acceleration_up_down.Value;
+                selected.setAcceleration((float)new_circle_acceleration_up_down.Value, ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
             }
         }
 
@@ -256,7 +256,7 @@ namespace remonduk
         {
             if(selected != null)
             {
-                selected.velocity_angle = ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180.0;
+                selected.setVelocity((float)new_circle_velocity_up_down.Value, ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180);
             }
         }
 
@@ -264,7 +264,7 @@ namespace remonduk
         {
             if (selected != null)
             {
-                selected.acceleration_angle = ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0;
+                selected.setAcceleration((float)new_circle_acceleration_up_down.Value, ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
             }
         }
 
@@ -316,6 +316,14 @@ namespace remonduk
                 c1.draw(this.CreateGraphics());
                 System.Diagnostics.Debug.WriteLine("X: " + c1.x + " Y: " + c1.y);
                 System.Diagnostics.Debug.WriteLine("R: " + c1.r);
+            }
+        }
+
+        private void circle_radius_up_down_ValueChanged(object sender, EventArgs e)
+        {
+            if(selected != null)
+            {
+                selected.r = (float)circle_radius_up_down.Value;
             }
         }
     }
