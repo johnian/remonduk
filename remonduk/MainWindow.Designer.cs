@@ -38,13 +38,13 @@
             this.label2 = new System.Windows.Forms.Label();
             this.menu = new System.Windows.Forms.MenuStrip();
             this.draw_menu_item = new System.Windows.Forms.ToolStripMenuItem();
+            this.groupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.shape_menu_item = new System.Windows.Forms.ToolStripMenuItem();
             this.circle_menu_item = new System.Windows.Forms.ToolStripMenuItem();
             this.system_menu_item = new System.Windows.Forms.ToolStripMenuItem();
-            this.new_menu_item = new System.Windows.Forms.ToolStripMenuItem();
-            this.save_menu_item = new System.Windows.Forms.ToolStripMenuItem();
             this.load_menu_item = new System.Windows.Forms.ToolStripMenuItem();
-            this.groupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.save_menu_item = new System.Windows.Forms.ToolStripMenuItem();
+            this.new_menu_item = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.new_circle_velocity_up_down)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.new_circle_acceleration_up_down)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.new_circle_velocity_angle_up_down)).BeginInit();
@@ -175,18 +175,25 @@
             this.draw_menu_item.Size = new System.Drawing.Size(44, 20);
             this.draw_menu_item.Text = "Draw";
             // 
+            // groupToolStripMenuItem
+            // 
+            this.groupToolStripMenuItem.Name = "groupToolStripMenuItem";
+            this.groupToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.G)));
+            this.groupToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.groupToolStripMenuItem.Text = "Group";
+            // 
             // shape_menu_item
             // 
             this.shape_menu_item.Name = "shape_menu_item";
             this.shape_menu_item.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.S)));
-            this.shape_menu_item.Size = new System.Drawing.Size(152, 22);
+            this.shape_menu_item.Size = new System.Drawing.Size(138, 22);
             this.shape_menu_item.Text = "Shape";
             // 
             // circle_menu_item
             // 
             this.circle_menu_item.Name = "circle_menu_item";
             this.circle_menu_item.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.C)));
-            this.circle_menu_item.Size = new System.Drawing.Size(152, 22);
+            this.circle_menu_item.Size = new System.Drawing.Size(138, 22);
             this.circle_menu_item.Text = "Circle";
             // 
             // system_menu_item
@@ -199,13 +206,14 @@
             this.system_menu_item.Size = new System.Drawing.Size(54, 20);
             this.system_menu_item.Text = "System";
             // 
-            // new_menu_item
+            // load_menu_item
             // 
-            this.new_menu_item.Name = "new_menu_item";
-            this.new_menu_item.ShortcutKeyDisplayString = "";
-            this.new_menu_item.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.new_menu_item.Size = new System.Drawing.Size(152, 22);
-            this.new_menu_item.Text = "New";
+            this.load_menu_item.Name = "load_menu_item";
+            this.load_menu_item.ShortcutKeyDisplayString = "";
+            this.load_menu_item.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.load_menu_item.Size = new System.Drawing.Size(152, 22);
+            this.load_menu_item.Text = "Load";
+            this.load_menu_item.Click += new System.EventHandler(this.load_menu_item_Click);
             // 
             // save_menu_item
             // 
@@ -216,20 +224,13 @@
             this.save_menu_item.Text = "Save";
             this.save_menu_item.Click += new System.EventHandler(this.save_menu_item_Click);
             // 
-            // load_menu_item
+            // new_menu_item
             // 
-            this.load_menu_item.Name = "load_menu_item";
-            this.load_menu_item.ShortcutKeyDisplayString = "";
-            this.load_menu_item.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.load_menu_item.Size = new System.Drawing.Size(152, 22);
-            this.load_menu_item.Text = "Load";
-            // 
-            // groupToolStripMenuItem
-            // 
-            this.groupToolStripMenuItem.Name = "groupToolStripMenuItem";
-            this.groupToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.G)));
-            this.groupToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.groupToolStripMenuItem.Text = "Group";
+            this.new_menu_item.Name = "new_menu_item";
+            this.new_menu_item.ShortcutKeyDisplayString = "";
+            this.new_menu_item.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.new_menu_item.Size = new System.Drawing.Size(152, 22);
+            this.new_menu_item.Text = "New";
             // 
             // MainWindow
             // 

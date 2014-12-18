@@ -16,6 +16,7 @@ namespace remonduk
     {
         HashSet<Circle> circles = new HashSet<Circle>();
         Circle selected;
+        int frame_count;
 
         bool pause;
 
@@ -30,6 +31,7 @@ namespace remonduk
             pause = false;
             selected = null;
             drag = false;
+            frame_count = 0;
         }
 
         //this method is added to the Idle event in the constructor
@@ -50,6 +52,9 @@ namespace remonduk
 
                 drawHUD(this.CreateGraphics());
 
+                System.Diagnostics.Debug.WriteLine("Frame Count: " + frame_count);
+                System.Diagnostics.Debug.WriteLine(circles.Count);
+                frame_count++;
                 System.Threading.Thread.Sleep(50);
             }
         }
@@ -283,14 +288,35 @@ namespace remonduk
 
         private void save_menu_item_Click(object sender, EventArgs e)
         {
-            using (var writer = new System.IO.StreamWriter("out.xml"))
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Title = "SAVE YOUR CIRCLES FOR FUTURE CIRCLES TO BE THE SAME AS YOUR CURRENT CIRCLES";
+            sfd.AddExtension = true;
+            sfd.DefaultExt = ".circles";
+            sfd.Filter = "Circles|.circles";
+            sfd.ShowDialog();
+            using (var writer = new System.IO.StreamWriter(sfd.FileName))
             {
                 var serializer = new XmlSerializer(typeof(HashSet<Circle>));
                 serializer.Serialize(writer, circles);
                 writer.Flush();
             }
+        }
 
-
+        private void load_menu_item_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Title = "REMEMBER YOUR CIRCLES FROM BEFORE TO MAKE THEM EXIST AGAIN!";
+            ofd.ShowDialog();
+            using (var stream = System.IO.File.OpenRead(ofd.FileName))
+            {
+                var serializer = new XmlSerializer(typeof(HashSet<Circle>));
+                circles = serializer.Deserialize(stream) as HashSet<Circle>;
+                System.Diagnostics.Debug.WriteLine(circles.Count);
+                Circle c1 = circles.ElementAt(0);
+                c1.draw(this.CreateGraphics());
+                System.Diagnostics.Debug.WriteLine("X: " + c1.x + " Y: " + c1.y);
+                System.Diagnostics.Debug.WriteLine("R: " + c1.r);
+            }
         }
     }
 }
