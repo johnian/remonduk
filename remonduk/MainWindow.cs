@@ -133,7 +133,7 @@ namespace remonduk
             foreach (Circle c in circles)
             {
 
-                if (click.collide(c) == c)
+                if (click.colliding(c))
                 {
                     System.Diagnostics.Debug.WriteLine("BOOP");
                     System.Diagnostics.Debug.WriteLine(c.velocity + " " + c.acceleration);
@@ -245,7 +245,7 @@ namespace remonduk
                 Point pos = Control.MousePosition;
                 pos = this.PointToClient(pos);
                 Circle click = new Circle(pos.X - 5, pos.Y - 5, 25);
-                if(click.collide(selected) == selected)
+                if(click.colliding(selected))
                 {
                     selected.x = pos.X;
                     selected.y = pos.Y;
