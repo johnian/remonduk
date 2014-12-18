@@ -286,17 +286,28 @@ namespace remonduk
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Title = "SAVE YOUR CIRCLES FOR FUTURE CIRCLES TO BE THE SAME AS YOUR CURRENT CIRCLES";
             sfd.AddExtension = true;
-            sfd.DefaultExt = ".xml";
-            sfd.Filter = "XML|.xml";
+            sfd.DefaultExt = ".circles";
+            sfd.Filter = "Circles|.circles";
             sfd.ShowDialog();
-            using (var writer = new System.IO.StreamWriter("out.xml"))
+            using (var writer = new System.IO.StreamWriter(sfd.FileName))
             {
                 var serializer = new XmlSerializer(typeof(HashSet<Circle>));
                 serializer.Serialize(writer, circles);
                 writer.Flush();
             }
+        }
 
-
+        private void load_menu_item_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Title = "REMEMBER YOUR CIRCLES FROM BEFORE TO MAKE THEM EXIST AGAIN!";
+            ofd.ShowDialog();
+            using (var stream = System.IO.File.OpenRead(ofd.FileName))
+            {
+                var serializer = new XmlSerializer(typeof(HashSet<Circle>));
+                circles =  serializer.Deserialize(stream) as HashSet<Circle>;
+                System.Diagnostics.Debug.WriteLine(circles.Count);
+            }
         }
     }
 }
