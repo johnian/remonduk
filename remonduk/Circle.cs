@@ -15,8 +15,8 @@ namespace remonduk
 
 		public const float VELOCITY = 0;
 		public const float VELOCITY_ANGLE = 0F;
-		public const float ACCELERATION = Constants.GRAVITY;
-		public const float ACCELERATION_ANGLE = Constants.GRAVITY_ANGLE;
+		public const float ACCELERATION = 0;
+		public const float ACCELERATION_ANGLE = 0;
         public Color DEFAULT_COLOR = Color.Chartreuse;
 
 		public const Circle TARGET = null;
