@@ -358,26 +358,10 @@ namespace TestSuite
 				AreEqual(gx * i * i / 2 + vx * i + 10 * vx, circle.x);
 				AreEqual(gy * i * i / 2 + vy * i + 10 * vy, circle.y);
 			}
-
-			//gravity *= -1;
-			//gx = gravity * Math.Cos(gravity_angle);
-			//gy = gravity * Math.Sin(gravity_angle);
-
-			//circle.updateAcceleration(2 * gravity, gravity_angle);
-			//for (int i = 9; i >= 0; i--) {
-			//	circle.updateVelocity();
-			//	AreEqual(i * (acceleration - gravity), circle.velocity);
-			//	double vx = i * (ax - gx);
-			//	double vy = i * (ay - gy);
-			//	AreEqual(circle.angle(vy, vx), circle.velocity_angle);
-			//	AreEqual(vx, circle.vx);
-			//	AreEqual(vy, circle.vy);
-			//}
-			// need to check position, velocity, and acceleration
 		}
 
 		[TestMethod]
-		public void collideTest()
+		public void collidingTest()
 		{
 
 		}

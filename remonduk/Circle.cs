@@ -179,7 +179,7 @@ namespace remonduk
 			{
 				// set up following in a better way ??
 				//double dist = distance(target);
-				setVelocity(velocity, angle(target.x - x, target.y - y));
+				setVelocity(velocity, angle(target.y - y, target.x - x));
 				//double tau = 2.0 * Math.PI;
 				//double diff = (velocity_angle % (tau)) - (target.velocity_angle % (tau));
 			}
