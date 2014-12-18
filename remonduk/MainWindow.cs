@@ -82,7 +82,7 @@ namespace remonduk
         void drawSelected(Graphics g)
         {
             Pen pen = new Pen(Color.Black);
-            g.DrawEllipse(pen, selected.x-25, selected.y-25, 50, 50);
+            g.DrawEllipse(pen, (float)selected.x-25, (float)selected.y-25, 50, 50);
         }
 
         void drawPause(Graphics g)

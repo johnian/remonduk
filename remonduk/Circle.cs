@@ -10,27 +10,29 @@ namespace remonduk
 {
     public class Circle
     {
-		public const float RADIUS = 1F;
-		public const float MASS = 1.0F;
+		public int PRECISION = 5;
 
-		public const float VELOCITY = 0;
-		public const float VELOCITY_ANGLE = 0F;
-		public const float ACCELERATION = 0;
-		public const float ACCELERATION_ANGLE = 0;
+		public const double RADIUS = 1;
+		public const double MASS = 1.0;
+
+		public const double VELOCITY = 0;
+		public const double VELOCITY_ANGLE = 0;
+		public const double ACCELERATION = 0;
+		public const double ACCELERATION_ANGLE = 0;
         public Color DEFAULT_COLOR = Color.Chartreuse;
 
 		public const Circle TARGET = null;
-		public float MIN_DIST = 0F;
-		public float MAX_DIST = 0F;
+		public double MIN_DIST = 0;
+		public double MAX_DIST = 0;
 
-		public float x, y, r, mass;
-		public float velocity, vx, vy;
-		public float acceleration, ax, ay;
+		public double x, y, r, mass;
+		public double velocity, vx, vy;
+		public double acceleration, ax, ay;
 		public double velocity_angle, acceleration_angle;
   
 		public Circle target;
-		public float min_dist;
-		public float max_dist;
+		public double min_dist;
+		public double max_dist;
 
 		public Color color;
 
@@ -45,19 +47,19 @@ namespace remonduk
 
 		public Circle() { }
 
-		public Circle(float x, float y, float r, float mass = MASS):
+		public Circle(double x, double y, double r, double mass = MASS):
 			this(x, y, r,
 				VELOCITY, VELOCITY_ANGLE, mass) { }
 
-		public Circle(float x, float y, float r,
-			float velocity, double velocity_angle, float mass = MASS):
+		public Circle(double x, double y, double r,
+			double velocity, double velocity_angle, double mass = MASS):
 			this(x, y, r,
 				velocity, velocity_angle,
 				ACCELERATION, ACCELERATION_ANGLE, mass) { }
 
-		public Circle(float x, float y, float r,
-			float velocity, double velocity_angle,
-			float acceleration, double acceleration_angle, float mass = MASS)
+		public Circle(double x, double y, double r,
+			double velocity, double velocity_angle,
+			double acceleration, double acceleration_angle, double mass = MASS)
         {
 			this.x = x;
 			this.y = y;
@@ -76,34 +78,34 @@ namespace remonduk
 		/// </summary>
 		/// <param name="r"></param>
 		/// 
-		public void setRadius(float r) {
+		public void setRadius(double r) {
 			if (r < RADIUS) {
 				throw new ArgumentException("radius: " + r);
 			}
 			this.r = r;
 		}
 
-		public void setMass(float mass) {
+		public void setMass(double mass) {
 			this.mass = mass;
 		}
 
-		public void setVelocity(float velocity, double velocity_angle)
+		public void setVelocity(double velocity, double velocity_angle)
         {
-			this.velocity = velocity;
-			this.velocity_angle = velocity_angle;
-            vx = velocity * (float)Math.Cos(velocity_angle);
-            vy = velocity * (float)Math.Sin(velocity_angle);
+            vx = velocity * Math.Cos(velocity_angle);
+            vy = velocity * Math.Sin(velocity_angle);
+			this.velocity = magnitude(vx, vy);
+			this.velocity_angle = angle(vy, vx);
         }
 
-		public void setAcceleration(float acceleration, double acceleration_angle) {
-			this.acceleration = acceleration;
-			this.acceleration_angle = acceleration_angle;
-			ax = acceleration * (float)Math.Cos(acceleration_angle);
-			ay = acceleration * (float)Math.Sin(acceleration_angle);
+		public void setAcceleration(double acceleration, double acceleration_angle) {
+			ax = acceleration * Math.Cos(acceleration_angle);
+			ay = acceleration * Math.Sin(acceleration_angle);
+			this.acceleration = magnitude(ax, ay);
+			this.acceleration_angle = angle(ay, ax);
 		}
 
 		public void follow(Circle target = null) {
-			if (target == null) {
+			if (target == null || target == this) {
 				this.target = null;
 				this.min_dist = MIN_DIST;
 				this.max_dist = MAX_DIST;
@@ -113,15 +115,11 @@ namespace remonduk
 			}
 		}
 
-        public void follow(Circle target, float min_dist, float max_dist)
+        public void follow(Circle target, double min_dist, double max_dist)
         {
-			if (target == null) {
+			if (target == null || target == this) {
 				follow();
 			}
-            else if(this == target)
-            {
-                follow();
-            }
 			else {
 				this.target = target;
 				this.min_dist = min_dist;
@@ -133,10 +131,10 @@ namespace remonduk
 		/// 
 		/// </summary>
 		///
-		public void updateAcceleration(float acceleration, double acceleration_angle) {
+		public void updateAcceleration(double acceleration, double acceleration_angle) {
 			// should we update velocity here?
-			this.ax += acceleration * (float)Math.Cos(acceleration_angle);
-			this.ay += acceleration * (float)Math.Sin(acceleration_angle);
+			ax += acceleration * Math.Cos(acceleration_angle);
+			ay += acceleration * Math.Sin(acceleration_angle);
 			this.acceleration = magnitude(ax, ay);
 			this.acceleration_angle = angle(ay, ax);
 		}
@@ -201,25 +199,27 @@ namespace remonduk
         {
 
             Brush brush = new SolidBrush(Color.Chartreuse);
-            g.FillEllipse(brush, x-r/2, y-r/2, r, r);
+            g.FillEllipse(brush, (float)(x - r / 2), (float)(y - r / 2), (float)r, (float)r);
         }
 
-		public float magnitude(float x, float y) {
-			return (float)Math.Sqrt(x * x + y * y);
+		public double magnitude(double x, double y) {
+			return Math.Sqrt(x * x + y * y);
+
+			//return Math.Round(Math.Sqrt(x * x + y * y), PRECISION);
 		}
 
         public double distance(Circle other)
         {
-            float distx = other.x - x;
-            float disty = other.y - y;
+            double distx = other.x - x;
+            double disty = other.y - y;
             return magnitude(distx, disty);
         }
 
-		public double angle(float y, float x) {
+		public double angle(double y, double x) {
 			double theta = Math.Atan2(y, x);
-			if (theta > 2 * Math.PI) {
-				theta -= 2 * Math.PI;
-			}
+			//if (theta > 2 * Math.PI) {
+			//	theta -= 2 * Math.PI;
+			//}
 			if (theta < 0) {
 				theta += 2 * Math.PI;
 			}
