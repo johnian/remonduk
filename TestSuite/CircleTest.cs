@@ -43,9 +43,10 @@ namespace TestSuite
 		}
 
 		[TestMethod]
-		public void CircleTestXYRV() {
+		public void CircleTestXYRV()
+		{
 			Circle circle = new Circle(2, 3, 5, 8, Math.PI / 4);
-			
+
 			AreEqual(2, circle.x);
 			AreEqual(3, circle.y);
 			AreEqual(5, circle.r);
@@ -68,9 +69,10 @@ namespace TestSuite
 			circle = new Circle(2, 3, 5, 8, Math.PI / 4, 13);
 			AreEqual(13, circle.mass);
 		}
-		
+
 		[TestMethod]
-		public void CircleTestXYRVA() {
+		public void CircleTestXYRVA()
+		{
 			Circle circle = new Circle(2, 3, 5, 8, Math.PI / 4, 13, 1 * Math.PI / 4);
 
 			AreEqual(2, circle.x);
@@ -97,38 +99,46 @@ namespace TestSuite
 		}
 
 		[TestMethod]
-		public void setRadiusTest() {
+		public void setRadiusTest()
+		{
 			Circle circle = new Circle(1, 1, 2);
 			circle.setRadius(10);
 			AreEqual(10, circle.r);
 			circle.setRadius(1);
 			AreEqual(1, circle.r);
 
-			try {
+			try
+			{
 				circle.setRadius(.99);
 				Assert.Fail();
 			}
-			catch (ArgumentException e) {
+			catch (ArgumentException e)
+			{
 				AreEqual("radius: 0.99", e.Message);
 			}
-			try {
+			try
+			{
 				circle.setRadius(0);
 				Assert.Fail();
 			}
-			catch (ArgumentException e) {
+			catch (ArgumentException e)
+			{
 				AreEqual("radius: 0", e.Message);
 			}
-			try {
+			try
+			{
 				circle.setRadius(-1.0);
 				Assert.Fail();
 			}
-			catch (ArgumentException e) {
+			catch (ArgumentException e)
+			{
 				AreEqual("radius: -1", e.Message);
 			}
 		}
 
 		[TestMethod]
-		public void setMassTest() {
+		public void setMassTest()
+		{
 			Circle circle = new Circle(1, 1, 2);
 			circle.setMass(10);
 			AreEqual(10, circle.mass);
@@ -139,7 +149,8 @@ namespace TestSuite
 		}
 
 		[TestMethod]
-		public void setVelocityTest() {
+		public void setVelocityTest()
+		{
 			Circle circle = new Circle(1, 1, 2);
 			circle.setVelocity(10, 0);
 			AreEqual(10, circle.velocity);
@@ -167,7 +178,8 @@ namespace TestSuite
 		}
 
 		[TestMethod]
-		public void setAccelerationTest() {
+		public void setAccelerationTest()
+		{
 			Circle circle = new Circle(1, 1, 2);
 			circle.setAcceleration(10, 0);
 			AreEqual(10, circle.acceleration);
@@ -195,7 +207,8 @@ namespace TestSuite
 		}
 
 		[TestMethod]
-		public void followTestT() {
+		public void followTestT()
+		{
 			Circle leader = new Circle(1, 1, 2);
 			Circle sheep = new Circle(3, 5, 8);
 
@@ -219,7 +232,8 @@ namespace TestSuite
 		}
 
 		[TestMethod]
-		public void followTestTMM() {
+		public void followTestTMM()
+		{
 			Circle leader = new Circle(1, 1, 2);
 			Circle sheep = new Circle(3, 5, 8);
 
@@ -240,19 +254,21 @@ namespace TestSuite
 			AreEqual(null, sheep.target);
 			AreEqual(0, sheep.min_dist);
 			AreEqual(0, sheep.max_dist);
-		}	
+		}
 
 		[TestMethod]
-		public void updateAccelerationTest() {
-			Circle circle = new Circle(1, 1, 2);
-			HashSet<Circle> circles = new HashSet<Circle>();
-			
+		public void updateAccelerationTest()
+		{
+			Circle circle = new Circle(1, 1, 2, 0, 0, 0, 0);
+
 			circle.updateAcceleration(-1 * constants.GRAVITY, constants.GRAVITY_ANGLE);
 			AreEqual(constants.GRAVITY, circle.acceleration);
-			if (constants.GRAVITY_ANGLE + Math.PI > 2 * Math.PI) {
+			if (constants.GRAVITY_ANGLE + Math.PI > 2 * Math.PI)
+			{
 				AreEqual(constants.GRAVITY_ANGLE - Math.PI, circle.acceleration_angle);
 			}
-			else {
+			else
+			{
 				AreEqual(constants.GRAVITY_ANGLE + Math.PI, circle.acceleration_angle);
 			}
 			AreEqual(0, circle.ax);
@@ -268,21 +284,17 @@ namespace TestSuite
 		}
 
 		[TestMethod]
-		public void updateVelocity() {
-			Circle circle = new Circle(1, 1, 2);
-			HashSet<Circle> circles = new HashSet<Circle>();
+		public void updateVelocity()
+		{
+			Circle circle = new Circle(1, 1, 2, 0, 0, 0, 0);
 
-			double acceleration = Circle.ACCELERATION;
-			double acceleration_angle = Circle.ACCELERATION_ANGLE;
-			double ax = acceleration * Math.Cos(acceleration_angle);
-			double ay = acceleration * Math.Sin(acceleration_angle);
-
-			for (int i = 1; i <= 10; i++) {
+			for (int i = 1; i <= 10; i++)
+			{
 				circle.updateVelocity();
-				AreEqual(i * acceleration, circle.velocity);
-				AreEqual(acceleration_angle, circle.velocity_angle);
-				AreEqual(i * ax, circle.vx);
-				AreEqual(i * ay, circle.vy);
+				AreEqual(0, circle.velocity);
+				AreEqual(0, circle.velocity_angle);
+				AreEqual(0, circle.vx);
+				AreEqual(0, circle.vy);
 			}
 
 			double gravity = constants.GRAVITY;
@@ -291,60 +303,107 @@ namespace TestSuite
 			double gy = gravity * Math.Sin(gravity_angle);
 
 			circle.updateAcceleration(gravity, gravity_angle);
-			for (int i = 1; i <= 10; i++) {
+			for (int i = 1; i <= 10; i++)
+			{
 				circle.updateVelocity();
-				AreEqual(i * (acceleration + gravity), circle.velocity);
-				double vx = i * (ax + gx);
-				double vy = i * (ay + gy);
-				AreEqual(circle.angle(vy, vx), circle.velocity_angle);
-				AreEqual(vx, circle.vx);
-				AreEqual(vy, circle.vy);
+				AreEqual(gravity * i, circle.velocity);
+				AreEqual(circle.angle(gy * i, gx * i), circle.velocity_angle);
+				AreEqual(gx * i, circle.vx);
+				AreEqual(gy * i, circle.vy);
 			}
 
-			gravity *= -1;
-			gx = gravity * Math.Cos(gravity_angle);
-			gy = gravity * Math.Sin(gravity_angle);
-
-			circle.updateAcceleration(2 * gravity, gravity_angle);
-			for (int i = 9; i >= 0; i--) {
+			circle.updateAcceleration(2 * gravity, gravity_angle + Math.PI);
+			for (int i = 9; i >= 0; i--)
+			{
 				circle.updateVelocity();
-				AreEqual(i * (acceleration - gravity), circle.velocity);
-				double vx = i * (ax - gx);
-				double vy = i * (ay - gy);
-				AreEqual(circle.angle(vy, vx), circle.velocity_angle);
-				AreEqual(vx, circle.vx);
-				AreEqual(vy, circle.vy);
+				AreEqual(gravity * i, circle.velocity);
+				AreEqual(circle.angle(gy * i, gx * i), circle.velocity_angle);
+				AreEqual(gx * i, circle.vx);
+				AreEqual(gy * i, circle.vy);
 			}
 		}
 
 		[TestMethod]
-		public void updatePosition() {
+		public void updatePosition()
+		{
+			Circle circle = new Circle(0, 0, 2, 0, 0, 0, 0);
+
+			for (int i = 1; i <= 10; i++)
+			{
+				circle.updatePosition();
+				AreEqual(0, circle.x);
+				AreEqual(0, circle.y);
+			}
+
+			double velocity = 1;
+			double velocity_angle = Math.PI / 4;
+			double vx = velocity * Math.Cos(velocity_angle);
+			double vy = velocity * Math.Sin(velocity_angle);
+			circle.setVelocity(velocity, velocity_angle);
+			for (int i = 1; i <= 10; i++)
+			{
+				circle.updatePosition();
+				AreEqual(i * vx, circle.x);
+				AreEqual(i * vy, circle.y);
+			}
+
+			double gravity = constants.GRAVITY;
+			double gravity_angle = Math.PI / 4;
+			double gx = gravity * Math.Cos(gravity_angle);
+			double gy = gravity * Math.Sin(gravity_angle);
+			circle.updateAcceleration(gravity, gravity_angle);
+			for (int i = 1; i <= 10; i++)
+			{
+				circle.updatePosition();
+				AreEqual(gx * i * i / 2 + vx * i + 10 * vx, circle.x);
+				AreEqual(gy * i * i / 2 + vy * i + 10 * vy, circle.y);
+			}
+
+			//gravity *= -1;
+			//gx = gravity * Math.Cos(gravity_angle);
+			//gy = gravity * Math.Sin(gravity_angle);
+
+			//circle.updateAcceleration(2 * gravity, gravity_angle);
+			//for (int i = 9; i >= 0; i--) {
+			//	circle.updateVelocity();
+			//	AreEqual(i * (acceleration - gravity), circle.velocity);
+			//	double vx = i * (ax - gx);
+			//	double vy = i * (ay - gy);
+			//	AreEqual(circle.angle(vy, vx), circle.velocity_angle);
+			//	AreEqual(vx, circle.vx);
+			//	AreEqual(vy, circle.vy);
+			//}
 			// need to check position, velocity, and acceleration
 		}
 
 		[TestMethod]
-		public void collideTest() {
+		public void collideTest()
+		{
 
 		}
 
 		[TestMethod]
 
-		public void moveTest() {
+		public void moveTest()
+		{
 
 		}
 
 		[TestMethod]
-		public void updateTest() {
+		public void updateTest()
+		{
 
 		}
 
 		[TestMethod]
-		public void drawTest() {
+		public void drawTest()
+		{
 			// is this even testable?
 		}
 
 		[TestMethod]
-		public void distanceTest() {
+		public void distanceTest()
+		{
 			// gonna have to make the method public to do this
 		}
 
@@ -352,16 +411,19 @@ namespace TestSuite
 		//	Assert.AreEqual(expected, actual);
 		//}
 
-		private void AreEqual(double expected, double actual) {
+		private void AreEqual(double expected, double actual)
+		{
 			System.Diagnostics.Debug.WriteLine("expected: " + expected + " actual: " + actual);
 			AreEqual(true, Math.Abs(expected - actual) < EPSILON);
 		}
 
-		private void AreEqual(bool expected, bool actual) {
+		private void AreEqual(bool expected, bool actual)
+		{
 			Assert.AreEqual(expected, actual);
 		}
 
-		private void AreEqual(Object expected, Object actual) {
+		private void AreEqual(Object expected, Object actual)
+		{
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -369,7 +431,8 @@ namespace TestSuite
 		//	Assert.AreEqual(expected, actual);
 		//}
 
-		private double round(double value) {
+		private double round(double value)
+		{
 			return Math.Round(value, PRECISION);
 		}
 	}

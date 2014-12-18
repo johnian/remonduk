@@ -5,13 +5,13 @@ namespace remonduk {
 
         public static Constants instance;
 
-		public float GRAVITY = 1F;
-		public float GRAVITY_ANGLE = (float)Math.PI / 2.0F;
+		public double GRAVITY = 1;
+		public double GRAVITY_ANGLE = Math.PI / 2.0;
         public bool GRAVITY_ACTIVE = false;
 
-        public float DEFAULT_RADIUS = 5F;
-        public float MIN_RADIUS = 1F;
-        public float MAX_RADIUS = 40F;
+        public double DEFAULT_RADIUS = 5;
+        public double MIN_RADIUS = 1;
+        public double MAX_RADIUS = 40;
         public bool STATIC_RADIUS = false;
 
         public Constants()
