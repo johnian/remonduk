@@ -47,6 +47,9 @@
             this.new_menu_item = new System.Windows.Forms.ToolStripMenuItem();
             this.circle_radius_up_down = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
+            this.worldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gravityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gravity_toggle_menu_item = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.new_circle_velocity_up_down)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.new_circle_acceleration_up_down)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.new_circle_velocity_angle_up_down)).BeginInit();
@@ -160,6 +163,7 @@
             this.menu.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.draw_menu_item,
+            this.worldToolStripMenuItem,
             this.system_menu_item});
             this.menu.Location = new System.Drawing.Point(0, 582);
             this.menu.Name = "menu";
@@ -214,7 +218,7 @@
             this.load_menu_item.Name = "load_menu_item";
             this.load_menu_item.ShortcutKeyDisplayString = "";
             this.load_menu_item.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.load_menu_item.Size = new System.Drawing.Size(137, 22);
+            this.load_menu_item.Size = new System.Drawing.Size(152, 22);
             this.load_menu_item.Text = "Load";
             this.load_menu_item.Click += new System.EventHandler(this.load_menu_item_Click);
             // 
@@ -223,7 +227,7 @@
             this.save_menu_item.Name = "save_menu_item";
             this.save_menu_item.ShortcutKeyDisplayString = "";
             this.save_menu_item.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.save_menu_item.Size = new System.Drawing.Size(137, 22);
+            this.save_menu_item.Size = new System.Drawing.Size(152, 22);
             this.save_menu_item.Text = "Save";
             this.save_menu_item.Click += new System.EventHandler(this.save_menu_item_Click);
             // 
@@ -232,7 +236,7 @@
             this.new_menu_item.Name = "new_menu_item";
             this.new_menu_item.ShortcutKeyDisplayString = "";
             this.new_menu_item.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.new_menu_item.Size = new System.Drawing.Size(137, 22);
+            this.new_menu_item.Size = new System.Drawing.Size(152, 22);
             this.new_menu_item.Text = "New";
             // 
             // circle_radius_up_down
@@ -266,6 +270,30 @@
             this.label3.Size = new System.Drawing.Size(74, 13);
             this.label3.TabIndex = 10;
             this.label3.Text = "R(but really D)";
+            // 
+            // worldToolStripMenuItem
+            // 
+            this.worldToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.gravityToolStripMenuItem});
+            this.worldToolStripMenuItem.Name = "worldToolStripMenuItem";
+            this.worldToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.worldToolStripMenuItem.Text = "World";
+            // 
+            // gravityToolStripMenuItem
+            // 
+            this.gravityToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.gravity_toggle_menu_item});
+            this.gravityToolStripMenuItem.Name = "gravityToolStripMenuItem";
+            this.gravityToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.gravityToolStripMenuItem.Text = "Gravity";
+            // 
+            // gravity_toggle_menu_item
+            // 
+            this.gravity_toggle_menu_item.CheckOnClick = true;
+            this.gravity_toggle_menu_item.Name = "gravity_toggle_menu_item";
+            this.gravity_toggle_menu_item.Size = new System.Drawing.Size(152, 22);
+            this.gravity_toggle_menu_item.Text = "On";
+            this.gravity_toggle_menu_item.Click += new System.EventHandler(this.onToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
@@ -324,6 +352,9 @@
         private System.Windows.Forms.ToolStripMenuItem groupToolStripMenuItem;
         private System.Windows.Forms.NumericUpDown circle_radius_up_down;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ToolStripMenuItem worldToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem gravityToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem gravity_toggle_menu_item;
     }
 }
 

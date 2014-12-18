@@ -5,7 +5,7 @@ namespace remonduk {
 
         public static Constants instance;
 
-		public float GRAVITY = 9.8F;
+		public float GRAVITY = 1F;
 		public float GRAVITY_ANGLE = (float)Math.PI / 2.0F;
         public bool GRAVITY_ACTIVE = false;
 

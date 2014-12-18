@@ -148,7 +148,7 @@ namespace remonduk
         {
             Point pos = Control.MousePosition;
             pos = this.PointToClient(pos);
-            Circle click = new Circle(pos.X - 5, pos.Y - 5, 25);
+            Circle click = new Circle(pos.X, pos.Y, 5);
             bool found = false;
             if (drag && selected != null)
             {
@@ -168,13 +168,14 @@ namespace remonduk
                     new_circle_acceleration_up_down.Value = (Decimal)selected.acceleration;
                     new_circle_velocity_angle_up_down.Value = (Decimal)(selected.velocity_angle * 180.0 / Math.PI);
                     new_circle_velocity_up_down.Value = (Decimal)selected.velocity;
+                    circle_radius_up_down.Value = (Decimal)selected.r;
                     found = true;
                     selected.color = Color.CornflowerBlue;
                 }
             }
             if (!found)
             {
-                click.r = 10;
+                click.r = (float)circle_radius_up_down.Value;
                 click.setVelocity((float)new_circle_velocity_up_down.Value, ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180.0);
                 click.updateAcceleration((float)new_circle_acceleration_up_down.Value, ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
                 circles.Add(click);
@@ -275,9 +276,8 @@ namespace remonduk
             {
                 Point pos = Control.MousePosition;
                 pos = this.PointToClient(pos);
-                Circle click = new Circle(pos.X, pos.Y, 50);
-                Circle easySelect = new Circle(selected.x, selected.y, 25);
-                if(click.colliding(easySelect))
+                Circle click = new Circle(pos.X, pos.Y, 5);
+                if(click.colliding(selected))
                 {
                     drag = true;
                     System.Diagnostics.Debug.WriteLine("SELECTED");
@@ -324,6 +324,26 @@ namespace remonduk
             if(selected != null)
             {
                 selected.r = (float)circle_radius_up_down.Value;
+            }
+        }
+
+        private void onToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(gravity_toggle_menu_item.Checked)
+            {
+                foreach(Circle c in circles)
+                {
+                    c.updateAcceleration(Constants.Instance.GRAVITY, Constants.Instance.GRAVITY_ANGLE);
+                }
+                Constants.Instance.GRAVITY_ACTIVE = true;
+            }
+            else
+            {
+                foreach (Circle c in circles)
+                {
+                    c.updateAcceleration(Constants.Instance.GRAVITY, -1*Constants.Instance.GRAVITY_ANGLE);
+                }
+                Constants.Instance.GRAVITY_ACTIVE = false;
             }
         }
     }
