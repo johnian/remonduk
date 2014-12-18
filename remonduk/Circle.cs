@@ -131,10 +131,10 @@ namespace remonduk
 		///
 		public void updateAcceleration(float acceleration, double acceleration_angle) {
 			// should we update velocity here?
-			ax += acceleration * (float)Math.Cos(acceleration_angle);
-			ay += acceleration * (float)Math.Sin(acceleration_angle);
-			acceleration = magnitude(ax, ay);
-			acceleration_angle = angle(ay, ax);
+			this.ax += acceleration * (float)Math.Cos(acceleration_angle);
+			this.ay += acceleration * (float)Math.Sin(acceleration_angle);
+			this.acceleration = magnitude(ax, ay);
+			this.acceleration_angle = angle(ay, ax);
 		}
 
 		public void updateVelocity() {
@@ -213,5 +213,14 @@ namespace remonduk
 		public double angle(float y, float x) {
 			return Math.Atan2(y, x);
 		}
-    }
+		
+		public String toString() {
+
+			return "(" + x + ", " + y + ") radius: " + r + " mass: " + mass + "\n" +
+				"velocity: " + velocity + " (" + vx + ", " + vy + "): " + velocity_angle + "\n" +
+				"acceleration: " + acceleration + " (" + ax + ", " + ay + "): " + acceleration_angle + "\n" +
+				"target: " + target + "[" + min_dist + ", " + max_dist + "\n" +
+				"color: " + color;
+		}
+	}
 }
