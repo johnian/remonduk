@@ -154,7 +154,7 @@ namespace remonduk
             foreach (Circle c in circles)
             {
 
-                if (click.collide(c) == c)
+                if (click.colliding(c))
                 {
                     System.Diagnostics.Debug.WriteLine("MOUSEUP");
                     System.Diagnostics.Debug.WriteLine(c.velocity + " " + c.acceleration);
@@ -272,7 +272,7 @@ namespace remonduk
                 pos = this.PointToClient(pos);
                 Circle click = new Circle(pos.X, pos.Y, 50);
                 Circle easySelect = new Circle(selected.x, selected.y, 25);
-                if(click.collide(easySelect) == easySelect)
+                if(click.colliding(easySelect))
                 {
                     drag = true;
                     System.Diagnostics.Debug.WriteLine("SELECTED");

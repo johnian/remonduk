@@ -19,25 +19,31 @@ namespace remonduk
 		public const float ACCELERATION_ANGLE = Constants.GRAVITY_ANGLE;
         public Color DEFAULT_COLOR = Color.Chartreuse;
 
-		public const bool FOLLOWING = false;
 		public const Circle TARGET = null;
-		public const double MIN_DIST = 0F;
-		public const double MAX_DIST = 0F;
+		public float MIN_DIST = 0F;
+		public float MAX_DIST = 0F;
 
 		public float x, y, r, mass;
 		public float velocity, vx, vy;
 		public float acceleration, ax, ay;
 		public double velocity_angle, acceleration_angle;
   
-		public bool following;
 		public Circle target;
-		public double min_dist;
-		public double max_dist;
+		public float min_dist;
+		public float max_dist;
 
-        public Color color;
+		public Color color;
 
-        public Circle()
-        { }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <param name="r"></param>
+		/// <param name="mass"></param>
+		///
+
+		public Circle() { }
 
 		public Circle(float x, float y, float r, float mass = MASS):
 			this(x, y, r,
@@ -61,57 +67,33 @@ namespace remonduk
 			setVelocity(velocity, velocity_angle);
 			setAcceleration(acceleration, acceleration_angle);
 
-			target = TARGET;
-			following = FOLLOWING;
-			min_dist = MIN_DIST * r;
-			max_dist = MAX_DIST * r;
-
-            //add me somewhere else
+			follow(TARGET);
             this.color = DEFAULT_COLOR;
         }
 
-        public void follow(Circle target)
-        {
-            following = true;
-            this.target = target;
-        }
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="r"></param>
+		/// 
 		public void setRadius(float r) {
 			if (r < RADIUS) {
-				this.r = RADIUS;
+				throw new ArgumentException("radius: " + r);
 			}
-			else {
-				this.r = r;
-			}
+			this.r = r;
 		}
 
 		public void setMass(float mass) {
-			if (mass < MASS) {
-				this.mass = MASS;
-			}
-			else {
-				this.mass = mass;
-			}
+			this.mass = mass;
 		}
 
-        public void setVelocity(float velocity, double velocity_angle)
+		public void setVelocity(float velocity, double velocity_angle)
         {
 			this.velocity = velocity;
 			this.velocity_angle = velocity_angle;
             vx = velocity * (float)Math.Cos(velocity_angle);
             vy = velocity * (float)Math.Sin(velocity_angle);
         }
-
-		public double getVelocityAngle() {
-			return Math.Atan2(vy, vx);
-		}
-
-		public void updateVelocity() {
-			vx += ax;
-			vy += ay;
-			velocity = magnitude(vx, vy);
-			velocity_angle = Math.Atan2(vy, vx);
-		}
 
 		public void setAcceleration(float acceleration, double acceleration_angle) {
 			this.acceleration = acceleration;
@@ -120,59 +102,80 @@ namespace remonduk
 			ay = acceleration * (float)Math.Sin(acceleration_angle);
 		}
 
+		public void follow(Circle target = null) {
+			if (target == null) {
+				this.target = null;
+				this.min_dist = MIN_DIST;
+				this.max_dist = MAX_DIST;
+			}
+			else {
+				follow(target, target.r + r, target.r + r);
+			}
+		}
+
+        public void follow(Circle target, float min_dist, float max_dist)
+        {
+			if (target == null) {
+				follow();
+			}
+			else {
+				this.target = target;
+				this.min_dist = min_dist;
+				this.max_dist = max_dist;
+			}
+        }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		///
 		public void updateAcceleration(float acceleration, double acceleration_angle) {
 			// should we update velocity here?
 			ax += acceleration * (float)Math.Cos(acceleration_angle);
 			ay += acceleration * (float)Math.Sin(acceleration_angle);
 			acceleration = magnitude(ax, ay);
-			acceleration_angle = Math.Atan2(ay, ax);
+			acceleration_angle = angle(ay, ax);
 		}
 
+		public void updateVelocity() {
+			vx += ax;
+			vy += ay;
+			velocity = magnitude(vx, vy);
+			velocity_angle = angle(vy, vx);
+		}
 
-        public void updatePosition()
+		public void updatePosition()
         {
             updateVelocity();
             x += vx;
             y += vy;
         }
 
-        public Circle collide(Circle other)
+        public bool colliding(Circle other) // do more robust collision detection here
         {
             //WE NEED TO REMEMBER VELOCITY EXISTS
-            if (other.GetHashCode() == this.GetHashCode())
+            if (other == this)
             {
-                return null;
+                return false;
             }
-            double dist = distance(other);
-            if(dist <= r+other.r)
-            {
-                return other;
-            }
-            return null;
+            return distance(other) <= r + other.r;
         }
 
         public void move(HashSet<Circle> circles)
         {
-            float delta_x = 0F;
-            float delta_y = 0F;
-            double dist = 0F;
             if (target != null)
             {
-                delta_x = target.x - x;
-                delta_y = target.y - y;
-                dist = distance(target);
-            }
-            if (following)
-            {
-                velocity_angle = Math.Atan2(delta_y, delta_x);
-                double tau = 2.0 * Math.PI;
-                double diff = (velocity_angle % (tau)) - (target.velocity_angle % (tau));
+				// set up following in a better way ??
+				//double dist = distance(target);
+				setVelocity(velocity, angle(target.x - x, target.y - y));
+				//double tau = 2.0 * Math.PI;
+				//double diff = (velocity_angle % (tau)) - (target.velocity_angle % (tau));
             }
 
             updatePosition();
             foreach(Circle c in circles)
             {
-                if (collide(c) != null)
+                if (colliding(c))
                 {
                     double kinetic = mass * velocity * velocity / 2;
                     //Debug.WriteLine(kinetic);
@@ -186,6 +189,10 @@ namespace remonduk
             move(circles);
         }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="g"></param>
         public void draw(Graphics g)
         {
             Brush brush = new SolidBrush(color);
@@ -202,5 +209,9 @@ namespace remonduk
             float disty = other.y - y;
             return magnitude(distx, disty);
         }
+
+		public double angle(float y, float x) {
+			return Math.Atan2(y, x);
+		}
     }
 }
