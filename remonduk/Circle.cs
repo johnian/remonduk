@@ -68,7 +68,7 @@ namespace remonduk
 			setAcceleration(acceleration, acceleration_angle);
 
 			follow(TARGET);
-            this.color = DEFAULT_COLOR;
+            this.color = Color.Chartreuse;
         }
 
 		/// <summary>
@@ -195,7 +195,8 @@ namespace remonduk
 		/// <param name="g"></param>
         public void draw(Graphics g)
         {
-            Brush brush = new SolidBrush(color);
+
+            Brush brush = new SolidBrush(Color.Chartreuse);
             g.FillEllipse(brush, x-r/2, y-r/2, r, r);
         }
 

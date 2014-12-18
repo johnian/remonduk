@@ -16,6 +16,7 @@ namespace remonduk
     {
         HashSet<Circle> circles = new HashSet<Circle>();
         Circle selected;
+        int frame_count;
 
         bool pause;
 
@@ -30,6 +31,7 @@ namespace remonduk
             pause = false;
             selected = null;
             drag = false;
+            frame_count = 0;
         }
 
         //this method is added to the Idle event in the constructor
@@ -50,6 +52,9 @@ namespace remonduk
 
                 drawHUD(this.CreateGraphics());
 
+                System.Diagnostics.Debug.WriteLine("Frame Count: " + frame_count);
+                System.Diagnostics.Debug.WriteLine(circles.Count);
+                frame_count++;
                 System.Threading.Thread.Sleep(50);
             }
         }
@@ -305,8 +310,12 @@ namespace remonduk
             using (var stream = System.IO.File.OpenRead(ofd.FileName))
             {
                 var serializer = new XmlSerializer(typeof(HashSet<Circle>));
-                circles =  serializer.Deserialize(stream) as HashSet<Circle>;
+                circles = serializer.Deserialize(stream) as HashSet<Circle>;
                 System.Diagnostics.Debug.WriteLine(circles.Count);
+                Circle c1 = circles.ElementAt(0);
+                c1.draw(this.CreateGraphics());
+                System.Diagnostics.Debug.WriteLine("X: " + c1.x + " Y: " + c1.y);
+                System.Diagnostics.Debug.WriteLine("R: " + c1.r);
             }
         }
     }
