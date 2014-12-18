@@ -118,6 +118,10 @@ namespace remonduk
 			if (target == null) {
 				follow();
 			}
+            else if(this == target)
+            {
+                follow();
+            }
 			else {
 				this.target = target;
 				this.min_dist = min_dist;
@@ -219,7 +223,7 @@ namespace remonduk
 			if (theta < 0) {
 				theta += 2 * Math.PI;
 			}
-			return Math.Atan2(y, x);
+			return theta;
 		}
 		
 		public String toString() {

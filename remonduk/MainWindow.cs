@@ -22,6 +22,8 @@ namespace remonduk
 
         bool drag;
 
+        bool targeting;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -31,6 +33,7 @@ namespace remonduk
             pause = false;
             selected = null;
             drag = false;
+            targeting = false;
             frame_count = 0;
         }
 
@@ -158,8 +161,12 @@ namespace remonduk
             drag = false;
             foreach (Circle c in circles)
             {
-
-                if (click.colliding(c))
+                if(click.colliding(c) && selected != null)
+                {
+                    selected.follow(c, 25, 100);
+                    found = true;
+                }
+                else if (click.colliding(c))
                 {
                     System.Diagnostics.Debug.WriteLine("MOUSEUP");
                     System.Diagnostics.Debug.WriteLine(c.velocity + " " + c.acceleration);
@@ -280,8 +287,8 @@ namespace remonduk
                 if(click.colliding(selected))
                 {
                     drag = true;
-                    System.Diagnostics.Debug.WriteLine("SELECTED");
-                    System.Diagnostics.Debug.WriteLine(String.Concat("MouseX = ", pos.X.ToString(),"  MouseY = ",pos.Y.ToString()));
+                    //System.Diagnostics.Debug.WriteLine("SELECTED");
+                    //System.Diagnostics.Debug.WriteLine(String.Concat("MouseX = ", pos.X.ToString(),"  MouseY = ",pos.Y.ToString()));
                 }
             }
         }
@@ -311,11 +318,11 @@ namespace remonduk
             {
                 var serializer = new XmlSerializer(typeof(HashSet<Circle>));
                 circles = serializer.Deserialize(stream) as HashSet<Circle>;
-                System.Diagnostics.Debug.WriteLine(circles.Count);
-                Circle c1 = circles.ElementAt(0);
-                c1.draw(this.CreateGraphics());
-                System.Diagnostics.Debug.WriteLine("X: " + c1.x + " Y: " + c1.y);
-                System.Diagnostics.Debug.WriteLine("R: " + c1.r);
+                //System.Diagnostics.Debug.WriteLine(circles.Count);
+                //Circle c1 = circles.ElementAt(0);
+                //c1.draw(this.CreateGraphics());
+                //System.Diagnostics.Debug.WriteLine("X: " + c1.x + " Y: " + c1.y);
+                //System.Diagnostics.Debug.WriteLine("R: " + c1.r);
             }
         }
 
