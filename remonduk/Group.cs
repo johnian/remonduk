@@ -28,12 +28,19 @@ namespace remonduk
 
         public void update()
         {
-            foreach(Tether t in tethers)
-            {
-                System.Diagnostics.Debug.WriteLine("PULLING");
-                t.pull();
-            }
-        }
 
+			HashSet<Tether> original_tethers = new HashSet<Tether>();
+			foreach (Tether tether in tethers) {
+				original_tethers.Add(new Tether(new Circle(tether.c1), new Circle(tether.c2), tether.max_dist, tether.k));
+
+			}
+			if (tethers.Count > 0) {
+				//System.Diagnostics.Debug.WriteLine(tethers.ElementAt(0).c1 == original_tethers.ElementAt(0).c1);
+			}
+
+			for (int i = 0; i < tethers.Count; i++) {
+				tethers.ElementAt(i).pull(original_tethers.ElementAt(i).c1, original_tethers.ElementAt(i).c2);
+			}
+        }
     }
 }

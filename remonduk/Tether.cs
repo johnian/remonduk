@@ -8,7 +8,7 @@ namespace remonduk
 {
     class Tether
     {
-        Circle c1, c2;
+        public Circle c1, c2;
         public double max_dist;
         public double k;
 
@@ -20,38 +20,42 @@ namespace remonduk
             this.k = k;
         }
 
-        public void pull()
+        public void pull(Circle original_c1, Circle original_c2)
         {
-            double delta_x = c1.x - c2.x;
-            double delta_y = c1.y - c2.y;
+            double delta_x = original_c2.x - original_c1.x;
+			double delta_y = original_c2.y - original_c1.y;
             double dist = Math.Sqrt(delta_x * delta_x + delta_y * delta_y);
-            System.Diagnostics.Debug.WriteLine("Distance = " + dist);
-            if(dist > max_dist)
-            {
-                double theta1 = Math.Atan2(-delta_y, -delta_x);
-                double theta2 = Math.Atan2(delta_y, delta_x);
-                double accel1 = k * (dist - max_dist) - c1.acceleration;
-                double accel2 = k * (dist - max_dist) - c2.acceleration;
+			if(dist > max_dist)
+			{
+				double spring_force = k * (dist - max_dist);
+				double accel1 = spring_force / original_c1.mass;
+                double accel2 = spring_force / original_c2.mass;
+				double theta = Math.Atan2(delta_y, delta_x);
 
-                if(accel1 < 0)
-                {
-                    c1.updateAcceleration(Math.Abs(k * (dist - max_dist) - c1.acceleration), theta2);
-                }
-                else
-                {
-                    c1.updateAcceleration(Math.Abs(k * (dist - max_dist) - c1.acceleration), theta1);
-                }
+				c1.updateAcceleration(accel1, theta);
+				c2.updateAcceleration(accel2, theta + Math.PI);
 
-                if(accel2 < 0)
-                {
-                    c2.updateAcceleration(Math.Abs(k * (dist - max_dist) - c2.acceleration), theta1);
-                }
-                else
-                {
-                    c2.updateAcceleration(Math.Abs(k * (dist - max_dist) - c2.acceleration), theta2);
-                }
-                System.Diagnostics.Debug.WriteLine("TETHERING");
-            }
+
+
+				//if(accel1 < 0)
+				//{
+				//}
+				//else
+				//{
+				//	c1.updateAcceleration(Math.Abs(accel1), theta1);
+				//}
+
+				//if(accel2 < 0)
+				//{
+				//	c2.updateAcceleration(Math.Abs(accel2), theta1);
+				//}
+				//else
+				//{
+				//	c2.updateAcceleration(Math.Abs(accel2), theta2);
+				//}
+				System.Diagnostics.Debug.WriteLine("Acceleration[" + c1.acceleration + ", " + original_c1.acceleration);
+
+			}
         }
     }
 }

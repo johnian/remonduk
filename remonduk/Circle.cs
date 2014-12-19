@@ -47,6 +47,9 @@ namespace remonduk
 
 		public Circle() { }
 
+		public Circle(Circle circle) :
+			this(circle.x, circle.y, circle.r, circle.velocity, circle.velocity_angle, circle.acceleration, circle.acceleration_angle, circle.mass) { }
+
 		public Circle(double x, double y, double r, double mass = MASS) :
 			this(x, y, r,
 				 VELOCITY, VELOCITY_ANGLE, mass) { }
@@ -170,7 +173,41 @@ namespace remonduk
 			{
 				return false;
 			}
-			return distance(other) <= r + other.r;
+			if (distance(other) <= r + other.r) {
+				return true;
+			}
+			else {
+				return false;
+				//double m1 = angle(vy, vx);
+				//double m2 = angle(other.vy, other.vx);
+
+				//double x1_new = (m2 * other.x - m1 * other.x - other.y + y) / (m2 - m1);
+				//double y1_new = 
+
+				//double t1_pos = (-1 * vx + Math.Sqrt(vx * vx - 2 * ax * (x - x1_new))) / ax;
+				//double t1_neg = (-1 * vx - Math.Sqrt(vx * vx - 2 * ax * (x - x1_new))) / ax;
+
+				//double x2_new = other.ax / 2 * t1_pos * t1_pos + other.vx * t1_pos + other.x;
+				//double y2_new = other.ay / 2 * t1_pos * t1_pos + other.vy * t1_pos + other.y;
+
+				//if (magnitude(y2_new - 
+				
+
+
+				//x, y values should be the same --
+				//t values of when they reach those points might be different
+				//so assuming t1, calculate new x2, y2
+				//assuming t2, calculate new x1, y1
+
+				//return magnitude(intersection_y2 - intersection_y1,  0) <= r + other.r;
+
+				//intersection_t_pos
+
+			}
+			// find where they would intersect
+			// if they intersect
+			// how to check if they crossed paths
+			//return 
 		}
 
 		public void move(HashSet<Circle> circles)
