@@ -48,6 +48,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Force.cs" />
     <Compile Include="Group.cs" />
+    <Compile Include="Interaction.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>

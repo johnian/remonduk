@@ -148,8 +148,8 @@ namespace remonduk
 			forces.Add(force);
 		}
 
-		public Force getForce() {
-			return forces.ElementAt(0);
+		public void removeForce(Force force) {
+			forces.Remove(force);
 		}
 
 		/// <summary>
@@ -158,6 +158,9 @@ namespace remonduk
 		///
 		public void updateAcceleration(double acceleration, double acceleration_angle)
 		{
+			// this needs to gather all the forces acting on this
+			// sum(forces)
+			// /= mass
 			ax += acceleration * Math.Cos(acceleration_angle);
 			ay += acceleration * Math.Sin(acceleration_angle);
 			this.acceleration = magnitude(ax, ay);
@@ -179,14 +182,25 @@ namespace remonduk
 			updateVelocity();
 		}
 
-		public bool colliding(Circle other) // do more robust collision detection here
+		// make this return the angle of impact
+		public bool colliding(Circle other)
 		{
 			//WE NEED TO REMEMBER VELOCITY EXISTS
 			if (other == this)
 			{
 				return false;
 			}
-			return distance(other) <= r + other.r;
+			if (distance(other) <= r + other.r) {
+				return true;
+			}
+			else {
+				// return crossing(other);
+				// find x intersection
+				// find time when this reach that x
+				// from velocity, find time range this is in the area
+				// is it enough to just check that they are colliding at that time
+				return false;
+			}
 		}
 
 		public void move(HashSet<Circle> circles)
