@@ -15,7 +15,11 @@ namespace remonduk
     public partial class MainWindow : Form
     {
         HashSet<Circle> circles = new HashSet<Circle>();
-        Circle selected;
+        HashSet<Group> groups = new HashSet<Group>();
+        
+        Circle selected_circle;
+        Group selected_group;
+
         int frame_count;
 
         bool pause;
@@ -29,9 +33,9 @@ namespace remonduk
             InitializeComponent();
 
             Application.Idle += HandleApplicationIdle;  //adds the HandleApplicationIdle method to the Application.Idle event
-
+            groups.Add(new Group());
             pause = false;
-            selected = null;
+            selected_circle = null;
             drag = false;
             targeting = false;
             frame_count = 0;
@@ -44,6 +48,7 @@ namespace remonduk
             {
                 this.CreateGraphics().Clear(System.Drawing.Color.Gray);
 
+                groups.ElementAt(0).update();
                 foreach (Circle c in circles)
                 {
                     if (!pause)
@@ -72,7 +77,7 @@ namespace remonduk
             {
                 drawPlay(g);
             }
-            if(selected != null)
+            if(selected_circle != null)
             {
                 drawSelected(g);
             }
@@ -82,7 +87,7 @@ namespace remonduk
         void drawSelected(Graphics g)
         {
             Pen pen = new Pen(Color.Black);
-            g.DrawEllipse(pen, (float)selected.x-25, (float)selected.y-25, 50, 50);
+            g.DrawEllipse(pen, (float)selected_circle.x-25, (float)selected_circle.y-25, 50, 50);
         }
 
         void drawPause(Graphics g)
@@ -153,31 +158,32 @@ namespace remonduk
             pos = this.PointToClient(pos);
             Circle click = new Circle(pos.X, pos.Y, 5);
             bool found = false;
-            if (drag && selected != null)
+            if (drag && selected_circle != null)
             {
-                selected.x = pos.X;
-                selected.y = pos.Y;
+                selected_circle.x = pos.X;
+                selected_circle.y = pos.Y;
             }
             drag = false;
             foreach (Circle c in circles)
             {
-                if(click.colliding(c) && selected != null)
+                if(click.colliding(c) && selected_circle != null)
                 {
-                    selected.follow(c, 25, 100);
+                    //selected_circle.follow(c, 25, 100);
+                    groups.ElementAt(0).tethers.Add(new Tether(selected_circle, c, 50, .002));
                     found = true;
                 }
                 else if (click.colliding(c))
                 {
                     System.Diagnostics.Debug.WriteLine("MOUSEUP");
                     System.Diagnostics.Debug.WriteLine(c.velocity + " " + c.acceleration);
-                    selected = c;
-                    new_circle_acceleration_angle_up_down.Value = (Decimal)(selected.acceleration_angle * 180.0 / Math.PI);
-                    new_circle_acceleration_up_down.Value = (Decimal)selected.acceleration;
-                    new_circle_velocity_angle_up_down.Value = (Decimal)(selected.velocity_angle * 180.0 / Math.PI);
-                    new_circle_velocity_up_down.Value = (Decimal)selected.velocity;
-                    circle_radius_up_down.Value = (Decimal)selected.r;
+                    selected_circle = c;
+                    new_circle_acceleration_angle_up_down.Value = (Decimal)(selected_circle.acceleration_angle * 180.0 / Math.PI);
+                    new_circle_acceleration_up_down.Value = (Decimal)selected_circle.acceleration;
+                    new_circle_velocity_angle_up_down.Value = (Decimal)(selected_circle.velocity_angle * 180.0 / Math.PI);
+                    new_circle_velocity_up_down.Value = (Decimal)selected_circle.velocity;
+                    circle_radius_up_down.Value = (Decimal)selected_circle.r;
                     found = true;
-                    selected.color = Color.CornflowerBlue;
+                    selected_circle.color = Color.CornflowerBlue;
                 }
             }
             if (!found)
@@ -185,12 +191,16 @@ namespace remonduk
                 click.r = (float)circle_radius_up_down.Value;
                 click.setVelocity((float)new_circle_velocity_up_down.Value, ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180.0);
                 click.updateAcceleration((float)new_circle_acceleration_up_down.Value, ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
-                circles.Add(click);
-                if(selected != null)
+                if (Constants.Instance.GRAVITY_ACTIVE)
                 {
-                    selected.color = Color.Chartreuse;
+                    click.updateAcceleration(Constants.Instance.GRAVITY, Constants.Instance.GRAVITY_ANGLE);
                 }
-                selected = null;
+                circles.Add(click);
+                if(selected_circle != null)
+                {
+                    selected_circle.color = Color.Chartreuse;
+                }
+                selected_circle = null;
             }
         }
 
@@ -246,45 +256,45 @@ namespace remonduk
 
         private void new_circle_velocity_up_down_ValueChanged(object sender, EventArgs e)
         {
-            if(selected != null)
+            if(selected_circle != null)
             {
-                selected.setVelocity((float)new_circle_velocity_up_down.Value, ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180);
+                selected_circle.setVelocity((float)new_circle_velocity_up_down.Value, ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180);
             }
         }
 
         private void new_circle_acceleration_up_down_ValueChanged(object sender, EventArgs e)
         {
-            if(selected != null)
+            if(selected_circle != null)
             {
-                selected.setAcceleration((float)new_circle_acceleration_up_down.Value, ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
+                selected_circle.setAcceleration((float)new_circle_acceleration_up_down.Value, ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
             }
         }
 
         private void new_circle_velocity_angle_up_down_ValueChanged(object sender, EventArgs e)
         {
-            if(selected != null)
+            if(selected_circle != null)
             {
-                selected.setVelocity((float)new_circle_velocity_up_down.Value, ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180);
+                selected_circle.setVelocity((float)new_circle_velocity_up_down.Value, ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180);
             }
         }
 
         private void new_circle_acceleration_angle_up_down_ValueChanged(object sender, EventArgs e)
         {
-            if (selected != null)
+            if (selected_circle != null)
             {
-                selected.setAcceleration((float)new_circle_acceleration_up_down.Value, ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
+                selected_circle.setAcceleration((float)new_circle_acceleration_up_down.Value, ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
             }
         }
 
         //actually on mouseclick
         private void MainWindow_MouseDown(object sender, MouseEventArgs e)
         {
-            if(selected != null)
+            if(selected_circle != null)
             {
                 Point pos = Control.MousePosition;
                 pos = this.PointToClient(pos);
                 Circle click = new Circle(pos.X, pos.Y, 5);
-                if(click.colliding(selected))
+                if(click.colliding(selected_circle))
                 {
                     drag = true;
                     //System.Diagnostics.Debug.WriteLine("SELECTED");
@@ -328,9 +338,9 @@ namespace remonduk
 
         private void circle_radius_up_down_ValueChanged(object sender, EventArgs e)
         {
-            if(selected != null)
+            if(selected_circle != null)
             {
-                selected.r = (float)circle_radius_up_down.Value;
+                selected_circle.r = (float)circle_radius_up_down.Value;
             }
         }
 

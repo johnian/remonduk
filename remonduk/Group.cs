@@ -8,6 +8,32 @@ namespace remonduk
 {
     class Group
     {
+        public HashSet<Circle> group;
+        public HashSet<Circle> anchors;
+        public HashSet<Tether> tethers;
+
+        public Group()
+        {
+            this.group = new HashSet<Circle>();
+            this.anchors = new HashSet<Circle>();
+            this.tethers = new HashSet<Tether>();
+        }
+
+        public void tether(Circle c1, Circle c2, double max_dist, double k)
+        {
+            group.Add(c1);
+            group.Add(c2);
+            tethers.Add(new Tether(c1,c2,max_dist,k));
+        }
+
+        public void update()
+        {
+            foreach(Tether t in tethers)
+            {
+                System.Diagnostics.Debug.WriteLine("PULLING");
+                t.pull();
+            }
+        }
 
     }
 }
