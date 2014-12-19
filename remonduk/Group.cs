@@ -28,10 +28,11 @@ namespace remonduk
 
         public void update()
         {
-            foreach(Tether t in tethers)
+   
+            for (int i = 0; i < tethers.Count; i++ )
             {
                 System.Diagnostics.Debug.WriteLine("PULLING");
-                t.pull();
+                tethers.ElementAt(i).pull();
             }
         }
 

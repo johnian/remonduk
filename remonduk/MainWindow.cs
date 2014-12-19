@@ -49,6 +49,7 @@ namespace remonduk
                 this.CreateGraphics().Clear(System.Drawing.Color.Gray);
 
                 groups.ElementAt(0).update();
+
                 foreach (Circle c in circles)
                 {
                     if (!pause)

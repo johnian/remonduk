@@ -47,6 +47,11 @@ namespace remonduk
 
 		public Circle() { }
 
+        public Circle(Circle other):
+            this(other.x, other.y, other.r, other.velocity, other.velocity_angle, other.acceleration,
+                other.acceleration_angle, other.mass) { }
+        
+
 		public Circle(double x, double y, double r, double mass = MASS) :
 			this(x, y, r,
 				 VELOCITY, VELOCITY_ANGLE, mass) { }
