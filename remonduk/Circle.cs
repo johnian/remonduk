@@ -36,6 +36,8 @@ namespace remonduk
 
 		public Color color;
 
+		public List<Force> forces;
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -76,6 +78,7 @@ namespace remonduk
 
 			follow(TARGET);
 			this.color = Color.Chartreuse;
+			forces = new List<Force>();
 		}
 
 		/// <summary>
@@ -139,6 +142,14 @@ namespace remonduk
 				this.min_dist = min_dist;
 				this.max_dist = max_dist;
 			}
+		}
+
+		public void addForce(Force force) {
+			forces.Add(force);
+		}
+
+		public Force getForce() {
+			return forces.ElementAt(0);
 		}
 
 		/// <summary>

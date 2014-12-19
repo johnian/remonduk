@@ -35,6 +35,5 @@ namespace remonduk
                 tethers.ElementAt(i).pull();
             }
         }
-
     }
 }
