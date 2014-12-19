@@ -61,8 +61,8 @@ namespace remonduk
 
                 drawHUD(this.CreateGraphics());
 
-                System.Diagnostics.Debug.WriteLine("Frame Count: " + frame_count);
-                System.Diagnostics.Debug.WriteLine(circles.Count);
+				//System.Diagnostics.Debug.WriteLine("Frame Count: " + frame_count);
+				//System.Diagnostics.Debug.WriteLine(circles.Count);
                 frame_count++;
                 System.Threading.Thread.Sleep(50);
             }
