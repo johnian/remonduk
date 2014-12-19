@@ -1,5 +1,4 @@
 c:\users\sid\documents\visual studio 2013\Projects\remonduk\remonduk\bin\Debug\remonduk.exe.config
-c:\users\sid\documents\visual studio 2013\Projects\remonduk\remonduk\obj\Debug\remonduk.csprojResolveAssemblyReference.cache
 c:\users\sid\documents\visual studio 2013\Projects\remonduk\remonduk\obj\Debug\remonduk.Properties.Resources.resources
 c:\users\sid\documents\visual studio 2013\Projects\remonduk\remonduk\obj\Debug\remonduk.csproj.GenerateResource.Cache
 c:\users\sid\documents\visual studio 2013\Projects\remonduk\remonduk\bin\Debug\remonduk.exe
