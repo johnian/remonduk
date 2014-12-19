@@ -1,6 +1,7 @@
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics;
 using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using remonduk;
 
@@ -18,60 +19,96 @@ namespace TestSuite
 		{
 			Circle first = new Circle();
 			Circle second = new Circle();
-			Force force = new Force(delegate(Circle one, Circle two) {
-					return 5.0; 
+			Force force = new Force(delegate(Circle one, Circle two)
+				{
+					return Tuple.Create(5.0, 3.0);
 				}
 			);
 			Interaction interaction = new Interaction(first, second, force);
-			AreEqual(5, interaction.forceOnFirst());
-			AreEqual(5, interaction.forceOnSecond());
+			AreEqual(Tuple.Create(5.0, 3.0), interaction.forceOnFirst());
+			AreEqual(Tuple.Create(5.0, 3.0), interaction.forceOnSecond());
 
 			interaction = new Interaction(first, second, force, 0);
-			AreEqual(5, interaction.forceOnFirst());
-			AreEqual(0, interaction.forceOnSecond());
+			AreEqual(Tuple.Create(5.0, 3.0), interaction.forceOnFirst());
+			AreEqual(Tuple.Create(0.0, 0.0), interaction.forceOnSecond());
 		}
 
 		[TestMethod]
-		public void gravityTest() {
+		public void gravityTest()
+		{
 			double earth_radius = 6371000;
 			double earth_mass = 5.972 * Math.Pow(10, 24);
 			Circle earth = new Circle(0, 0, earth_radius, earth_mass);
-			Circle person = new Circle(0, 0, 10, 60);
+			Circle person = new Circle(earth_radius, 0, 10, 60);
 
-			Force gravity = new Force(delegate(Circle planet, Circle body) {
-					double G = 6.67384 * Math.Pow(10, -11);
-					double planet_pos = planet.r;
-					double body_pos = 2 * body.r;
-					double r_squared = (planet_pos + body_pos) * (planet_pos + body_pos);
-					return G * planet.mass * body.mass / r_squared;
+			Force gravity = new Force(delegate(Circle first, Circle second)
+				{
+					double delta_x = second.x - first.x;
+					double delta_y = second.y - first.y;
+					double r = Circle.magnitude(delta_x, delta_y);
+					double angle = Circle.angle(delta_y, delta_x);
+
+					double g = 6.67384 * Math.Pow(10, -11);
+					double f = g * first.mass * second.mass / (r * r);
+					double fx = f * Math.Cos(angle);
+					double fy = f * Math.Sin(angle);
+					//double fx = g * first.mass * second.mass / (delta_x * delta_x);
+					//double fy = g * first.mass * second.mass / (delta_y * delta_y);
+					return Tuple.Create(fx, fy);
 				}
 			);
 			Interaction interaction = new Interaction(earth, person, gravity);
-			AreEqual(Math.Round(60 * 9.81), Math.Round(interaction.forceOnFirst()));
-			AreEqual(Math.Round(60 * 9.81), Math.Round(interaction.forceOnSecond()));
+			AreClose(Tuple.Create(60 * 9.81, 0.0), interaction.forceOnFirst());
+			AreClose(Tuple.Create(-60 * 9.81, 0.0), interaction.forceOnSecond());
 		}
 
 		[TestMethod]
-		public void elasticityTest() {
-			Circle one = new Circle(1, 1, 2, 3);
-			Circle two = new Circle(5, 8, 13, 21);
-			
-			Force elasticity = new Force(delegate(Circle first, Circle second) {
-					double k = 2;
-					double equilibrium = 3;
-					double dist = first.distance(second); // what should this formula be
-					if (dist > equilibrium) {
-						dist -= equilibrium;
-					}
-					return k * dist;
+		public void elasticityTest()
+		{
+			Circle one = new Circle(1, 2, 2, 3);
+			Circle two = new Circle(5, 6, 13, 21);
+
+			Force elasticity = new Force(delegate(Circle first, Circle second)
+			{
+				double k = 2;
+				double equilibrium = 3;
+				double dist = first.distance(second);
+				if (dist > equilibrium)
+				{
+					dist -= equilibrium;
+					double f = k * dist;
+
+					double delta_x = second.x - first.x;
+					double delta_y = second.y - first.y;
+					double angle = Circle.angle(delta_y, delta_x);
+					Debug.WriteLine(angle);
+
+					double fx = f * Math.Cos(angle);
+					double fy = f * Math.Sin(angle);
+					return Tuple.Create(fx, fy);
 				}
+				else {
+					return Tuple.Create(0.0, 0.0);
+				}
+			}
 			);
 			Interaction interaction = new Interaction(one, two, elasticity);
-			AreEqual(2 * (Math.Sqrt(65) - 3), interaction.forceOnFirst());
-			AreEqual(2 * (Math.Sqrt(65) - 3), interaction.forceOnSecond());
+			double force = 2 * (Math.Sqrt(32) - 3);
+			AreEqual(Tuple.Create(force * Math.Cos(Math.PI / 4), force * Math.Sin(Math.PI / 4)), interaction.forceOnFirst());
+			AreEqual(Tuple.Create(force * Math.Cos(5 * Math.PI / 4), force * Math.Sin(5 * Math.PI / 4)), interaction.forceOnSecond());
 		}
 
+		private void AreClose(Tuple<double, double> expected, Tuple<double, double> actual)
+		{
+			AreEqual(Math.Round(expected.Item1), Math.Round(actual.Item1));
+			AreEqual(Math.Round(expected.Item2), Math.Round(actual.Item2));
+		}
 
+		private void AreEqual(Tuple<double, double> expected, Tuple<double, double> actual)
+		{
+			AreEqual(expected.Item1, actual.Item1);
+			AreEqual(expected.Item2, actual.Item2);
+		}
 
 		private void AreEqual(double expected, double actual)
 		{

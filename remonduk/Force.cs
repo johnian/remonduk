@@ -4,13 +4,13 @@ namespace remonduk
 {
 	public class Force
 	{
-		public Func<Circle, Circle, double> forceFunction;
+		public Func<Circle, Circle, Tuple<double, double>> forceFunction;
 
-		public Force(Func<Circle, Circle, double> forceFunction) {
+		public Force(Func<Circle, Circle, Tuple<double, double>> forceFunction) {
 			this.forceFunction = forceFunction;
 		}
 
-		public double calculate(Circle first, Circle second)
+		public Tuple<double, double> calculate(Circle first, Circle second)
 		{
 			return forceFunction(first, second);
 		}

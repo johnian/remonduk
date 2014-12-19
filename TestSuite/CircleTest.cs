@@ -1,6 +1,7 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics;
 using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using remonduk;
 
@@ -277,8 +278,8 @@ namespace TestSuite
 			double expected_ax = -1 * constants.GRAVITY * Math.Sqrt(2) / 2;
 			double expected_ay = -1 * constants.GRAVITY * Math.Sqrt(2) / 2 - constants.GRAVITY;
 			circle.updateAcceleration(-1 * constants.GRAVITY, Math.PI / 4);
-			AreEqual(circle.magnitude(expected_ax, expected_ay), circle.acceleration);
-			AreEqual(circle.angle(expected_ay, expected_ax), circle.acceleration_angle);
+			AreEqual(Circle.magnitude(expected_ax, expected_ay), circle.acceleration);
+			AreEqual(Circle.angle(expected_ay, expected_ax), circle.acceleration_angle);
 			AreEqual(expected_ax, circle.ax);
 			AreEqual(expected_ay, circle.ay);
 		}
@@ -307,7 +308,7 @@ namespace TestSuite
 			{
 				circle.updateVelocity();
 				AreEqual(gravity * i, circle.velocity);
-				AreEqual(circle.angle(gy * i, gx * i), circle.velocity_angle);
+				AreEqual(Circle.angle(gy * i, gx * i), circle.velocity_angle);
 				AreEqual(gx * i, circle.vx);
 				AreEqual(gy * i, circle.vy);
 			}
@@ -317,7 +318,7 @@ namespace TestSuite
 			{
 				circle.updateVelocity();
 				AreEqual(gravity * i, circle.velocity);
-				AreEqual(circle.angle(gy * i, gx * i), circle.velocity_angle);
+				AreEqual(Circle.angle(gy * i, gx * i), circle.velocity_angle);
 				AreEqual(gx * i, circle.vx);
 				AreEqual(gy * i, circle.vy);
 			}

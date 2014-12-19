@@ -16,12 +16,13 @@ namespace remonduk
 			this.scalar = scalar;
 		}
 
-		public double forceOnFirst() {
+		public Tuple<double, double> forceOnFirst() {
 			return force.calculate(first, second);
 		}
 
-		public double forceOnSecond() {
-			return scalar * force.calculate(first, second);
+		public Tuple<double, double> forceOnSecond() {
+			Tuple<double, double> f = force.calculate(second, first);
+			return Tuple.Create(scalar * f.Item1, scalar * f.Item2);
 		}
 
 		// need functions to calculate ax and ay

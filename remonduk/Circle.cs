@@ -10,7 +10,7 @@ namespace remonduk
 {
 	public class Circle
 	{
-		public int PRECISION = 8;
+		public const int PRECISION = 8;
 
 		public const double RADIUS = 1;
 		public const double MASS = 1.0;
@@ -242,7 +242,7 @@ namespace remonduk
 			g.FillEllipse(brush, (float)(x - r / 2), (float)(y - r / 2), (float)r, (float)r);
 		}
 
-		public double magnitude(double x, double y)
+		public static double magnitude(double x, double y)
 		{
 			return Math.Sqrt(x * x + y * y);
 
@@ -256,7 +256,7 @@ namespace remonduk
 			return magnitude(distx, disty);
 		}
 
-		public double angle(double y, double x)
+		public static double angle(double y, double x)
 		{
 			if (Math.Round(y, PRECISION) == 0 &&
 				Math.Round(x, PRECISION) == 0)
