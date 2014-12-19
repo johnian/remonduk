@@ -377,10 +377,10 @@ namespace TestSuite
 
             t.pull();
 
-            AreEqual(t.c1.acceleration_angle, 0);
-            AreEqual(t.c2.acceleration_angle, Math.PI);
-            AreEqual(t.c1.acceleration, .18);
-            AreEqual(t.c2.acceleration, .18);
+            //AreEqual(t.c1.acceleration_angle, 0);
+            //AreEqual(t.c2.acceleration_angle, Math.PI);
+            //AreEqual(t.c1.acceleration, .18);
+            //AreEqual(t.c2.acceleration, .18);
 
             t.c1.update(new HashSet<Circle>());
             t.c2.update(new HashSet<Circle>());
@@ -389,8 +389,8 @@ namespace TestSuite
             AreEqual(t.c2.velocity_angle, Math.PI);
             AreEqual(t.c1.velocity, .18);
             AreEqual(t.c2.velocity, .18);
-            AreEqual(t.c1.x, .09);
-            AreEqual(t.c2.x, 199.91);
+            AreEqual(t.c1.x, .18);
+            AreEqual(t.c2.x, 199.82);
         }
 
         [TestMethod]
@@ -408,12 +408,12 @@ namespace TestSuite
             t.pull();
             t2.pull();
 
-            AreEqual(Math.PI / 4.0, c1.acceleration_angle);
-            AreEqual(Math.PI, c2.acceleration_angle);
-            AreEqual(3 * Math.PI / 2, c3.acceleration_angle);
-            AreEqual(.18, c2.acceleration);
-            AreEqual(.18, c3.acceleration);
-            AreEqual(.36, c1.acceleration);
+            AreEqual(Math.PI / 4.0, c1.velocity_angle);
+            AreEqual(Math.PI, c2.velocity_angle);
+            AreEqual(3 * Math.PI / 2, c3.velocity_angle);
+            AreEqual(.18, c2.velocity);
+            AreEqual(.18, c3.velocity);
+            AreEqual(.36, c1.velocity);
         }
 
 		[TestMethod]

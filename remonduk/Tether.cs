@@ -39,12 +39,14 @@ namespace remonduk
                 {
                     c1.vx += Math.Cos(theta2) * Math.Abs(k * (dist - max_dist));
                     c1.vy += Math.Sin(theta2) * Math.Abs(k * (dist - max_dist));
+                    c1.velocity_angle = theta2;
                     //c1.updateAcceleration(Math.Abs(k * (dist - max_dist)), theta2);
                 }
                 else
                 {
                     c1.vx += Math.Cos(theta1) * Math.Abs(k * (dist - max_dist));
                     c1.vy += Math.Sin(theta1) * Math.Abs(k * (dist - max_dist));
+                    c1.velocity_angle = theta1;
                     //c1.updateAcceleration(Math.Abs(k * (dist - max_dist)), theta1);
                 }
 
@@ -52,12 +54,14 @@ namespace remonduk
                 {
                     c2.vx += Math.Cos(theta1) * Math.Abs(k * (dist - max_dist));
                     c2.vy += Math.Sin(theta1) * Math.Abs(k * (dist - max_dist));
+                    c2.velocity_angle = theta1;
                     //c2.updateAcceleration(Math.Abs(k * (dist - max_dist)), theta1);
                 }
                 else
                 {
                     c2.vx += Math.Cos(theta2) * Math.Abs(k * (dist - max_dist));
                     c2.vy += Math.Sin(theta2) * Math.Abs(k * (dist - max_dist));
+                    c2.velocity_angle = theta2;
                     //c2.updateAcceleration(Math.Abs(k * (dist - max_dist)), theta2);
                 }
 
