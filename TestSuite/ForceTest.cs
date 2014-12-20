@@ -67,7 +67,7 @@ namespace TestSuite
 			Circle two = new Circle(5, 6, 13, 21);
 
 			Force gravity = new Gravity(Gravity.GRAVITY, Gravity.ANGLE);
-			Force tether = new Tether();
+			Force tether = new Tether(2.0, 3.0);
 
 			Interaction gravityOn12 = new Interaction(one, two, gravity);
 			Interaction tetherOn12 = new Interaction(one, two, tether);
@@ -75,12 +75,17 @@ namespace TestSuite
 			PhysicalSystem world = new PhysicalSystem();
 			world.addCircle(one);
 			world.addCircle(two);
+			AreEqual(Tuple.Create(0.0, 0.0), world.netForceOn(one));
+			AreEqual(Tuple.Create(0.0, 0.0), world.netForceOn(two));
+
 			world.addInteraction(gravityOn12);
 			world.addInteraction(tetherOn12);
 
+			// 8, 8
+			double value = (Math.Sqrt(32) - 3) * Math.Sqrt(2);
 			world.updateNetForces();
-			AreEqual(Tuple.Create(12.0, 0.0), world.netForceOn(one));
-			AreEqual(Tuple.Create(23.0, 0.0), world.netForceOn(two));
+			AreEqual(Tuple.Create(value, Gravity.GRAVITY + value), world.netForceOn(one));
+			AreEqual(Tuple.Create(-value, Gravity.GRAVITY - value), world.netForceOn(two));
 		}
 
 
