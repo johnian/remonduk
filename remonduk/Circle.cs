@@ -36,7 +36,7 @@ namespace remonduk
 
 		public Color color;
 
-		public List<Force> forces;
+		//public List<Force> forces;
 
 		/// <summary>
 		/// 
@@ -46,13 +46,11 @@ namespace remonduk
 		/// <param name="r"></param>
 		/// <param name="mass"></param>
 		///
-
 		public Circle() { }
 
 		public Circle(Circle other) :
 			this(other.x, other.y, other.r, other.velocity, other.velocity_angle, other.acceleration,
 				 other.acceleration_angle, other.mass) { }
-
 
 		public Circle(double x, double y, double r, double mass = MASS) :
 			this(x, y, r,
@@ -78,7 +76,7 @@ namespace remonduk
 
 			follow(TARGET);
 			this.color = Color.Chartreuse;
-			forces = new List<Force>();
+			//forces = new List<Force>();
 		}
 
 		/// <summary>
@@ -160,15 +158,15 @@ namespace remonduk
 			}
 		}
 
-		public void addForce(Force force)
-		{
-			forces.Add(force);
-		}
+		//public void addForce(Force force)
+		//{
+		//	forces.Add(force);
+		//}
 
-		public void removeForce(Force force)
-		{
-			forces.Remove(force);
-		}
+		//public void removeForce(Force force)
+		//{
+		//	forces.Remove(force);
+		//}
 
 		/// <summary>
 		/// 
@@ -176,9 +174,6 @@ namespace remonduk
 		///
 		public void updateAcceleration(double acceleration, double acceleration_angle)
 		{
-			// this needs to gather all the forces acting on this
-			// sum(forces)
-			// /= mass
 			ax += acceleration * Math.Cos(acceleration_angle);
 			ay += acceleration * Math.Sin(acceleration_angle);
 			this.acceleration = magnitude(ax, ay);
@@ -201,79 +196,66 @@ namespace remonduk
 		}
 
 		// make this return the angle of impact
-		public bool colliding(Circle other)
+		public bool colliding(Circle that)
 		{
 			// use squared instead of square root for efficiency?
-			if (distance(other) <= r + other.r)
+			if (distance(that) <= that.r + r)
 			{
-				return (other != this);
+				return (that != this);
 			}
 			else
 			{
-				if (velocity == 0 && other.velocity == 0)
+				double this_direction = Circle.angle(ay / 2 + vy - that.ay / 2 - that.vy, ax / 2 + vx - that.ax / 2 - that.vx);
+				double that_direction = Circle.angle(that.y - y, that.x - x);
+				if ((acceleration + velocity == 0 && that.acceleration + that.velocity == 0) ||
+					Math.Abs(that_direction - this_direction) > Math.PI / 2)
 				{
 					return false;
 				}
-				if (crossing(other) == null)
-				{
-					return false;
-				}
-				return true;
+				return crossing(that) != null;
 			}
 		}
 
 		public Tuple<double, double> closestPoint(double point_x, double point_y,
 			double reference_vx, double reference_vy)
 		{
-			//double A1 = reference_vy;
-			//double B1 = -reference_vx;
 
-			//double C1 = A1 * x + B1 * y;
-			//double C2 = -B1 * point_x + A1 * point_y;
+			// m = reference_vy / reference_vx
+			// y = mx + b
+			// y = this.y
+			// x = this.x
+			// y = m x + b1
+			// y = -x / m + b2
+			// y - m x = b1
+			// y + x / m = b2
 
-			//double determinant = A1 * A1 + B1 * B1;
+			// ydx - xdy = b1
+			// ydy + xdx = b2
+			// d 
 
+			// -xdy + ydx = b1
+			//  xdx + ydy = b2
+			// d = -dy * dy - dx * dx
 
-
-			double constant_1 = -reference_vx * y + reference_vy * x;
-			double constant_2 = reference_vx * point_x + reference_vy * point_y;
-			//// vx y - vy x = c1
-			//// vx.x + vy.y = c2
-
-			////-vy x + vx y = c1
-			//// vx.x + vy.y = c2
-
-			//// vx y - vy x = c1
-			//// vy.y + vx.x = c2
-
-			//// y    x
-			//// vx - vy = c1
-			//// vy + vx = c2
-
-			//// y =
-			//// c1 - vy
-			//// c2 + vx
-
-			//// x =
-			//// vx + c1
-			//// vy + c2
-
+			//double constant_1 = -reference_vy * x		+ reference_vx * y;
+			double constant_1 = reference_vy * x		- reference_vx * y;
+			double constant_2 = reference_vx * point_x	+ reference_vy * point_y;
 			double determinant = reference_vx * reference_vx + reference_vy * reference_vy;
+			//double determinant = -reference_vy * reference_vy - reference_vx * reference_vx;
 
 			double intersection_x;
 			double intersection_y;
 			if (determinant == 0)
 			{
-				Debug.WriteLine("determinant 0");
 				intersection_x = x;
 				intersection_y = y;
 			}
 			else
 			{
-				//intersection_x = (A1 * C1 - B1 * C2) / determinant;
-				//intersection_y = (A1 * C2 + B1 * C1) / determinant;
+				//intersection_x = (constant_1 * -reference_vy - constant_2 * reference_vx) / determinant;
 				intersection_x = (constant_1 * reference_vy + constant_2 * reference_vx) / determinant;
 				intersection_y = (constant_2 * reference_vy - constant_1 * reference_vx) / determinant;
+				//intersection_y = (constant_2 * -reference_vy - constant_1 * reference_vx) / determinant;
 			}
 
 			Debug.WriteLine("intersection_x: " + intersection_x);
@@ -287,18 +269,9 @@ namespace remonduk
 				Debug.WriteLine("too far");
 				return null;
 			}
-			if (Math.Sign(Circle.angle(delta_y, delta_x)) !=
-				Math.Sign(Circle.angle(point_y - y, point_x - x)))
-			{
-				Debug.WriteLine("wrong direction");
-				return null;
-			}
-
 			return Tuple.Create(intersection_x, intersection_y);
 		}
 
-		// treat this as moving
-		// treat that as stationary
 		public Tuple<double, double> crossing(Circle that)
 		{
 			double reference_vx = ax / 2 + vx - that.ax / 2 - that.vx;
@@ -313,7 +286,7 @@ namespace remonduk
 				return null;
 			}
 			double distance_from_that = Circle.magnitude(point.Item1 - that.x, point.Item2 - that.y);
-			double radii_sum = r + that.r;
+			double radii_sum = that.r + r;
 
 			Debug.WriteLine("distance_from_that: " + distance_from_that);
 			Debug.WriteLine("radii_sum: " + radii_sum);
@@ -338,11 +311,7 @@ namespace remonduk
 		{
 			if (target != null)
 			{
-				// set up following in a better way ??
-				//double dist = distance(target);
 				setVelocity(velocity, angle(target.y - y, target.x - x));
-				//double tau = 2.0 * Math.PI;
-				//double diff = (velocity_angle % (tau)) - (target.velocity_angle % (tau));
 			}
 
 			updatePosition();
@@ -351,7 +320,6 @@ namespace remonduk
 				if (colliding(c))
 				{
 					double kinetic = mass * velocity * velocity / 2;
-					//Debug.WriteLine(kinetic);
 				}
 			}
 		}
@@ -368,7 +336,6 @@ namespace remonduk
 		/// <param name="g"></param>
 		public void draw(Graphics g)
 		{
-
 			Brush brush = new SolidBrush(color);
 			g.FillEllipse(brush, (float)(x - r / 2), (float)(y - r / 2), (float)r, (float)r);
 		}
@@ -376,7 +343,6 @@ namespace remonduk
 		public static double magnitude(double x, double y)
 		{
 			return Math.Sqrt(x * x + y * y);
-
 			//return Math.Round(Math.Sqrt(x * x + y * y), PRECISION);
 		}
 
@@ -395,38 +361,13 @@ namespace remonduk
 				return 0;
 			}
 			double theta = Math.Atan2(y, x);
-			//if (theta > 2 * Math.PI) {
-			//	theta -= 2 * Math.PI;
-			//}
 			if (theta < 0)
 			{
 				theta += 2 * Math.PI;
 			}
 			return theta;
 		}
-
-		//double backdist = Math.sqrt(Math.pow(circle1.radius + circle2.radius, 2) - closestdistsq); 
-		//double movementvectorlength = Math.sqrt(Math.pow(circle1.vx, 2) + Math.pow(circle1.vy, 2)); 
-		//double c_x = d.x - backdist * (circle1.vx / movementvectorlength); 
-		//double c_y = d.y - backdist * (circle1.vy / movementvectorlength);
-
-		// treat the first circle as a movement vector
-		// treat the second circle as stationary
-		// find closest point on second circle's center to movement vector
-		// that distance is b
-		// if b is larger than sum of radii, no collision
-		// else, collision -> use pythagorean theorem
-		// (distance from closest point to first circle)^2 + (distance from circle to closest point)^2 = (sum of radii)^2
-		// a^2 = sum(radii)^2 - (distance)^2
-		// closest point - a = center of circle 1 where collision happens
-
-		// subtract the movement vector of one circle from another
-		// treat one of the circles as stationary
-		// and do the dynamic-static collision detection 
-
-
-		// multiple simultaneous collisions
-
+		
 		public String toString()
 		{
 			return "(" + x + ", " + y + ") radius: " + r + " mass: " + mass + "\n" +
