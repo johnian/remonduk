@@ -17,19 +17,12 @@ namespace remonduk
 		}
 
 		public Tuple<double, double> forceOnFirst() {
-			return force.calculate(first, second);
-		}
-
-		public Tuple<double, double> forceOnSecond() {
 			Tuple<double, double> f = force.calculate(second, first);
 			return Tuple.Create(scalar * f.Item1, scalar * f.Item2);
 		}
 
-		// need functions to calculate ax and ay
-		//public void update() {
-
-		//	first.updateAcceleration(ax1, ay1);
-		//	second.updateAcceleration(ax2, ay2);
-		//}
+		public Tuple<double, double> forceOnSecond() {
+			return force.calculate(first, second);
+		}
 	}
 }

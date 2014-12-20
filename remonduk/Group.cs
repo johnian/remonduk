@@ -23,7 +23,7 @@ namespace remonduk
         {
             group.Add(c1);
             group.Add(c2);
-            tethers.Add(new Tether(c1,c2,max_dist,k));
+			//tethers.Add(new Tether(c1,c2,max_dist,k));
         }
 
         public void update()
@@ -32,7 +32,7 @@ namespace remonduk
             for (int i = 0; i < tethers.Count; i++ )
             {
                 System.Diagnostics.Debug.WriteLine("PULLING");
-                tethers.ElementAt(i).pull();
+				//tethers.ElementAt(i).pull();
             }
         }
     }

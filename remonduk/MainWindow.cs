@@ -170,7 +170,7 @@ namespace remonduk
                 if(click.colliding(c) && selected_circle != null)
                 {
                     //selected_circle.follow(c, 25, 100);
-                    groups.ElementAt(0).tethers.Add(new Tether(selected_circle, c, 50, .002));
+					//groups.ElementAt(0).tethers.Add(new Tether(selected_circle, c, 50, .002));
                     found = true;
                 }
                 else if (click.colliding(c))
