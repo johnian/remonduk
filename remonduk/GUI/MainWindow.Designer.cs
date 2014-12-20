@@ -44,13 +44,14 @@
             this.worldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gravityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gravity_toggle_menu_item = new System.Windows.Forms.ToolStripMenuItem();
+            this.detailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.system_menu_item = new System.Windows.Forms.ToolStripMenuItem();
             this.load_menu_item = new System.Windows.Forms.ToolStripMenuItem();
             this.save_menu_item = new System.Windows.Forms.ToolStripMenuItem();
             this.new_menu_item = new System.Windows.Forms.ToolStripMenuItem();
             this.circle_radius_up_down = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
-            this.detailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.interactionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.new_circle_velocity_up_down)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.new_circle_acceleration_up_down)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.new_circle_velocity_angle_up_down)).BeginInit();
@@ -216,7 +217,8 @@
             // 
             this.worldToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.gravityToolStripMenuItem,
-            this.detailsToolStripMenuItem});
+            this.detailsToolStripMenuItem,
+            this.interactionsToolStripMenuItem});
             this.worldToolStripMenuItem.Name = "worldToolStripMenuItem";
             this.worldToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.worldToolStripMenuItem.Text = "World";
@@ -236,6 +238,13 @@
             this.gravity_toggle_menu_item.Size = new System.Drawing.Size(88, 22);
             this.gravity_toggle_menu_item.Text = "On";
             this.gravity_toggle_menu_item.Click += new System.EventHandler(this.onToolStripMenuItem_Click);
+            // 
+            // detailsToolStripMenuItem
+            // 
+            this.detailsToolStripMenuItem.Name = "detailsToolStripMenuItem";
+            this.detailsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.detailsToolStripMenuItem.Text = "Details";
+            this.detailsToolStripMenuItem.Click += new System.EventHandler(this.detailsToolStripMenuItem_Click);
             // 
             // system_menu_item
             // 
@@ -307,12 +316,12 @@
             this.label3.TabIndex = 10;
             this.label3.Text = "R(but really D)";
             // 
-            // detailsToolStripMenuItem
+            // interactionsToolStripMenuItem
             // 
-            this.detailsToolStripMenuItem.Name = "detailsToolStripMenuItem";
-            this.detailsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.detailsToolStripMenuItem.Text = "Details";
-            this.detailsToolStripMenuItem.Click += new System.EventHandler(this.detailsToolStripMenuItem_Click);
+            this.interactionsToolStripMenuItem.Name = "interactionsToolStripMenuItem";
+            this.interactionsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.interactionsToolStripMenuItem.Text = "Interactions";
+            this.interactionsToolStripMenuItem.Click += new System.EventHandler(this.interactionsToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
@@ -377,6 +386,7 @@
         private System.Windows.Forms.ToolStripMenuItem gravityToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gravity_toggle_menu_item;
         private System.Windows.Forms.ToolStripMenuItem detailsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem interactionsToolStripMenuItem;
     }
 }
 

@@ -258,15 +258,15 @@ namespace remonduk
 				//intersection_y = (constant_2 * -reference_vy - constant_1 * reference_vx) / determinant;
 			}
 
-			Debug.WriteLine("intersection_x: " + intersection_x);
-			Debug.WriteLine("intersection_y: " + intersection_y);
+			//Debug.WriteLine("intersection_x: " + intersection_x);
+			//Debug.WriteLine("intersection_y: " + intersection_y);
 
 			double delta_x = intersection_x - x;
 			double delta_y = intersection_y - y;
 			if (Circle.magnitude(intersection_x - x, intersection_y - y) >
 				Circle.magnitude(reference_vx, reference_vy))
 			{
-				Debug.WriteLine("too far");
+				//Debug.WriteLine("too far");
 				return null;
 			}
 			return Tuple.Create(intersection_x, intersection_y);
@@ -276,9 +276,9 @@ namespace remonduk
 		{
 			double reference_vx = ax / 2 + vx - that.ax / 2 - that.vx;
 			double reference_vy = ay / 2 + vy - that.ay / 2 - that.vy;
-			Debug.WriteLine("");
-			Debug.WriteLine("reference_vx: " + reference_vx);
-			Debug.WriteLine("reference_vy: " + reference_vy);
+			//Debug.WriteLine("");
+			//Debug.WriteLine("reference_vx: " + reference_vx);
+			//Debug.WriteLine("reference_vy: " + reference_vy);
 
 			Tuple<double, double> point = closestPoint(that.x, that.y, reference_vx, reference_vy);
 			if (point == null)
@@ -288,11 +288,11 @@ namespace remonduk
 			double distance_from_that = Circle.magnitude(point.Item1 - that.x, point.Item2 - that.y);
 			double radii_sum = that.r + r;
 
-			Debug.WriteLine("distance_from_that: " + distance_from_that);
-			Debug.WriteLine("radii_sum: " + radii_sum);
+			//Debug.WriteLine("distance_from_that: " + distance_from_that);
+			//Debug.WriteLine("radii_sum: " + radii_sum);
 			if (distance_from_that > radii_sum)
 			{
-				Debug.WriteLine("here");
+				//Debug.WriteLine("here");
 				return null;
 			}
 			else

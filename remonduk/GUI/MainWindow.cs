@@ -20,8 +20,10 @@ namespace remonduk
         PhysicalSystem ps = new PhysicalSystem();
         GUI.Circle_Detail_Window cdw;
         GUI.Physical_System_Detail_Window psdw;
+        GUI.Interaction_Detail_Window idw;
         Circle selected_circle;
         Group selected_group;
+        Interaction selected_interaction;
 
         int frame_count;
 
@@ -34,10 +36,12 @@ namespace remonduk
             InitializeComponent();
             cdw = GUI.GUI_Singleton.Instance.cdw;
             psdw = GUI.GUI_Singleton.Instance.psdw;
+            idw = GUI.GUI_Singleton.Instance.idw;
             Application.Idle += HandleApplicationIdle;
             groups.Add(new Group());
             pause = false;
             selected_circle = null;
+            selected_interaction = null;
             drag = false;
             frame_count = 0;
             tethering = false;
@@ -64,7 +68,7 @@ namespace remonduk
                 }
 
                 drawHUD(this.CreateGraphics());
-
+                selected_interaction = psdw.selected_interaction;
 				//System.Diagnostics.Debug.WriteLine("Frame Count: " + frame_count);
 				//System.Diagnostics.Debug.WriteLine(circles.Count);
                 frame_count++;
@@ -102,6 +106,10 @@ namespace remonduk
             {
                 psdw.update_ps(ps);
                 selected_circle = psdw.selected_circle;
+            }
+            if(idw.Visible)
+            {
+                idw.update_interaction(selected_interaction);
             }
             if(pause)
             {
@@ -435,6 +443,12 @@ namespace remonduk
         {
             psdw = new GUI.Physical_System_Detail_Window(ps);
             psdw.Show();
+        }
+
+        private void interactionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            idw = new GUI.Interaction_Detail_Window(selected_interaction);
+            idw.Show();
         }
     }
 }

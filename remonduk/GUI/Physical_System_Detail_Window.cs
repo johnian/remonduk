@@ -89,5 +89,10 @@ namespace remonduk.GUI
                 cdw.Focus();
             }
         }
+
+        private void interactions_list_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

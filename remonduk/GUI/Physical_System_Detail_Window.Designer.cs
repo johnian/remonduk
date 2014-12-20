@@ -80,6 +80,7 @@
             this.interactions_list.Name = "interactions_list";
             this.interactions_list.Size = new System.Drawing.Size(174, 212);
             this.interactions_list.TabIndex = 2;
+            this.interactions_list.SelectedIndexChanged += new System.EventHandler(this.interactions_list_SelectedIndexChanged);
             // 
             // gravity_checkbox
             // 

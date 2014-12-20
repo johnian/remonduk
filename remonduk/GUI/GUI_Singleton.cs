@@ -12,6 +12,7 @@ namespace remonduk.GUI
 
         public Circle_Detail_Window cdw = new Circle_Detail_Window();
         public Physical_System_Detail_Window psdw = new Physical_System_Detail_Window();
+        public Interaction_Detail_Window idw = new Interaction_Detail_Window();
 
         public GUI_Singleton()
         {
