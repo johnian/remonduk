@@ -29,8 +29,8 @@ namespace TestSuite
 			AreEqual(Tuple.Create(5.0, 3.0), interaction.forceOnSecond());
 
 			interaction = new Interaction(first, second, force, 0);
-			AreEqual(Tuple.Create(5.0, 3.0), interaction.forceOnFirst());
-			AreEqual(Tuple.Create(0.0, 0.0), interaction.forceOnSecond());
+			AreEqual(Tuple.Create(0.0, 0.0), interaction.forceOnFirst());
+			AreEqual(Tuple.Create(5.0, 3.0), interaction.forceOnSecond());
 		}
 
 		[TestMethod]
@@ -53,8 +53,9 @@ namespace TestSuite
 			Circle one = new Circle(1, 2, 2, 3);
 			Circle two = new Circle(5, 6, 13, 21);
 
-			Tether elasticity = new Tether();
-			Interaction interaction = new Interaction(one, two, elasticity);
+			Tether tether = new Tether();
+			Interaction interaction = new Interaction(one, two, tether);
+
 			double force = 2 * (Math.Sqrt(32) - 3);
 			AreEqual(Tuple.Create(force * Math.Cos(Math.PI / 4), force * Math.Sin(Math.PI / 4)), interaction.forceOnFirst());
 			AreEqual(Tuple.Create(force * Math.Cos(5 * Math.PI / 4), force * Math.Sin(5 * Math.PI / 4)), interaction.forceOnSecond());
@@ -65,31 +66,21 @@ namespace TestSuite
 			Circle one = new Circle(1, 2, 2, 3);
 			Circle two = new Circle(5, 6, 13, 21);
 
-			Force elasticity = new Force(
-				delegate(Circle first, Circle second)
-				{
-					double k = 2;
-					double equilibrium = 3;
-					double dist = first.distance(second);
-					if (dist > equilibrium)
-					{
-						dist -= equilibrium;
-						double f = k * dist;
+			Force gravity = new Gravity(Gravity.GRAVITY, Gravity.ANGLE);
+			Force tether = new Tether();
 
-						double delta_x = second.x - first.x;
-						double delta_y = second.y - first.y;
-						double angle = Circle.angle(delta_y, delta_x);
-						Debug.WriteLine(angle);
+			Interaction gravityOn12 = new Interaction(one, two, gravity);
+			Interaction tetherOn12 = new Interaction(one, two, tether);
 
-						double fx = f * Math.Cos(angle);
-						double fy = f * Math.Sin(angle);
-						return Tuple.Create(fx, fy);
-					}
-					else {
-						return Tuple.Create(0.0, 0.0);
-					}
-				}
-			);
+			PhysicalSystem world = new PhysicalSystem();
+			world.addCircle(one);
+			world.addCircle(two);
+			world.addInteraction(gravityOn12);
+			world.addInteraction(tetherOn12);
+
+			world.updateNetForces();
+			AreEqual(Tuple.Create(12.0, 0.0), world.netForceOn(one));
+			AreEqual(Tuple.Create(23.0, 0.0), world.netForceOn(two));
 		}
 
 
