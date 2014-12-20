@@ -16,4 +16,5 @@ C:\Users\julian\johnian\remonduk\remonduk\obj\Debug\remonduk.csproj.GenerateReso
 C:\Users\julian\johnian\remonduk\remonduk\obj\Debug\remonduk.MainWindow.resources
 C:\Users\Sid\Documents\Visual Studio 2013\Projects\remonduk\remonduk\obj\Debug\remonduk.MainWindow.resources
 C:\Users\Sid\Documents\Visual Studio 2013\Projects\remonduk\remonduk\obj\Debug\remonduk.csprojResolveAssemblyReference.cache
-C:\Users\Sid\Documents\Visual Studio 2013\Projects\remonduk\remonduk\obj\Debug\remonduk.GUI.Form1.resources
+C:\Users\Sid\Documents\Visual Studio 2013\Projects\remonduk\remonduk\obj\Debug\remonduk.GUI.Circle_Detail_Window.resources
+C:\Users\Sid\Documents\Visual Studio 2013\Projects\remonduk\remonduk\obj\Debug\remonduk.GUI.Physical_System_Detail_Window.resources

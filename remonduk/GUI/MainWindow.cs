@@ -18,26 +18,29 @@ namespace remonduk
         HashSet<Group> groups = new HashSet<Group>();
 
         PhysicalSystem ps = new PhysicalSystem();
-        
+        GUI.Circle_Detail_Window cdw;
+        GUI.Physical_System_Detail_Window psdw;
         Circle selected_circle;
         Group selected_group;
 
         int frame_count;
 
         bool pause;
-
+        bool tethering;
         bool drag;
 
         public MainWindow()
         {
             InitializeComponent();
-
+            cdw = new GUI.Circle_Detail_Window();
+            psdw = new GUI.Physical_System_Detail_Window(ps);
             Application.Idle += HandleApplicationIdle;
             groups.Add(new Group());
             pause = false;
             selected_circle = null;
             drag = false;
             frame_count = 0;
+            tethering = false;
         }
 
         void HandleApplicationIdle(object sender, EventArgs e)
@@ -71,16 +74,34 @@ namespace remonduk
         void drawInteractions(Graphics g)
         {
             Pen pen = new Pen(Color.Red);
+            Pen select_pen = new Pen(Color.CornflowerBlue);
             foreach(Interaction i in ps.interactions)
             {
                 Point p1 = new Point((int)i.first.x, (int)i.first.y);
                 Point p2 = new Point((int)i.second.x, (int)i.second.y);
-                g.DrawLine(pen, p1, p2);
+                if (i == psdw.selected_interaction && psdw.Visible)
+                {
+                    
+                    g.DrawLine(select_pen, p1, p2);
+                }
+                else
+                {
+                    g.DrawLine(pen, p1, p2);
+                }
             }
         }
 
         void drawHUD(Graphics g)
         {
+            if(cdw.Visible && selected_circle != null)
+            {
+                cdw.update_circle(selected_circle, ps.interactions);
+            }
+            if(psdw.Visible)
+            {
+                psdw.update_ps(ps);
+                selected_circle = psdw.selected_circle;
+            }
             if(pause)
             {
                 drawPause(g);
@@ -182,7 +203,7 @@ namespace remonduk
             drag = false;
             foreach (Circle c in ps.netForces.Keys)
             {
-                if(click.colliding(c) && selected_circle != null)
+                if(click.colliding(c) && selected_circle != null && tethering)
                 {
                     //selected_circle.follow(c, 25, 100);
                     Tether t = new Tether(.0002, 50);
@@ -201,8 +222,9 @@ namespace remonduk
                     new_circle_velocity_angle_up_down.Value = (Decimal)(selected_circle.velocity_angle * 180.0 / Math.PI);
                     new_circle_velocity_up_down.Value = (Decimal)selected_circle.velocity;
                     circle_radius_up_down.Value = (Decimal)selected_circle.r;
+                    psdw.selected_circle = c;
+                    psdw.circle_list.SelectedItem = c;
                     found = true;
-                    selected_circle.color = Color.CornflowerBlue;
                 }
             }
             if (!found)
@@ -216,11 +238,7 @@ namespace remonduk
                 }
                 ps.addCircle(click);
                 groups.ElementAt(0).group.Add(click);
-                if(selected_circle != null)
-                {
-                    selected_circle.color = Color.Chartreuse;
-                }
-                selected_circle = null;
+
             }
         }
 
@@ -388,6 +406,34 @@ namespace remonduk
                 //}
                 //Constants.Instance.GRAVITY_ACTIVE = false;
             }
+        }
+
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.ShiftKey)
+            {
+                System.Diagnostics.Debug.WriteLine("TETHER ON");
+                tethering = true;
+            }
+        }
+
+        private void MainWindow_KeyUp(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.ShiftKey)
+            {
+                tethering = false;
+            }
+            if(e.KeyCode == Keys.Q && selected_circle != null)
+            {
+                cdw = new GUI.Circle_Detail_Window(selected_circle, ps.interactions);
+                cdw.Show();
+            }
+        }
+
+        private void detailsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            psdw = new GUI.Physical_System_Detail_Window(ps);
+            psdw.Show();
         }
     }
 }

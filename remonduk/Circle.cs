@@ -238,7 +238,7 @@ namespace remonduk
 		public void draw(Graphics g)
 		{
 
-			Brush brush = new SolidBrush(Color.Chartreuse);
+			Brush brush = new SolidBrush(color);
 			g.FillEllipse(brush, (float)(x - r / 2), (float)(y - r / 2), (float)r, (float)r);
 		}
 
