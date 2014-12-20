@@ -43,16 +43,12 @@ namespace remonduk
 		}
 
 		public void updateNetForces() {
-			//List<Circle> circles = netForces.Keys;
-			//for (int i = 0; i < circles.Count; i++) {
-			//	netForces[circles[i]] = updateNetForceOn(circles[i]);
-			//}
-			//foreach(KeyValuePair<Circle, Tuple<double, double>> entry in netForces) {
-			//	netForces[entry.Key] = updateNetForceOn(entry.Key);
-			//}
 			for (int i = 0; i < netForces.Count; i++) {
 				Circle circle = netForces.ElementAt(i).Key;
 				netForces[circle] = updateNetForceOn(circle);
+				double ax = netForces[circle].Item1 / circle.mass;
+				double ay = netForces[circle].Item2 / circle.mass;
+				circle.setAcceleration(Circle.magnitude(ax, ay), Circle.angle(ay, ax));
 			}
 		}
 		

@@ -86,6 +86,20 @@ namespace TestSuite
 			world.updateNetForces();
 			AreEqual(Tuple.Create(value, Gravity.GRAVITY + value), world.netForceOn(one));
 			AreEqual(Tuple.Create(-value, Gravity.GRAVITY - value), world.netForceOn(two));
+
+			world.updateNetForces();
+			AreEqual(Tuple.Create(value, Gravity.GRAVITY + value), world.netForceOn(one));
+			AreEqual(Tuple.Create(-value, Gravity.GRAVITY - value), world.netForceOn(two));
+
+			world.removeInteraction(gravityOn12);
+			world.updateNetForces();
+			AreEqual(Tuple.Create(value, value), world.netForceOn(one));
+			AreEqual(Tuple.Create(-value, -value), world.netForceOn(two));
+
+			world.removeInteraction(tetherOn12);
+			world.updateNetForces();
+			AreEqual(Tuple.Create(0.0, 0.0), world.netForceOn(one));
+			AreEqual(Tuple.Create(0.0, 0.0), world.netForceOn(two));
 		}
 
 
