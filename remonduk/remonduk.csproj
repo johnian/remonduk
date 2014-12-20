@@ -55,6 +55,7 @@
     <Compile Include="GUI\Circle_Detail_Window.Designer.cs">
       <DependentUpon>Circle_Detail_Window.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\GUI_Singleton.cs" />
     <Compile Include="GUI\Physical_System_Detail_Window.cs">
       <SubType>Form</SubType>
     </Compile>

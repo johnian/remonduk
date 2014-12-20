@@ -38,6 +38,9 @@
             this.interactions_blank_button = new System.Windows.Forms.Button();
             this.interactions_remove_button = new System.Windows.Forms.Button();
             this.interactions_edit_button = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -139,11 +142,42 @@
             this.interactions_edit_button.Text = "edit";
             this.interactions_edit_button.UseVisualStyleBackColor = true;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(533, 267);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(46, 23);
+            this.button1.TabIndex = 12;
+            this.button1.Text = "edit";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(585, 267);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(58, 23);
+            this.button2.TabIndex = 11;
+            this.button2.Text = "remove";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(469, 267);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(58, 23);
+            this.button3.TabIndex = 10;
+            this.button3.UseVisualStyleBackColor = true;
+            // 
             // Physical_System_Detail_Window
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(655, 305);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.interactions_edit_button);
             this.Controls.Add(this.interactions_remove_button);
             this.Controls.Add(this.interactions_blank_button);
@@ -174,5 +208,8 @@
         private System.Windows.Forms.Button interactions_remove_button;
         private System.Windows.Forms.Button interactions_edit_button;
         public System.Windows.Forms.ListBox circle_list;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
     }
 }

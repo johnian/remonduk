@@ -32,8 +32,8 @@ namespace remonduk
         public MainWindow()
         {
             InitializeComponent();
-            cdw = new GUI.Circle_Detail_Window();
-            psdw = new GUI.Physical_System_Detail_Window(ps);
+            cdw = GUI.GUI_Singleton.Instance.cdw;
+            psdw = GUI.GUI_Singleton.Instance.psdw;
             Application.Idle += HandleApplicationIdle;
             groups.Add(new Group());
             pause = false;
@@ -41,6 +41,7 @@ namespace remonduk
             drag = false;
             frame_count = 0;
             tethering = false;
+            System.Diagnostics.Debug.WriteLine("HERE");
         }
 
         void HandleApplicationIdle(object sender, EventArgs e)
