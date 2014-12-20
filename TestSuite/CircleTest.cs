@@ -364,11 +364,49 @@ namespace TestSuite
 		[TestMethod]
 		public void collidingTest()
 		{
+			Circle one = new Circle(0, 0, 1, 0, 0, 0, 0);
+			Circle two = new Circle(0, 0, 1, 0, 0, 0, 0);
 
+			AreEqual(false, one.colliding(one));
+			AreEqual(false, two.colliding(two));
+			AreEqual(true, one.colliding(two));
+			AreEqual(true, two.colliding(one));
+
+			two = new Circle(0, 1, 1);
+			AreEqual(true, one.colliding(two));
+			AreEqual(true, two.colliding(one));
+
+			two = new Circle(2, 2, 1);
+			AreEqual(false, one.colliding(two));
+			AreEqual(false, two.colliding(one));
+
+			two.setVelocity(1, Math.PI / 4);
+			AreEqual(false, one.colliding(two));
+			AreEqual(false, two.colliding(one));
+
+			two.setVelocity(1, Math.PI / 2);
+			AreEqual(false, one.colliding(two));
+			AreEqual(false, two.colliding(one));
+
+			two.setVelocity(2, 5 * Math.PI / 4);
+			AreEqual(false, one.colliding(two));
+			AreEqual(false, two.colliding(one));
+
+			two.setVelocity(2, 3 * Math.PI / 2);
+			AreEqual(true, one.colliding(two));
+			AreEqual(true, two.colliding(one));
+
+			two.setVelocity(0, 0);
+			one.setVelocity(1, Math.PI / 4);
+			AreEqual(false, one.colliding(two));
+			AreEqual(false, two.colliding(one));
+
+			one.setVelocity(2, Math.PI / 2);
+			AreEqual(true, one.colliding(two));
+			AreEqual(true, two.colliding(one));
 		}
 
 		[TestMethod]
-
 		public void moveTest()
 		{
 
