@@ -15,18 +15,24 @@ namespace remonduk
     public partial class MainWindow : Form
     {
         //HashSet<Circle> circles = new HashSet<Circle>();
+        //groups may not be needed, should verify
         HashSet<Group> groups = new HashSet<Group>();
 
         PhysicalSystem ps = new PhysicalSystem();
+
+        //Detail Windows
         GUI.Circle_Detail_Window cdw;
         GUI.Physical_System_Detail_Window psdw;
         GUI.Interaction_Detail_Window idw;
+
+        //selected_group may not be need, should verify
         Circle selected_circle;
         Group selected_group;
         Interaction selected_interaction;
 
         int frame_count;
 
+        //"states"
         bool pause;
         bool tethering;
         bool drag;
@@ -34,18 +40,24 @@ namespace remonduk
         public MainWindow()
         {
             InitializeComponent();
+
+            Application.Idle += HandleApplicationIdle;
+
             cdw = GUI.GUI_Singleton.Instance.cdw;
             psdw = GUI.GUI_Singleton.Instance.psdw;
             idw = GUI.GUI_Singleton.Instance.idw;
-            Application.Idle += HandleApplicationIdle;
+
             groups.Add(new Group());
+
             pause = false;
+            drag = false;
+            tethering = false;
+
             selected_circle = null;
             selected_interaction = null;
-            drag = false;
+
             frame_count = 0;
-            tethering = false;
-            System.Diagnostics.Debug.WriteLine("HERE");
+            System.Diagnostics.Debug.WriteLine("MAIN WINDOW CREATED");
         }
 
         void HandleApplicationIdle(object sender, EventArgs e)
@@ -53,11 +65,9 @@ namespace remonduk
             while (IsApplicationIdle())
             {
                 this.CreateGraphics().Clear(System.Drawing.Color.Gray);
-
-                groups.ElementAt(0).update();
              
-
                 ps.updateNetForces();
+
                 foreach (Circle c in ps.netForces.Keys)
                 {
                     if (!pause)
@@ -68,30 +78,28 @@ namespace remonduk
                 }
 
                 drawHUD(this.CreateGraphics());
+
                 selected_interaction = psdw.selected_interaction;
-				//System.Diagnostics.Debug.WriteLine("Frame Count: " + frame_count);
-				//System.Diagnostics.Debug.WriteLine(circles.Count);
+                selected_circle = psdw.selected_circle;
+
                 frame_count++;
+
                 System.Threading.Thread.Sleep(50);
             }
         }
 
         void drawInteractions(Graphics g)
         {
-            Pen pen = new Pen(Color.Red);
-            Pen select_pen = new Pen(Color.CornflowerBlue);
             foreach(Interaction i in ps.interactions)
             {
-                Point p1 = new Point((int)i.first.x, (int)i.first.y);
-                Point p2 = new Point((int)i.second.x, (int)i.second.y);
                 if (i == psdw.selected_interaction && psdw.Visible)
                 {
-                    
-                    g.DrawLine(select_pen, p1, p2);
+
+                    i.draw(g, Color.CornflowerBlue);
                 }
                 else
                 {
-                    g.DrawLine(pen, p1, p2);
+                    i.draw(g, Color.Red);
                 }
             }
         }
@@ -102,15 +110,18 @@ namespace remonduk
             {
                 cdw.update_circle(selected_circle, ps.interactions);
             }
+
             if(psdw.Visible)
             {
                 psdw.update_ps(ps);
                 selected_circle = psdw.selected_circle;
             }
+
             if(idw.Visible)
             {
                 idw.update_interaction(selected_interaction);
             }
+
             if(pause)
             {
                 drawPause(g);
@@ -119,12 +130,13 @@ namespace remonduk
             {
                 drawPlay(g);
             }
+
             if(selected_circle != null)
             {
                 drawSelected(g);
             }
+
             drawNewCircleAngles(g);
-            //groups.ElementAt(0).draw(g);
             drawInteractions(g);
         }
 
@@ -164,7 +176,6 @@ namespace remonduk
 
 
             theta = (double)new_circle_acceleration_angle_up_down.Value;
-            //System.Diagnostics.Debug.WriteLine(new_circle_acceleration_angle_up_down.Value);
             x1 = 162.5F;
             y1 = 127.5F;
             x2 = (float)Math.Cos(theta * (Math.PI / 180.0)) * 25 + x1;
@@ -199,55 +210,60 @@ namespace remonduk
         private void MainWindow_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
-                return;
-            Point pos = Control.MousePosition;
-            pos = this.PointToClient(pos);
+                return; //will implement soon
+
+            drag = false;
+
+            Point pos = this.PointToClient(Control.MousePosition);
+
             Circle click = new Circle(pos.X, pos.Y, 5);
+
             bool found = false;
+
             if (drag && selected_circle != null)
             {
                 selected_circle.x = pos.X;
                 selected_circle.y = pos.Y;
             }
-            drag = false;
+
+
             foreach (Circle c in ps.netForces.Keys)
             {
-                if(click.colliding(c) && selected_circle != null && tethering)
+                bool collide = click.colliding(c);
+
+                if(collide && selected_circle != null && tethering)
                 {
-                    //selected_circle.follow(c, 25, 100);
                     Tether t = new Tether(.0002, 50);
                     Interaction i = new Interaction(selected_circle, c, t);
                     ps.addInteraction(i);
-					//groups.ElementAt(0).tethers.Add(t);
                     found = true;
                 }
-                else if (click.colliding(c))
+                else if (collide)
                 {
-                    System.Diagnostics.Debug.WriteLine("MOUSEUP");
-                    System.Diagnostics.Debug.WriteLine(c.velocity + " " + c.acceleration);
                     selected_circle = c;
+                    psdw.selected_circle = c;
+                    psdw.circle_list.SelectedItem = c;
+
+                    cdw.update_circle(selected_circle, ps.interactions);
+
                     new_circle_acceleration_angle_up_down.Value = (Decimal)(selected_circle.acceleration_angle * 180.0 / Math.PI);
                     new_circle_acceleration_up_down.Value = (Decimal)selected_circle.acceleration;
                     new_circle_velocity_angle_up_down.Value = (Decimal)(selected_circle.velocity_angle * 180.0 / Math.PI);
                     new_circle_velocity_up_down.Value = (Decimal)selected_circle.velocity;
                     circle_radius_up_down.Value = (Decimal)selected_circle.r;
-                    psdw.selected_circle = c;
-                    psdw.circle_list.SelectedItem = c;
+
                     found = true;
                 }
             }
+
             if (!found)
             {
                 click.r = (float)circle_radius_up_down.Value;
-                click.setVelocity((float)new_circle_velocity_up_down.Value, ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180.0);
-                click.updateAcceleration((float)new_circle_acceleration_up_down.Value, ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
-                if (Constants.Instance.GRAVITY_ACTIVE)
-                {
-                    click.updateAcceleration(Constants.Instance.GRAVITY, Constants.Instance.GRAVITY_ANGLE);
-                }
+                click.setVelocity((float)new_circle_velocity_up_down.Value, 
+                    ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180.0);
+                click.updateAcceleration((float)new_circle_acceleration_up_down.Value, 
+                    ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
                 ps.addCircle(click);
-                groups.ElementAt(0).group.Add(click);
-
             }
         }
 
@@ -337,17 +353,17 @@ namespace remonduk
         private void MainWindow_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
-                return;
+                return; //will implement soon
+
             if(selected_circle != null)
             {
-                Point pos = Control.MousePosition;
-                pos = this.PointToClient(pos);
+                Point pos = this.PointToClient(Control.MousePosition);
+
                 Circle click = new Circle(pos.X, pos.Y, 5);
+
                 if(click.colliding(selected_circle))
                 {
                     drag = true;
-                    //System.Diagnostics.Debug.WriteLine("SELECTED");
-                    //System.Diagnostics.Debug.WriteLine(String.Concat("MouseX = ", pos.X.ToString(),"  MouseY = ",pos.Y.ToString()));
                 }
             }
         }
@@ -421,7 +437,7 @@ namespace remonduk
         {
             if(e.KeyCode == Keys.ShiftKey)
             {
-                System.Diagnostics.Debug.WriteLine("TETHER ON");
+                //System.Diagnostics.Debug.WriteLine("TETHER ON");
                 tethering = true;
             }
         }

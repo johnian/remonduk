@@ -45,13 +45,13 @@
             this.gravityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gravity_toggle_menu_item = new System.Windows.Forms.ToolStripMenuItem();
             this.detailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.interactionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.system_menu_item = new System.Windows.Forms.ToolStripMenuItem();
             this.load_menu_item = new System.Windows.Forms.ToolStripMenuItem();
             this.save_menu_item = new System.Windows.Forms.ToolStripMenuItem();
             this.new_menu_item = new System.Windows.Forms.ToolStripMenuItem();
             this.circle_radius_up_down = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
-            this.interactionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.new_circle_velocity_up_down)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.new_circle_acceleration_up_down)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.new_circle_velocity_angle_up_down)).BeginInit();
@@ -74,7 +74,7 @@
             this.new_circle_velocity_up_down.TabIndex = 0;
             this.new_circle_velocity_up_down.ValueChanged += new System.EventHandler(this.new_circle_velocity_up_down_ValueChanged);
             this.new_circle_velocity_up_down.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainWindow_KeyDown);
-            this.new_circle_velocity_up_down.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.new_circle_velocity_up_down_KeyPress);
+            this.new_circle_velocity_up_down.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MainWindow_KeyPress);
             this.new_circle_velocity_up_down.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainWindow_KeyUp);
             // 
             // new_circle_velocity_label
@@ -112,7 +112,7 @@
             this.new_circle_acceleration_up_down.TabIndex = 2;
             this.new_circle_acceleration_up_down.ValueChanged += new System.EventHandler(this.new_circle_acceleration_up_down_ValueChanged);
             this.new_circle_acceleration_up_down.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainWindow_KeyDown);
-            this.new_circle_acceleration_up_down.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.new_circle_acceleration_up_down_KeyPress);
+            this.new_circle_acceleration_up_down.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MainWindow_KeyPress);
             this.new_circle_acceleration_up_down.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainWindow_KeyUp);
             // 
             // new_circle_velocity_angle_up_down
@@ -128,7 +128,7 @@
             this.new_circle_velocity_angle_up_down.TabIndex = 4;
             this.new_circle_velocity_angle_up_down.ValueChanged += new System.EventHandler(this.new_circle_velocity_angle_up_down_ValueChanged);
             this.new_circle_velocity_angle_up_down.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainWindow_KeyDown);
-            this.new_circle_velocity_angle_up_down.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.new_circle_velocity_angle_up_down_KeyPress);
+            this.new_circle_velocity_angle_up_down.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MainWindow_KeyPress);
             this.new_circle_velocity_angle_up_down.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainWindow_KeyUp);
             // 
             // new_circle_acceleration_angle_up_down
@@ -144,7 +144,7 @@
             this.new_circle_acceleration_angle_up_down.TabIndex = 5;
             this.new_circle_acceleration_angle_up_down.ValueChanged += new System.EventHandler(this.new_circle_acceleration_angle_up_down_ValueChanged);
             this.new_circle_acceleration_angle_up_down.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainWindow_KeyDown);
-            this.new_circle_acceleration_angle_up_down.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.new_circle_acceleration_angle_up_down_KeyPress);
+            this.new_circle_acceleration_angle_up_down.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MainWindow_KeyPress);
             this.new_circle_acceleration_angle_up_down.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainWindow_KeyUp);
             // 
             // label1
@@ -228,7 +228,7 @@
             this.gravityToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.gravity_toggle_menu_item});
             this.gravityToolStripMenuItem.Name = "gravityToolStripMenuItem";
-            this.gravityToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.gravityToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.gravityToolStripMenuItem.Text = "Gravity";
             // 
             // gravity_toggle_menu_item
@@ -242,9 +242,16 @@
             // detailsToolStripMenuItem
             // 
             this.detailsToolStripMenuItem.Name = "detailsToolStripMenuItem";
-            this.detailsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.detailsToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.detailsToolStripMenuItem.Text = "Details";
             this.detailsToolStripMenuItem.Click += new System.EventHandler(this.detailsToolStripMenuItem_Click);
+            // 
+            // interactionsToolStripMenuItem
+            // 
+            this.interactionsToolStripMenuItem.Name = "interactionsToolStripMenuItem";
+            this.interactionsToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.interactionsToolStripMenuItem.Text = "Interactions";
+            this.interactionsToolStripMenuItem.Click += new System.EventHandler(this.interactionsToolStripMenuItem_Click);
             // 
             // system_menu_item
             // 
@@ -305,6 +312,7 @@
             0});
             this.circle_radius_up_down.ValueChanged += new System.EventHandler(this.circle_radius_up_down_ValueChanged);
             this.circle_radius_up_down.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainWindow_KeyDown);
+            this.circle_radius_up_down.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MainWindow_KeyPress);
             this.circle_radius_up_down.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainWindow_KeyUp);
             // 
             // label3
@@ -315,13 +323,6 @@
             this.label3.Size = new System.Drawing.Size(74, 13);
             this.label3.TabIndex = 10;
             this.label3.Text = "R(but really D)";
-            // 
-            // interactionsToolStripMenuItem
-            // 
-            this.interactionsToolStripMenuItem.Name = "interactionsToolStripMenuItem";
-            this.interactionsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.interactionsToolStripMenuItem.Text = "Interactions";
-            this.interactionsToolStripMenuItem.Click += new System.EventHandler(this.interactionsToolStripMenuItem_Click);
             // 
             // MainWindow
             // 

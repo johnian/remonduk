@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 
 namespace remonduk
 {
@@ -24,5 +25,13 @@ namespace remonduk
 		public Tuple<double, double> forceOnSecond() {
 			return force.calculate(second, first);
 		}
+
+        public void draw(Graphics g, Color color)
+        {
+            Pen pen = new Pen(color);
+            Point p1 = new Point((int)first.x, (int)first.y);
+            Point p2 = new Point((int)second.x, (int)second.y);
+            g.DrawLine(pen, p1, p2);
+        }
 	}
 }
