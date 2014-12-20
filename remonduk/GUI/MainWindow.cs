@@ -14,8 +14,10 @@ namespace remonduk
 {
     public partial class MainWindow : Form
     {
-        HashSet<Circle> circles = new HashSet<Circle>();
+        //HashSet<Circle> circles = new HashSet<Circle>();
         HashSet<Group> groups = new HashSet<Group>();
+
+        PhysicalSystem ps = new PhysicalSystem();
         
         Circle selected_circle;
         Group selected_group;
@@ -26,35 +28,33 @@ namespace remonduk
 
         bool drag;
 
-        bool targeting;
-
         public MainWindow()
         {
             InitializeComponent();
 
-            Application.Idle += HandleApplicationIdle;  //adds the HandleApplicationIdle method to the Application.Idle event
+            Application.Idle += HandleApplicationIdle;
             groups.Add(new Group());
             pause = false;
             selected_circle = null;
             drag = false;
-            targeting = false;
             frame_count = 0;
         }
 
-        //this method is added to the Idle event in the constructor
         void HandleApplicationIdle(object sender, EventArgs e)
         {
-            while (IsApplicationIdle()) //keep going while we're still idle. idle event is fired once when the queue is emptied
+            while (IsApplicationIdle())
             {
                 this.CreateGraphics().Clear(System.Drawing.Color.Gray);
 
                 groups.ElementAt(0).update();
+             
 
-                foreach (Circle c in circles)
+                ps.updateNetForces();
+                foreach (Circle c in ps.netForces.Keys)
                 {
                     if (!pause)
                     {
-                        c.update(circles);
+                        c.update(ps.netForces.Keys);
                     }
                     c.draw(this.CreateGraphics());
                 }
@@ -65,6 +65,17 @@ namespace remonduk
 				//System.Diagnostics.Debug.WriteLine(circles.Count);
                 frame_count++;
                 System.Threading.Thread.Sleep(50);
+            }
+        }
+
+        void drawInteractions(Graphics g)
+        {
+            Pen pen = new Pen(Color.Red);
+            foreach(Interaction i in ps.interactions)
+            {
+                Point p1 = new Point((int)i.first.x, (int)i.first.y);
+                Point p2 = new Point((int)i.second.x, (int)i.second.y);
+                g.DrawLine(pen, p1, p2);
             }
         }
 
@@ -83,6 +94,8 @@ namespace remonduk
                 drawSelected(g);
             }
             drawNewCircleAngles(g);
+            //groups.ElementAt(0).draw(g);
+            drawInteractions(g);
         }
 
         void drawSelected(Graphics g)
@@ -155,6 +168,8 @@ namespace remonduk
         //actually on mouseup
         private void MainWindow_MouseClick(object sender, MouseEventArgs e)
         {
+            if (e.Button == MouseButtons.Right)
+                return;
             Point pos = Control.MousePosition;
             pos = this.PointToClient(pos);
             Circle click = new Circle(pos.X, pos.Y, 5);
@@ -165,12 +180,15 @@ namespace remonduk
                 selected_circle.y = pos.Y;
             }
             drag = false;
-            foreach (Circle c in circles)
+            foreach (Circle c in ps.netForces.Keys)
             {
                 if(click.colliding(c) && selected_circle != null)
                 {
                     //selected_circle.follow(c, 25, 100);
-					//groups.ElementAt(0).tethers.Add(new Tether(selected_circle, c, 50, .002));
+                    Tether t = new Tether(.0002, 50);
+                    Interaction i = new Interaction(selected_circle, c, t);
+                    ps.addInteraction(i);
+					//groups.ElementAt(0).tethers.Add(t);
                     found = true;
                 }
                 else if (click.colliding(c))
@@ -196,7 +214,8 @@ namespace remonduk
                 {
                     click.updateAcceleration(Constants.Instance.GRAVITY, Constants.Instance.GRAVITY_ANGLE);
                 }
-                circles.Add(click);
+                ps.addCircle(click);
+                groups.ElementAt(0).group.Add(click);
                 if(selected_circle != null)
                 {
                     selected_circle.color = Color.Chartreuse;
@@ -290,6 +309,8 @@ namespace remonduk
         //actually on mouseclick
         private void MainWindow_MouseDown(object sender, MouseEventArgs e)
         {
+            if (e.Button == MouseButtons.Right)
+                return;
             if(selected_circle != null)
             {
                 Point pos = Control.MousePosition;
@@ -315,7 +336,7 @@ namespace remonduk
             using (var writer = new System.IO.StreamWriter(sfd.FileName))
             {
                 var serializer = new XmlSerializer(typeof(HashSet<Circle>));
-                serializer.Serialize(writer, circles);
+                serializer.Serialize(writer, ps.netForces.Keys);
                 writer.Flush();
             }
         }
@@ -328,7 +349,11 @@ namespace remonduk
             using (var stream = System.IO.File.OpenRead(ofd.FileName))
             {
                 var serializer = new XmlSerializer(typeof(HashSet<Circle>));
-                circles = serializer.Deserialize(stream) as HashSet<Circle>;
+                HashSet<Circle> circles = serializer.Deserialize(stream) as HashSet<Circle>;
+                foreach(Circle c in circles)
+                {
+                    ps.addCircle(c);
+                }
                 //System.Diagnostics.Debug.WriteLine(circles.Count);
                 //Circle c1 = circles.ElementAt(0);
                 //c1.draw(this.CreateGraphics());
@@ -349,19 +374,19 @@ namespace remonduk
         {
             if(gravity_toggle_menu_item.Checked)
             {
-                foreach(Circle c in circles)
-                {
-                    c.updateAcceleration(Constants.Instance.GRAVITY, Constants.Instance.GRAVITY_ANGLE);
-                }
-                Constants.Instance.GRAVITY_ACTIVE = true;
+                //foreach(Circle c in circles)
+                //{
+                //    c.updateAcceleration(Constants.Instance.GRAVITY, Constants.Instance.GRAVITY_ANGLE);
+                //}
+                //Constants.Instance.GRAVITY_ACTIVE = true;
             }
             else
             {
-                foreach (Circle c in circles)
-                {
-                    c.updateAcceleration(Constants.Instance.GRAVITY, -1*Constants.Instance.GRAVITY_ANGLE);
-                }
-                Constants.Instance.GRAVITY_ACTIVE = false;
+                //foreach (Circle c in circles)
+                //{
+                //    c.updateAcceleration(Constants.Instance.GRAVITY, -1*Constants.Instance.GRAVITY_ANGLE);
+                //}
+                //Constants.Instance.GRAVITY_ACTIVE = false;
             }
         }
     }

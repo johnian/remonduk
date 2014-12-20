@@ -203,7 +203,7 @@ namespace remonduk
 			}
 		}
 
-		public void move(HashSet<Circle> circles)
+        public void move(Dictionary<Circle, Tuple<double, double>>.KeyCollection circles)
 		{
 			if (target != null)
 			{
@@ -225,7 +225,7 @@ namespace remonduk
 			}
 		}
 
-		public void update(HashSet<Circle> circles) //revisit List for refactorization!!!!! rar i like my keyboard this
+        public void update(Dictionary<Circle, Tuple<double, double>>.KeyCollection circles) //revisit List for refactorization!!!!! rar i like my keyboard this
 		//is fun kbye
 		{
 			move(circles);
