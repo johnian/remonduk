@@ -334,7 +334,7 @@ namespace remonduk
 			}
 		}
 
-		public void move(HashSet<Circle> circles)
+        public void move(Dictionary<Circle, Tuple<double, double>>.KeyCollection circles)
 		{
 			if (target != null)
 			{
@@ -356,7 +356,7 @@ namespace remonduk
 			}
 		}
 
-		public void update(HashSet<Circle> circles) //revisit List for refactorization!!!!! rar i like my keyboard this
+        public void update(Dictionary<Circle, Tuple<double, double>>.KeyCollection circles) //revisit List for refactorization!!!!! rar i like my keyboard this
 		//is fun kbye
 		{
 			move(circles);
@@ -369,7 +369,7 @@ namespace remonduk
 		public void draw(Graphics g)
 		{
 
-			Brush brush = new SolidBrush(Color.Chartreuse);
+			Brush brush = new SolidBrush(color);
 			g.FillEllipse(brush, (float)(x - r / 2), (float)(y - r / 2), (float)r, (float)r);
 		}
 

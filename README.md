@@ -24,17 +24,17 @@ should not be hyper realistic
 gravitational point -- can be a specific point
 	can be the boundaries -- should not inherently be a built in feature because
 	it assumes the world will be drawn a certain way
-	
+
 	-- gravity calculator can be given a new function so you can make custom gravity
 	-- decreases as cubic, decreases as linear, increases with distance
-	
+
 	flag for whether the stage wraps around or has hard boundaries
-	
+
 3 types of physical interactions:
 	collision (when actual boundaries are crossed)
 	repulsion
 	following
-	
+
 	grouping - leashing
 		- anchoring (multiple anchoring pairings that connect two circles)
 
@@ -43,9 +43,10 @@ gravitational point -- can be a specific point
 	implementation {
 		draw circles {
 			group circles {
-				chasing "leaders"
-				dragging "followers"
-				group motion
+				//chasing "leaders"
+				//dragging "followers"
+				//group motion
+				tethering
 			}
 		}
 		physics {
@@ -53,7 +54,8 @@ gravitational point -- can be a specific point
 				position
 				velocity
 				acceleration
-				gravity	
+				gravity
+				forces
 			}
 			mass
 			basic collision detection
@@ -61,14 +63,24 @@ gravitational point -- can be a specific point
 		basic i/o
 	}
 	gui {
-		content management
-		loading
+		content management {
+			create/modify/delete objects
+			detailed windows {
+				circle
+				tether
+				physical system {
+					constants
+				}
+			}
+		}
+		saving/loading
+		basic io
 	}
 	refactor & optimize {
-	
+
 	}
 	testing {
-	
+
 	}
 }
 
@@ -76,27 +88,44 @@ gravitational point -- can be a specific point
 # 2 basic physics {
 	implementation {
 		groups {
-			
+			fill(circle packing, autobuild tethers)
+			compress? - hold together, may just be above
+			anchors
+			differentiate - either through color or maybe bounding shape or something
 		}
 		physics {
 			friction
-			forces
 			density
 			momentum
 			inertia
 			elasticity
 			intermediate collision detection
 		}
-		intermediate i/o
 	}
 	gui {
-	
+		intermediate i/o {
+			group selection
+			keyboard shortcuts (delete, copy, paste, etc)
+			menu bar {
+				ensure all items are accessible
+				define names
+				shortcuts
+			}
+		}
+		group detailed window
+		global forces detailed window
+		revamp lists {
+			proper text
+			multiple selections
+			lock/unlock for modifications
+		}
 	}
 	refactor & optimize {
-	
+		main window
+		check for redundant lists
 	}
 	testing {
-	
+
 	}
 }
 
@@ -109,33 +138,33 @@ gravitational point -- can be a specific point
 		}
 	}
 	gui {
-	
+
 	}
 	refactor & optimize {
-	
+
 	}
 	testing {
-	
+
 	}
 }
 
 <div id="4"></div>
 # 4 intermediate physics {
 	implementation {
-		
+
 		physics {
-				
+
 			line of sight
 		}
 	}
 	gui {
-	
+
 	}
 	refactor & optimize {
-	
+
 	}
 	testing {
-	
+
 	}
 }
 
@@ -146,13 +175,13 @@ gravitational point -- can be a specific point
 		particle effects
 	}
 	gui {
-		
+
 	}
 	refactor & optimize {
-		
+
 	}
 	testing {
-		
+
 	}
 }
 
@@ -166,19 +195,19 @@ gravitational point -- can be a specific point
 		}
 	}
 	gui {
-		
+
 	}
 	refactor & optimize {
-		
+
 	}
 	testing {
-		
+
 	}
 }
 
 <div id="7"></div>
 # 7 sound {
-	
+
 }
 
 <div id="8"></div>
