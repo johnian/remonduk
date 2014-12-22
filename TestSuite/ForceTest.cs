@@ -10,9 +10,7 @@ namespace TestSuite
 	public class ForceTest
 	{
 		Constants constants = Constants.Instance;
-		int PRECISION = 6;
-		double EPSILON = .0001;
-
+		
 		[TestMethod]
 		public void forceTest()
 		{
@@ -25,12 +23,12 @@ namespace TestSuite
 				}
 			);
 			Interaction interaction = new Interaction(first, second, force);
-			AreEqual(Tuple.Create(5.0, 3.0), interaction.forceOnFirst());
-			AreEqual(Tuple.Create(5.0, 3.0), interaction.forceOnSecond());
+			Test.AreEqual(Tuple.Create(5.0, 3.0), interaction.forceOnFirst());
+			Test.AreEqual(Tuple.Create(5.0, 3.0), interaction.forceOnSecond());
 
 			interaction = new Interaction(first, second, force, 0);
-			AreEqual(Tuple.Create(0.0, 0.0), interaction.forceOnFirst());
-			AreEqual(Tuple.Create(5.0, 3.0), interaction.forceOnSecond());
+			Test.AreEqual(Tuple.Create(0.0, 0.0), interaction.forceOnFirst());
+			Test.AreEqual(Tuple.Create(5.0, 3.0), interaction.forceOnSecond());
 		}
 
 		[TestMethod]
@@ -43,8 +41,8 @@ namespace TestSuite
 
 			Gravity gravity = new Gravity(Gravity.G);
 			Interaction interaction = new Interaction(earth, person, gravity);
-			AreClose(Tuple.Create(60 * 9.81, 0.0), interaction.forceOnFirst());
-			AreClose(Tuple.Create(-60 * 9.81, 0.0), interaction.forceOnSecond());
+			Test.AreClose(Tuple.Create(60 * 9.81, 0.0), interaction.forceOnFirst());
+			Test.AreClose(Tuple.Create(-60 * 9.81, 0.0), interaction.forceOnSecond());
 		}
 
 		[TestMethod]
@@ -57,8 +55,8 @@ namespace TestSuite
 			Interaction interaction = new Interaction(one, two, tether);
 
 			double force = 2 * (Math.Sqrt(32) - 3);
-			AreEqual(Tuple.Create(force * Math.Cos(Math.PI / 4), force * Math.Sin(Math.PI / 4)), interaction.forceOnFirst());
-			AreEqual(Tuple.Create(force * Math.Cos(5 * Math.PI / 4), force * Math.Sin(5 * Math.PI / 4)), interaction.forceOnSecond());
+			Test.AreEqual(Tuple.Create(force * Math.Cos(Math.PI / 4), force * Math.Sin(Math.PI / 4)), interaction.forceOnFirst());
+			Test.AreEqual(Tuple.Create(force * Math.Cos(5 * Math.PI / 4), force * Math.Sin(5 * Math.PI / 4)), interaction.forceOnSecond());
 		}
 
 		[TestMethod]
@@ -75,8 +73,8 @@ namespace TestSuite
 			PhysicalSystem world = new PhysicalSystem();
 			world.addCircle(one);
 			world.addCircle(two);
-			AreEqual(Tuple.Create(0.0, 0.0), world.netForceOn(one));
-			AreEqual(Tuple.Create(0.0, 0.0), world.netForceOn(two));
+			Test.AreEqual(Tuple.Create(0.0, 0.0), world.netForceOn(one));
+			Test.AreEqual(Tuple.Create(0.0, 0.0), world.netForceOn(two));
 
 			world.addInteraction(gravityOn12);
 			world.addInteraction(tetherOn12);
@@ -84,56 +82,22 @@ namespace TestSuite
 			// 8, 8
 			double value = (Math.Sqrt(32) - 3) * Math.Sqrt(2);
 			world.updateNetForces();
-			AreEqual(Tuple.Create(value, Gravity.GRAVITY + value), world.netForceOn(one));
-			AreEqual(Tuple.Create(-value, Gravity.GRAVITY - value), world.netForceOn(two));
+			Test.AreEqual(Tuple.Create(value, Gravity.GRAVITY + value), world.netForceOn(one));
+			Test.AreEqual(Tuple.Create(-value, Gravity.GRAVITY - value), world.netForceOn(two));
 
 			world.updateNetForces();
-			AreEqual(Tuple.Create(value, Gravity.GRAVITY + value), world.netForceOn(one));
-			AreEqual(Tuple.Create(-value, Gravity.GRAVITY - value), world.netForceOn(two));
+			Test.AreEqual(Tuple.Create(value, Gravity.GRAVITY + value), world.netForceOn(one));
+			Test.AreEqual(Tuple.Create(-value, Gravity.GRAVITY - value), world.netForceOn(two));
 
 			world.removeInteraction(gravityOn12);
 			world.updateNetForces();
-			AreEqual(Tuple.Create(value, value), world.netForceOn(one));
-			AreEqual(Tuple.Create(-value, -value), world.netForceOn(two));
+			Test.AreEqual(Tuple.Create(value, value), world.netForceOn(one));
+			Test.AreEqual(Tuple.Create(-value, -value), world.netForceOn(two));
 
 			world.removeInteraction(tetherOn12);
 			world.updateNetForces();
-			AreEqual(Tuple.Create(0.0, 0.0), world.netForceOn(one));
-			AreEqual(Tuple.Create(0.0, 0.0), world.netForceOn(two));
-		}
-
-
-		private void AreClose(Tuple<double, double> expected, Tuple<double, double> actual)
-		{
-			AreEqual(Math.Round(expected.Item1), Math.Round(actual.Item1));
-			AreEqual(Math.Round(expected.Item2), Math.Round(actual.Item2));
-		}
-
-		private void AreEqual(Tuple<double, double> expected, Tuple<double, double> actual)
-		{
-			AreEqual(expected.Item1, actual.Item1);
-			AreEqual(expected.Item2, actual.Item2);
-		}
-
-		private void AreEqual(double expected, double actual)
-		{
-			System.Diagnostics.Debug.WriteLine("expected: " + expected + " actual: " + actual);
-			AreEqual(true, Math.Abs(expected - actual) < EPSILON);
-		}
-
-		private void AreEqual(bool expected, bool actual)
-		{
-			Assert.AreEqual(expected, actual);
-		}
-
-		private void AreEqual(Object expected, Object actual)
-		{
-			Assert.AreEqual(expected, actual);
-		}
-
-		private double round(double value)
-		{
-			return Math.Round(value, PRECISION);
+			Test.AreEqual(Tuple.Create(0.0, 0.0), world.netForceOn(one));
+			Test.AreEqual(Tuple.Create(0.0, 0.0), world.netForceOn(two));
 		}
 	}
 }

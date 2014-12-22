@@ -56,6 +56,12 @@
       <DependentUpon>Circle_Detail_Window.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\GUI_Singleton.cs" />
+    <Compile Include="GUI\Interaction_Detail_Window.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Interaction_Detail_Window.Designer.cs">
+      <DependentUpon>Interaction_Detail_Window.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Physical_System_Detail_Window.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -75,6 +81,9 @@
     <Compile Include="Tether.cs" />
     <EmbeddedResource Include="GUI\Circle_Detail_Window.resx">
       <DependentUpon>Circle_Detail_Window.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Interaction_Detail_Window.resx">
+      <DependentUpon>Interaction_Detail_Window.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>

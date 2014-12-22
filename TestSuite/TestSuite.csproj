@@ -53,6 +53,7 @@
     <Compile Include="CircleTest.cs" />
     <Compile Include="ForceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestFunctions.cs" />
     <Compile Include="TetherTest.cs" />
   </ItemGroup>
   <ItemGroup>

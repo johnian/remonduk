@@ -174,6 +174,7 @@ namespace remonduk
 		///
 		public void updateAcceleration(double acceleration, double acceleration_angle)
 		{
+			// this might not be necessary anymore
 			ax += acceleration * Math.Cos(acceleration_angle);
 			ay += acceleration * Math.Sin(acceleration_angle);
 			this.acceleration = magnitude(ax, ay);
@@ -201,98 +202,45 @@ namespace remonduk
 			// use squared instead of square root for efficiency?
 			if (distance(that) <= that.r + r)
 			{
+				Debug.WriteLine("overlapping");
 				return (that != this);
 			}
 			else
 			{
-				double this_direction = Circle.angle(ay / 2 + vy - that.ay / 2 - that.vy, ax / 2 + vx - that.ax / 2 - that.vx);
-				double that_direction = Circle.angle(that.y - y, that.x - x);
+				double reference_angle = Circle.angle(ay / 2 + vy - that.ay / 2 - that.vy, ax / 2 + vx - that.ax / 2 - that.vx);
+				double direction = Circle.angle(that.y - y, that.x - x);
 				if ((acceleration + velocity == 0 && that.acceleration + that.velocity == 0) ||
-					Math.Abs(that_direction - this_direction) > Math.PI / 2)
+					Math.Abs(direction - reference_angle) > Math.PI / 2)
 				{
+					Debug.WriteLine("not moving or wrong direction");
 					return false;
 				}
 				return crossing(that) != null;
 			}
 		}
 
-		public Tuple<double, double> closestPoint(double point_x, double point_y,
-			double reference_vx, double reference_vy)
-		{
-
-			// m = reference_vy / reference_vx
-			// y = mx + b
-			// y = this.y
-			// x = this.x
-			// y = m x + b1
-			// y = -x / m + b2
-			// y - m x = b1
-			// y + x / m = b2
-
-			// ydx - xdy = b1
-			// ydy + xdx = b2
-			// d 
-
-			// -xdy + ydx = b1
-			//  xdx + ydy = b2
-			// d = -dy * dy - dx * dx
-
-			//double constant_1 = -reference_vy * x		+ reference_vx * y;
-			double constant_1 = reference_vy * x		- reference_vx * y;
-			double constant_2 = reference_vx * point_x	+ reference_vy * point_y;
-			double determinant = reference_vx * reference_vx + reference_vy * reference_vy;
-			//double determinant = -reference_vy * reference_vy - reference_vx * reference_vx;
-
-			double intersection_x;
-			double intersection_y;
-			if (determinant == 0)
-			{
-				intersection_x = x;
-				intersection_y = y;
-			}
-			else
-			{
-				//intersection_x = (constant_1 * -reference_vy - constant_2 * reference_vx) / determinant;
-				intersection_x = (constant_1 * reference_vy + constant_2 * reference_vx) / determinant;
-				intersection_y = (constant_2 * reference_vy - constant_1 * reference_vx) / determinant;
-				//intersection_y = (constant_2 * -reference_vy - constant_1 * reference_vx) / determinant;
-			}
-
-			//Debug.WriteLine("intersection_x: " + intersection_x);
-			//Debug.WriteLine("intersection_y: " + intersection_y);
-
-			double delta_x = intersection_x - x;
-			double delta_y = intersection_y - y;
-			if (Circle.magnitude(intersection_x - x, intersection_y - y) >
-				Circle.magnitude(reference_vx, reference_vy))
-			{
-				//Debug.WriteLine("too far");
-				return null;
-			}
-			return Tuple.Create(intersection_x, intersection_y);
-		}
-
 		public Tuple<double, double> crossing(Circle that)
 		{
-			double reference_vx = ax / 2 + vx - that.ax / 2 - that.vx;
-			double reference_vy = ay / 2 + vy - that.ay / 2 - that.vy;
-			//Debug.WriteLine("");
-			//Debug.WriteLine("reference_vx: " + reference_vx);
-			//Debug.WriteLine("reference_vy: " + reference_vy);
+			double reference_vx = ax / 2 + vx - (that.ax / 2 + that.vx);
+			double reference_vy = ay / 2 + vy - (that.ay / 2 + that.vy);
+			Debug.WriteLine("");
+			Debug.WriteLine("reference_vx: " + reference_vx);
+			Debug.WriteLine("reference_vy: " + reference_vy);
 
 			Tuple<double, double> point = closestPoint(that.x, that.y, reference_vx, reference_vy);
 			if (point == null)
 			{
+				Debug.WriteLine("point is null");
 				return null;
 			}
 			double distance_from_that = Circle.magnitude(point.Item1 - that.x, point.Item2 - that.y);
 			double radii_sum = that.r + r;
 
-			//Debug.WriteLine("distance_from_that: " + distance_from_that);
-			//Debug.WriteLine("radii_sum: " + radii_sum);
+			Debug.WriteLine("distance_from_that: " + distance_from_that);
+			Debug.WriteLine("radii_sum: " + radii_sum);
 			if (distance_from_that > radii_sum)
 			{
-				//Debug.WriteLine("here");
+				Debug.WriteLine("too far");
 				return null;
 			}
 			else
@@ -307,7 +255,42 @@ namespace remonduk
 			}
 		}
 
-        public void move(Dictionary<Circle, Tuple<double, double>>.KeyCollection circles)
+		public Tuple<double, double> closestPoint(double point_x, double point_y,
+			double reference_vx, double reference_vy)
+		{
+			double constant_1 = reference_vy * x - reference_vx * y;
+			double constant_2 = reference_vx * point_x + reference_vy * point_y;
+
+			double determinant = reference_vx * reference_vx + reference_vy * reference_vy;
+
+			double intersection_x;
+			double intersection_y;
+			if (determinant == 0)
+			{
+				intersection_x = x;
+				intersection_y = y;
+			}
+			else
+			{
+				intersection_x = (constant_1 * reference_vy + constant_2 * reference_vx) / determinant;
+				intersection_y = (constant_2 * reference_vy - constant_1 * reference_vx) / determinant;
+			}
+
+			Debug.WriteLine("intersection_x: " + intersection_x);
+			Debug.WriteLine("intersection_y: " + intersection_y);
+
+			double delta_x = intersection_x - x;
+			double delta_y = intersection_y - y;
+			if (Circle.magnitude(intersection_x - x, intersection_y - y) >
+				Circle.magnitude(reference_vx, reference_vy))
+			{
+				Debug.WriteLine("too far");
+				return null;
+			}
+			return Tuple.Create(intersection_x, intersection_y);
+		}
+
+		public void move(Dictionary<Circle, Tuple<double, double>>.KeyCollection circles)
 		{
 			if (target != null)
 			{
@@ -315,16 +298,23 @@ namespace remonduk
 			}
 
 			updatePosition();
-			foreach (Circle c in circles)
-			{
-				if (colliding(c))
-				{
-					double kinetic = mass * velocity * velocity / 2;
-				}
-			}
+			//foreach (Circle c in circles)
+			//{
+			//	if (colliding(c))
+			//	{
+			//		double kinetic = mass * velocity * velocity / 2;
+			//	}
+			//}
 		}
 
-        public void update(Dictionary<Circle, Tuple<double, double>>.KeyCollection circles) //revisit List for refactorization!!!!! rar i like my keyboard this
+		public double distance(Circle other)
+		{
+			double distx = other.x - x;
+			double disty = other.y - y;
+			return magnitude(distx, disty);
+		}
+
+		public void update(Dictionary<Circle, Tuple<double, double>>.KeyCollection circles) //revisit List for refactorization!!!!! rar i like my keyboard this
 		//is fun kbye
 		{
 			move(circles);
@@ -346,13 +336,6 @@ namespace remonduk
 			//return Math.Round(Math.Sqrt(x * x + y * y), PRECISION);
 		}
 
-		public double distance(Circle other)
-		{
-			double distx = other.x - x;
-			double disty = other.y - y;
-			return magnitude(distx, disty);
-		}
-
 		public static double angle(double y, double x)
 		{
 			if (Math.Round(y, PRECISION) == 0 &&
@@ -367,7 +350,7 @@ namespace remonduk
 			}
 			return theta;
 		}
-		
+
 		public String toString()
 		{
 			return "(" + x + ", " + y + ") radius: " + r + " mass: " + mass + "\n" +
