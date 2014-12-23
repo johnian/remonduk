@@ -20,3 +20,5 @@ C:\Users\Sid\Documents\Visual Studio 2013\Projects\remonduk\remonduk\obj\Debug\r
 C:\Users\julian\johnian\remonduk\remonduk\obj\Debug\remonduk.GUI.Circle_Detail_Window.resources
 C:\Users\julian\johnian\remonduk\remonduk\obj\Debug\remonduk.GUI.Physical_System_Detail_Window.resources
 C:\Users\julian\johnian\remonduk\remonduk\obj\Debug\remonduk.GUI.Interaction_Detail_Window.resources
+C:\Users\Sid\documents\visual studio 2013\Projects\Remonduk\remonduk\obj\Debug\remonduk.csprojResolveAssemblyReference.cache
+C:\Users\Sid\documents\visual studio 2013\Projects\Remonduk\remonduk\obj\Debug\remonduk.GUI.Interaction_Detail_Window.resources

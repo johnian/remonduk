@@ -36,6 +36,8 @@ namespace remonduk
 
 		public Color color;
 
+        bool exists;
+
 		//public List<Force> forces;
 
 		/// <summary>
@@ -76,6 +78,7 @@ namespace remonduk
 
 			follow(TARGET);
 			this.color = Color.Chartreuse;
+            exists = true;
 			//forces = new List<Force>();
 		}
 
@@ -196,14 +199,30 @@ namespace remonduk
 			updateVelocity();
 		}
 
+        public bool elastic(Circle that)
+        {
+            if (!that.exists)
+                return false;
+            double this_vx = (that.vx * (this.mass - that.mass) + 2 * that.mass * that.vx) / (this.mass + that.mass);
+            double that_vx = (this.vx * (this.mass - that.mass) + 2 * this.mass * this.vx) / (this.mass + that.mass);
+            double this_vy = (that.vy * (this.mass - that.mass) + 2 * that.mass * that.vy) / (this.mass + that.mass);
+            double that_vy = (this.vy * (this.mass - that.mass) + 2 * this.mass * this.vy) / (this.mass + that.mass);
+            this.setVelocity(Circle.magnitude(this_vx, this_vy), Circle.angle(this_vy, this_vx));
+            that.setVelocity(Circle.magnitude(that_vx, that_vy), Circle.angle(that_vy, that_vx));
+            return true;
+        }
+
 		// make this return the angle of impact
-		public bool colliding(Circle that)
+		public double colliding(Circle that)
 		{
+            double center = Circle.angle(that.y - this.y, that.x - this.x);
 			// use squared instead of square root for efficiency?
 			if (distance(that) <= that.r + r)
 			{
 				Debug.WriteLine("overlapping");
-				return (that != this);
+                if (that != this)
+                    return center;
+                return -1;
 			}
 			else
 			{
@@ -213,9 +232,15 @@ namespace remonduk
 					Math.Abs(direction - reference_angle) > Math.PI / 2)
 				{
 					Debug.WriteLine("not moving or wrong direction");
-					return false;
+					return -1;
 				}
-				return crossing(that) != null;
+                Tuple<double, double> cross = crossing(that);
+				if (cross != null)
+                {
+                    center = Circle.angle(that.y - cross.Item2, that.x - cross.Item1);
+                    return center;
+                }
+                return -1;
 			}
 		}
 
@@ -296,7 +321,16 @@ namespace remonduk
 			{
 				setVelocity(velocity, angle(target.y - y, target.x - x));
 			}
-
+            if(this.exists)
+            {
+                foreach (Circle c in circles)
+                {
+                    if (colliding(c) >= 0)
+                    {
+                        elastic(c);
+                    }
+                }
+            }
 			updatePosition();
 			//foreach (Circle c in circles)
 			//{
@@ -327,7 +361,7 @@ namespace remonduk
 		public void draw(Graphics g)
 		{
 			Brush brush = new SolidBrush(color);
-			g.FillEllipse(brush, (float)(x - r / 2), (float)(y - r / 2), (float)r, (float)r);
+			g.FillEllipse(brush, (float)(x - r), (float)(y - r), (float)(2F*r), (float)(2F*r));
 		}
 
 		public static double magnitude(double x, double y)
