@@ -30,6 +30,7 @@ namespace remonduk
 		public void removeCircle(Circle circle)
 		{
 			netForces.Remove(circle);
+			// have this also remove from the interaction list
 		}
 
 		public void addInteraction(Interaction interaction)
@@ -42,8 +43,10 @@ namespace remonduk
 			interactions.Remove(interaction);
 		}
 
-		public void updateNetForces() {
-			for (int i = 0; i < netForces.Count; i++) {
+		public void updateNetForces()
+		{
+			for (int i = 0; i < netForces.Count; i++)
+			{
 				Circle circle = netForces.ElementAt(i).Key;
 				netForces[circle] = updateNetForceOn(circle);
 				double ax = netForces[circle].Item1 / circle.mass;
@@ -51,17 +54,20 @@ namespace remonduk
 				circle.setAcceleration(Circle.magnitude(ax, ay), Circle.angle(ay, ax));
 			}
 		}
-		
+
 		public Tuple<double, double> updateNetForceOn(Circle circle)
 		{
 			double fx = 0;
 			double fy = 0;
-			foreach(Interaction interaction in interactions) {
-				if (interaction.first == circle) {
+			foreach (Interaction interaction in interactions)
+			{
+				if (interaction.first == circle)
+				{
 					fx += interaction.forceOnFirst().Item1;
 					fy += interaction.forceOnFirst().Item2;
 				}
-				if (interaction.second == circle) {
+				if (interaction.second == circle)
+				{
 					fx += interaction.forceOnSecond().Item1;
 					fy += interaction.forceOnSecond().Item2;
 				}
@@ -69,7 +75,9 @@ namespace remonduk
 			return Tuple.Create(fx, fy);
 		}
 
-		public Tuple<double, double> netForceOn(Circle circle) {
+		// remove this -- don't need, just grab array directly -- less overhead
+		public Tuple<double, double> netForceOn(Circle circle)
+		{
 			return netForces[circle];
 		}
 	}

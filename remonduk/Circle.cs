@@ -36,7 +36,7 @@ namespace remonduk
 
 		public Color color;
 
-        bool exists;
+		bool exists;
 
 		//public List<Force> forces;
 
@@ -78,7 +78,7 @@ namespace remonduk
 
 			follow(TARGET);
 			this.color = Color.Chartreuse;
-            exists = true;
+			exists = true;
 			//forces = new List<Force>();
 		}
 
@@ -161,16 +161,6 @@ namespace remonduk
 			}
 		}
 
-		//public void addForce(Force force)
-		//{
-		//	forces.Add(force);
-		//}
-
-		//public void removeForce(Force force)
-		//{
-		//	forces.Remove(force);
-		//}
-
 		/// <summary>
 		/// 
 		/// </summary>
@@ -199,30 +189,34 @@ namespace remonduk
 			updateVelocity();
 		}
 
-        public bool elastic(Circle that)
-        {
-            if (!that.exists)
-                return false;
-            double this_vx = (that.vx * (this.mass - that.mass) + 2 * that.mass * that.vx) / (this.mass + that.mass);
-            double that_vx = (this.vx * (this.mass - that.mass) + 2 * this.mass * this.vx) / (this.mass + that.mass);
-            double this_vy = (that.vy * (this.mass - that.mass) + 2 * that.mass * that.vy) / (this.mass + that.mass);
-            double that_vy = (this.vy * (this.mass - that.mass) + 2 * this.mass * this.vy) / (this.mass + that.mass);
-            this.setVelocity(Circle.magnitude(this_vx, this_vy), Circle.angle(this_vy, this_vx));
-            that.setVelocity(Circle.magnitude(that_vx, that_vy), Circle.angle(that_vy, that_vx));
-            return true;
-        }
+		public bool elastic(Circle that)
+		{
+			// should make this take a "combined mass" circle
+			if (!that.exists)
+				return false;
+			double this_vx = (that.vx * (this.mass - that.mass) + 2 * that.mass * that.vx) / (this.mass + that.mass);
+			double that_vx = (this.vx * (this.mass - that.mass) + 2 * this.mass * this.vx) / (this.mass + that.mass);
+			double this_vy = (that.vy * (this.mass - that.mass) + 2 * that.mass * that.vy) / (this.mass + that.mass);
+			double that_vy = (this.vy * (this.mass - that.mass) + 2 * this.mass * this.vy) / (this.mass + that.mass);
+			this.setVelocity(Circle.magnitude(this_vx, this_vy), Circle.angle(this_vy, this_vx));
+			that.setVelocity(Circle.magnitude(that_vx, that_vy), Circle.angle(that_vy, that_vx));
+
+			// this should only set velocity for "this" because it'll be automatically handled when looping through
+			// also, simultaneous collisions won't work with this version
+			return true;
+		}
 
 		// make this return the angle of impact
 		public double colliding(Circle that)
 		{
-            double center = Circle.angle(that.y - this.y, that.x - this.x);
-			// use squared instead of square root for efficiency?
+			double center = Circle.angle(that.y - this.y, that.x - this.x);
+			// use squared instead of square root for efficiency
 			if (distance(that) <= that.r + r)
 			{
 				Debug.WriteLine("overlapping");
-                if (that != this)
-                    return center;
-                return -1;
+				if (that != this)
+					return center;
+				return -1;
 			}
 			else
 			{
@@ -234,13 +228,13 @@ namespace remonduk
 					Debug.WriteLine("not moving or wrong direction");
 					return -1;
 				}
-                Tuple<double, double> cross = crossing(that);
+				Tuple<double, double> cross = crossing(that);
 				if (cross != null)
-                {
-                    center = Circle.angle(that.y - cross.Item2, that.x - cross.Item1);
-                    return center;
-                }
-                return -1;
+				{
+					center = Circle.angle(that.y - cross.Item2, that.x - cross.Item1);
+					return center;
+				}
+				return -1;
 			}
 		}
 
@@ -312,6 +306,8 @@ namespace remonduk
 				Debug.WriteLine("too far");
 				return null;
 			}
+			// have this also return the time of impact, double between [0, 1]
+			// this might automatically take care of the above case because time would be > 1
 			return Tuple.Create(intersection_x, intersection_y);
 		}
 
@@ -321,16 +317,20 @@ namespace remonduk
 			{
 				setVelocity(velocity, angle(target.y - y, target.x - x));
 			}
-            if(this.exists)
-            {
-                foreach (Circle c in circles)
-                {
-                    if (colliding(c) >= 0)
-                    {
-                        elastic(c);
-                    }
-                }
-            }
+			if (this.exists)
+			{
+				foreach (Circle c in circles)
+				{
+					if (colliding(c) >= 0)
+					{
+						// need to pass this the crossing point
+						// need to update position in two steps
+						// push them to the exact point of collision
+						// and then have them move according to the remaining time
+						elastic(c);
+					}
+				}
+			}
 			updatePosition();
 			//foreach (Circle c in circles)
 			//{
@@ -361,7 +361,7 @@ namespace remonduk
 		public void draw(Graphics g)
 		{
 			Brush brush = new SolidBrush(color);
-			g.FillEllipse(brush, (float)(x - r), (float)(y - r), (float)(2F*r), (float)(2F*r));
+			g.FillEllipse(brush, (float)(x - r), (float)(y - r), (float)(2F * r), (float)(2F * r));
 		}
 
 		public static double magnitude(double x, double y)

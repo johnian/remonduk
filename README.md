@@ -28,8 +28,41 @@ simultaneous collisions: refactor collide to return time of collision as well
 	add up the masses,
 		treat them all as one singular circle,
 		and then do a collision with this and this new singular circle
+
+
+game update consists of two events
+update accelerations based on forces
+update positions of all circles
+
+
+dictionary of circle : (fx, fy)
+list of interactions
+quadtree that has references to circles
+
+update accelerations
+		iterate over all interactions
+		build new dictionary, updating each key with the new forces
+	// either reinitialize old dictionary to 0 values,
+	// or replace old array with new array
+	// play around with both to see which works better
+	iterate over dictionary, setting new accelerations for all circles
+
+update positions
+	
+move() needs to happen simultaneously on all circles
+move() should return a copy of the circle
+add the circle to a new list
+once the entire list has been iterated over,
+	replace the old list with the new list
+	garbage collect the old list
+// quad tree holds references not to actual circles, but ID numbers in a list
+// don't worry about chain reaction collisions for now
+whenever there is a collision, add the two circles to a new list
+// i have an idea for handling chain reaction collisions in a single timestep
 		
 everything that happens in the engine is a consequence of the parameters and the engine itself
+
+
 
 should not be hyper realistic
 
