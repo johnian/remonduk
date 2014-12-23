@@ -1,4 +1,4 @@
-implementation / gui / refactor & optimize / testing
+implementation / gui / refactor, comment, optimize / testing
 
 # FLUID / ATOMIC
 ================
@@ -17,6 +17,18 @@ Floid
 circles
 forces
 
+simultaneous collisions: refactor collide to return time of collision as well
+	in the move function, create a list of circles
+	iterate over all possible circles it can collide with,
+		if anything has a lower collision time than current,
+			create a new list, and add that circle to the list
+		if the same,
+			keep the same list, but add that circle to the list
+	then add up all the vx, vy of circles in that list
+	add up the masses,
+		treat them all as one singular circle,
+		and then do a collision with this and this new singular circle
+		
 everything that happens in the engine is a consequence of the parameters and the engine itself
 
 should not be hyper realistic
@@ -37,6 +49,8 @@ gravitational point -- can be a specific point
 
 	grouping - leashing
 		- anchoring (multiple anchoring pairings that connect two circles)
+		
+	tests for gui
 
 <div id="1"></div>
 # 1 basic graphics and i/o {
@@ -76,11 +90,12 @@ gravitational point -- can be a specific point
 		saving/loading
 		basic io
 	}
-	refactor & optimize {
-
+	refactor, comment, optimize {
 	}
 	testing {
-
+		implementation
+		gui
+		drawing
 	}
 }
 
