@@ -229,16 +229,16 @@ namespace remonduk
 
             foreach (Circle c in ps.netForces.Keys)
             {
-                bool collide = click.colliding(c);
+                double collide = click.colliding(c);
 
-                if(collide && selected_circle != null && tethering)
+                if(collide != -1 && selected_circle != null && tethering)
                 {
                     Tether t = new Tether(.0002, 50);
                     Interaction i = new Interaction(selected_circle, c, t);
                     ps.addInteraction(i);
                     found = true;
                 }
-                else if (collide)
+                else if (collide >= 0)
                 {
                     selected_circle = c;
                     psdw.selected_circle = c;
@@ -361,7 +361,7 @@ namespace remonduk
 
                 Circle click = new Circle(pos.X, pos.Y, 5);
 
-                if(click.colliding(selected_circle))
+                if(click.colliding(selected_circle) >= 0)
                 {
                     drag = true;
                 }
