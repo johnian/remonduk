@@ -72,40 +72,82 @@ namespace remonduk
         /// </summary>
 		public double acceleration, acceleration_angle, ax, ay;
 
-		public Circle target;
+        /// <summary>
+        /// This circles target.  Used for non-physics interactions.
+        /// </summary>
+        public Circle target;
+        /// <summary>
+        /// The minimum distance this circle will follow at.
+        /// </summary>
 		public double min_dist;
+        /// <summary>
+        /// The maximum distance this circle will follow at.
+        /// </summary>
 		public double max_dist;
 
+        /// <summary>
+        /// This circles color.
+        /// </summary>
 		public Color color;
 
+        /// <summary>
+        /// If this circle exists (if it should interact with other objects in the physical system).
+        /// </summary>
 		bool exists;
 
 		//public List<Force> forces;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="x"></param>
-		/// <param name="y"></param>
-		/// <param name="r"></param>
-		/// <param name="mass"></param>
-		///
+        /// <summary>
+        /// Empty constructor.  No values are set.
+        /// </summary>
 		public Circle() { }
 
+        /// <summary>
+        /// Copy constructor
+        /// </summary>
+        /// <param name="other">The other circle to copy.</param>
 		public Circle(Circle other) :
 			this(other.x, other.y, other.r, other.velocity, other.velocity_angle, other.acceleration,
 				 other.acceleration_angle, other.mass) { }
-
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="r"></param>
+        /// <param name="mass"></param>
+        ///
 		public Circle(double x, double y, double r, double mass = MASS) :
 			this(x, y, r,
 				 VELOCITY, VELOCITY_ANGLE, mass) { }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="r"></param>
+        /// <param name="velocity"></param>
+        /// <param name="velocity_angle"></param>
+        /// <param name="mass"></param>
 		public Circle(double x, double y, double r,
 			double velocity, double velocity_angle, double mass = MASS) :
 			this(x, y, r,
 				 velocity, velocity_angle,
 				 ACCELERATION, ACCELERATION_ANGLE, mass) { }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="r"></param>
+        /// <param name="velocity"></param>
+        /// <param name="velocity_angle"></param>
+        /// <param name="acceleration"></param>
+        /// <param name="acceleration_angle"></param>
+        /// <param name="mass"></param>
 		public Circle(double x, double y, double r,
 			double velocity, double velocity_angle,
 			double acceleration, double acceleration_angle, double mass = MASS)
@@ -125,9 +167,9 @@ namespace remonduk
 		}
 
 		/// <summary>
-		/// 
+		/// Sets this circles radius.
 		/// </summary>
-		/// <param name="r"></param>
+		/// <param name="r">The new value for this circles radius.</param>
 		/// 
 		public void setRadius(double r)
 		{
@@ -138,15 +180,25 @@ namespace remonduk
 			this.r = r;
 		}
 
+        /// <summary>
+        /// Set this circles mass.
+        /// </summary>
+        /// <param name="mass">The value to set this circles mass to.</param>
 		public void setMass(double mass)
 		{
 			this.mass = mass;
 		}
 
+        /// <summary>
+        /// Sets this circles velocity.  Recalculates vx and vy values.
+        /// </summary>
+        /// <param name="velocity">The new velocity vector's magnitude.</param>
+        /// <param name="velocity_angle">The new velocity vector's angle.</param>
 		public void setVelocity(double velocity, double velocity_angle)
 		{
 			vx = velocity * Math.Cos(velocity_angle);
 			vy = velocity * Math.Sin(velocity_angle);
+            //I know we went over these once before but why are we rounding here?  For the tests?
 			if (Math.Round(vx, PRECISION) == 0)
 			{
 				vx = 0;
@@ -159,10 +211,16 @@ namespace remonduk
 			this.velocity_angle = angle(vy, vx);
 		}
 
+        /// <summary>
+        /// Sets this circles acceleration.  Recalculates ax and ay values.
+        /// </summary>
+        /// <param name="acceleration">The new acceleration vector's magnitude.</param>
+        /// <param name="acceleration_angle">The new acceleration vector's angle.</param>
 		public void setAcceleration(double acceleration, double acceleration_angle)
 		{
 			ax = acceleration * Math.Cos(acceleration_angle);
-			ay = acceleration * Math.Sin(acceleration_angle);
+            ay = acceleration * Math.Sin(acceleration_angle);
+            //again I know we went over these once before but why are we rounding here?  For the tests?
 			if (Math.Round(ax, PRECISION) == 0)
 			{
 				ax = 0;
@@ -175,6 +233,11 @@ namespace remonduk
 			this.acceleration_angle = angle(ay, ax);
 		}
 
+        /// <summary>
+        /// Sets the target circle for this circle to follow.  Uses default min and max distances.
+        /// Somethings a little weird - we should talk about this one.
+        /// </summary>
+        /// <param name="target">The target circle for this circle to follow.</param>
 		public void follow(Circle target = null)
 		{
 			if (target == null || target == this)
@@ -189,6 +252,12 @@ namespace remonduk
 			}
 		}
 
+        /// <summary>
+        /// Sets a circle for this circle to follow.
+        /// </summary>
+        /// <param name="target">The target circle this circle should follow.</param>
+        /// <param name="min_dist">The minimum distance this circle will start following at.</param>
+        /// <param name="max_dist">The maximum distance this circle will start following at.</param>
 		public void follow(Circle target, double min_dist, double max_dist)
 		{
 			if (target == null || target == this)
@@ -203,10 +272,11 @@ namespace remonduk
 			}
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		///
+        /// <summary>
+        /// Updates this circles acceleration.  Adds an acceleration vector to the current acceleration.
+        /// </summary>
+        /// <param name="acceleration">The acceleration vector's magnitude to be added.</param>
+        /// <param name="acceleration_angle">The acceleration vector's angle to be added.</param>
 		public void updateAcceleration(double acceleration, double acceleration_angle)
 		{
 			// this might not be necessary anymore
@@ -216,6 +286,9 @@ namespace remonduk
 			this.acceleration_angle = angle(ay, ax);
 		}
 
+        /// <summary>
+        /// Updates this circles velocity by adding it's acceleration values to velocity values.  Occurs once per frame.
+        /// </summary>
 		public void updateVelocity()
 		{
 			vx += ax;
@@ -224,6 +297,9 @@ namespace remonduk
 			velocity_angle = angle(vy, vx);
 		}
 
+        /// <summary>
+        /// Updates this circles position based on current velocity and acceleration values.
+        /// </summary>
 		public void updatePosition()
 		{
 			x += ax / 2 + vx;
@@ -231,6 +307,11 @@ namespace remonduk
 			updateVelocity();
 		}
 
+        /// <summary>
+        /// The beginings of elastic collisions.
+        /// </summary>
+        /// <param name="that">The other circle this circle is colliding with.</param>
+        /// <returns></returns>
 		public bool elastic(Circle that)
 		{
 			// should make this take a "combined mass" circle
@@ -249,10 +330,16 @@ namespace remonduk
 		}
 
 		// make this return the angle of impact
-		public double colliding(Circle that)
+		/// <summary>
+		/// Determines if this circle is colliding with that circle.
+		/// </summary>
+		/// <param name="that">The circle to check for collision with.</param>
+		/// <returns>Returns the angle of impact if colliding.  -1 if not.  </returns>
+        public double colliding(Circle that)
 		{
 			double center = Circle.angle(that.y - this.y, that.x - this.x);
 			// use squared instead of square root for efficiency
+            //Check the easy  one first
 			if (distance(that) <= that.r + r)
 			{
 				Out.WriteLine("overlapping");
@@ -264,12 +351,14 @@ namespace remonduk
 			{
 				double reference_angle = Circle.angle(ay / 2 + vy - that.ay / 2 - that.vy, ax / 2 + vx - that.ax / 2 - that.vx);
 				double direction = Circle.angle(that.y - y, that.x - x);
+                //if neither are moving or if they're moving in opposite directions.
 				if ((acceleration + velocity == 0 && that.acceleration + that.velocity == 0) ||
 					Math.Abs(direction - reference_angle) > Math.PI / 2)
 				{
                     Out.WriteLine("not moving or wrong direction");
 					return -1;
 				}
+                //check if we will cross
 				Tuple<double, double> cross = crossing(that);
 				if (cross != null)
 				{
@@ -353,6 +442,10 @@ namespace remonduk
 			return Tuple.Create(intersection_x, intersection_y);
 		}
 
+        /// <summary>
+        /// This circles move method.  Updates the velocity, checks for collisions then updates the (x,y) coordinates.
+        /// </summary>
+        /// <param name="circles">For some reason a silly keycollection of circles, change me.</param>
 		public void move(Dictionary<Circle, Tuple<double, double>>.KeyCollection circles)
 		{
 			if (target != null)
@@ -374,15 +467,13 @@ namespace remonduk
 				}
 			}
 			updatePosition();
-			//foreach (Circle c in circles)
-			//{
-			//	if (colliding(c))
-			//	{
-			//		double kinetic = mass * velocity * velocity / 2;
-			//	}
-			//}
 		}
 
+        /// <summary>
+        /// Calculates the distance from this circle to that circle.
+        /// </summary>
+        /// <param name="other">The other circle to calculate distance to.</param>
+        /// <returns>The distance to the other circle.</returns>
 		public double distance(Circle other)
 		{
 			double distx = other.x - x;
@@ -390,6 +481,10 @@ namespace remonduk
 			return magnitude(distx, disty);
 		}
 
+        /// <summary>
+        /// This circles update method.  See move()
+        /// </summary>
+        /// <param name="circles">Some silly keycollection...change me</param>
 		public void update(Dictionary<Circle, Tuple<double, double>>.KeyCollection circles) //revisit List for refactorization!!!!! rar i like my keyboard this
 		//is fun kbye
 		{
@@ -397,21 +492,32 @@ namespace remonduk
 		}
 
 		/// <summary>
-		/// 
+		/// Draws this circle.
 		/// </summary>
-		/// <param name="g"></param>
+		/// <param name="g">The graphics object to draw this circle on.</param>
 		public void draw(Graphics g)
 		{
 			Brush brush = new SolidBrush(color);
 			g.FillEllipse(brush, (float)(x - r), (float)(y - r), (float)(2F * r), (float)(2F * r));
 		}
 
+        /// <summary>
+        /// Returns the magnitude of a vector based on it's x and y components.
+        /// </summary>
+        /// <param name="x">The magnitude of the x component.</param>
+        /// <param name="y">The magnitude of the y component.</param>
+        /// <returns>The magnitude.</returns>
 		public static double magnitude(double x, double y)
 		{
 			return Math.Sqrt(x * x + y * y);
-			//return Math.Round(Math.Sqrt(x * x + y * y), PRECISION);
 		}
 
+        /// <summary>
+        /// Julians atan2.  Always positive with some precision thing he needs to explain to me.
+        /// </summary>
+        /// <param name="y">The y value.</param>
+        /// <param name="x">The x value.</param>
+        /// <returns>tan(y,x) from 0 to 2PI</returns>
 		public static double angle(double y, double x)
 		{
 			if (Math.Round(y, PRECISION) == 0 &&
@@ -427,6 +533,16 @@ namespace remonduk
 			return theta;
 		}
 
+        /// <summary>
+        /// This circles to string method.
+        /// </summary>
+        /// <returns>
+        /// (523, 316) radius: 5 mass: 1
+        /// velocity: 0 (0, 0): 0
+        /// acceleration: 0 (0, 0): 0
+        /// target: [0, 0
+        /// color: Color [Chartreuse]
+        /// </returns>
 		public String toString()
 		{
 			return "(" + x + ", " + y + ") radius: " + r + " mass: " + mass + "\n" +
