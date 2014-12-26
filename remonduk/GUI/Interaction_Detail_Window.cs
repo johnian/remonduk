@@ -18,6 +18,7 @@ namespace remonduk.GUI
         {
             InitializeComponent();
             interaction = null;
+
         }
         public Interaction_Detail_Window(Interaction interaction)
         {
@@ -48,13 +49,46 @@ namespace remonduk.GUI
                     (Decimal)(interaction.second.velocity_angle * 180.0 / Math.PI);
                 circle_2_velocity_updown.Value =
                     (Decimal)interaction.second.velocity;
+
+                Graphics g = this.CreateGraphics();
+                Pen pen = new Pen(Color.Black);
+                double theta = (double)interaction.first.velocity_angle;
+                float x1 = 42.5F;
+                float y1 = 167.5F;
+                float x2 = (float)Math.Cos(theta) * 25 + x1;
+                float y2 = (float)Math.Sin(theta) * 25 + y1;
+                g.DrawLine(pen, x1, y1, x2, y2);
+                g.DrawEllipse(pen, 5, 130, 75, 75);
+
+
+                theta = (double)interaction.first.acceleration_angle;
+                //Out.WriteLine(new_circle_acceleration_angle_up_down.Value);
+                x1 = 152.5F;
+                y1 = 167.5F;
+                x2 = (float)Math.Cos(theta) * 25 + x1;
+                y2 = (float)Math.Sin(theta) * 25 + y1;
+                g.DrawLine(pen, x1, y1, x2, y2);
+                g.DrawEllipse(pen, 115, 130, 75, 75);
+
+                theta = (double)interaction.second.velocity_angle;
+                x1 = 237.5F;
+                y1 = 167.5F;
+                x2 = (float)Math.Cos(theta) * 25 + x1;
+                y2 = (float)Math.Sin(theta) * 25 + y1;
+                g.DrawLine(pen, x1, y1, x2, y2);
+                g.DrawEllipse(pen, 200, 130, 75, 75);
+
+
+                theta = (double)interaction.second.acceleration_angle;
+                //Out.WriteLine(new_circle_acceleration_angle_up_down.Value);
+                x1 = 357.5F;
+                y1 = 167.5F;
+                x2 = (float)Math.Cos(theta) * 25 + x1;
+                y2 = (float)Math.Sin(theta) * 25 + y1;
+                g.DrawLine(pen, x1, y1, x2, y2);
+                g.DrawEllipse(pen, 310, 130, 75, 75);
             }
             Invalidate();
-        }
-
-        private void label4_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

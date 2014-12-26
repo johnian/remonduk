@@ -43,7 +43,7 @@ namespace remonduk.GUI
 
 
             theta = (double)acceleration_angle_up_down.Value;
-            //System.Diagnostics.Debug.WriteLine(new_circle_acceleration_angle_up_down.Value);
+            //Out.WriteLine(new_circle_acceleration_angle_up_down.Value);
             x1 = 162.5F;
             y1 = 127.5F;
             x2 = (float)Math.Cos(theta * (Math.PI / 180.0)) * 25 + x1;
@@ -71,16 +71,6 @@ namespace remonduk.GUI
             color_button.BackColor = c.color;
             this.c = c;
             this.Invalidate();
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void velocity_label_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void color_button_Click(object sender, EventArgs e)

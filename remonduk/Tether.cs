@@ -61,7 +61,7 @@ namespace remonduk
 	//		double delta_x = c1.x - c2.x;
 	//		double delta_y = c1.y - c2.y;
 	//		double dist = Math.Sqrt(delta_x * delta_x + delta_y * delta_y);
-	//		System.Diagnostics.Debug.WriteLine("Distance = " + dist);
+    //		Out.WriteLine("Distance = " + dist);
 	//		double accel1 = k * (dist - max_dist) - c1.acceleration;
 	//		double accel2 = k * (dist - max_dist) - c2.acceleration;
 	//		if(dist > max_dist)
@@ -101,7 +101,7 @@ namespace remonduk
 	//				//c2.updateAcceleration(Math.Abs(k * (dist - max_dist)), theta2);
 	//			}
 
-	//			System.Diagnostics.Debug.WriteLine("TETHERING");
+    //			Out.WriteLine("TETHERING");
 	//		}
 	//		else
 	//		{

@@ -86,7 +86,6 @@
             this.new_circle_velocity_label.Size = new System.Drawing.Size(47, 13);
             this.new_circle_velocity_label.TabIndex = 1;
             this.new_circle_velocity_label.Text = "Velocity:";
-            this.new_circle_velocity_label.Click += new System.EventHandler(this.label1_Click);
             // 
             // new_circle_acceleration_label
             // 
@@ -166,7 +165,6 @@
             this.label2.Size = new System.Drawing.Size(96, 13);
             this.label2.TabIndex = 7;
             this.label2.Text = "Acceleration Angle";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // menu
             // 
@@ -237,7 +235,6 @@
             this.gravity_toggle_menu_item.Name = "gravity_toggle_menu_item";
             this.gravity_toggle_menu_item.Size = new System.Drawing.Size(88, 22);
             this.gravity_toggle_menu_item.Text = "On";
-            this.gravity_toggle_menu_item.Click += new System.EventHandler(this.onToolStripMenuItem_Click);
             // 
             // detailsToolStripMenuItem
             // 

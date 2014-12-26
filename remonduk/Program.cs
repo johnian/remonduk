@@ -16,9 +16,9 @@ namespace remonduk
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            System.Diagnostics.Debug.WriteLine("STARTING");
+            Out.WriteLine("STARTING");
             Application.Run(new MainWindow());
-            System.Diagnostics.Debug.WriteLine("DONE");
+            Out.WriteLine("DONE");
         }
     }
 }

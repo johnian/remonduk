@@ -213,7 +213,7 @@ namespace remonduk
 			// use squared instead of square root for efficiency
 			if (distance(that) <= that.r + r)
 			{
-				Debug.WriteLine("overlapping");
+				Out.WriteLine("overlapping");
 				if (that != this)
 					return center;
 				return -1;
@@ -225,7 +225,7 @@ namespace remonduk
 				if ((acceleration + velocity == 0 && that.acceleration + that.velocity == 0) ||
 					Math.Abs(direction - reference_angle) > Math.PI / 2)
 				{
-					Debug.WriteLine("not moving or wrong direction");
+                    Out.WriteLine("not moving or wrong direction");
 					return -1;
 				}
 				Tuple<double, double> cross = crossing(that);
@@ -242,24 +242,24 @@ namespace remonduk
 		{
 			double reference_vx = ax / 2 + vx - (that.ax / 2 + that.vx);
 			double reference_vy = ay / 2 + vy - (that.ay / 2 + that.vy);
-			Debug.WriteLine("");
-			Debug.WriteLine("reference_vx: " + reference_vx);
-			Debug.WriteLine("reference_vy: " + reference_vy);
+			Out.WriteLine("");
+			Out.WriteLine("reference_vx: " + reference_vx);
+			Out.WriteLine("reference_vy: " + reference_vy);
 
 			Tuple<double, double> point = closestPoint(that.x, that.y, reference_vx, reference_vy);
 			if (point == null)
 			{
-				Debug.WriteLine("point is null");
+				Out.WriteLine("point is null");
 				return null;
 			}
 			double distance_from_that = Circle.magnitude(point.Item1 - that.x, point.Item2 - that.y);
 			double radii_sum = that.r + r;
 
-			Debug.WriteLine("distance_from_that: " + distance_from_that);
-			Debug.WriteLine("radii_sum: " + radii_sum);
+			Out.WriteLine("distance_from_that: " + distance_from_that);
+			Out.WriteLine("radii_sum: " + radii_sum);
 			if (distance_from_that > radii_sum)
 			{
-				Debug.WriteLine("too far");
+                Out.WriteLine("too far");
 				return null;
 			}
 			else
@@ -295,15 +295,15 @@ namespace remonduk
 				intersection_y = (constant_2 * reference_vy - constant_1 * reference_vx) / determinant;
 			}
 
-			Debug.WriteLine("intersection_x: " + intersection_x);
-			Debug.WriteLine("intersection_y: " + intersection_y);
+            Out.WriteLine("intersection_x: " + intersection_x);
+            Out.WriteLine("intersection_y: " + intersection_y);
 
 			double delta_x = intersection_x - x;
 			double delta_y = intersection_y - y;
 			if (Circle.magnitude(intersection_x - x, intersection_y - y) >
 				Circle.magnitude(reference_vx, reference_vy))
 			{
-				Debug.WriteLine("too far");
+                Out.WriteLine("too far");
 				return null;
 			}
 			// have this also return the time of impact, double between [0, 1]

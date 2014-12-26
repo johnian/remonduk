@@ -14,8 +14,6 @@ namespace remonduk
 {
     public partial class MainWindow : Form
     {
-        //HashSet<Circle> circles = new HashSet<Circle>();
-        //groups may not be needed, should verify
         HashSet<Group> groups = new HashSet<Group>();
 
         PhysicalSystem ps = new PhysicalSystem();
@@ -27,7 +25,6 @@ namespace remonduk
 
         //selected_group may not be need, should verify
         Circle selected_circle;
-        Group selected_group;
         Interaction selected_interaction;
 
         int frame_count;
@@ -57,7 +54,7 @@ namespace remonduk
             selected_interaction = null;
 
             frame_count = 0;
-            System.Diagnostics.Debug.WriteLine("MAIN WINDOW CREATED");
+            Out.WriteLine("MAIN WINDOW CREATED");
         }
 
         void HandleApplicationIdle(object sender, EventArgs e)
@@ -275,48 +272,6 @@ namespace remonduk
             }
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void new_circle_velocity_up_down_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == ' ')
-            {
-                pause = !pause;
-            }
-        }
-
-        private void new_circle_acceleration_up_down_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == ' ')
-            {
-                pause = !pause;
-            }
-        }
-
-        private void new_circle_velocity_angle_up_down_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == ' ')
-            {
-                pause = !pause;
-            }
-        }
-
-        private void new_circle_acceleration_angle_up_down_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == ' ')
-            {
-                pause = !pause;
-            }
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void new_circle_velocity_up_down_ValueChanged(object sender, EventArgs e)
         {
             if(selected_circle != null)
@@ -397,11 +352,11 @@ namespace remonduk
                 {
                     ps.addCircle(c);
                 }
-                //System.Diagnostics.Debug.WriteLine(circles.Count);
+                //Out.WriteLine(circles.Count);
                 //Circle c1 = circles.ElementAt(0);
                 //c1.draw(this.CreateGraphics());
-                //System.Diagnostics.Debug.WriteLine("X: " + c1.x + " Y: " + c1.y);
-                //System.Diagnostics.Debug.WriteLine("R: " + c1.r);
+                //Out.WriteLine("X: " + c1.x + " Y: " + c1.y);
+                //Out.WriteLine("R: " + c1.r);
             }
         }
 
@@ -413,31 +368,11 @@ namespace remonduk
             }
         }
 
-        private void onToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if(gravity_toggle_menu_item.Checked)
-            {
-                //foreach(Circle c in circles)
-                //{
-                //    c.updateAcceleration(Constants.Instance.GRAVITY, Constants.Instance.GRAVITY_ANGLE);
-                //}
-                //Constants.Instance.GRAVITY_ACTIVE = true;
-            }
-            else
-            {
-                //foreach (Circle c in circles)
-                //{
-                //    c.updateAcceleration(Constants.Instance.GRAVITY, -1*Constants.Instance.GRAVITY_ANGLE);
-                //}
-                //Constants.Instance.GRAVITY_ACTIVE = false;
-            }
-        }
-
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.KeyCode == Keys.ShiftKey)
             {
-                //System.Diagnostics.Debug.WriteLine("TETHER ON");
+                //Out.WriteLine("TETHER ON");
                 tethering = true;
             }
         }

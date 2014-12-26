@@ -191,7 +191,6 @@
             this.circle_2_label.Size = new System.Drawing.Size(42, 13);
             this.circle_2_label.TabIndex = 38;
             this.circle_2_label.Text = "Circle 2";
-            this.circle_2_label.Click += new System.EventHandler(this.label4_Click);
             // 
             // circle_2_acceleration_angle
             // 

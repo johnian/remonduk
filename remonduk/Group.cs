@@ -83,7 +83,7 @@ namespace remonduk
             }
             //for (int i = 0; i < tethers.Count; i++ )
             //{
-            //    System.Diagnostics.Debug.WriteLine("PULLING");
+            //    Out.WriteLine("PULLING");
             //    tethers.ElementAt(i).pull();
             //}
         }

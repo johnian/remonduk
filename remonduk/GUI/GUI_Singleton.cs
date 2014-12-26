@@ -16,7 +16,7 @@ namespace remonduk.GUI
 
         public GUI_Singleton()
         {
-            System.Diagnostics.Debug.WriteLine("SINGLETON CONSTRUCTOR");
+            Out.WriteLine("SINGLETON CONSTRUCTOR");
         }
 
         public static GUI_Singleton Instance
@@ -25,7 +25,7 @@ namespace remonduk.GUI
             {
                 if (instance == null)
                 {
-                    System.Diagnostics.Debug.WriteLine("INSTANCE == NULL");
+                    Out.WriteLine("INSTANCE == NULL");
                     instance = new GUI_Singleton();
                 }
                 return instance;
