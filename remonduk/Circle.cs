@@ -8,6 +8,9 @@ using System.Diagnostics;
 
 namespace remonduk
 {
+    /// <summary>
+    /// Building blocks.
+    /// </summary>
 	public class Circle
 	{
         //precision for what?  assuming collision
