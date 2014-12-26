@@ -10,25 +10,67 @@ namespace remonduk
 {
 	public class Circle
 	{
+        //precision for what?  assuming collision
 		public const int PRECISION = 8;
 
+        /// <summary>
+        /// The default value for a circles radius.
+        /// </summary>
 		public const double RADIUS = 1;
+        /// <summary>
+        /// The default value for a circles mass.
+        /// </summary>
 		public const double MASS = 1.0;
 
+        /// <summary>
+        /// The default value for a circles velocity vector magnitude.
+        /// </summary>
 		public const double VELOCITY = 0;
+        /// <summary>
+        /// The default value for a circles velocity vector angle.
+        /// </summary>
 		public const double VELOCITY_ANGLE = 0;
+        /// <summary>
+        /// The default value for a circles acceleration vector magnitude.
+        /// </summary>
 		public const double ACCELERATION = 0;
+        /// <summary>
+        /// The default value for a circles acceleration vector angle.
+        /// </summary>
 		public const double ACCELERATION_ANGLE = 0;
-		public Color DEFAULT_COLOR = Color.Chartreuse;
 
+		/// <summary>
+        /// The default value for a circles color.
+        /// </summary>
+        //Need to rework this for loading / saving.  Save to string and load from there
+        public Color DEFAULT_COLOR = Color.Chartreuse;
+
+        /// <summary>
+        /// The default value for a circles target.  Used for non-physics interactions.
+        /// </summary>
 		public const Circle TARGET = null;
+        /// <summary>
+        /// The default value for the minimum distance to follow the target at.
+        /// </summary>
 		public double MIN_DIST = 0;
+        /// <summary>
+        /// The default value for the maximum distance to follow the target at.
+        /// </summary>
 		public double MAX_DIST = 0;
 
+        //r = d!
+        /// <summary>
+        /// This circles position, radius, and mass.
+        /// </summary>
 		public double x, y, r, mass;
-		public double velocity, vx, vy;
-		public double acceleration, ax, ay;
-		public double velocity_angle, acceleration_angle;
+        /// <summary>
+        /// This circles velocity vector magnitude and angle and (x,y) components.
+        /// </summary>
+        public double velocity, velocity_angle, vx, vy;
+        /// <summary>
+        /// This circles acceleration vector magnitude and angle and (x,y) components.
+        /// </summary>
+		public double acceleration, acceleration_angle, ax, ay;
 
 		public Circle target;
 		public double min_dist;
