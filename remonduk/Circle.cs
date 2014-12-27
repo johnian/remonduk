@@ -13,7 +13,9 @@ namespace remonduk
     /// </summary>
 	public class Circle
 	{
-        //precision for what?  assuming collision
+        /// <summary>
+        /// Precision for rounding to 0.
+        /// </summary>
 		public const int PRECISION = 8;
 
         /// <summary>
@@ -372,6 +374,11 @@ namespace remonduk
 			}
 		}
 
+        /// <summary>
+        /// Treats that circle as stationary and the frame of perspective as this.
+        /// </summary>
+        /// <param name="that">The circle to check if this circle is crossing.</param>
+        /// <returns>The center of this circle when the two circles collide.</returns>
 		public Tuple<double, double> crossing(Circle that)
 		{
 			double reference_vx = ax / 2 + vx - (that.ax / 2 + that.vx);
@@ -408,6 +415,14 @@ namespace remonduk
 			}
 		}
 
+        /// <summary>
+        /// Calculates the closest point on the this' movement vector to that.
+        /// </summary>
+        /// <param name="point_x">That circles x value.</param>
+        /// <param name="point_y">That circles y value</param>
+        /// <param name="reference_vx">This circles reference vx.</param>
+        /// <param name="reference_vy">This circles reference vy.</param>
+        /// <returns>The closest point on this' movement vector to point_x and point_y</returns>
 		public Tuple<double, double> closestPoint(double point_x, double point_y,
 			double reference_vx, double reference_vy)
 		{
