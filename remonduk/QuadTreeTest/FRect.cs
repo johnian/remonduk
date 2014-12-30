@@ -1,23 +1,4 @@
-// // // // // // // // // // // // //
-// QuadTree and supporting code
-// by Kyle Schouviller
-// http://www.kyleschouviller.com
-//
-// December 2006: Original version
-// May 06, 2007:  Updated for XNA Framework 1.0
-//                and public release.
-//
-// You may use and modify this code however you
-// wish, under the following condition:
-// *) I must be credited
-// A little line in the credits is all I ask -
-// to show your appreciation.
-// 
-// If you have any questions, please use the
-// contact form on my website.
-//
-// Now get back to making great games!
-// // // // // // // // // // // // //
+
 
 #region Using declarations
 

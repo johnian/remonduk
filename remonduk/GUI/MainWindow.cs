@@ -70,7 +70,9 @@ namespace remonduk
                 {
                     if (!pause)
                     {
-                        c.update(ps.netForces.Keys);
+                        List<QuadTreePositionItem<Circle>> cs = new List<QuadTreePositionItem<Circle>>();
+                        ps.tree.GetItems(new FRect(c.y-50, c.x-50, c.y + 50, c.x + 50), ref cs);
+                        c.update(cs);
                     }
                     c.draw(this.CreateGraphics());
                 }

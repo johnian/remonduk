@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Diagnostics;
+using remonduk.QuadTreeTest;
 
 namespace remonduk
 {
@@ -468,7 +469,7 @@ namespace remonduk
         /// This circles move method.  Updates the velocity, checks for collisions then updates the (x,y) coordinates.
         /// </summary>
         /// <param name="circles">For some reason a silly keycollection of circles, change me.</param>
-		public void move(Dictionary<Circle, Tuple<double, double>>.KeyCollection circles)
+		public void move(List<QuadTreeTest.QuadTreePositionItem<Circle>> circles)
 		{
 			if (target != null)
 			{
@@ -476,8 +477,9 @@ namespace remonduk
 			}
 			if (this.exists)
 			{
-				foreach (Circle c in circles)
+				foreach (QuadTreePositionItem<Circle> qc in circles)
 				{
+                    Circle c = (Circle)qc.Parent;
 					if (colliding(c) >= 0)
 					{
 						// need to pass this the crossing point
@@ -507,7 +509,7 @@ namespace remonduk
         /// This circles update method.  See move()
         /// </summary>
         /// <param name="circles">Some silly keycollection...change me</param>
-		public void update(Dictionary<Circle, Tuple<double, double>>.KeyCollection circles) //revisit List for refactorization!!!!! rar i like my keyboard this
+		public void update(List<QuadTreeTest.QuadTreePositionItem<Circle>> circles) //revisit List for refactorization!!!!! rar i like my keyboard this
 		//is fun kbye
 		{
 			move(circles);

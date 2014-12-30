@@ -14,7 +14,7 @@ namespace remonduk
         /// <summary>
         /// Turns debug printing on and off.
         /// </summary>
-        public static bool on = true;
+        public static bool on = false;
 
         /// <summary>
         /// Wrapper for write.
