@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using remonduk.QuadTreeTest;
 
 namespace remonduk
 {
@@ -132,7 +133,10 @@ namespace remonduk
             {
                 drawSelected(g);
             }
-
+            foreach(Circle c in ps.netForces.Keys)
+            {
+                c.q_tree_pos.Rect.draw(g);
+            }
             drawNewCircleAngles(g);
             drawInteractions(g);
         }
@@ -230,7 +234,7 @@ namespace remonduk
 
                 if(collide != -1 && selected_circle != null && tethering)
                 {
-                    Tether t = new Tether(.0002, 50);
+                    Tether t = new Tether(.002, 50);
                     Interaction i = new Interaction(selected_circle, c, t);
                     ps.addInteraction(i);
                     found = true;

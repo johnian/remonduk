@@ -100,6 +100,8 @@ namespace remonduk
         /// </summary>
 		bool exists;
 
+        public QuadTreeTest.QuadTreePositionItem<Circle> q_tree_pos;
+
 		//public List<Force> forces;
 
         /// <summary>
@@ -168,7 +170,8 @@ namespace remonduk
 			follow(TARGET);
 			this.color = Color.Chartreuse;
 			exists = true;
-			//forces = new List<Force>();
+            q_tree_pos = new QuadTreeTest.QuadTreePositionItem<Circle>(this, new Tuple<double, double>(x, y), new Tuple<double, double>(r, r));
+            //forces = new List<Force>();
 		}
 
 		/// <summary>
@@ -309,6 +312,7 @@ namespace remonduk
 		{
 			x += ax / 2 + vx;
 			y += ay / 2 + vy;
+            q_tree_pos.Position = new Tuple<double, double>(x, y);
 			updateVelocity();
 		}
 

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using remonduk.QuadTreeTest;
 
 namespace remonduk
 {
@@ -15,7 +16,9 @@ namespace remonduk
         /// Looking up a circle will give the netforce exerted on that circle from within the physical system.
         /// </summary>
 		public Dictionary<Circle, Tuple<double, double>> netForces;
-		
+
+        public QuadTree<Circle> tree;
+
         //public Dictionary<Circle, List<Interaction>> interactions;
 		/// <summary>
 		/// A list of all of the interactions in this physical system.
@@ -39,6 +42,7 @@ namespace remonduk
 			netForces = new Dictionary<Circle, Tuple<double, double>>();
 			//interactions = new Dictionary<Circle, List<Interaction>>();
 			interactions = new List<Interaction>();
+            tree = new QuadTree<Circle>(new FRect(0, 0, 600, 600), 10);
 			gravity = GRAVITY;
 		}
 
@@ -49,6 +53,7 @@ namespace remonduk
 		public void addCircle(Circle circle)
 		{
 			netForces.Add(circle, Tuple.Create(0.0, 0.0));
+            tree.Insert(circle.q_tree_pos);
 			// could make this add gravity as a default based on a flag
             //you mean SHOULD, there is a grav flag here and in constants
 		}

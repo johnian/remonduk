@@ -80,6 +80,8 @@
     <Compile Include="PhysicalSystem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuadTreeTest\FRect.cs" />
+    <Compile Include="QuadTreeTest\QuadTree.cs" />
     <Compile Include="Tether.cs" />
     <EmbeddedResource Include="GUI\Circle_Detail_Window.resx">
       <DependentUpon>Circle_Detail_Window.cs</DependentUpon>
