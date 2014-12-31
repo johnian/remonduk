@@ -67,6 +67,8 @@ namespace remonduk
 			}
 
 			netForces.Add(circle, new OrderedPair(0, 0));
+			
+			interactionMap.Add(circle, new List<Interaction>());
 			tree.Insert(circle.q_tree_pos);
 		}
 
