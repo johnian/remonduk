@@ -102,6 +102,12 @@ namespace remonduk
 				circle.setAcceleration(Circle.magnitude(ax, ay), Circle.angle(ay, ax));
 			}
 		}
+		
+		public void update()
+		{
+			updateNetForces();
+			updatePositions();
+		}
 
         /// <summary>
         /// Calculates the net forces acting on a circle.
@@ -128,10 +134,54 @@ namespace remonduk
 			return Tuple.Create(fx, fy);
 		}
 
-        //// remove this -- don't need, just grab array directly -- less overhead
-        //public Tuple<double, double> netForceOn(Circle circle)
-        //{
-        //    return netForces[circle];
-        //}
+		public void updatePositions()
+		{
+			double time = 1;
+			Dictionary<Circle, Tuple<Double, Double>>.KeyCollection circles = netForces.Keys;
+			Dictionary<Circle, List<Circle>> collisionMap = new Dictionary<Circle, List<Circle>>();;
+			while (time > 0)
+			{
+				double min = time;
+				foreach (Circle circle in circles) {
+					foreach (Circle that in circles) {
+						// use quad tree to get the list of circles to check against
+						// for now, just use circles
+						double value = circle.colliding(that, time);
+						if (value < min) {
+							min = value;
+							collisionMap = new Dictionary<Circle, List<Circle>>();
+							List<Circle> collisions = new List<Circle>();
+							collisions.Add(that);
+							collisionMap.Add(circle, collisions);
+						}
+						else if (value == min)
+						{
+							collisionMap[circle].Add(that);
+							//collisionMap.Add(circle, collisions);
+						}
+					}
+				}
+				foreach (Circle circle in circles)
+				{
+					circle.update(min);
+				}
+				updateVelocities(collisionMap);
+				time -= min;
+			}
+		}
+
+		public void updateVelocities(Dictionary<Circle, List<Circle>> collisionMap)
+		{
+			Dictionary<Circle, Tuple<double, double>> velocityMap = new Dictionary<Circle, Tuple<double, double>>();
+			foreach (Circle circle in collisionMap.Keys)
+			{
+				velocityMap.Add(circle, circle.collideWith(collisionMap[circle]));
+			}
+			foreach (Circle circle in velocityMap.Keys)
+			{
+				Tuple<double, double> velocity = velocityMap[circle];
+				circle.setVelocity(velocity.Item1, velocity.Item2);
+			}
+		}
 	}
 }
