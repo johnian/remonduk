@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Diagnostics;
+using remonduk.QuadTreeTest;
 
 namespace remonduk
 {
@@ -14,9 +15,9 @@ namespace remonduk
 	public class Circle
 	{
 		/// <summary>
-		/// Default value for a circle's diameter.
+		/// Default value for a circle's radius.
 		/// </summary>
-		public const double DIAMETER = 1;
+		public const double RADIUS = 1;
 		/// <summary>
 		/// Default value for a circle's mass.
 		/// </summary>
@@ -69,9 +70,9 @@ namespace remonduk
 		public Color COLOR = Color.Chartreuse;
 
 		/// <summary>
-		/// The circle's diameter and mass.
+		/// The circle's radius and mass.
 		/// </summary>
-		public double diameter, mass;
+		public double radius, mass;
 		/// <summary>
 		/// The circle's position, velocity, and acceleration vectors.
 		/// </summary>
@@ -118,25 +119,25 @@ namespace remonduk
 		/// </summary>
 		/// <param name="other">The other circle to copy.</param>
 		public Circle(Circle that) :
-			this(that.diameter, that.mass, that.position.x, that.position.y,
+			this(that.radius, that.mass, that.position.x, that.position.y,
 				that.velocity.x, that.velocity.y, that.acceleration.x, that.acceleration.y) { }
 
-		public Circle(double diameter) :
-			this(diameter, MASS) { }
+		public Circle(double radius) :
+			this(radius, MASS) { }
 
-		public Circle(double diameter, double mass) :
-			this(diameter, mass, PX, PY) { }
+		public Circle(double radius, double mass) :
+			this(radius, mass, PX, PY) { }
 
-		public Circle(double diameter, double mass, double px, double py) :
-			this(diameter, mass, px, py, VX, VY) { }
+		public Circle(double radius, double mass, double px, double py) :
+			this(radius, mass, px, py, VX, VY) { }
 
-		public Circle(double diameter, double mass, double px, double py, double vx, double vy) :
-			this(diameter, mass, px, py, vx, vy, AX, AY) { }
+		public Circle(double radius, double mass, double px, double py, double vx, double vy) :
+			this(radius, mass, px, py, vx, vy, AX, AY) { }
 
-		public Circle(double diameter, double mass, double px, double py,
+		public Circle(double radius, double mass, double px, double py,
 			double vx, double vy, double ax, double ay)
 		{
-			setDiameter(diameter);
+			setRadius(radius);
 			setMass(mass);
 
 			setPosition(px, py);
@@ -147,77 +148,20 @@ namespace remonduk
 			follow(TARGET);
 
 			color = COLOR;
-			q_tree_pos = new QuadTreeTest.QuadTreePositionItem<Circle>(this, new Tuple<double, double>(position.x, position.y), new Tuple<double, double>(diameter, diameter));
+			//q_tree_pos = new QuadTreeTest.QuadTreePositionItem<Circle>(this, new Tuple<double, double>(position.x, position.y), new Tuple<double, double>(radius, radius));
 		}
 
 		/// <summary>
-		/// 
+		/// Sets the radius.
 		/// </summary>
-		/// <param name="x"></param>
-		/// <param name="y"></param>
-		/// <param name="diameter"></param>
-		/// <param name="mass"></param>
-		///
-		//public Circle(double x, double y, double diameter, double mass = MASS) :
-		//	this(x, y, diameter,
-		//		 VELOCITY, VELOCITY_ANGLE, mass) { }
-
-		///// <summary>
-		///// 
-		///// </summary>
-		///// <param name="x"></param>
-		///// <param name="y"></param>
-		///// <param name="diameter"></param>
-		///// <param name="velocity"></param>
-		///// <param name="velocity_angle"></param>
-		///// <param name="mass"></param>
-		//public Circle(double x, double y, double diameter,
-		//	double velocity, double velocity_angle, double mass = MASS) :
-		//	this(x, y, diameter,
-		//		 velocity, velocity_angle,
-		//		 ACCELERATION, ACCELERATION_ANGLE, mass) { }
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="x"></param>
-		/// <param name="y"></param>
-		/// <param name="diameter"></param>
-		/// <param name="velocity"></param>
-		/// <param name="velocity_angle"></param>
-		/// <param name="acceleration"></param>
-		/// <param name="acceleration_angle"></param>
-		/// <param name="mass"></param>
-		//public Circle(double x, double y, double diameter,
-		//	double velocity, double velocity_angle,
-		//	double acceleration, double acceleration_angle, double mass = MASS)
-		//{
-		//	this.x = x;
-		//	this.y = y;
-		//	setDiameter(diameter);
-		//	setMass(mass);
-
-		//	setVelocity(velocity, velocity_angle);
-		//	setAcceleration(acceleration, acceleration_angle);
-
-		//	follow(TARGET);
-		//	this.color = Color.Chartreuse;
-		//	exists = true;
-		//	q_tree_pos = new QuadTreeTest.QuadTreePositionItem<Circle>(this, new Tuple<double, double>(x, y), new Tuple<double, double>(diameter, diameter));
-		//	//forces = new List<Force>();
-		//}
-
-		/// <summary>
-		/// Sets the diameter.
-		/// </summary>
-		/// <param name="diameter">The new value for this circle's diameter.</param>
-		public void setDiameter(double diameter)
+		/// <param name="radius">The new value for this circle's radius.</param>
+		public void setRadius(double radius)
 		{
-			if (diameter < DIAMETER)
+			if (radius < RADIUS)
 			{
-				throw new ArgumentException("diameter: " + diameter);
+				throw new ArgumentException("radius: " + radius);
 			}
-			this.diameter = diameter;
+			this.radius = radius;
 		}
 
 		/// <summary>
@@ -240,28 +184,6 @@ namespace remonduk
 			position.y = py;
 		}
 
-		/// <summary>
-		/// Sets this circles velocity.  Recalculates vx and vy values.
-		/// </summary>
-		/// <param name="velocity">The new velocity vector's magnitude.</param>
-		/// <param name="velocity_angle">The new velocity vector's angle.</param>
-		//public void setVelocity(double velocity, double velocity_angle)
-		//{
-		//	vx = velocity * Math.Cos(velocity_angle);
-		//	vy = velocity * Math.Sin(velocity_angle);
-		//	//I know we went over these once before but why are we rounding here?  For the tests?
-		//	if (Math.Round(vx, PRECISION) == 0)
-		//	{
-		//		vx = 0;
-		//	}
-		//	if (Math.Round(vy, PRECISION) == 0)
-		//	{
-		//		vy = 0;
-		//	}
-		//	this.velocity = magnitude(vx, vy);
-		//	this.velocity_angle = angle(vy, vx);
-		//}
-
 		public void setVelocity(double vx, double vy)
 		{
 			velocity.x = vx;
@@ -270,8 +192,7 @@ namespace remonduk
 
 		public void changeDirection(double angle)
 		{
-			double magnitude = velocity.magnitude();
-			velocity.set(magnitude, angle);
+			velocity.set(velocity.magnitude(), angle);
 		}
 
 		/// <summary>
@@ -279,25 +200,10 @@ namespace remonduk
 		/// </summary>
 		/// <param name="acceleration">The new acceleration vector's magnitude.</param>
 		/// <param name="acceleration_angle">The new acceleration vector's angle.</param>
-		//public void setAcceleration(double acceleration, double acceleration_angle)
-		//{
-		//	ax = acceleration * Math.Cos(acceleration_angle);
-		//	ay = acceleration * Math.Sin(acceleration_angle);
-		//	//again I know we went over these once before but why are we rounding here?  For the tests?
-		//	if (Math.Round(ax, PRECISION) == 0)
-		//	{
-		//		ax = 0;
-		//	}
-		//	if (Math.Round(ay, PRECISION) == 0)
-		//	{
-		//		ay = 0;
-		//	}
-		//	this.acceleration = magnitude(ax, ay);
-		//	this.acceleration_angle = angle(ay, ax);
-		//}
 
 		public void setAcceleration(double ax, double ay)
 		{
+			// maybe check for close to 0 precision rounding
 			acceleration.x = ax;
 			acceleration.y = ay;
 		}
@@ -317,7 +223,7 @@ namespace remonduk
 			}
 			else
 			{
-				follow(target, target.diameter + diameter, target.diameter + diameter);
+				follow(target, target.radius + radius, target.radius + radius);
 			}
 		}
 
@@ -340,21 +246,7 @@ namespace remonduk
 				this.max_dist = max_dist;
 			}
 		}
-
-		/// <summary>
-		/// Updates this circles acceleration.  Adds an acceleration vector to the current acceleration.
-		/// </summary>
-		/// <param name="acceleration">The acceleration vector's magnitude to be added.</param>
-		/// <param name="acceleration_angle">The acceleration vector's angle to be added.</param>
-		public void updateAcceleration(double magnitude, double angle)
-		{
-			// should remove this - acceleration shouldn't be changed, just forces
-			acceleration.x += magnitude * Math.Cos(angle);
-			acceleration.y += magnitude * Math.Sin(angle);
-			//this.acceleration = magnitude(ax, ay);
-			//this.acceleration_angle = angle(ay, ax);
-		}
-
+		
 		/// <summary>
 		/// Updates this circles velocity by adding its acceleration values to velocity values.  Occurs once per frame.
 		/// </summary>
@@ -362,11 +254,6 @@ namespace remonduk
 		{
 			velocity.x += acceleration.x * time;
 			velocity.y += acceleration.y * time;
-			//setVelocity(acceleration.x * time, acceleration.y * time);
-			//vx += ax * time;
-			//vy += ay * time;
-			//velocity = magnitude(vx, vy);
-			//velocity_angle = angle(vy, vx);
 		}
 
 		/// <summary>
@@ -419,7 +306,7 @@ namespace remonduk
 			double center = OrderedPair.angle(that.position.y - position.y, that.position.x - position.x);
 			// use squared instead of square root for efficiency
 			//Check the easy  one first
-			if (distanceSquared(that.position) <= (that.diameter + diameter) * (that.diameter + diameter))
+			if (distanceSquared(that.position) <= (that.radius + radius) * (that.radius + radius))
 			{
 				Out.WriteLine("overlapping");
 				if (that != this)
@@ -432,26 +319,6 @@ namespace remonduk
 			else
 			{
 				return crossing(that, time);
-
-
-
-				//double reference_angle = Circle.angle(ay / 2 + vy - that.ay / 2 - that.vy, ax / 2 + vx - that.ax / 2 - that.vx);
-				//double direction = Circle.angle(that.y - y, that.x - x);
-				//if neither are moving or if they're moving in opposite directions.
-				//if ((acceleration + velocity == 0 && that.acceleration + that.velocity == 0) ||
-				//	Math.Abs(direction - reference_angle) > Math.PI / 2)
-				//{
-				//	Out.WriteLine("not moving or wrong direction");
-				//	return -1;
-				//}
-				//check if we will cross
-				//double cross = crossing(that);
-				//if (cross != null)
-				//{
-				//	center = Circle.angle(that.y - cross.Item2, that.x - cross.Item1);
-				//	return center;
-				//}
-				//return -1;
 			}
 		}
 
@@ -480,7 +347,7 @@ namespace remonduk
 				//return null;
 			}
 			double distance_from_that = OrderedPair.magnitude(point.x - that.position.x, point.y - that.position.y);
-			double radii_sum = that.diameter + diameter;
+			double radii_sum = that.radius + radius;
 
 			Out.WriteLine("distance_from_that: " + distance_from_that);
 			Out.WriteLine("radii_sum: " + radii_sum);
@@ -554,11 +421,9 @@ namespace remonduk
 				Out.WriteLine("too far");
 				return null;
 			}
-			// have this also return the time of impact, double between [0, 1]
-			// this might automatically take care of the above case because time would be > 1
 			return new OrderedPair(intersection_x, intersection_y);
 		}
-
+		
 		public OrderedPair collideWith(List<Circle> circles)
 		{
 			double total_mass = 0;
@@ -571,15 +436,10 @@ namespace remonduk
 				total_vy += circle.velocity.y;
 			}
 
-
 			double vx = (total_vx * (mass - total_mass) + 2 * total_mass * total_vx) / (mass + total_mass);
 			double vy = (total_vy * (mass - total_mass) + 2 * total_mass * total_vy) / (mass + total_mass);
 
 			return new OrderedPair(vx, vy);
-			//setVelocity(vx, vy);
-
-			//return velocity;
-			//elastic(new Circle(0, 0, 1, total_mass))
 		}
 
 		/// <summary>
@@ -593,16 +453,6 @@ namespace remonduk
 				// changeDirection(target.y - y, target.x - x);
 				velocity.set(velocity.magnitude(), position.angle(target.position));
 			}
-			//if (this.exists)
-			//{
-			//	foreach (Circle c in circles)
-			//	{
-			//		if (colliding(c) >= 0)
-			//		{
-			//			elastic(c);
-			//		}
-			//	}
-			//}
 			updatePosition(time);
 		}
 
@@ -640,14 +490,14 @@ namespace remonduk
 		public void draw(Graphics g)
 		{
 			Brush brush = new SolidBrush(color);
-			g.FillEllipse(brush, (float)(position.x - diameter), (float)(position.y - diameter), (float)(2 * diameter), (float)(2 * diameter));
+			g.FillEllipse(brush, (float)(position.x - radius), (float)(position.y - radius), (float)(2 * radius), (float)(2 * radius));
 		}
 
 		/// <summary>
 		/// This circles to string method.
 		/// </summary>
 		/// <returns>
-		/// (523, 316) DIAMETER: 5 mass: 1
+		/// (523, 316) radius: 5 mass: 1
 		/// velocity: 0 (0, 0): 0
 		/// acceleration: 0 (0, 0): 0
 		/// target: [0, 0
@@ -655,7 +505,7 @@ namespace remonduk
 		/// </returns>
 		public String toString()
 		{
-			return "diameter: " + diameter + ", mass: " + mass + "\n" +
+			return "radius: " + radius + ", mass: " + mass + "\n" +
 				"position: " + position + "\n" +
 				"velocity: " + velocity + "\n" +
 				"acceleration: " + acceleration + "\n" +

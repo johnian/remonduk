@@ -25,17 +25,17 @@ namespace remonduk
 						dist -= equilibrium;
 						double f = k * dist;
 
-						double delta_x = second.x - first.x;
-						double delta_y = second.y - first.y;
-						double angle = Circle.angle(delta_y, delta_x);
+						double delta_x = second.px - first.px;
+						double delta_y = second.py - first.py;
+						double angle = OrderedPair.angle(delta_y, delta_x);
 
 						double fx = f * Math.Cos(angle);
 						double fy = f * Math.Sin(angle);
-						return Tuple.Create(fx, fy);
+						return new OrderedPair(fx, fy);
 					}
 					else
 					{
-						return Tuple.Create(0.0, 0.0);
+						return new OrderedPair(0.0, 0.0);
 					}
 				}
 			)

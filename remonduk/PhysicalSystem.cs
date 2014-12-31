@@ -99,7 +99,7 @@ namespace remonduk
 				netForces[circle] = updateNetForceOn(circle);
 				double ax = netForces[circle].Item1 / circle.mass;
 				double ay = netForces[circle].Item2 / circle.mass;
-				circle.setAcceleration(Circle.magnitude(ax, ay), Circle.angle(ay, ax));
+				circle.setAcceleration(OrderedPair.magnitude(ax, ay), OrderedPair.angle(ay, ax));
 			}
 		}
 		
@@ -172,15 +172,14 @@ namespace remonduk
 
 		public void updateVelocities(Dictionary<Circle, List<Circle>> collisionMap)
 		{
-			Dictionary<Circle, Tuple<double, double>> velocityMap = new Dictionary<Circle, Tuple<double, double>>();
+			Dictionary<Circle, OrderedPair> velocityMap = new Dictionary<Circle, OrderedPair>();
 			foreach (Circle circle in collisionMap.Keys)
 			{
 				velocityMap.Add(circle, circle.collideWith(collisionMap[circle]));
 			}
 			foreach (Circle circle in velocityMap.Keys)
 			{
-				Tuple<double, double> velocity = velocityMap[circle];
-				circle.setVelocity(velocity.Item1, velocity.Item2);
+				circle.setVelocity(velocityMap[circle].x, velocityMap[circle].y);
 			}
 		}
 	}
