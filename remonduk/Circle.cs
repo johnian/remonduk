@@ -119,8 +119,8 @@ namespace remonduk
 		/// </summary>
 		/// <param name="other">The other circle to copy.</param>
 		public Circle(Circle that) :
-			this(that.radius, that.mass, that.position.x, that.position.y,
-				that.velocity.x, that.velocity.y, that.acceleration.x, that.acceleration.y) { }
+			this(that.radius, that.position.x, that.position.y,
+                that.velocity.x, that.velocity.y, that.acceleration.x, that.acceleration.y, that.mass) { }
 
 		public Circle(double radius) :
 			this(radius, MASS) { }
@@ -143,6 +143,7 @@ namespace remonduk
 			position = new OrderedPair(px, py);
 			velocity = new OrderedPair(vx, vy);
 			acceleration = new OrderedPair(ax, ay);
+            Out.WriteLine("CIRCLE ACCEL MAG: " + acceleration.magnitude());
 
 			//setPosition(px, py);
 			//setVelocity(vx, vy);
@@ -152,7 +153,7 @@ namespace remonduk
 			follow(TARGET);
 
 			color = COLOR;
-			//q_tree_pos = new QuadTreeTest.QuadTreePositionItem<Circle>(this, new Tuple<double, double>(position.x, position.y), new Tuple<double, double>(radius, radius));
+			q_tree_pos = new QuadTreeTest.QuadTreePositionItem<Circle>(this, new Tuple<double, double>(position.x, position.y), new Tuple<double, double>(radius, radius));
 		}
 
 		/// <summary>
@@ -314,7 +315,7 @@ namespace remonduk
 			// use squared instead of square root for efficiency
 			if (distanceSquared(that.position) <= (that.radius + radius) * (that.radius + radius))
 			{
-				Out.WriteLine("overlapping");
+				//Out.WriteLine("overlapping");
 				if (that != this)
 				{
 					return 0;
@@ -338,25 +339,25 @@ namespace remonduk
 			double that_vy = that.acceleration.y * time / 2 + that.velocity.y;
 			double reference_vx = this_vx - that_vx;
 			double reference_vy = this_vy - that_vy;
-			Out.WriteLine("");
-			Out.WriteLine("reference_vx: " + reference_vx);
-			Out.WriteLine("reference_vy: " + reference_vy);
+			//Out.WriteLine("");
+			//Out.WriteLine("reference_vx: " + reference_vx);
+			//Out.WriteLine("reference_vy: " + reference_vy);
 
 			OrderedPair point = closestPoint(that.position.x, that.position.y, reference_vx, reference_vy);
 			if (point == null)
 			{
-				Out.WriteLine("point is null");
+				//Out.WriteLine("point is null");
 				return Double.PositiveInfinity;
 				//return null;
 			}
 			double distance_from_that = OrderedPair.magnitude(point.x - that.position.x, point.y - that.position.y);
 			double radii_sum = that.radius + radius;
 
-			Out.WriteLine("distance_from_that: " + distance_from_that);
-			Out.WriteLine("radii_sum: " + radii_sum);
+			//Out.WriteLine("distance_from_that: " + distance_from_that);
+			//Out.WriteLine("radii_sum: " + radii_sum);
 			if (distance_from_that > radii_sum)
 			{
-				Out.WriteLine("too far");
+				//Out.WriteLine("too far");
 				return Double.PositiveInfinity;
 				//return null;
 			}
@@ -504,7 +505,8 @@ namespace remonduk
 		/// <param name="g">The graphics object to draw this circle on.</param>
 		public void draw(Graphics g)
 		{
-			Brush brush = new SolidBrush(color);
+			Brush brush = new SolidBrush(Color.Chartreuse);
+            Out.WriteLine("Drawing in circle " + position.x + " " + position.y + " " + radius);
 			g.FillEllipse(brush, (float)(position.x - radius), (float)(position.y - radius), (float)(2 * radius), (float)(2 * radius));
 		}
 

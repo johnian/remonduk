@@ -43,6 +43,8 @@ namespace remonduk
 		/// <returns>The magnitude.</returns>
 		public static double magnitude(double x, double y)
 		{
+            if (x == 0 && y == 0)
+                return 0;
 			return Math.Sqrt(x * x + y * y);
 		}
 

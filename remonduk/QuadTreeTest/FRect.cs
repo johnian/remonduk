@@ -202,8 +202,8 @@ namespace remonduk.QuadTreeTest
         public void draw(Graphics g)
         {
             Pen pen = new Pen(Color.Black);
-            Out.WriteLine("Left: " + Left + " Top: " + Top + " W: " + Width + " H: " + Height);
-            Out.WriteLine("TopLeft " + TopLeft + " BottomRight " + BottomRight);
+            //Out.WriteLine("Left: " + Left + " Top: " + Top + " W: " + Width + " H: " + Height);
+            //Out.WriteLine("TopLeft " + TopLeft + " BottomRight " + BottomRight);
             g.DrawRectangle(pen, (float)Left, (float)Top, (float)Width, (float)Height);
         }
 

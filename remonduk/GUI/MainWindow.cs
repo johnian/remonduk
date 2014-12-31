@@ -75,6 +75,7 @@ namespace remonduk
                         ps.tree.GetItems(new FRect(c.py-50, c.px-50, c.py + 50, c.px + 50), ref cs);
 						//c.update(cs);
                     }
+                    Out.WriteLine("Drawing");
                     c.draw(this.CreateGraphics());
                 }
 
