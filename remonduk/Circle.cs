@@ -119,8 +119,8 @@ namespace remonduk
 		/// </summary>
 		/// <param name="other">The other circle to copy.</param>
 		public Circle(Circle that) :
-			this(that.radius, that.mass, that.position.x, that.position.y,
-				that.velocity.x, that.velocity.y, that.acceleration.x, that.acceleration.y) { }
+			this(that.radius, that.position.x, that.position.y,
+				that.velocity.x, that.velocity.y, that.acceleration.x, that.acceleration.y, that.mass) { }
 
 		public Circle(double radius) :
 			this(radius, MASS) { }
