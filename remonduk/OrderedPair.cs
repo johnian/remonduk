@@ -29,7 +29,7 @@ namespace remonduk
 
 		}
 
-		public String toString()
+		public String ToString()
 		{
 			return "(" + x + ", " + y + ")";
 		}

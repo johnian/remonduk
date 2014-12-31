@@ -67,7 +67,7 @@ namespace remonduk
 				ps.update();
 				//ps.updateNetForces();
 
-                foreach (Circle c in ps.netForces.Keys)
+                foreach (Circle c in ps.circles)
                 {
                     if (!pause)
                     {
@@ -220,7 +220,7 @@ namespace remonduk
             drag = false;
 
             Point pos = this.PointToClient(Control.MousePosition);
-
+            Out.WriteLine("Original Click Pos: " + pos.ToString());
             Circle click = new Circle(5, pos.X, pos.Y);
 
             bool found = false;
@@ -237,14 +237,14 @@ namespace remonduk
             {
                 double collide = click.colliding(c, 0);
 
-                if(collide != -1 && selected_circle != null && tethering)
+                if(collide < 1 && selected_circle != null && tethering)
                 {
                     Tether t = new Tether(.002, 50);
                     Interaction i = new Interaction(selected_circle, c, t);
                     ps.addInteraction(i);
                     found = true;
                 }
-                else if (collide >= 0)
+                else if (!Double.IsInfinity(collide))
                 {
                     selected_circle = c;
                     psdw.selected_circle = c;
@@ -265,8 +265,8 @@ namespace remonduk
             if (!found)
             {
                 click.radius = (float)circle_radius_up_down.Value;
-                click.setVelocity((float)new_circle_velocity_up_down.Value, 
-                    ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180.0);
+                //click.setVelocity((float)new_circle_velocity_up_down.Value, 
+                    //((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180.0);
 
 				/*
 				 * FIX ME!! update acceleration is no longer a thing
@@ -274,6 +274,7 @@ namespace remonduk
 
 				//click.updateAcceleration((float)new_circle_acceleration_up_down.Value, 
 				//	((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
+                Out.WriteLine("Click Pos: " + click.position);
                 ps.addCircle(click);
             }
         }
@@ -328,7 +329,7 @@ namespace remonduk
             {
                 Point pos = this.PointToClient(Control.MousePosition);
 
-                Circle click = new Circle(pos.X, pos.Y, 5);
+                Circle click = new Circle(5, pos.X, pos.Y);
 
                 if(click.colliding(selected_circle, 0) >= 0)
                 {

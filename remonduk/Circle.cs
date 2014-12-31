@@ -126,13 +126,13 @@ namespace remonduk
 			this(radius, MASS) { }
 
 		public Circle(double radius, double mass = MASS) :
-			this(radius, mass, PX, PY) { }
+			this(radius, PX, PY, mass) { }
 
 		public Circle(double radius, double px, double py, double mass = MASS) :
-			this(radius, mass, px, py, VX, VY) { }
+			this(radius, px, py, VX, VY, mass) { }
 
 		public Circle(double radius, double px, double py, double vx, double vy, double mass = MASS) :
-			this(radius, mass, px, py, vx, vy, AX, AY) { }
+			this(radius, px, py, vx, vy, AX, AY, mass) { }
 
 		public Circle(double radius, double px, double py,
 			double vx, double vy, double ax, double ay, double mass = MASS)
@@ -506,7 +506,8 @@ namespace remonduk
 		public void draw(Graphics g)
 		{
 			Brush brush = new SolidBrush(Color.Chartreuse);
-            Out.WriteLine("Drawing in circle " + position.x + " " + position.y + " " + radius);
+            Out.WriteLine("Drawing in circle " + position);
+            
 			g.FillEllipse(brush, (float)(position.x - radius), (float)(position.y - radius), (float)(2 * radius), (float)(2 * radius));
 		}
 
