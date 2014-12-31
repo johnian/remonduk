@@ -63,16 +63,17 @@ namespace remonduk
             while (IsApplicationIdle())
             {
                 this.CreateGraphics().Clear(System.Drawing.Color.Gray);
-             
-                ps.updateNetForces();
+				
+				ps.update();
+				//ps.updateNetForces();
 
                 foreach (Circle c in ps.netForces.Keys)
                 {
                     if (!pause)
                     {
                         List<QuadTreePositionItem<Circle>> cs = new List<QuadTreePositionItem<Circle>>();
-                        ps.tree.GetItems(new FRect(c.y-50, c.x-50, c.y + 50, c.x + 50), ref cs);
-                        c.update(cs);
+                        ps.tree.GetItems(new FRect(c.py-50, c.px-50, c.py + 50, c.px + 50), ref cs);
+						//c.update(cs);
                     }
                     c.draw(this.CreateGraphics());
                 }
@@ -146,7 +147,7 @@ namespace remonduk
         void drawSelected(Graphics g)
         {
             Pen pen = new Pen(Color.Black);
-            g.DrawEllipse(pen, (float)selected_circle.x-25, (float)selected_circle.y-25, 50, 50);
+            g.DrawEllipse(pen, (float)selected_circle.px-25, (float)selected_circle.py-25, 50, 50);
         }
 
         void drawPause(Graphics g)
@@ -219,20 +220,21 @@ namespace remonduk
 
             Point pos = this.PointToClient(Control.MousePosition);
 
-            Circle click = new Circle(pos.X, pos.Y, 5);
+            Circle click = new Circle(5, pos.X, pos.Y);
 
             bool found = false;
 
             if (drag && selected_circle != null)
             {
-                selected_circle.x = pos.X;
-                selected_circle.y = pos.Y;
+				selected_circle.setPosition(pos.X, pos.Y);
+				//selected_circle.x = pos.X;
+				//selected_circle.y = pos.Y;
             }
 
 
             foreach (Circle c in ps.netForces.Keys)
             {
-                double collide = click.colliding(c);
+                double collide = click.colliding(c, 0);
 
                 if(collide != -1 && selected_circle != null && tethering)
                 {
@@ -249,11 +251,11 @@ namespace remonduk
 
                     cdw.update_circle(selected_circle, ps.interactions);
 
-                    new_circle_acceleration_angle_up_down.Value = (Decimal)(selected_circle.acceleration_angle * 180.0 / Math.PI);
-                    new_circle_acceleration_up_down.Value = (Decimal)selected_circle.acceleration;
-                    new_circle_velocity_angle_up_down.Value = (Decimal)(selected_circle.velocity_angle * 180.0 / Math.PI);
-                    new_circle_velocity_up_down.Value = (Decimal)selected_circle.velocity;
-                    circle_radius_up_down.Value = (Decimal)selected_circle.r;
+                    new_circle_acceleration_angle_up_down.Value = (Decimal)(selected_circle.acceleration.angle() * 180.0 / Math.PI);
+                    new_circle_acceleration_up_down.Value = (Decimal)selected_circle.acceleration.magnitude();
+                    new_circle_velocity_angle_up_down.Value = (Decimal)(selected_circle.velocity.angle() * 180.0 / Math.PI);
+                    new_circle_velocity_up_down.Value = (Decimal)selected_circle.velocity.magnitude();
+                    circle_radius_up_down.Value = (Decimal)selected_circle.radius;
 
                     found = true;
                 }
@@ -261,11 +263,16 @@ namespace remonduk
 
             if (!found)
             {
-                click.r = (float)circle_radius_up_down.Value;
+                click.radius = (float)circle_radius_up_down.Value;
                 click.setVelocity((float)new_circle_velocity_up_down.Value, 
                     ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180.0);
-                click.updateAcceleration((float)new_circle_acceleration_up_down.Value, 
-                    ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
+
+				/*
+				 * FIX ME!! update acceleration is no longer a thing
+				 * */
+
+				//click.updateAcceleration((float)new_circle_acceleration_up_down.Value, 
+				//	((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
                 ps.addCircle(click);
             }
         }
@@ -322,7 +329,7 @@ namespace remonduk
 
                 Circle click = new Circle(pos.X, pos.Y, 5);
 
-                if(click.colliding(selected_circle) >= 0)
+                if(click.colliding(selected_circle, 0) >= 0)
                 {
                     drag = true;
                 }
@@ -362,7 +369,7 @@ namespace remonduk
                 //Circle c1 = circles.ElementAt(0);
                 //c1.draw(this.CreateGraphics());
                 //Out.WriteLine("X: " + c1.x + " Y: " + c1.y);
-                //Out.WriteLine("R: " + c1.r);
+                //Out.WriteLine("R: " + c1.radius);
             }
         }
 
@@ -370,7 +377,7 @@ namespace remonduk
         {
             if(selected_circle != null)
             {
-                selected_circle.r = (float)circle_radius_up_down.Value;
+                selected_circle.radius = (float)circle_radius_up_down.Value;
             }
         }
 

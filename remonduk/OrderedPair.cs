@@ -17,8 +17,9 @@ namespace remonduk
 			this.y = y;
 		}
 
-		public void set(double magnitude, double angle)
+		public void set(double angle)
 		{
+			double magnitude = this.magnitude();
 			x = magnitude * Math.Cos(angle);
 			y = magnitude * Math.Sin(angle);
 		}

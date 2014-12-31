@@ -54,10 +54,10 @@ namespace remonduk.GUI
 
         public void update_circle(Circle c, List<Interaction> interactions)
         {
-            acceleration_up_down.Value = (Decimal)c.acceleration;
-            velocity_up_down.Value = (Decimal)c.velocity;
-            acceleration_angle_up_down.Value = (Decimal)(c.acceleration_angle * 180.0/Math.PI);
-            velocity_angle_up_down.Value = (Decimal)(c.velocity_angle * 180.0/Math.PI);
+            acceleration_up_down.Value = (Decimal)c.acceleration.magnitude();
+            velocity_up_down.Value = (Decimal)c.velocity.magnitude();
+            acceleration_angle_up_down.Value = (Decimal)(c.acceleration.angle() * 180.0/Math.PI);
+            velocity_angle_up_down.Value = (Decimal)(c.velocity.angle() * 180.0/Math.PI);
             List<Interaction> real = new List<Interaction>();
             foreach(Interaction interaction in interactions)
             {

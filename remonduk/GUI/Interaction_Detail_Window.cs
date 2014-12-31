@@ -33,26 +33,26 @@ namespace remonduk.GUI
             if (interaction != null)
             {
                 circle_1_acceleration_angle_up_down.Value =
-                    (Decimal)(interaction.first.acceleration_angle * 180.0 / Math.PI);
+                    (Decimal)(interaction.first.acceleration.angle() * 180.0 / Math.PI);
                 circle_1_acceleration_up_down.Value =
-                    (Decimal)interaction.first.acceleration;
+                    (Decimal)interaction.first.acceleration.magnitude();
                 circle_1_velocity_angle_up_down.Value =
-                    (Decimal)(interaction.first.velocity_angle * 180.0 / Math.PI);
+                    (Decimal)(interaction.first.velocity.angle() * 180.0 / Math.PI);
                 circle_1_velocity_up_down.Value =
-                    (Decimal)interaction.first.velocity;
+                    (Decimal)interaction.first.velocity.magnitude();
 
                 circle_2_acceleration_angle_updown.Value =
-                    (Decimal)(interaction.second.acceleration_angle * 180.0 / Math.PI);
+                    (Decimal)(interaction.second.acceleration.angle() * 180.0 / Math.PI);
                 circle_2_acceleration_updown.Value =
-                    (Decimal)interaction.second.acceleration;
+                    (Decimal)interaction.second.acceleration.magnitude();
                 circle_2_velocity_angle_up_down.Value =
-                    (Decimal)(interaction.second.velocity_angle * 180.0 / Math.PI);
+                    (Decimal)(interaction.second.velocity.angle() * 180.0 / Math.PI);
                 circle_2_velocity_updown.Value =
-                    (Decimal)interaction.second.velocity;
+                    (Decimal)interaction.second.velocity.magnitude();
 
                 Graphics g = this.CreateGraphics();
                 Pen pen = new Pen(Color.Black);
-                double theta = (double)interaction.first.velocity_angle;
+                double theta = (double)interaction.first.velocity.angle();
                 float x1 = 42.5F;
                 float y1 = 167.5F;
                 float x2 = (float)Math.Cos(theta) * 25 + x1;
@@ -61,7 +61,7 @@ namespace remonduk.GUI
                 g.DrawEllipse(pen, 5, 130, 75, 75);
 
 
-                theta = (double)interaction.first.acceleration_angle;
+                theta = (double)interaction.first.acceleration.angle();
                 //Out.WriteLine(new_circle_acceleration_angle_up_down.Value);
                 x1 = 152.5F;
                 y1 = 167.5F;
@@ -70,7 +70,7 @@ namespace remonduk.GUI
                 g.DrawLine(pen, x1, y1, x2, y2);
                 g.DrawEllipse(pen, 115, 130, 75, 75);
 
-                theta = (double)interaction.second.velocity_angle;
+                theta = (double)interaction.second.velocity.angle();
                 x1 = 237.5F;
                 y1 = 167.5F;
                 x2 = (float)Math.Cos(theta) * 25 + x1;
@@ -79,7 +79,7 @@ namespace remonduk.GUI
                 g.DrawEllipse(pen, 200, 130, 75, 75);
 
 
-                theta = (double)interaction.second.acceleration_angle;
+                theta = (double)interaction.second.acceleration.angle();
                 //Out.WriteLine(new_circle_acceleration_angle_up_down.Value);
                 x1 = 357.5F;
                 y1 = 167.5F;

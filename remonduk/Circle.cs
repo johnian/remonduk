@@ -125,24 +125,28 @@ namespace remonduk
 		public Circle(double radius) :
 			this(radius, MASS) { }
 
-		public Circle(double radius, double mass) :
+		public Circle(double radius, double mass = MASS) :
 			this(radius, mass, PX, PY) { }
 
-		public Circle(double radius, double mass, double px, double py) :
+		public Circle(double radius, double px, double py, double mass = MASS) :
 			this(radius, mass, px, py, VX, VY) { }
 
-		public Circle(double radius, double mass, double px, double py, double vx, double vy) :
+		public Circle(double radius, double px, double py, double vx, double vy, double mass = MASS) :
 			this(radius, mass, px, py, vx, vy, AX, AY) { }
 
-		public Circle(double radius, double mass, double px, double py,
-			double vx, double vy, double ax, double ay)
+		public Circle(double radius, double px, double py,
+			double vx, double vy, double ax, double ay, double mass = MASS)
 		{
 			setRadius(radius);
 			setMass(mass);
 
-			setPosition(px, py);
-			setVelocity(vx, vy);
-			setAcceleration(ax, ay);
+			position = new OrderedPair(px, py);
+			velocity = new OrderedPair(vx, vy);
+			acceleration = new OrderedPair(ax, ay);
+
+			//setPosition(px, py);
+			//setVelocity(vx, vy);
+			//setAcceleration(ax, ay);
 
 			exists = EXISTS;
 			follow(TARGET);
@@ -190,9 +194,9 @@ namespace remonduk
 			velocity.y = vy;
 		}
 
-		public void changeDirection(double angle)
+		public void faceTarget()
 		{
-			velocity.set(velocity.magnitude(), angle);
+			velocity.set(OrderedPair.angle(target.py, target.px));
 		}
 
 		/// <summary>
@@ -252,8 +256,8 @@ namespace remonduk
 		/// </summary>
 		public void updateVelocity(double time)
 		{
-			velocity.x += acceleration.x * time;
-			velocity.y += acceleration.y * time;
+			vx += ax * time;
+			vy += ay * time;
 		}
 
 		/// <summary>
@@ -261,16 +265,16 @@ namespace remonduk
 		/// </summary>
 		public void updatePosition(double time)
 		{
-			position.x += acceleration.x * time * time / 2 + velocity.x * time;
-			position.y += acceleration.y * time * time / 2 + velocity.y * time;
+			px += ax * time * time / 2 + vx * time;
+			py += ay * time * time / 2 + vy * time;
 			q_tree_pos.Position = new Tuple<double, double>(position.x, position.y);
 			updateVelocity(time);
 		}
 
 		public OrderedPair potentialPosition()
 		{
-			double potential_x = acceleration.x / 2 + velocity.x + position.x;
-			double potential_y = acceleration.y / 2 + velocity.y + position.y;
+			double potential_x = ax / 2 + vx + px;
+			double potential_y = ay / 2 + vy + py;
 			return new OrderedPair(potential_x, potential_y);
 		}
 
@@ -279,22 +283,25 @@ namespace remonduk
 		/// </summary>
 		/// <param name="that">The other circle this circle is colliding with.</param>
 		/// <returns></returns>
-		public bool elastic(Circle that)
-		{
-			// should make this take a "combined mass" circle
-			if (!that.exists)
-				return false;
-			//double this_vx = (that.vx * (this.mass - that.mass) + 2 * that.mass * that.vx) / (this.mass + that.mass);
-			//double that_vx = (this.vx * (this.mass - that.mass) + 2 * this.mass * this.vx) / (this.mass + that.mass);
-			//double this_vy = (that.vy * (this.mass - that.mass) + 2 * that.mass * that.vy) / (this.mass + that.mass);
-			//double that_vy = (this.vy * (this.mass - that.mass) + 2 * this.mass * this.vy) / (this.mass + that.mass);
-			//this.setVelocity(Circle.magnitude(this_vx, this_vy), Circle.angle(this_vy, this_vx));
-			//that.setVelocity(Circle.magnitude(that_vx, that_vy), Circle.angle(that_vy, that_vx));
-
-			// this should only set velocity for "this" because it'll be automatically handled when looping through
-			// also, simultaneous collisions won't work with this version
-			return true;
-		}
+		//public void elastic(double that_mass, double that_vx, double that_vy, double elasticity = 1)
+		//{
+		//	// would like to figure out how to determine elasticity of a collision
+		//	// wikipedia has an article for calculating the coefficient of restitution
+		//	// but what actually determines that -- average hardness of the two objects? etc.
+		//	// can we just use our own bastardized version where we give all circles an "elasticity" coefficient
+		//	// and take the average of the two colliding bodies
+		//	//if (!that.exists)
+		//	//	return false;
+		//	vx = (vx * (mass - that_mass) + 2 * that_mass * that_vx) / (mass + that_mass);
+		//	vy = (vy * (mass - that_mass) + 2 * that_mass * that_vy) / (mass + that_mass);
+		//	//double this_vx = (that.vx * (this.mass - that.mass) + 2 * that.mass * that.vx) / (this.mass + that.mass);
+		//	//double that_vx = (this.vx * (this.mass - that.mass) + 2 * this.mass * this.vx) / (this.mass + that.mass);
+		//	//double this_vy = (that.vy * (this.mass - that.mass) + 2 * that.mass * that.vy) / (this.mass + that.mass);
+		//	//double that_vy = (this.vy * (this.mass - that.mass) + 2 * this.mass * this.vy) / (this.mass + that.mass);
+		//	//this.setVelocity(Circle.magnitude(this_vx, this_vy), Circle.angle(this_vy, this_vx));
+		//	//that.setVelocity(Circle.magnitude(that_vx, that_vy), Circle.angle(that_vy, that_vx));
+		//	//return true;
+		//}
 
 		/// <summary>
 		/// Determines if this circle is colliding with that circle.
@@ -303,23 +310,19 @@ namespace remonduk
 		/// <returns>Returns the angle of impact if colliding.  -1 if not.  </returns>
 		public double colliding(Circle that, double time)
 		{
-			double center = OrderedPair.angle(that.position.y - position.y, that.position.x - position.x);
+			// double center = OrderedPair.angle(that.position.y - position.y, that.position.x - position.x);
 			// use squared instead of square root for efficiency
-			//Check the easy  one first
 			if (distanceSquared(that.position) <= (that.radius + radius) * (that.radius + radius))
 			{
 				Out.WriteLine("overlapping");
 				if (that != this)
 				{
-					return 0; // what do we do in this case
+					return 0;
 				}
 				return Double.PositiveInfinity;
 				//return -1;
 			}
-			else
-			{
-				return crossing(that, time);
-			}
+			return crossing(that, time);
 		}
 
 		/// <summary>
@@ -429,17 +432,30 @@ namespace remonduk
 			double total_mass = 0;
 			double total_vx = 0;
 			double total_vy = 0;
-			foreach (Circle circle in circles)
+			//double average_elasticity = elasticity;
+			foreach (Circle that in circles)
 			{
-				total_mass += circle.mass;
-				total_vx += circle.velocity.x;
-				total_vy += circle.velocity.y;
+				if (that == this) {
+					continue;
+				}
+				//total_mass += circle.mass;
+				//total_vx += circle.velocity.x;
+				//total_vy += circle.velocity.y;
+				// average_elasticity += circle.elasticity;
+
+				total_vx += (that.vx * (mass - that.mass) + 2 * that.mass * that.vx) / (mass + that.mass);
+				total_vy += (that.vy * (mass - that.mass) + 2 * that.mass * that.vy) / (mass + that.mass);
+				// modify for elasticity
+				// use average elasticity between two colliding objects for simplicity
+				// try to derive a formula for it
 			}
 
-			double vx = (total_vx * (mass - total_mass) + 2 * total_mass * total_vx) / (mass + total_mass);
-			double vy = (total_vy * (mass - total_mass) + 2 * total_mass * total_vy) / (mass + total_mass);
+			// average_elasticity /= (circles.count + 1);
 
-			return new OrderedPair(vx, vy);
+			//total_vx = (total_vx * (mass - total_mass) + 2 * total_mass * total_vx) / (mass + total_mass);
+			//total_vy = (total_vy * (mass - total_mass) + 2 * total_mass * total_vy) / (mass + total_mass);
+
+			return new OrderedPair(total_vx, total_vy);
 		}
 
 		/// <summary>
@@ -450,8 +466,7 @@ namespace remonduk
 		{
 			if (target != null)
 			{
-				// changeDirection(target.y - y, target.x - x);
-				velocity.set(velocity.magnitude(), position.angle(target.position));
+				 faceTarget();
 			}
 			updatePosition(time);
 		}

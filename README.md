@@ -14,6 +14,9 @@ Floid
 [networking] (#7)  
 [sound] (#8)  
 
+partial ghostiness? what if a circle can pass through some things, but not others
+	ie. pass through people, but not through environment
+
 test classes
 make it work with quad tree
 

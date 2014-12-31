@@ -32,20 +32,27 @@ namespace remonduk
 			this.scalar = scalar;
 		}
 
+		public Circle getOther(Circle circle) {
+			if (circle == first) {
+				return first;
+			}
+			return second;
+		}
+
         /// <summary>
         /// Calculates the force exterted on the first circle.
         /// </summary>
         /// <returns>The force on the first circle.</returns>
-		public Tuple<double, double> forceOnFirst() {
-			Tuple<double, double> f = force.calculate(first, second);
-			return Tuple.Create(scalar * f.Item1, scalar * f.Item2);
+		public OrderedPair forceOnFirst() {
+			OrderedPair f = force.calculate(first, second);
+			return new OrderedPair(scalar * f.x, scalar * f.y);
 		}
 
         /// <summary>
         /// Calculates the force exerted on the second circle.
         /// </summary>
         /// <returns>The force on the second circle.</returns>
-		public Tuple<double, double> forceOnSecond() {
+		public OrderedPair forceOnSecond() {
 			return force.calculate(second, first);
 		}
 
@@ -57,8 +64,8 @@ namespace remonduk
         public void draw(Graphics g, Color color)
         {
             Pen pen = new Pen(color);
-            Point p1 = new Point((int)first.x, (int)first.y);
-            Point p2 = new Point((int)second.x, (int)second.y);
+            Point p1 = new Point((int)first.px, (int)first.py);
+            Point p2 = new Point((int)second.px, (int)second.py);
             g.DrawLine(pen, p1, p2);
         }
 	}

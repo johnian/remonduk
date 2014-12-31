@@ -49,9 +49,9 @@ namespace remonduk
         {
             if (group.Count > 0)
             {
-                x_min = group.ElementAt(0).x;
+                x_min = group.ElementAt(0).px;
                 x_max = x_min;
-                y_min = group.ElementAt(0).y;
+                y_min = group.ElementAt(0).py;
                 y_max = y_min;
                 y_min_x = x_min;
                 y_max_x = x_max;
@@ -59,25 +59,25 @@ namespace remonduk
                 x_min_y = y_min;
                 foreach (Circle c in group)
                 {
-                    if (c.x > x_max)
+                    if (c.px > x_max)
                     {
-                        x_max = c.x;
-                        x_max_y = c.y;
+                        x_max = c.px;
+                        x_max_y = c.py;
                     }
-                    if (c.x < x_min)
+                    if (c.px < x_min)
                     {
-                        x_min = c.x;
-                        x_min_y = c.y;
+                        x_min = c.px;
+                        x_min_y = c.py;
                     }
-                    if (c.y > y_max)
+                    if (c.py > y_max)
                     {
-                        y_max = c.y;
-                        y_max_x = c.x;
+                        y_max = c.py;
+                        y_max_x = c.px;
                     }
-                    if (c.y < y_min)
+                    if (c.py < y_min)
                     {
-                        y_min = c.y;
-                        y_min_x = c.x;
+                        y_min = c.py;
+                        y_min_x = c.px;
                     }
                 }
             }
