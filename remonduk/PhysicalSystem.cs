@@ -174,9 +174,10 @@ namespace remonduk
 			//Dictionary<Circle, List<Circle>> overlapMap = new Dictionary<Circle, List<Circle>>();
 			while (time > 0)
 			{
-				double min = time;
+				double min = Double.PositiveInfinity;
 				foreach (Circle circle in circles)
 				{
+					List<Circle> collisions = new List<Circle>();
 					foreach (Circle that in circles)
 					{
 						// how do i properly handle a circle that's already colliding to begin with
@@ -187,33 +188,40 @@ namespace remonduk
 						// use quad tree to get the list of circles to check against
 						// for now, just use circles
 						double value = circle.colliding(that, time);
-						if (value == 0) {
-
-						}
-						if (value < min)
+						if (!Double.IsInfinity(value))
 						{
-							List<Circle> collisions = null;
-							if (value > 0)
+							if (value < min)
 							{
 								min = value;
 								collisionMap = new Dictionary<Circle, List<Circle>>();
 								collisions = new List<Circle>();
+								collisionMap.Add(circle, collisions);
+								collisions.Add(that);
 							}
-							collisionMap.Add(circle, collisions);
-							collisions.Add(that);
+							else if (value == min)
+							{
+
+								//if (collisions != null && !collisions.ContainsKey(circle))
+								//{
+								//	collisions.Add(circle, new List<Circle>());
+								//}
+								collisions.Add(that);
+							}
 						}
-						else if (value == min)
-						{
-							//Out.WriteLine("value: " + value);
-							//Out.WriteLine("min: " + min);
-							//Out.WriteLine("time: " + time);
-							//if (collisions != null && !collisions.ContainsKey(circle))
-							//{
-							//	collisions.Add(circle, new List<Circle>());
-							//}
-							collisionMap[circle].Add(that);
-						}
+						Out.WriteLine("value: " + value);
+						Out.WriteLine("min: " + min);
+						Out.WriteLine("time: " + time);
 					}
+				}
+				// if there are overlaps, do what??
+				if (min == 0)
+				{
+					min = .01;
+				}
+				// if there are no collisions, update by 1 full time step
+				if (Double.IsInfinity(min))
+				{
+					min = 1;
 				}
 				foreach (Circle circle in circles)
 				{
