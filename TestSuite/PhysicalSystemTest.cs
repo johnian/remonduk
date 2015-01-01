@@ -10,7 +10,7 @@ namespace TestSuite
 	public class PhysicalSystemTest
 	{
 		[TestMethod]
-		public void PhysicalSystem()
+		public void PhysicalSystemTestNoArg()
 		{
 			PhysicalSystem world = new PhysicalSystem();
 			Test.AreEqual(0, world.circles.Count);
@@ -26,7 +26,7 @@ namespace TestSuite
 		} 
 
 		[TestMethod]
-		public void addCircle()
+		public void addCircleTest()
 		{
 			PhysicalSystem world = new PhysicalSystem();
 			Circle circle = new Circle();
@@ -36,7 +36,7 @@ namespace TestSuite
 		}
 
 		[TestMethod]
-		public void removeCircle()
+		public void removeCircleTest()
 		{
 			PhysicalSystem world = new PhysicalSystem();
 			Circle circle = new Circle();
@@ -49,7 +49,7 @@ namespace TestSuite
 		}
 
 		[TestMethod]
-		public void addInteraction()
+		public void addInteractionTest()
 		{
 			PhysicalSystem world = new PhysicalSystem();
 			Circle one = new Circle();
@@ -64,7 +64,7 @@ namespace TestSuite
 		}
 
 		[TestMethod]
-		public void removeInteraction()
+		public void removeInteractionTest()
 		{
 			PhysicalSystem world = new PhysicalSystem();
 			Circle one = new Circle();
@@ -80,7 +80,7 @@ namespace TestSuite
 		}
 
 		[TestMethod]
-		public void updateNetForceOn()
+		public void updateNetForceOnTest()
 		{
 			PhysicalSystem world = new PhysicalSystem();
 			Circle one = new Circle();
@@ -102,7 +102,7 @@ namespace TestSuite
 		}
 
 		[TestMethod]
-		public void updateNetForces()
+		public void updateNetForcesTest()
 		{
 			PhysicalSystem world = new PhysicalSystem();
 			Circle one = new Circle();
@@ -124,19 +124,32 @@ namespace TestSuite
 		}
 
 		[TestMethod]
-		public void updateVelocities()
+		public void updateVelocitiesTest()
+		{
+			//Dictionary<Circle, List<Circle>> collisionMap = new Dictionary<Circle, List<Circle>>();
+			//Dictionary<Circle, OrderedPair> velocityMap = new Dictionary<Circle, OrderedPair>();
+			//foreach (Circle circle in collisionMap.Keys)
+			//{
+			//	velocityMap.Add(circle, circle.collideWith(collisionMap[circle]));
+			//	//Out.WriteLine("updated velocities" + velocityMap[circle]);
+			//}
+			//foreach (Circle circle in velocityMap.Keys)
+			//{
+			//	circle.setVelocity(velocityMap[circle].x, velocityMap[circle].y);
+			//}
+
+
+
+		}
+
+		[TestMethod]
+		public void updatePositionsTest()
 		{
 
 		}
 
 		[TestMethod]
-		public void updatePositions()
-		{
-
-		}
-
-		[TestMethod]
-		public void update()
+		public void updateTest()
 		{
 			// nothing to do for this really
 		}		

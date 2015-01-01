@@ -313,9 +313,14 @@ namespace TestSuite
 				Test.AreEqual(gy * i * i / 2 + vy * i + 10 * vy, circle.py);
 			}
 		}
+		
+		[TestMethod]
+		public void collidingTestT() {
+			Test.AreEqual(true, false);
+		}
 
 		[TestMethod]
-		public void collidingTest()
+		public void collidingTestTT()
 		{
 			Circle one = new Circle(1, 0, 0, 0, 0, 0, 0);
 			Circle two = new Circle(1, 0, 0, 0, 0, 0, 0);
@@ -378,19 +383,37 @@ namespace TestSuite
 			Test.AreEqual(.5, two.colliding(one, time));
 		}
 
-		//[TestMethod]
-		//public void moveTest()
-		//{
-		//	Circle one = new Circle(1, 1, 1, 1, 1);
-		//	Circle two = new Circle(3, 3, 3);
+		[TestMethod]
+		public void collideWithTest()
+		{
+			Test.AreEqual(true, false);
+		}
 
-		//	one.follow(two);
-		//	one.move(null);
-		//	Test.AreEqual(1.0, one.velocity);
-		//	Test.AreEqual(Math.PI / 4, one.velocity_angle);
-		//	Test.AreEqual(0.0, two.velocity);
-		//	Test.AreEqual(0.0, two.velocity_angle);
-		//}
+		[TestMethod]
+		public void crossingTest() {
+			Test.AreEqual(true, false);
+		}
+
+		[TestMethod]
+		public void closestPointTest() {
+			Test.AreEqual(true, false);
+		}
+
+
+		[TestMethod]
+		public void moveTest()
+		{
+			Circle one = new Circle(1, 1, 1, 1, 1);
+			Circle two = new Circle(3, 3, 3);
+
+			Test.AreEqual(true, false);
+			//one.follow(two);
+			//one.move(null);
+			//Test.AreEqual(1.0, one.velocity);
+			//Test.AreEqual(Math.PI / 4, one.velocity_angle);
+			//Test.AreEqual(0.0, two.velocity);
+			//Test.AreEqual(0.0, two.velocity_angle);
+		}
 
 		[TestMethod]
 		public void distanceTest()
@@ -405,6 +428,11 @@ namespace TestSuite
 
 			Test.AreEqual(5.0, one.distance(two));
 			Test.AreEqual(5.0, two.distance(one));
+		}
+
+		[TestMethod]
+		public void distanceSquaredTest() {
+			Test.AreEqual(true, false);
 		}
 
 		[TestMethod]
