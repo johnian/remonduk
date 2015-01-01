@@ -343,25 +343,25 @@ namespace remonduk
 			double that_vy = that.acceleration.y * time / 2 + that.velocity.y;
 			double reference_vx = this_vx - that_vx;
 			double reference_vy = this_vy - that_vy;
-			Out.WriteLine("");
-			Out.WriteLine("reference_vx: " + reference_vx);
-			Out.WriteLine("reference_vy: " + reference_vy);
+			//Out.WriteLine("");
+			//Out.WriteLine("reference_vx: " + reference_vx);
+			//Out.WriteLine("reference_vy: " + reference_vy);
 
 			OrderedPair point = closestPoint(that.position.x, that.position.y, reference_vx, reference_vy);
 			if (point == null)
 			{
-				Out.WriteLine("point is null");
+				//Out.WriteLine("point is null");
 				return Double.PositiveInfinity;
 				//return null;
 			}
 			double distance_from_that = OrderedPair.magnitude(point.x - that.position.x, point.y - that.position.y);
 			double radii_sum = that.radius + radius;
 
-			Out.WriteLine("distance_from_that: " + distance_from_that);
-			Out.WriteLine("radii_sum: " + radii_sum);
+			//Out.WriteLine("distance_from_that: " + distance_from_that);
+			//Out.WriteLine("radii_sum: " + radii_sum);
 			if (distance_from_that > radii_sum)
 			{
-				Out.WriteLine("too far");
+				//Out.WriteLine("too far");
 				return Double.PositiveInfinity;
 				//return null;
 			}
@@ -376,8 +376,8 @@ namespace remonduk
 				//double v = velocity.magnitude();
 				//double collision_x = point.x - distance_from_collision * vx / v;
 				//double collision_y = point.y - distance_from_collision * vy / v;
-				Out.WriteLine("collision_x: " + collision_x);
-				Out.WriteLine("collision_y: " + collision_y);
+				//Out.WriteLine("collision_x: " + collision_x);
+				//Out.WriteLine("collision_y: " + collision_y);
 				double time_x;
 				if (reference_vx == 0) {
 
@@ -403,17 +403,15 @@ namespace remonduk
 				else {
 					time_y = (collision_y - py) / reference_vy;
 				}
-				Out.WriteLine("time_x: " + time_x);
-				Out.WriteLine("time_y: " + time_y);
+				//Out.WriteLine("time_x: " + time_x);
+				//Out.WriteLine("time_y: " + time_y);
 				if (time_x >= 0 && time_x <= time &&
 					time_y >= 0 && time_y <= time)
 				{
-					Out.WriteLine("good");
 					return (time_x > time_y) ? time_x : time_y;
 				}
 				else
 				{
-					Out.WriteLine("bad");
 					return Double.PositiveInfinity;
 				}
 				//return Tuple.Create(collision_x, collision_y);

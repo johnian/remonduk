@@ -62,12 +62,13 @@ namespace remonduk
 		{
 			circles.Add(circle);
 			// need to figure out how to handle gravity
-			if (false /*gravity*/) {
+			if (false /*gravity*/)
+			{
 				interactions.Add(new Interaction(circle, null, forces["Gravity"]));
 			}
 
 			netForces.Add(circle, new OrderedPair(0, 0));
-			
+
 			interactionMap.Add(circle, new List<Interaction>());
 			tree.Insert(circle.q_tree_pos);
 		}
@@ -78,10 +79,12 @@ namespace remonduk
 		/// <param name="circle">The circle to remove from this system.</param>
 		public bool removeCircle(Circle circle)
 		{
-			if (circles.Remove(circle)) {
+			if (circles.Remove(circle))
+			{
 				netForces.Remove(circle);
 				List<Interaction> associations = interactionMap[circle];
-				foreach (Interaction interaction in associations) {
+				foreach (Interaction interaction in associations)
+				{
 					Circle other = interaction.getOther(circle);
 					interactionMap[other].Remove(interaction);
 					interactions.Remove(interaction);
@@ -125,7 +128,7 @@ namespace remonduk
 				netForces[circle] = updateNetForceOn(circle);
 				double ax = netForces[circle].x / circle.mass;
 				double ay = netForces[circle].y / circle.mass;
-				circle.setAcceleration(OrderedPair.magnitude(ax, ay), OrderedPair.angle(ay, ax));
+				circle.setAcceleration(ax, ay);
 			}
 		}
 
@@ -146,25 +149,29 @@ namespace remonduk
 			double fy = 0;
 			foreach (Interaction interaction in interactions)
 			{
+				OrderedPair f;
 				if (interaction.first == circle)
 				{
-					fx += interaction.forceOnFirst().x;
-					fy += interaction.forceOnFirst().y;
+					f = interaction.forceOnFirst();
 				}
-				if (interaction.second == circle)
+				else
 				{
-					fx += interaction.forceOnSecond().x;
-					fy += interaction.forceOnSecond().y;
+					f = interaction.forceOnSecond();
 				}
+				fx += f.x;
+				fy += f.y;
 			}
+			//Out.WriteLine("f: " + fx + ", " + fy);
 			return new OrderedPair(fx, fy);
 		}
 
 		public void updatePositions()
 		{
-			double time = 1;
 			Dictionary<Circle, OrderedPair>.KeyCollection circles = netForces.Keys;
-			Dictionary<Circle, List<Circle>> collisionMap = new Dictionary<Circle, List<Circle>>(); ;
+			double time = 1;
+
+			Dictionary<Circle, List<Circle>> collisionMap = new Dictionary<Circle, List<Circle>>();
+			//Dictionary<Circle, List<Circle>> overlapMap = new Dictionary<Circle, List<Circle>>();
 			while (time > 0)
 			{
 				double min = time;
@@ -172,32 +179,41 @@ namespace remonduk
 				{
 					foreach (Circle that in circles)
 					{
+						// how do i properly handle a circle that's already colliding to begin with
+						// i have to let it somehow escape the circle it's touching
+						// or maybe make collide with move them so they're no longer touching??
+
+
 						// use quad tree to get the list of circles to check against
 						// for now, just use circles
 						double value = circle.colliding(that, time);
+						if (value == 0) {
+
+						}
 						if (value < min)
 						{
-							
-							min = value;
-							collisionMap = new Dictionary<Circle, List<Circle>>();
-							List<Circle> collisions = new List<Circle>();
-							collisions.Add(that);
-							collisionMap.Add(circle, collisions);
-						}
-						else if (value == min && value != time && collisionMap != null)
-						{
-							Out.WriteLine("value: " + value);
-							Out.WriteLine("min: " + min);
-							Out.WriteLine("time: " + time);
-							if (collisionMap != null && !collisionMap.ContainsKey(circle)) {
-								collisionMap.Add(circle, new List<Circle>());
+							List<Circle> collisions = null;
+							if (value > 0)
+							{
+								min = value;
+								collisionMap = new Dictionary<Circle, List<Circle>>();
+								collisions = new List<Circle>();
 							}
+							collisionMap.Add(circle, collisions);
+							collisions.Add(that);
+						}
+						else if (value == min)
+						{
+							//Out.WriteLine("value: " + value);
+							//Out.WriteLine("min: " + min);
+							//Out.WriteLine("time: " + time);
+							//if (collisions != null && !collisions.ContainsKey(circle))
+							//{
+							//	collisions.Add(circle, new List<Circle>());
+							//}
 							collisionMap[circle].Add(that);
 						}
 					}
-				}
-				if (min == 0) {
-
 				}
 				foreach (Circle circle in circles)
 				{
@@ -214,7 +230,7 @@ namespace remonduk
 			foreach (Circle circle in collisionMap.Keys)
 			{
 				velocityMap.Add(circle, circle.collideWith(collisionMap[circle]));
-				Out.WriteLine("updated velocities" + velocityMap[circle]);
+				//Out.WriteLine("updated velocities" + velocityMap[circle]);
 			}
 			foreach (Circle circle in velocityMap.Keys)
 			{
