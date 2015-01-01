@@ -431,9 +431,7 @@ namespace remonduk
 		public OrderedPair closestPoint(double that_x, double that_y,
 			double reference_vx, double reference_vy)
 		{
-			double x = position.x;
-			double y = position.y;
-			double constant_1 = reference_vy * x - reference_vx * y;
+			double constant_1 = reference_vy * px - reference_vx * py;
 			double constant_2 = reference_vx * that_x + reference_vy * that_y;
 
 			double determinant = reference_vx * reference_vx + reference_vy * reference_vy;
@@ -442,8 +440,8 @@ namespace remonduk
 			double intersection_y;
 			if (determinant == 0)
 			{
-				intersection_x = x;
-				intersection_y = y;
+				intersection_x = px;
+				intersection_y = py;
 			}
 			else
 			{
@@ -454,13 +452,15 @@ namespace remonduk
 			//Out.WriteLine("intersection_x: " + intersection_x);
 			//Out.WriteLine("intersection_y: " + intersection_y);
 
-			double delta_x = intersection_x - x;
-			double delta_y = intersection_y - y;
-			if (OrderedPair.magnitude(intersection_x - x, intersection_y - y) >
+			double delta_x = intersection_x - px;
+			double delta_y = intersection_y - py;
+			if (OrderedPair.magnitude(delta_x, delta_y) >
 				OrderedPair.magnitude(reference_vx, reference_vy))
 			{
 				//Out.WriteLine("too far");
-				return null;
+				//Out.WriteLine(OrderedPair.magnitude(delta_x, delta_y) + "");
+				//Out.WriteLine(OrderedPair.magnitude(reference_vx, reference_vy) + "");
+				//return null;
 			}
 			return new OrderedPair(intersection_x, intersection_y);
 		}

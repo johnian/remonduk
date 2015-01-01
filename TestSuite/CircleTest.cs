@@ -363,7 +363,7 @@ namespace TestSuite
 			Test.AreEqual(true, Double.IsInfinity(one.colliding(two, time)));
 			Test.AreEqual(true, Double.IsInfinity(two.colliding(one, time)));
 
-			two.setVelocity(-1.42, -1.42);
+			two.setVelocity(-Math.Sqrt(2), -Math.Sqrt(2));
 			Test.AreEqual(1, one.colliding(two, time));
 			Test.AreEqual(1, two.colliding(one, time));
 		}
