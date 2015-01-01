@@ -363,9 +363,19 @@ namespace TestSuite
 			Test.AreEqual(true, Double.IsInfinity(one.colliding(two, time)));
 			Test.AreEqual(true, Double.IsInfinity(two.colliding(one, time)));
 
-			two.setVelocity(-Math.Sqrt(2), -Math.Sqrt(2));
+			two.setVelocity(2 * Math.Sqrt(2) - 4, 2 * Math.Sqrt(2) - 4);
+			Test.AreEqual(.5, one.colliding(two, time));
+			Test.AreEqual(.5, two.colliding(one, time));
+
+			one.setVelocity(0, 2);
+			two.setVelocity(0, 0);
 			Test.AreEqual(1, one.colliding(two, time));
 			Test.AreEqual(1, two.colliding(one, time));
+
+			one.setVelocity(2 - Math.Sqrt(2), 2 - Math.Sqrt(2));
+			two.setVelocity(Math.Sqrt(2) - 2, Math.Sqrt(2) - 2);
+			Test.AreEqual(.5, one.colliding(two, time));
+			Test.AreEqual(.5, two.colliding(one, time));
 		}
 
 		//[TestMethod]
