@@ -29,8 +29,8 @@ namespace TestSuite
 			Test.AreEqual(Circle.AY, circle.ay);
 
 			Test.AreEqual(Circle.TARGET, circle.target);
-			Test.AreEqual(Circle.MIN_DIST, circle.min_dist);
-			Test.AreEqual(Circle.MAX_DIST, circle.max_dist);
+			Test.AreEqual(Circle.MIN_DISTANCE, circle.min_distance);
+			Test.AreEqual(Circle.MAX_DISTANCE, circle.max_distance);
 
 			circle = new Circle(2, 3, 5, 8);
 			Test.AreEqual(8, circle.mass);
@@ -53,8 +53,8 @@ namespace TestSuite
 			Test.AreEqual(Circle.AY, circle.ay);
 
 			Test.AreEqual(Circle.TARGET, circle.target);
-			Test.AreEqual(Circle.MIN_DIST, circle.min_dist);
-			Test.AreEqual(Circle.MAX_DIST, circle.max_dist);
+			Test.AreEqual(Circle.MIN_DISTANCE, circle.min_distance);
+			Test.AreEqual(Circle.MAX_DISTANCE, circle.max_distance);
 
 			circle = new Circle(2, 3, 5, 8, 13, 21);
 			Test.AreEqual(21, circle.mass);
@@ -77,8 +77,8 @@ namespace TestSuite
 			Test.AreEqual(34, circle.ay);
 
 			Test.AreEqual(Circle.TARGET, circle.target);
-			Test.AreEqual(Circle.MIN_DIST, circle.min_dist);
-			Test.AreEqual(Circle.MAX_DIST, circle.max_dist);
+			Test.AreEqual(Circle.MIN_DISTANCE, circle.min_distance);
+			Test.AreEqual(Circle.MAX_DISTANCE, circle.max_distance);
 
 			circle = new Circle(2, 3, 5, 8, 13, 21, 34, 55);
 			Test.AreEqual(55, circle.mass);
@@ -169,21 +169,21 @@ namespace TestSuite
 
 			sheep.follow(leader);
 			Test.AreEqual(Circle.TARGET, leader.target);
-			Test.AreEqual(Circle.MIN_DIST, leader.min_dist);
-			Test.AreEqual(Circle.MAX_DIST, leader.max_dist);
+			Test.AreEqual(Circle.MIN_DISTANCE, leader.min_distance);
+			Test.AreEqual(Circle.MAX_DISTANCE, leader.max_distance);
 
 			Test.AreEqual(leader, sheep.target);
-			Test.AreEqual(leader.radius + sheep.radius, sheep.min_dist);
-			Test.AreEqual(leader.radius + sheep.radius, sheep.max_dist);
+			Test.AreEqual(leader.radius + sheep.radius, sheep.min_distance);
+			Test.AreEqual(leader.radius + sheep.radius, sheep.max_distance);
 
 			sheep.follow();
 			Test.AreEqual(null, leader.target);
-			Test.AreEqual(0, leader.min_dist);
-			Test.AreEqual(0, leader.max_dist);
+			Test.AreEqual(0, leader.min_distance);
+			Test.AreEqual(0, leader.max_distance);
 
 			Test.AreEqual(null, sheep.target);
-			Test.AreEqual(0, sheep.min_dist);
-			Test.AreEqual(0, sheep.max_dist);
+			Test.AreEqual(0, sheep.min_distance);
+			Test.AreEqual(0, sheep.max_distance);
 		}
 
 		[TestMethod]
@@ -194,21 +194,21 @@ namespace TestSuite
 
 			sheep.follow(leader, 13, 21);
 			Test.AreEqual(Circle.TARGET, leader.target);
-			Test.AreEqual(Circle.MIN_DIST, leader.min_dist);
-			Test.AreEqual(Circle.MAX_DIST, leader.max_dist);
+			Test.AreEqual(Circle.MIN_DISTANCE, leader.min_distance);
+			Test.AreEqual(Circle.MAX_DISTANCE, leader.max_distance);
 
 			Test.AreEqual(leader, sheep.target);
-			Test.AreEqual(13, sheep.min_dist);
-			Test.AreEqual(21, sheep.max_dist);
+			Test.AreEqual(13, sheep.min_distance);
+			Test.AreEqual(21, sheep.max_distance);
 
 			sheep.follow(null, 34, 55);
 			Test.AreEqual(null, leader.target);
-			Test.AreEqual(0, leader.min_dist);
-			Test.AreEqual(0, leader.max_dist);
+			Test.AreEqual(0, leader.min_distance);
+			Test.AreEqual(0, leader.max_distance);
 
 			Test.AreEqual(null, sheep.target);
-			Test.AreEqual(0, sheep.min_dist);
-			Test.AreEqual(0, sheep.max_dist);
+			Test.AreEqual(0, sheep.min_distance);
+			Test.AreEqual(0, sheep.max_distance);
 		}
 
 		//[TestMethod]

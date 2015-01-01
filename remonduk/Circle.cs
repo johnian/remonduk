@@ -14,76 +14,122 @@ namespace remonduk
 	/// </summary>
 	public class Circle
 	{
+		////
+		// Constants
+		////
+		
+		public const int PRECISION = 8;
+
 		/// <summary>
-		/// Default value for a circle's radius.
+		/// Default radius.
 		/// </summary>
 		public const double RADIUS = 1;
 		/// <summary>
-		/// Default value for a circle's mass.
+		/// Default mass.
 		/// </summary>
 		public const double MASS = 1;
 
 		/// <summary>
-		/// Default value for the x component of a circle's position.
+		/// Default px.
 		/// </summary>
 		public const double PX = 0;
 		/// <summary>
-		/// Default value for the y component of a circle's position.
+		/// Default py.
 		/// </summary>
 		public const double PY = 0;
 		/// <summary>
-		/// Default value for the x component of a circle's velocity.
+		/// Default vx.
 		/// </summary>
 		public const double VX = 0;
 		/// <summary>
-		/// Default value for the y component of a circle's velocity.
+		/// Default vy.
 		/// </summary>
 		public const double VY = 0;
 		/// <summary>
-		/// Default value for the x component of a circle's acceleration.
+		/// Default ax.
 		/// </summary>
 		public const double AX = 0;
 		/// <summary>
-		/// Default value for the y component of a circle's acceleration.
+		/// Default ay.
 		/// </summary>
 		public const double AY = 0;
 
-		public bool EXISTS = true;
-
 		/// <summary>
-		/// Default value for a circle's target. Used for non-physics interactions.
+		/// Default exists.
+		/// </summary>
+		public const bool EXISTS = true;
+		/// <summary>
+		/// Default target.
 		/// </summary>
 		public const Circle TARGET = null;
 		/// <summary>
-		/// Default value for the minimum distance to follow the target at.
+		/// Default min_distance.
 		/// </summary>
-		public const double MIN_DIST = 0;
+		public const double MIN_DISTANCE = 0;
 		/// <summary>
-		/// Default value for the maximum distance to follow the target at.
+		/// Default max_distance.
 		/// </summary>
-		public const double MAX_DIST = 0;
+		public const double MAX_DISTANCE = 0;
 
 		/// <summary>
-		/// Default value for a circle's color.
+		/// Default color.
 		/// </summary>
-		//Need to rework this for loading / saving.  Save to string and load from there
-		public Color COLOR = Color.Chartreuse;
+		public Color COLOR = Color.Chartreuse;	//Need to rework this for loading / saving.  Save to string and load from there
+
+		////
+		// Fields
+		////		
 
 		/// <summary>
-		/// The circle's radius and mass.
+		/// The circle's radius.
 		/// </summary>
-		public double radius, mass;
+		public double radius;
 		/// <summary>
-		/// The circle's position, velocity, and acceleration vectors.
+		/// The circle's mass.
 		/// </summary>
-		public OrderedPair position, velocity, acceleration;
-		public double px { get { return position.x; } set { position.x = value; } }
-		public double py { get { return position.y; } set { position.y = value; } }
-		public double vx { get { return velocity.x; } set { velocity.x = value; } }
-		public double vy { get { return velocity.y; } set { velocity.y = value; } }
-		public double ax { get { return acceleration.x; } set { acceleration.x = value; } }
-		public double ay { get { return acceleration.y; } set { acceleration.y = value; } }
+		public double mass;
+		/// <summary>
+		/// The circle's position vector.
+		/// </summary>
+		public OrderedPair position;
+		/// <summary>
+		/// The circle's velocity vector.
+		/// </summary>
+		public OrderedPair velocity;
+		/// <summary>
+		/// The circle's acceleration vector.
+		/// </summary>
+		public OrderedPair acceleration;
+		/// <summary>
+		/// Shorthand for position.x.
+		/// </summary>
+		public double px { get { return position.x; } }
+		/// <summary>
+		/// Shorthand for position.y.
+		/// </summary>
+		public double py { get { return position.y; } }
+		/// <summary>
+		/// Shorthand for velocity.x.
+		/// </summary>
+		public double vx { get { return velocity.x; } }
+		/// <summary>
+		/// Shorthand for velocity.y.
+		/// </summary>
+		public double vy { get { return velocity.y; } }
+		/// <summary>
+		/// Shorthand for acceleration.x.
+		/// </summary>
+		public double ax { get { return acceleration.x; } }
+		/// <summary>
+		/// Shorthand for acceleration.y.
+		/// </summary>
+		public double ay { get { return acceleration.y; } }
 
+		
+		/// <summary>
+		/// Whether this circle exists (if other objects in the physical system can interact with it).
+		/// </summary>
+		public bool exists;
 		/// <summary>
 		/// The circle's target. Used for non-physics interactions.
 		/// </summary>
@@ -91,49 +137,77 @@ namespace remonduk
 		/// <summary>
 		/// The minimum distance this circle will follow the target to.
 		/// </summary>
-		public double min_dist;
+		public double min_distance;
 		/// <summary>
 		/// The maximum distance this circle will follow the target from.
 		/// </summary>
-		public double max_dist;
+		public double max_distance;
 
 		/// <summary>
 		/// The circle's color.
 		/// </summary>
 		public Color color;
 
-		/// <summary>
-		/// If this circle exists (if it should interact with other objects in the physical system).
-		/// </summary>
-		public bool exists;
-
 		public QuadTreeTest.QuadTreePositionItem<Circle> q_tree_pos;
 
+		////
+		// Constructors
+		////
+
 		/// <summary>
-		/// Empty constructor. No values are set.
+		/// Default constructor.
 		/// </summary>
 		public Circle() : this(RADIUS) { }
 
 		/// <summary>
-		/// Copy constructor
+		/// Copy constructor.
 		/// </summary>
-		/// <param name="other">The other circle to copy.</param>
+		/// <param name="that">The circle to copy.</param>
 		public Circle(Circle that) :
 			this(that.radius, that.position.x, that.position.y,
 				that.velocity.x, that.velocity.y, that.acceleration.x, that.acceleration.y, that.mass) { }
 
-		public Circle(double radius) :
-			this(radius, MASS) { }
-
+		/// <summary>
+		/// Creates a circle with the specified radius and optional mass.
+		/// </summary>
+		/// <param name="radius">The radius of the circle.</param>
+		/// <param name="mass">The mass of the circle.</param>
 		public Circle(double radius, double mass = MASS) :
 			this(radius, PX, PY, mass) { }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="radius"></param>
+		/// <param name="px"></param>
+		/// <param name="py"></param>
+		/// <param name="mass"></param>
 		public Circle(double radius, double px, double py, double mass = MASS) :
 			this(radius, px, py, VX, VY, mass) { }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="radius"></param>
+		/// <param name="px"></param>
+		/// <param name="py"></param>
+		/// <param name="vx"></param>
+		/// <param name="vy"></param>
+		/// <param name="mass"></param>
 		public Circle(double radius, double px, double py, double vx, double vy, double mass = MASS) :
 			this(radius, px, py, vx, vy, AX, AY, mass) { }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="radius"></param>
+		/// <param name="px"></param>
+		/// <param name="py"></param>
+		/// <param name="vx"></param>
+		/// <param name="vy"></param>
+		/// <param name="ax"></param>
+		/// <param name="ay"></param>
+		/// <param name="mass"></param>
 		public Circle(double radius, double px, double py,
 			double vx, double vy, double ax, double ay, double mass = MASS)
 		{
@@ -143,11 +217,6 @@ namespace remonduk
 			position = new OrderedPair(px, py);
 			velocity = new OrderedPair(vx, vy);
 			acceleration = new OrderedPair(ax, ay);
-			//Out.WriteLine("CIRCLE ACCEL MAG: " + acceleration.magnitude());
-
-			//setPosition(px, py);
-			//setVelocity(vx, vy);
-			//setAcceleration(ax, ay);
 
 			exists = EXISTS;
 			follow(TARGET);
@@ -189,42 +258,43 @@ namespace remonduk
 			position.y = py;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="vx"></param>
+		/// <param name="vy"></param>
 		public void setVelocity(double vx, double vy)
 		{
 			velocity.x = vx;
 			velocity.y = vy;
-		}
-
-		public void faceTarget()
-		{
-			velocity.set(OrderedPair.angle(target.py, target.px));
+			if (target != null)
+			{
+				faceTarget();
+			}
 		}
 
 		/// <summary>
-		/// Sets this circles acceleration.  Recalculates ax and ay values.
+		/// 
 		/// </summary>
-		/// <param name="acceleration">The new acceleration vector's magnitude.</param>
-		/// <param name="acceleration_angle">The new acceleration vector's angle.</param>
-
+		/// <param name="ax"></param>
+		/// <param name="ay"></param>
 		public void setAcceleration(double ax, double ay)
 		{
-			// maybe check for close to 0 precision rounding
 			acceleration.x = ax;
 			acceleration.y = ay;
 		}
 
 		/// <summary>
-		/// Sets the target circle for this circle to follow.  Uses default min and max distances.
-		/// Somethings a little weird - we should talk about this one.
+		/// 
 		/// </summary>
-		/// <param name="target">The target circle for this circle to follow.</param>
+		/// <param name="target"></param>
 		public void follow(Circle target = null)
 		{
 			if (target == null || target == this)
 			{
 				this.target = null;
-				this.min_dist = MIN_DIST;
-				this.max_dist = MAX_DIST;
+				this.min_distance = MIN_DISTANCE;
+				this.max_distance = MAX_DISTANCE;
 			}
 			else
 			{
@@ -236,9 +306,9 @@ namespace remonduk
 		/// Sets a circle for this circle to follow.
 		/// </summary>
 		/// <param name="target">The target circle this circle should follow.</param>
-		/// <param name="min_dist">The minimum distance this circle will start following at.</param>
-		/// <param name="max_dist">The maximum distance this circle will start following at.</param>
-		public void follow(Circle target, double min_dist, double max_dist)
+		/// <param name="min_distance">The minimum distance this circle will start following at.</param>
+		/// <param name="max_distance">The maximum distance this circle will start following at.</param>
+		public void follow(Circle target, double min_distance, double max_distance)
 		{
 			if (target == null || target == this)
 			{
@@ -247,172 +317,53 @@ namespace remonduk
 			else
 			{
 				this.target = target;
-				this.min_dist = min_dist;
-				this.max_dist = max_dist;
+				this.min_distance = min_distance;
+				this.max_distance = max_distance;
 			}
 		}
 
 		/// <summary>
-		/// Updates this circles velocity by adding its acceleration values to velocity values.  Occurs once per frame.
+		/// 
 		/// </summary>
-		public void updateVelocity(double time)
+		public void faceTarget()
 		{
-			vx += ax * time;
-			vy += ay * time;
+			velocity.set(OrderedPair.angle(target.py - py, target.px - px));
 		}
 
 		/// <summary>
-		/// Updates this circles position based on current velocity and acceleration values.
+		/// 
 		/// </summary>
+		/// <param name="time"></param>
+		public void updateVelocity(double time)
+		{
+			setVelocity(ax * time + vx, ay * time + vy);
+			if (target != null)
+			{
+				faceTarget();
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="time"></param>
 		public void updatePosition(double time)
 		{
-			px += ax * time * time / 2 + vx * time;
-			py += ay * time * time / 2 + vy * time;
+			setPosition(ax * time * time / 2 + vx * time + px,
+				ay * time * time / 2 + vy * time + py);
 			q_tree_pos.Position = new Tuple<double, double>(position.x, position.y);
 			updateVelocity(time);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
 		public OrderedPair potentialPosition()
 		{
 			double potential_x = ax / 2 + vx + px;
 			double potential_y = ay / 2 + vy + py;
 			return new OrderedPair(potential_x, potential_y);
-		}
-
-		/// <summary>
-		/// Determines if this circle is colliding with that circle.
-		/// </summary>
-		/// <param name="that">The circle to check for collision with.</param>
-		/// <returns>Returns the angle of impact if colliding.  -1 if not.  </returns>
-		public double colliding(Circle that, double time)
-		{
-			// double center = OrderedPair.angle(that.position.y - position.y, that.position.x - position.x);
-			// use squared instead of square root for efficiency
-			if (distanceSquared(that.position) <= (that.radius + radius) * (that.radius + radius))
-			{
-				if (that != this)
-				{
-									Out.WriteLine("overlapping");
-
-					double old_distance = distance(that);
-
-					double this_px = ax / 2 + vx + px;
-					double this_py = ay / 2 + vy + py;
-					double that_px = that.ax / 2 + that.vx + that.px;
-					double that_py = that.ay / 2 + that.vy + that.py;
-					double new_distance = OrderedPair.magnitude(that_px - this_px, that_py - this_py);
-
-					if (new_distance < old_distance)
-					{
-						Out.WriteLine("overlapping");
-						return 0;
-					}
-				}
-				return Double.PositiveInfinity;
-				//return -1;
-			}
-			return crossing(that, time);
-		}
-
-		public bool colliding(Circle that)
-		{
-			return (distanceSquared(that.position) <= (that.radius + radius) * (that.radius + radius));
-		}
-
-		/// <summary>
-		/// Treats that circle as stationary and the frame of perspective as this.
-		/// </summary>
-		/// <param name="that">The circle to check if this circle is crossing.</param>
-		/// <returns>The center of this circle when the two circles collide.</returns>
-		public double crossing(Circle that, double time)
-		{
-			double this_vx = acceleration.x * time / 2 + velocity.x;
-			double this_vy = acceleration.y * time / 2 + velocity.y;
-			double that_vx = that.acceleration.x * time / 2 + that.velocity.x;
-			double that_vy = that.acceleration.y * time / 2 + that.velocity.y;
-			double reference_vx = this_vx - that_vx;
-			double reference_vy = this_vy - that_vy;
-			//Out.WriteLine("");
-			//Out.WriteLine("reference_vx: " + reference_vx);
-			//Out.WriteLine("reference_vy: " + reference_vy);
-
-			OrderedPair point = closestPoint(that.position.x, that.position.y, reference_vx, reference_vy);
-			if (point == null)
-			{
-				//Out.WriteLine("point is null");
-				return Double.PositiveInfinity;
-				//return null;
-			}
-			double distance_from_that = OrderedPair.magnitude(point.x - that.position.x, point.y - that.position.y);
-			double radii_sum = that.radius + radius;
-
-			//Out.WriteLine("distance_from_that: " + distance_from_that);
-			//Out.WriteLine("radii_sum: " + radii_sum);
-			if (distance_from_that > radii_sum)
-			{
-				//Out.WriteLine("too far");
-				return Double.PositiveInfinity;
-				//return null;
-			}
-			else
-			{
-				double distance_from_collision_squared = radii_sum * radii_sum - distance_from_that * distance_from_that;
-				double distance_from_collision = Math.Sqrt(distance_from_collision_squared);
-
-				double reference_velocity = OrderedPair.magnitude(reference_vx, reference_vy);
-				double collision_x = point.x - distance_from_collision * reference_vx / reference_velocity;
-				double collision_y = point.y - distance_from_collision * reference_vy / reference_velocity;
-				//double v = velocity.magnitude();
-				//double collision_x = point.x - distance_from_collision * vx / v;
-				//double collision_y = point.y - distance_from_collision * vy / v;
-				//Out.WriteLine("collision_x: " + collision_x);
-				//Out.WriteLine("collision_y: " + collision_y);
-				double time_x;
-				if (reference_vx == 0)
-				{
-
-					if (collision_x == px)
-					{
-						time_x = 0;
-					}
-					else
-					{
-						time_x = Double.PositiveInfinity;
-					}
-				}
-				else
-				{
-					time_x = (collision_x - px) / reference_vx;
-				}
-				double time_y;
-				if (reference_vy == 0)
-				{
-					if (collision_y == py)
-					{
-						time_y = 0;
-					}
-					else
-					{
-						time_y = Double.PositiveInfinity;
-					}
-				}
-				else
-				{
-					time_y = (collision_y - py) / reference_vy;
-				}
-				//Out.WriteLine("time_x: " + time_x);
-				//Out.WriteLine("time_y: " + time_y);
-				if (time_x >= 0 && time_x <= time &&
-					time_y >= 0 && time_y <= time)
-				{
-					return Math.Round((time_x > time_y) ? time_x : time_y, 8);
-				}
-				else
-				{
-					return Double.PositiveInfinity;
-				}
-				//return Tuple.Create(collision_x, collision_y);
-			}
 		}
 
 		/// <summary>
@@ -443,39 +394,131 @@ namespace remonduk
 				intersection_x = (constant_1 * reference_vy + constant_2 * reference_vx) / determinant;
 				intersection_y = (constant_2 * reference_vy - constant_1 * reference_vx) / determinant;
 			}
-
-			//Out.WriteLine("intersection_x: " + intersection_x);
-			//Out.WriteLine("intersection_y: " + intersection_y);
-
-			double delta_x = intersection_x - px;
-			double delta_y = intersection_y - py;
-			if (OrderedPair.magnitude(delta_x, delta_y) >
-				OrderedPair.magnitude(reference_vx, reference_vy))
-			{
-				//Out.WriteLine("too far");
-				//Out.WriteLine(OrderedPair.magnitude(delta_x, delta_y) + "");
-				//Out.WriteLine(OrderedPair.magnitude(reference_vx, reference_vy) + "");
-				//return null;
-			}
 			return new OrderedPair(intersection_x, intersection_y);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="that"></param>
+		/// <param name="time"></param>
+		/// <returns></returns>
+		public double crossing(Circle that, double time)
+		{
+			double this_vx = acceleration.x * time / 2 + velocity.x;
+			double this_vy = acceleration.y * time / 2 + velocity.y;
+			double that_vx = that.acceleration.x * time / 2 + that.velocity.x;
+			double that_vy = that.acceleration.y * time / 2 + that.velocity.y;
+			double reference_vx = this_vx - that_vx;
+			double reference_vy = this_vy - that_vy;
+
+			OrderedPair point = closestPoint(that.position.x, that.position.y, reference_vx, reference_vy);
+			if (point == null)
+			{
+				return Double.PositiveInfinity;
+			}
+			double distance_from_that = OrderedPair.magnitude(point.x - that.position.x, point.y - that.position.y);
+			double radii_sum = that.radius + radius;
+
+			if (distance_from_that > radii_sum)
+			{
+				return Double.PositiveInfinity;
+			}
+			else
+			{
+				double distance_from_collision_squared = radii_sum * radii_sum - distance_from_that * distance_from_that;
+				double distance_from_collision = Math.Sqrt(distance_from_collision_squared);
+
+				double reference_velocity = OrderedPair.magnitude(reference_vx, reference_vy);
+				double collision_x = point.x - distance_from_collision * reference_vx / reference_velocity;
+				double collision_y = point.y - distance_from_collision * reference_vy / reference_velocity;
+				double time_x;
+				if (reference_vx == 0)
+				{
+					if (collision_x == px) time_x = 0;
+					else time_x = Double.PositiveInfinity;
+				}
+				else
+				{
+					time_x = (collision_x - px) / reference_vx;
+				}
+				double time_y;
+				if (reference_vy == 0)
+				{
+					if (collision_y == py) time_y = 0;
+					else time_y = Double.PositiveInfinity;
+				}
+				else
+				{
+					time_y = (collision_y - py) / reference_vy;
+				}
+				if (time_x >= 0 && time_x <= time &&
+					time_y >= 0 && time_y <= time)
+				{
+					return Math.Round((time_x > time_y) ? time_x : time_y, PRECISION);
+				}
+				else
+				{
+					return Double.PositiveInfinity;
+				}
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="that"></param>
+		/// <param name="time"></param>
+		/// <returns></returns>
+		public double colliding(Circle that, double time)
+		{
+			if (distanceSquared(that.position) <= (that.radius + radius) * (that.radius + radius))
+			{
+				if (that != this)
+				{
+					double old_distance = distance(that);
+
+					double this_px = ax / 2 + vx + px;
+					double this_py = ay / 2 + vy + py;
+					double that_px = that.ax / 2 + that.vx + that.px;
+					double that_py = that.ay / 2 + that.vy + that.py;
+					double new_distance = OrderedPair.magnitude(that_px - this_px, that_py - this_py);
+
+					if (new_distance < old_distance)
+					{
+						return 0;
+					}
+				}
+				return Double.PositiveInfinity;
+			}
+			return crossing(that, time);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="that"></param>
+		/// <returns></returns>
+		public bool colliding(Circle that)
+		{
+			return (distanceSquared(that.position) <= (that.radius + radius) * (that.radius + radius));
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="circles"></param>
+		/// <returns></returns>
 		public OrderedPair collideWith(List<Circle> circles)
 		{
-			double total_mass = 0;
 			double total_vx = 0;
 			double total_vy = 0;
-			//double average_elasticity = elasticity;
 			foreach (Circle that in circles)
 			{
 				if (that == this)
 				{
 					continue;
 				}
-				//total_mass += circle.mass;
-				//total_vx += circle.velocity.x;
-				//total_vy += circle.velocity.y;
-				// average_elasticity += circle.elasticity;
 
 				total_vx += (vx * (mass - that.mass) + 2 * that.vx * that.mass) / (mass + that.mass);
 				total_vy += (vy * (mass - that.mass) + 2 * that.vy * that.mass) / (mass + that.mass);
@@ -483,12 +526,6 @@ namespace remonduk
 				// use average elasticity between two colliding objects for simplicity
 				// try to derive a formula for it
 			}
-
-			// average_elasticity /= (circles.count + 1);
-
-			//total_vx = (total_vx * (mass - total_mass) + 2 * total_mass * total_vx) / (mass + total_mass);
-			//total_vy = (total_vy * (mass - total_mass) + 2 * total_mass * total_vy) / (mass + total_mass);
-			//Out.WriteLine(this.GetHashCode() + ": " + velocity + ": " + total_vx + ", " + total_vy);
 			return new OrderedPair(total_vx, total_vy);
 		}
 
@@ -498,10 +535,10 @@ namespace remonduk
 		/// <param name="time">For some reason a silly keycollection of circles, change me.</param>
 		public void move(double time)
 		{
-			if (target != null)
-			{
-				faceTarget();
-			}
+			//if (target != null)
+			//{
+			//	faceTarget();
+			//}
 			updatePosition(time);
 		}
 
@@ -515,6 +552,11 @@ namespace remonduk
 			return position.magnitude(other.position);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="that"></param>
+		/// <returns></returns>
 		public double distanceSquared(OrderedPair that)
 		{
 			double distx = that.x - position.x;
@@ -539,32 +581,21 @@ namespace remonduk
 		public void draw(Graphics g)
 		{
 			Brush brush = new SolidBrush(Color.Chartreuse);
-			//Out.WriteLine("Drawing in circle " + position);
-
 			g.FillEllipse(brush, (float)(position.x - radius), (float)(position.y - radius), (float)(2 * radius), (float)(2 * radius));
 		}
 
 		/// <summary>
-		/// This circles to string method.
+		/// 
 		/// </summary>
-		/// <returns>
-		/// (523, 316) radius: 5 mass: 1
-		/// velocity: 0 (0, 0): 0
-		/// acceleration: 0 (0, 0): 0
-		/// target: [0, 0
-		/// color: Color [Chartreuse]
-		/// </returns>
-		public String toString()
+		/// <returns></returns>
+		public String ToString()
 		{
 			return "radius: " + radius + ", mass: " + mass + "\n" +
 				"position: " + position + "\n" +
 				"velocity: " + velocity + "\n" +
 				"acceleration: " + acceleration + "\n" +
-				"target: " + target + "[" + min_dist + ", " + max_dist + "]\n" +
+				"target: " + target + "[" + min_distance + ", " + max_distance + "]\n" +
 				"color: " + color;
 		}
 	}
 }
-
-// need to handle following differently
-// make crossing check if following target first, if so, update velocity first
