@@ -44,7 +44,7 @@ namespace TestSuite
 			world.removeCircle(circle);
 			Test.AreEqual(false, world.circles.Contains(circle));
 			Test.AreEqual(false, world.netForces.ContainsKey(circle));
-			Test.AreEqual(true, false);
+			//Test.AreEqual(true, false);
 			// add the interactions and check interactions are updated properly
 		}
 
