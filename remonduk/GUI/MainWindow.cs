@@ -236,7 +236,7 @@ namespace remonduk
             foreach (Circle c in ps.netForces.Keys)
             {
 				//double collide = click.colliding(c, 0);
-				bool collide = click.overlapping(c);
+				bool collide = click.colliding(c);
 
                 if(collide/*collide < 1*/ && selected_circle != null && tethering)
                 {
@@ -332,7 +332,7 @@ namespace remonduk
 
                 Circle click = new Circle(5, pos.X, pos.Y);
 
-                if(click.overlapping(selected_circle)/*click.colliding(selected_circle, 0) >= 0*/)
+                if(click.colliding(selected_circle)/*click.colliding(selected_circle, 0) >= 0*/)
                 {
                     drag = true;
                 }

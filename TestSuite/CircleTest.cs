@@ -279,7 +279,7 @@ namespace TestSuite
 		[TestMethod]
 		public void updatePosition()
 		{
-			Circle circle = new Circle(0, 0, 2, 0, 0, 0, 0);
+			Circle circle = new Circle(2, 0, 0, 0, 0, 0, 0);
 
 			double time = 1;
 			for (int i = 1; i <= 10; i++)
@@ -324,53 +324,48 @@ namespace TestSuite
 			Test.AreEqual(true, Double.IsInfinity(one.colliding(one, time)));
 			Test.AreEqual(true, Double.IsInfinity(two.colliding(two, time)));
 
-			Test.AreEqual(false, Double.IsInfinity(one.colliding(two, time)));
-			Test.AreEqual(false, Double.IsInfinity(two.colliding(one, time)));
+			Test.AreEqual(0, one.colliding(two, time));
+			Test.AreEqual(0, two.colliding(one, time));
 
-			two = new Circle(0, 1, 1);
-			Test.AreEqual(false, Double.IsInfinity(one.colliding(two, time)));
-			Test.AreEqual(false, Double.IsInfinity(two.colliding(one, time)));
+			two = new Circle(1, 0, 2);
+			Test.AreEqual(0, one.colliding(two, time));
+			Test.AreEqual(0, two.colliding(one, time));
 
-			two = new Circle(2, 2, 1);
+			two = new Circle(1, 2, 2);
 			Test.AreEqual(true, Double.IsInfinity(one.colliding(two, time)));
 			Test.AreEqual(true, Double.IsInfinity(two.colliding(one, time)));
 
-			two.setVelocity(2, Math.PI / 4);
+			two.setVelocity(2, 0);
 			Test.AreEqual(true, Double.IsInfinity(one.colliding(two, time)));
 			Test.AreEqual(true, Double.IsInfinity(two.colliding(one, time)));
 
-			two.setVelocity(2, Math.PI / 2);
+			two.setVelocity(0, 2);
 			Test.AreEqual(true, Double.IsInfinity(one.colliding(two, time)));
 			Test.AreEqual(true, Double.IsInfinity(two.colliding(one, time)));
 
-			two.setVelocity(2, 3 * Math.PI / 4);
+			two.setVelocity(-2, 0);
+			Test.AreEqual(1, one.colliding(two, time));
+			Test.AreEqual(1, two.colliding(one, time));
+
+			two.setVelocity(0, -2);
+			Test.AreEqual(1, one.colliding(two, time));
+			Test.AreEqual(1, two.colliding(one, time));
+
+			two.setVelocity(1.42, 1.42);
 			Test.AreEqual(true, Double.IsInfinity(one.colliding(two, time)));
 			Test.AreEqual(true, Double.IsInfinity(two.colliding(one, time)));
 
-			two.setVelocity(2, Math.PI);
-			Test.AreEqual(false, Double.IsInfinity(one.colliding(two, time)));
-			Test.AreEqual(false, Double.IsInfinity(two.colliding(one, time)));
-
-			two.setVelocity(2, 5 * Math.PI / 4);
+			two.setVelocity(1.42, -1.42);
 			Test.AreEqual(true, Double.IsInfinity(one.colliding(two, time)));
 			Test.AreEqual(true, Double.IsInfinity(two.colliding(one, time)));
 
-			two.setVelocity(2, 3 * Math.PI / 2);
-			Test.AreEqual(false, Double.IsInfinity(one.colliding(two, time)));
-			Test.AreEqual(false, Double.IsInfinity(two.colliding(one, time)));
-
-			two.setVelocity(2, 7 * Math.PI / 4);
+			two.setVelocity(-1.42, 1.42);
 			Test.AreEqual(true, Double.IsInfinity(one.colliding(two, time)));
 			Test.AreEqual(true, Double.IsInfinity(two.colliding(one, time)));
 
-			two.setVelocity(0, 0);
-			one.setVelocity(1, Math.PI / 4);
-			Test.AreEqual(true, Double.IsInfinity(one.colliding(two, time)));
-			Test.AreEqual(true, Double.IsInfinity(two.colliding(one, time)));
-
-			one.setVelocity(2, Math.PI / 2);
-			Test.AreEqual(false, Double.IsInfinity(one.colliding(two, time)));
-			Test.AreEqual(false, Double.IsInfinity(two.colliding(one, time)));
+			two.setVelocity(-1.42, -1.42);
+			Test.AreEqual(1, one.colliding(two, time));
+			Test.AreEqual(1, two.colliding(one, time));
 		}
 
 		//[TestMethod]
@@ -390,13 +385,13 @@ namespace TestSuite
 		[TestMethod]
 		public void distanceTest()
 		{
-			Circle one = new Circle(0, 0, 1);
-			Circle two = new Circle(0, 0, 1);
+			Circle one = new Circle(1, 0, 0);
+			Circle two = new Circle(1, 0, 0);
 
 			Test.AreEqual(0.0, one.distance(two));
 			Test.AreEqual(0.0, two.distance(one));
 
-			two = new Circle(3, 4, 1);
+			two = new Circle(1, 3, 4);
 
 			Test.AreEqual(5.0, one.distance(two));
 			Test.AreEqual(5.0, two.distance(one));
