@@ -1,5 +1,6 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using remonduk;
 
 namespace TestSuite
 {
@@ -8,16 +9,16 @@ namespace TestSuite
 		public const int PRECISION = 6;
 		public const double EPSILON = .0001;
 
-		public static void AreEqual(Tuple<double, double> expected, Tuple<double, double> actual)
+		public static void AreEqual(OrderedPair expected, OrderedPair actual)
 		{
-			AreEqual(expected.Item1, actual.Item1);
-			AreEqual(expected.Item2, actual.Item2);
+			AreEqual(expected.x, actual.x);
+			AreEqual(expected.y, actual.y);
 		}
 
-		public static void AreClose(Tuple<double, double> expected, Tuple<double, double> actual)
+		public static void AreClose(OrderedPair expected, OrderedPair actual)
 		{
-			AreEqual(Math.Round(expected.Item1), Math.Round(actual.Item1));
-			AreEqual(Math.Round(expected.Item2), Math.Round(actual.Item2));
+			AreEqual(Math.Round(expected.x), Math.Round(actual.x));
+			AreEqual(Math.Round(expected.y), Math.Round(actual.y));
 		}
 
 		public static void AreEqual(double expected, double actual)

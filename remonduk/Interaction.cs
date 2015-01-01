@@ -34,9 +34,9 @@ namespace remonduk
 
 		public Circle getOther(Circle circle) {
 			if (circle == first) {
-				return first;
+				return second;
 			}
-			return second;
+			return first;
 		}
 
         /// <summary>

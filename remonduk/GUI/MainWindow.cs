@@ -75,7 +75,7 @@ namespace remonduk
                         ps.tree.GetItems(new FRect(c.py-50, c.px-50, c.py + 50, c.px + 50), ref cs);
 						//c.update(cs);
                     }
-                    Out.WriteLine("Drawing");
+					//Out.WriteLine("Drawing");
                     c.draw(this.CreateGraphics());
                 }
 
@@ -235,16 +235,17 @@ namespace remonduk
 
             foreach (Circle c in ps.netForces.Keys)
             {
-                double collide = click.colliding(c, 0);
+				//double collide = click.colliding(c, 0);
+				bool collide = click.overlapping(c);
 
-                if(collide < 1 && selected_circle != null && tethering)
+                if(collide/*collide < 1*/ && selected_circle != null && tethering)
                 {
                     Tether t = new Tether(.002, 50);
                     Interaction i = new Interaction(selected_circle, c, t);
                     ps.addInteraction(i);
                     found = true;
                 }
-                else if (!Double.IsInfinity(collide))
+                else if (collide /*!Double.IsInfinity(collide)*/)
                 {
                     selected_circle = c;
                     psdw.selected_circle = c;
@@ -331,7 +332,7 @@ namespace remonduk
 
                 Circle click = new Circle(5, pos.X, pos.Y);
 
-                if(click.colliding(selected_circle, 0) >= 0)
+                if(click.overlapping(selected_circle)/*click.colliding(selected_circle, 0) >= 0*/)
                 {
                     drag = true;
                 }

@@ -19,16 +19,16 @@ namespace TestSuite
 			Force force = new Force(
 				delegate(Circle one, Circle two)
 				{
-					return Tuple.Create(5.0, 3.0);
+					return new OrderedPair(5.0, 3.0);
 				}
 			);
 			Interaction interaction = new Interaction(first, second, force);
-			Test.AreEqual(Tuple.Create(5.0, 3.0), interaction.forceOnFirst());
-			Test.AreEqual(Tuple.Create(5.0, 3.0), interaction.forceOnSecond());
+			Test.AreEqual(new OrderedPair(5.0, 3.0), interaction.forceOnFirst());
+			Test.AreEqual(new OrderedPair(5.0, 3.0), interaction.forceOnSecond());
 
 			interaction = new Interaction(first, second, force, 0);
-			Test.AreEqual(Tuple.Create(0.0, 0.0), interaction.forceOnFirst());
-			Test.AreEqual(Tuple.Create(5.0, 3.0), interaction.forceOnSecond());
+			Test.AreEqual(new OrderedPair(0.0, 0.0), interaction.forceOnFirst());
+			Test.AreEqual(new OrderedPair(5.0, 3.0), interaction.forceOnSecond());
 		}
 
 		[TestMethod]
@@ -41,8 +41,8 @@ namespace TestSuite
 
 			Gravity gravity = new Gravity(Gravity.G);
 			Interaction interaction = new Interaction(earth, person, gravity);
-			Test.AreClose(Tuple.Create(60 * 9.81, 0.0), interaction.forceOnFirst());
-			Test.AreClose(Tuple.Create(-60 * 9.81, 0.0), interaction.forceOnSecond());
+			Test.AreClose(new OrderedPair(60 * 9.81, 0.0), interaction.forceOnFirst());
+			Test.AreClose(new OrderedPair(-60 * 9.81, 0.0), interaction.forceOnSecond());
 		}
 
 		[TestMethod]
@@ -55,8 +55,8 @@ namespace TestSuite
 			Interaction interaction = new Interaction(one, two, tether);
 
 			double force = 2 * (Math.Sqrt(32) - 3);
-			Test.AreEqual(Tuple.Create(force * Math.Cos(Math.PI / 4), force * Math.Sin(Math.PI / 4)), interaction.forceOnFirst());
-			Test.AreEqual(Tuple.Create(force * Math.Cos(5 * Math.PI / 4), force * Math.Sin(5 * Math.PI / 4)), interaction.forceOnSecond());
+			Test.AreEqual(new OrderedPair(force * Math.Cos(Math.PI / 4), force * Math.Sin(Math.PI / 4)), interaction.forceOnFirst());
+			Test.AreEqual(new OrderedPair(force * Math.Cos(5 * Math.PI / 4), force * Math.Sin(5 * Math.PI / 4)), interaction.forceOnSecond());
 		}
 
 		[TestMethod]
@@ -73,8 +73,8 @@ namespace TestSuite
 			PhysicalSystem world = new PhysicalSystem();
 			world.addCircle(one);
 			world.addCircle(two);
-			Test.AreEqual(Tuple.Create(0.0, 0.0), world.netForceOn(one));
-			Test.AreEqual(Tuple.Create(0.0, 0.0), world.netForceOn(two));
+			Test.AreEqual(new OrderedPair(0.0, 0.0), world.netForces[one]);
+			Test.AreEqual(new OrderedPair(0.0, 0.0), world.netForces[two]);
 
 			world.addInteraction(gravityOn12);
 			world.addInteraction(tetherOn12);
@@ -82,22 +82,22 @@ namespace TestSuite
 			// 8, 8
 			double value = (Math.Sqrt(32) - 3) * Math.Sqrt(2);
 			world.updateNetForces();
-			Test.AreEqual(Tuple.Create(value, Gravity.GRAVITY + value), world.netForceOn(one));
-			Test.AreEqual(Tuple.Create(-value, Gravity.GRAVITY - value), world.netForceOn(two));
+			Test.AreEqual(new OrderedPair(value, Gravity.GRAVITY + value), world.netForces[one]);
+			Test.AreEqual(new OrderedPair(-value, Gravity.GRAVITY - value), world.netForces[two]);
 
 			world.updateNetForces();
-			Test.AreEqual(Tuple.Create(value, Gravity.GRAVITY + value), world.netForceOn(one));
-			Test.AreEqual(Tuple.Create(-value, Gravity.GRAVITY - value), world.netForceOn(two));
+			Test.AreEqual(new OrderedPair(value, Gravity.GRAVITY + value), world.netForces[one]);
+			Test.AreEqual(new OrderedPair(-value, Gravity.GRAVITY - value), world.netForces[two]);
 
 			world.removeInteraction(gravityOn12);
 			world.updateNetForces();
-			Test.AreEqual(Tuple.Create(value, value), world.netForceOn(one));
-			Test.AreEqual(Tuple.Create(-value, -value), world.netForceOn(two));
+			Test.AreEqual(new OrderedPair(value, value), world.netForces[one]);
+			Test.AreEqual(new OrderedPair(-value, -value), world.netForces[two]);
 
 			world.removeInteraction(tetherOn12);
 			world.updateNetForces();
-			Test.AreEqual(Tuple.Create(0.0, 0.0), world.netForceOn(one));
-			Test.AreEqual(Tuple.Create(0.0, 0.0), world.netForceOn(two));
+			Test.AreEqual(new OrderedPair(0.0, 0.0), world.netForces[one]);
+			Test.AreEqual(new OrderedPair(0.0, 0.0), world.netForces[two]);
 		}
 	}
 }

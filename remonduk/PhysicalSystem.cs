@@ -98,6 +98,7 @@ namespace remonduk
 		public void addInteraction(Interaction interaction)
 		{
 			interactions.Add(interaction);
+			// do a try get value here, else create a new list, then add
 			interactionMap[interaction.first].Add(interaction);
 			interactionMap[interaction.second].Add(interaction);
 		}
@@ -176,17 +177,27 @@ namespace remonduk
 						double value = circle.colliding(that, time);
 						if (value < min)
 						{
+							
 							min = value;
 							collisionMap = new Dictionary<Circle, List<Circle>>();
 							List<Circle> collisions = new List<Circle>();
 							collisions.Add(that);
 							collisionMap.Add(circle, collisions);
 						}
-						else if (value == min)
+						else if (value == min && value != time && collisionMap != null)
 						{
+							Out.WriteLine("value: " + value);
+							Out.WriteLine("min: " + min);
+							Out.WriteLine("time: " + time);
+							if (collisionMap != null && !collisionMap.ContainsKey(circle)) {
+								collisionMap.Add(circle, new List<Circle>());
+							}
 							collisionMap[circle].Add(that);
 						}
 					}
+				}
+				if (min == 0) {
+
 				}
 				foreach (Circle circle in circles)
 				{
@@ -203,6 +214,7 @@ namespace remonduk
 			foreach (Circle circle in collisionMap.Keys)
 			{
 				velocityMap.Add(circle, circle.collideWith(collisionMap[circle]));
+				Out.WriteLine("updated velocities" + velocityMap[circle]);
 			}
 			foreach (Circle circle in velocityMap.Keys)
 			{

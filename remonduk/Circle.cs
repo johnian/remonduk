@@ -57,11 +57,11 @@ namespace remonduk
 		/// <summary>
 		/// Default value for the minimum distance to follow the target at.
 		/// </summary>
-		public double MIN_DIST = 0;
+		public const double MIN_DIST = 0;
 		/// <summary>
 		/// Default value for the maximum distance to follow the target at.
 		/// </summary>
-		public double MAX_DIST = 0;
+		public const double MAX_DIST = 0;
 
 		/// <summary>
 		/// Default value for a circle's color.
@@ -318,12 +318,16 @@ namespace remonduk
 				//Out.WriteLine("overlapping");
 				if (that != this)
 				{
-					return 0;
+					//return 0;
 				}
 				return Double.PositiveInfinity;
 				//return -1;
 			}
 			return crossing(that, time);
+		}
+
+		public bool overlapping(Circle that) {
+			return (distanceSquared(that.position) <= (that.radius + radius) * (that.radius + radius));
 		}
 
 		/// <summary>
@@ -371,7 +375,7 @@ namespace remonduk
 				double collision_y = point.y - distance_from_collision * reference_vy / reference_velocity;
 				double time_x = collision_x / reference_vx;
 				double time_y = collision_y / reference_vy;
-				if (time_x >= 0 && time_x == time_y)
+				if (time_x >= 0 && time_x <= time && time_x == time_y)
 				{
 					return time_x;
 				}
@@ -414,15 +418,15 @@ namespace remonduk
 				intersection_y = (constant_2 * reference_vy - constant_1 * reference_vx) / determinant;
 			}
 
-			Out.WriteLine("intersection_x: " + intersection_x);
-			Out.WriteLine("intersection_y: " + intersection_y);
+			//Out.WriteLine("intersection_x: " + intersection_x);
+			//Out.WriteLine("intersection_y: " + intersection_y);
 
 			double delta_x = intersection_x - x;
 			double delta_y = intersection_y - y;
 			if (OrderedPair.magnitude(intersection_x - x, intersection_y - y) >
 				OrderedPair.magnitude(reference_vx, reference_vy))
 			{
-				Out.WriteLine("too far");
+				//Out.WriteLine("too far");
 				return null;
 			}
 			return new OrderedPair(intersection_x, intersection_y);
@@ -506,7 +510,7 @@ namespace remonduk
 		public void draw(Graphics g)
 		{
 			Brush brush = new SolidBrush(Color.Chartreuse);
-            Out.WriteLine("Drawing in circle " + position);
+			//Out.WriteLine("Drawing in circle " + position);
             
 			g.FillEllipse(brush, (float)(position.x - radius), (float)(position.y - radius), (float)(2 * radius), (float)(2 * radius));
 		}

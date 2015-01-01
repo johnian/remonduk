@@ -34,6 +34,13 @@ namespace remonduk
 			return "(" + x + ", " + y + ")";
 		}
 
+		public bool Equals(Object obj)
+		{
+			if (obj == null) return false;
+			if (obj == this) return true;
+			OrderedPair that = (OrderedPair)obj;
+			return x == that.x && y == that.y;
+		}
 
 		/// <summary>
 		/// Returns the magnitude of a vector based on it's x and y components.
@@ -43,8 +50,6 @@ namespace remonduk
 		/// <returns>The magnitude.</returns>
 		public static double magnitude(double x, double y)
 		{
-            if (x == 0 && y == 0)
-                return 0;
 			return Math.Sqrt(x * x + y * y);
 		}
 
