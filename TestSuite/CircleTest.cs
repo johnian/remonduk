@@ -173,8 +173,8 @@ namespace TestSuite
 			Test.AreEqual(Circle.MAX_DIST, leader.max_dist);
 
 			Test.AreEqual(leader, sheep.target);
-			Test.AreEqual(10, sheep.min_dist);
-			Test.AreEqual(10, sheep.max_dist);
+			Test.AreEqual(leader.radius + sheep.radius, sheep.min_dist);
+			Test.AreEqual(leader.radius + sheep.radius, sheep.max_dist);
 
 			sheep.follow();
 			Test.AreEqual(null, leader.target);

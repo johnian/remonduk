@@ -36,8 +36,8 @@ namespace TestSuite
 		{
 			double earth_radius = 6371000;
 			double earth_mass = 5.972 * Math.Pow(10, 24);
-			Circle earth = new Circle(-1 * earth_radius, 0, earth_radius, earth_mass);
-			Circle person = new Circle(0, 0, 10, 60);
+			Circle earth = new Circle(earth_radius, -1 * earth_radius, 0, earth_mass);
+			Circle person = new Circle(10, 0, 0, 60);
 
 			Gravity gravity = new Gravity(Gravity.G);
 			Interaction interaction = new Interaction(earth, person, gravity);
@@ -48,8 +48,8 @@ namespace TestSuite
 		[TestMethod]
 		public void tetherTest()
 		{
-			Circle one = new Circle(1, 2, 2, 3);
-			Circle two = new Circle(5, 6, 13, 21);
+			Circle one = new Circle(2, 1, 2, 3);
+			Circle two = new Circle(13, 5, 6, 21);
 
 			Tether tether = new Tether();
 			Interaction interaction = new Interaction(one, two, tether);
@@ -61,8 +61,8 @@ namespace TestSuite
 
 		[TestMethod]
 		public void netForce() {
-			Circle one = new Circle(1, 2, 2, 3);
-			Circle two = new Circle(5, 6, 13, 21);
+			Circle one = new Circle(2, 1, 2, 3);
+			Circle two = new Circle(13, 5, 6, 21);
 
 			Force gravity = new Gravity(Gravity.GRAVITY, Gravity.ANGLE);
 			Force tether = new Tether(2.0, 3.0);
