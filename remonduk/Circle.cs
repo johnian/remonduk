@@ -120,7 +120,7 @@ namespace remonduk
 		/// <param name="other">The other circle to copy.</param>
 		public Circle(Circle that) :
 			this(that.radius, that.position.x, that.position.y,
-                that.velocity.x, that.velocity.y, that.acceleration.x, that.acceleration.y, that.mass) { }
+				that.velocity.x, that.velocity.y, that.acceleration.x, that.acceleration.y, that.mass) { }
 
 		public Circle(double radius) :
 			this(radius, MASS) { }
@@ -251,7 +251,7 @@ namespace remonduk
 				this.max_dist = max_dist;
 			}
 		}
-		
+
 		/// <summary>
 		/// Updates this circles velocity by adding its acceleration values to velocity values.  Occurs once per frame.
 		/// </summary>
@@ -280,31 +280,6 @@ namespace remonduk
 		}
 
 		/// <summary>
-		/// The beginings of elastic collisions.
-		/// </summary>
-		/// <param name="that">The other circle this circle is colliding with.</param>
-		/// <returns></returns>
-		//public void elastic(double that_mass, double that_vx, double that_vy, double elasticity = 1)
-		//{
-		//	// would like to figure out how to determine elasticity of a collision
-		//	// wikipedia has an article for calculating the coefficient of restitution
-		//	// but what actually determines that -- average hardness of the two objects? etc.
-		//	// can we just use our own bastardized version where we give all circles an "elasticity" coefficient
-		//	// and take the average of the two colliding bodies
-		//	//if (!that.exists)
-		//	//	return false;
-		//	vx = (vx * (mass - that_mass) + 2 * that_mass * that_vx) / (mass + that_mass);
-		//	vy = (vy * (mass - that_mass) + 2 * that_mass * that_vy) / (mass + that_mass);
-		//	//double this_vx = (that.vx * (this.mass - that.mass) + 2 * that.mass * that.vx) / (this.mass + that.mass);
-		//	//double that_vx = (this.vx * (this.mass - that.mass) + 2 * this.mass * this.vx) / (this.mass + that.mass);
-		//	//double this_vy = (that.vy * (this.mass - that.mass) + 2 * that.mass * that.vy) / (this.mass + that.mass);
-		//	//double that_vy = (this.vy * (this.mass - that.mass) + 2 * this.mass * this.vy) / (this.mass + that.mass);
-		//	//this.setVelocity(Circle.magnitude(this_vx, this_vy), Circle.angle(this_vy, this_vx));
-		//	//that.setVelocity(Circle.magnitude(that_vx, that_vy), Circle.angle(that_vy, that_vx));
-		//	//return true;
-		//}
-
-		/// <summary>
 		/// Determines if this circle is colliding with that circle.
 		/// </summary>
 		/// <param name="that">The circle to check for collision with.</param>
@@ -315,10 +290,23 @@ namespace remonduk
 			// use squared instead of square root for efficiency
 			if (distanceSquared(that.position) <= (that.radius + radius) * (that.radius + radius))
 			{
-				//Out.WriteLine("overlapping");
 				if (that != this)
 				{
-					return 0;
+									Out.WriteLine("overlapping");
+
+					double old_distance = distance(that);
+
+					double this_px = ax / 2 + vx + px;
+					double this_py = ay / 2 + vy + py;
+					double that_px = that.ax / 2 + that.vx + that.px;
+					double that_py = that.ay / 2 + that.vy + that.py;
+					double new_distance = OrderedPair.magnitude(that_px - this_px, that_py - this_py);
+
+					if (new_distance < old_distance)
+					{
+						Out.WriteLine("overlapping");
+						return 0;
+					}
 				}
 				return Double.PositiveInfinity;
 				//return -1;
@@ -326,8 +314,9 @@ namespace remonduk
 			return crossing(that, time);
 		}
 
-		public bool colliding(Circle that) {
-			return colliding(that, 0) == 0;
+		public bool colliding(Circle that)
+		{
+			return (distanceSquared(that.position) <= (that.radius + radius) * (that.radius + radius));
 		}
 
 		/// <summary>
@@ -379,28 +368,36 @@ namespace remonduk
 				//Out.WriteLine("collision_x: " + collision_x);
 				//Out.WriteLine("collision_y: " + collision_y);
 				double time_x;
-				if (reference_vx == 0) {
+				if (reference_vx == 0)
+				{
 
-					if (collision_x == px) {
-						time_x  = 0;
+					if (collision_x == px)
+					{
+						time_x = 0;
 					}
-					else {
-						time_x = Double.PositiveInfinity;	
+					else
+					{
+						time_x = Double.PositiveInfinity;
 					}
 				}
-				else {
+				else
+				{
 					time_x = (collision_x - px) / reference_vx;
 				}
 				double time_y;
-				if (reference_vy == 0) {
-					if (collision_y == py) {
-						time_y  = 0;
+				if (reference_vy == 0)
+				{
+					if (collision_y == py)
+					{
+						time_y = 0;
 					}
-					else {
-						time_y = Double.PositiveInfinity;	
+					else
+					{
+						time_y = Double.PositiveInfinity;
 					}
 				}
-				else {
+				else
+				{
 					time_y = (collision_y - py) / reference_vy;
 				}
 				//Out.WriteLine("time_x: " + time_x);
@@ -408,7 +405,7 @@ namespace remonduk
 				if (time_x >= 0 && time_x <= time &&
 					time_y >= 0 && time_y <= time)
 				{
-					return (time_x > time_y) ? time_x : time_y;
+					return Math.Round((time_x > time_y) ? time_x : time_y, 8);
 				}
 				else
 				{
@@ -462,7 +459,7 @@ namespace remonduk
 			}
 			return new OrderedPair(intersection_x, intersection_y);
 		}
-		
+
 		public OrderedPair collideWith(List<Circle> circles)
 		{
 			double total_mass = 0;
@@ -471,7 +468,8 @@ namespace remonduk
 			//double average_elasticity = elasticity;
 			foreach (Circle that in circles)
 			{
-				if (that == this) {
+				if (that == this)
+				{
 					continue;
 				}
 				//total_mass += circle.mass;
@@ -479,8 +477,8 @@ namespace remonduk
 				//total_vy += circle.velocity.y;
 				// average_elasticity += circle.elasticity;
 
-				total_vx += (that.vx * (mass - that.mass) + 2 * that.mass * that.vx) / (mass + that.mass);
-				total_vy += (that.vy * (mass - that.mass) + 2 * that.mass * that.vy) / (mass + that.mass);
+				total_vx += (vx * (mass - that.mass) + 2 * that.vx * that.mass) / (mass + that.mass);
+				total_vy += (vy * (mass - that.mass) + 2 * that.vy * that.mass) / (mass + that.mass);
 				// modify for elasticity
 				// use average elasticity between two colliding objects for simplicity
 				// try to derive a formula for it
@@ -490,7 +488,7 @@ namespace remonduk
 
 			//total_vx = (total_vx * (mass - total_mass) + 2 * total_mass * total_vx) / (mass + total_mass);
 			//total_vy = (total_vy * (mass - total_mass) + 2 * total_mass * total_vy) / (mass + total_mass);
-
+			//Out.WriteLine(this.GetHashCode() + ": " + velocity + ": " + total_vx + ", " + total_vy);
 			return new OrderedPair(total_vx, total_vy);
 		}
 
@@ -502,7 +500,7 @@ namespace remonduk
 		{
 			if (target != null)
 			{
-				 faceTarget();
+				faceTarget();
 			}
 			updatePosition(time);
 		}
@@ -542,7 +540,7 @@ namespace remonduk
 		{
 			Brush brush = new SolidBrush(Color.Chartreuse);
 			//Out.WriteLine("Drawing in circle " + position);
-            
+
 			g.FillEllipse(brush, (float)(position.x - radius), (float)(position.y - radius), (float)(2 * radius), (float)(2 * radius));
 		}
 

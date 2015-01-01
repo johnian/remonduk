@@ -60,26 +60,26 @@ namespace remonduk
 		/// <param name="circle">The new circle to add.</param>
 		public void addCircle(Circle circle)
 		{
-			Out.WriteLine("1");
+			//Out.WriteLine("1");
 			circles.Add(circle);
-			Out.WriteLine("2");
+			//Out.WriteLine("2");
 			// need to figure out how to handle gravity
 			if (false /*gravity*/)
 			{
-				Out.WriteLine("3");
+				//Out.WriteLine("3");
 				interactions.Add(new Interaction(circle, null, forces["Gravity"]));
 			}
 
-			Out.WriteLine("4");
+			//Out.WriteLine("4");
 			netForces.Add(circle, new OrderedPair(0, 0));
 
-			Out.WriteLine("5");
+			//Out.WriteLine("5");
 			interactionMap.Add(circle, new List<Interaction>());
-			Out.WriteLine("6");
+			//Out.WriteLine("6");
 
 			// why does this throw a null pointer exception
 			tree.Insert(circle.q_tree_pos);
-			Out.WriteLine("7");
+			//Out.WriteLine("7");
 		}
 
 		/// <summary>
@@ -134,13 +134,13 @@ namespace remonduk
 			for (int i = 0; i < netForces.Count; i++)
 			{
 				Circle circle = netForces.ElementAt(i).Key;
-				Out.WriteLine(circle.GetHashCode() + "");
+				//Out.WriteLine(circle.GetHashCode() + "");
 
 				updateNetForceOn(circle);
 				//netForces[circle] = updateNetForceOn(circle);
 				double ax = netForces[circle].x / circle.mass;
 				double ay = netForces[circle].y / circle.mass;
-				Out.WriteLine(netForces[circle] + "");
+				//Out.WriteLine(netForces[circle] + "");
 				circle.setAcceleration(ax, ay);
 			}
 		}
@@ -160,7 +160,7 @@ namespace remonduk
 		{
 			double fx = 0;
 			double fy = 0;
-			Out.WriteLine(circle.GetHashCode() + "");
+			//Out.WriteLine(circle.GetHashCode() + "");
 			foreach (Interaction interaction in interactionMap[circle])
 			{
 				OrderedPair f;
@@ -183,25 +183,21 @@ namespace remonduk
 		{
 			Dictionary<Circle, OrderedPair>.KeyCollection circles = netForces.Keys;
 			double time = 1;
-
-			Dictionary<Circle, List<Circle>> collisionMap = new Dictionary<Circle, List<Circle>>();
-			//Dictionary<Circle, List<Circle>> overlapMap = new Dictionary<Circle, List<Circle>>();
+			Dictionary<Circle, List<Circle>> collisionMap;
 			while (time > 0)
 			{
+				collisionMap = new Dictionary<Circle, List<Circle>>();
 				double min = Double.PositiveInfinity;
 				foreach (Circle circle in circles)
 				{
 					List<Circle> collisions = new List<Circle>();
 					foreach (Circle that in circles)
 					{
-						// how do i properly handle a circle that's already colliding to begin with
-						// i have to let it somehow escape the circle it's touching
-						// or maybe make collide with move them so they're no longer touching??
-
-
 						// use quad tree to get the list of circles to check against
 						// for now, just use circles
+						
 						double value = circle.colliding(that, time);
+						//Out.WriteLine("collision time for " + this.GetHashCode() + "> " + that.GetHashCode() + ": " + value);
 						if (!Double.IsInfinity(value))
 						{
 							if (value < min)
@@ -214,28 +210,17 @@ namespace remonduk
 							}
 							else if (value == min)
 							{
-
-								//if (collisions != null && !collisions.ContainsKey(circle))
-								//{
-								//	collisions.Add(circle, new List<Circle>());
-								//}
+								collisionMap.Add(circle, collisions);
 								collisions.Add(that);
 							}
 						}
-						Out.WriteLine("value: " + value);
-						Out.WriteLine("min: " + min);
-						Out.WriteLine("time: " + time);
+						//Out.WriteLine("value: " + value);
+						//Out.WriteLine("min: " + min);
 					}
 				}
-				// if there are overlaps, do what??
-				if (min == 0)
-				{
-					min = .01;
-				}
-				// if there are no collisions, update by 1 full time step
 				if (Double.IsInfinity(min))
 				{
-					min = 1;
+					min = time;
 				}
 				foreach (Circle circle in circles)
 				{
@@ -243,6 +228,8 @@ namespace remonduk
 				}
 				updateVelocities(collisionMap);
 				time -= min;
+				//Out.WriteLine("time: " + time);
+				//Out.WriteLine("number of collisions: " + collisionMap.Count + "");
 			}
 		}
 
@@ -252,10 +239,12 @@ namespace remonduk
 			foreach (Circle circle in collisionMap.Keys)
 			{
 				velocityMap.Add(circle, circle.collideWith(collisionMap[circle]));
-				//Out.WriteLine("updated velocities" + velocityMap[circle]);
+
+				//Out.WriteLine("updated velocity " + circle.GetHashCode() + " " + velocityMap[circle]);
 			}
 			foreach (Circle circle in velocityMap.Keys)
 			{
+				//Out.WriteLine(velocityMap[circle] + "");
 				circle.setVelocity(velocityMap[circle].x, velocityMap[circle].y);
 			}
 		}
