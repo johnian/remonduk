@@ -33,7 +33,7 @@ flag for whether the stage wraps around or has hard boundaries
 
 	grouping - leashing
 		- anchoring (multiple anchoring pairings that connect two circles)
-		
+
 	tests for gui
 
 <div id="1"></div>
@@ -87,23 +87,36 @@ flag for whether the stage wraps around or has hard boundaries
 # 2 basic physics {
 	implementation {
 		groups {
-			fill(circle packing, autobuild tethers)
+			fill {
+				packing
+					same size circles
+					variable size
+				auto-build tethers
+					internal tethers
+					"skin" tethers
+				}
 			compress? - hold together, may just be above
+				I'm thinking you're referring to the "skin" here
 			anchors
-			differentiate - either through color or maybe bounding shape or something
+				anchor tethers
+			differentiate
+				fill color - shading?
+				again the "skin" should help here
 		}
 		physics {
 			friction
-			density
-			momentum
-			inertia
+				sliding, rolling, fluid
+				global for air friction, similar to gravity
+			density - I think most of this will be handled by the density of the group, otherwise it's just m/v
+			momentum - doesn't our kinetics handle this already?
+			inertia -  same as above?
 			elasticity
 			intermediate collision detection
 		}
 	}
 	gui {
 		intermediate i/o {
-			group selection
+			group selection / drawing
 			keyboard shortcuts (delete, copy, paste, etc)
 			menu bar {
 				ensure all items are accessible
@@ -118,6 +131,10 @@ flag for whether the stage wraps around or has hard boundaries
 			multiple selections
 			lock/unlock for modifications
 		}
+		generate frames - option to save each frame for replay
+			might want to include a debug output too as in objects and their values
+			always save the last # of frames - able to save and review if something looks weird
+
 	}
 	refactor & optimize {
 		main window
@@ -241,7 +258,7 @@ namespace remonduk
 		/// Default value for a circle's mass.
 		/// </summary>
 		public const double MASS = 1;
-		
+
 		/// <summary>
 		/// Default value for the x component of a circle's position.
 		/// </summary>
@@ -266,9 +283,9 @@ namespace remonduk
 		/// Default value for the y component of a circle's acceleration.
 		/// </summary>
 		public const double AY = 0;
-		
+
 		public bool EXISTS = true;
-		
+
 		/// <summary>
 		/// Default value for a circle's target. Used for non-physics interactions.
 		/// </summary>
@@ -281,13 +298,13 @@ namespace remonduk
 		/// Default value for the maximum distance to follow the target at.
 		/// </summary>
 		public double MAX_DIST = 0;
-		
+
 		/// <summary>
 		/// Default value for a circle's color.
 		/// </summary>
 		//Need to rework this for loading / saving.  Save to string and load from there
 		public Color COLOR = Color.Chartreuse;
-		
+
 		/// <summary>
 		/// The circle's radius and mass.
 		/// </summary>
@@ -302,7 +319,7 @@ namespace remonduk
 		public double vy { get { return velocity.y; } set { velocity.y = value; } }
 		public double ax { get { return acceleration.x; } set { acceleration.x = value; } }
 		public double ay { get { return acceleration.y; } set { acceleration.y = value; } }
-		
+
 		/// <summary>
 		/// The circle's target. Used for non-physics interactions.
 		/// </summary>
@@ -315,24 +332,24 @@ namespace remonduk
 		/// The maximum distance this circle will follow the target from.
 		/// </summary>
 		public double max_dist;
-		
+
 		/// <summary>
 		/// The circle's color.
 		/// </summary>
 		public Color color;
-		
+
 		/// <summary>
 		/// If this circle exists (if it should interact with other objects in the physical system).
 		/// </summary>
 		bool exists;
-		
+
 		public QuadTreeTest.QuadTreePositionItem<Circle> q_tree_pos;
-		
+
 		/// <summary>
 		/// Empty constructor. No values are set.
 		/// </summary>
 		public Circle() { }
-		
+
 		/// <summary>
 		/// Copy constructor
 		/// </summary>
@@ -340,38 +357,38 @@ namespace remonduk
 		public Circle(Circle that) :
 		this(that.radius, that.mass, that.position.x, that.position.y,
 			that.velocity.x, that.velocity.y, that.acceleration.x, that.acceleration.y) { }
-			
+
 			public Circle(double radius) :
 			this(radius, MASS) { }
-			
+
 			public Circle(double radius, double mass) :
 			this(radius, mass, PX, PY) { }
-			
+
 			public Circle(double radius, double mass, double px, double py) :
 			this(radius, mass, px, py, VX, VY) { }
-			
+
 			public Circle(double radius, double mass, double px, double py, double vx, double vy) :
 			this(radius, mass, px, py, vx, vy, AX, AY) { }
-			
+
 			public Circle(double radius, double mass, double px, double py,
 				double vx, double vy, double ax, double ay)
 				{
 					setRadius(radius);
 					setMass(mass);
-					
+
 					setPosition(px, py);
 					setVelocity(vx, vy);
 					setAcceleration(ax, ay);
-					
+
 					exists = EXISTS;
 					follow(TARGET);
-					
+
 					color = COLOR;
 					//q_tree_pos = new QuadTreeTest.QuadTreePositionItem<Circle>(this, new Tuple<double, double>(position.x, position.y), new Tuple<double, double>(radius, radius));
 				}
-				
+
 				/// <summary>
-				/// 
+				///
 				/// </summary>
 				/// <param name="x"></param>
 				/// <param name="y"></param>
@@ -381,9 +398,9 @@ namespace remonduk
 				//public Circle(double x, double y, double radius, double mass = MASS) :
 				//	this(x, y, radius,
 					//		 VELOCITY, VELOCITY_ANGLE, mass) { }
-					
+
 					///// <summary>
-					///// 
+					/////
 					///// </summary>
 					///// <param name="x"></param>
 					///// <param name="y"></param>
@@ -396,9 +413,9 @@ namespace remonduk
 						//	this(x, y, radius,
 							//		 velocity, velocity_angle,
 							//		 ACCELERATION, ACCELERATION_ANGLE, mass) { }
-							
+
 							/// <summary>
-							/// 
+							///
 							/// </summary>
 							/// <param name="x"></param>
 							/// <param name="y"></param>
@@ -416,17 +433,17 @@ namespace remonduk
 									//	this.y = y;
 									//	setRadius(radius);
 									//	setMass(mass);
-									
+
 									//	setVelocity(velocity, velocity_angle);
 									//	setAcceleration(acceleration, acceleration_angle);
-									
+
 									//	follow(TARGET);
 									//	this.color = Color.Chartreuse;
 									//	exists = true;
 									//	q_tree_pos = new QuadTreeTest.QuadTreePositionItem<Circle>(this, new Tuple<double, double>(x, y), new Tuple<double, double>(radius, radius));
 									//	//forces = new List<Force>();
 									//}
-									
+
 									/// <summary>
 									/// Sets the radius.
 									/// </summary>
@@ -439,7 +456,7 @@ namespace remonduk
 										}
 										this.radius = radius;
 									}
-									
+
 									/// <summary>
 									/// Set this circles mass.
 									/// </summary>
@@ -448,9 +465,9 @@ namespace remonduk
 									{
 										this.mass = mass;
 									}
-									
+
 									/// <summary>
-									/// 
+									///
 									/// </summary>
 									/// <param name="px"></param>
 									/// <param name="py"></param>
@@ -459,7 +476,7 @@ namespace remonduk
 										position.x = px;
 										position.y = py;
 									}
-									
+
 									/// <summary>
 									/// Sets this circles velocity.  Recalculates vx and vy values.
 									/// </summary>
@@ -481,18 +498,18 @@ namespace remonduk
 												//	this.velocity = magnitude(vx, vy);
 												//	this.velocity_angle = angle(vy, vx);
 												//}
-												
+
 												public void setVelocity(double vx, double vy)
 												{
 													velocity.x = vx;
 													velocity.y = vy;
 												}
-												
+
 												public void changeDirection(double angle)
 												{
 													velocity.set(velocity.magnitude(), angle);
 												}
-												
+
 												/// <summary>
 												/// Sets this circles acceleration.  Recalculates ax and ay values.
 												/// </summary>
@@ -514,13 +531,13 @@ namespace remonduk
 															//	this.acceleration = magnitude(ax, ay);
 															//	this.acceleration_angle = angle(ay, ax);
 															//}
-															
+
 															public void setAcceleration(double ax, double ay)
 															{
 																acceleration.x = ax;
 																acceleration.y = ay;
 															}
-															
+
 															/// <summary>
 															/// Sets the target circle for this circle to follow.  Uses default min and max distances.
 															/// Somethings a little weird - we should talk about this one.
@@ -539,7 +556,7 @@ namespace remonduk
 																	follow(target, target.radius + radius, target.radius + radius);
 																}
 															}
-															
+
 															/// <summary>
 															/// Sets a circle for this circle to follow.
 															/// </summary>
@@ -559,7 +576,7 @@ namespace remonduk
 																	this.max_dist = max_dist;
 																}
 															}
-															
+
 															/// <summary>
 															/// Updates this circles acceleration.  Adds an acceleration vector to the current acceleration.
 															/// </summary>
@@ -573,7 +590,7 @@ namespace remonduk
 																//	//this.acceleration = magnitude(ax, ay);
 																//	//this.acceleration_angle = angle(ay, ax);
 																//}
-																
+
 																/// <summary>
 																/// Updates this circles velocity by adding its acceleration values to velocity values.  Occurs once per frame.
 																/// </summary>
@@ -587,7 +604,7 @@ namespace remonduk
 																	//velocity = magnitude(vx, vy);
 																	//velocity_angle = angle(vy, vx);
 																}
-																
+
 																/// <summary>
 																/// Updates this circles position based on current velocity and acceleration values.
 																/// </summary>
@@ -598,14 +615,14 @@ namespace remonduk
 																	q_tree_pos.Position = new Tuple<double, double>(position.x, position.y);
 																	updateVelocity(time);
 																}
-																
+
 																public OrderedPair potentialPosition()
 																{
 																	double potential_x = acceleration.x / 2 + velocity.x + position.x;
 																	double potential_y = acceleration.y / 2 + velocity.y + position.y;
 																	return new OrderedPair(potential_x, potential_y);
 																}
-																
+
 																/// <summary>
 																/// The beginings of elastic collisions.
 																/// </summary>
@@ -622,12 +639,12 @@ namespace remonduk
 																	//double that_vy = (this.vy * (this.mass - that.mass) + 2 * this.mass * this.vy) / (this.mass + that.mass);
 																	//this.setVelocity(Circle.magnitude(this_vx, this_vy), Circle.angle(this_vy, this_vx));
 																	//that.setVelocity(Circle.magnitude(that_vx, that_vy), Circle.angle(that_vy, that_vx));
-																	
+
 																	// this should only set velocity for "this" because it'll be automatically handled when looping through
 																	// also, simultaneous collisions won't work with this version
 																	return true;
 																}
-																
+
 																/// <summary>
 																/// Determines if this circle is colliding with that circle.
 																/// </summary>
@@ -651,9 +668,9 @@ namespace remonduk
 																	else
 																	{
 																		return crossing(that, time);
-																		
-																		
-																		
+
+
+
 																		//double reference_angle = Circle.angle(ay / 2 + vy - that.ay / 2 - that.vy, ax / 2 + vx - that.ax / 2 - that.vx);
 																		//double direction = Circle.angle(that.y - y, that.x - x);
 																		//if neither are moving or if they're moving in opposite directions.
@@ -673,7 +690,7 @@ namespace remonduk
 																				//return -1;
 																			}
 																		}
-																		
+
 																		/// <summary>
 																		/// Treats that circle as stationary and the frame of perspective as this.
 																		/// </summary>
@@ -690,7 +707,7 @@ namespace remonduk
 																			Out.WriteLine("");
 																			Out.WriteLine("reference_vx: " + reference_vx);
 																			Out.WriteLine("reference_vy: " + reference_vy);
-																			
+
 																			OrderedPair point = closestPoint(that.position.x, that.position.y, reference_vx, reference_vy);
 																			if (point == null)
 																			{
@@ -700,7 +717,7 @@ namespace remonduk
 																			}
 																			double distance_from_that = OrderedPair.magnitude(point.x - that.position.x, point.y - that.position.y);
 																			double radii_sum = that.radius + radius;
-																			
+
 																			Out.WriteLine("distance_from_that: " + distance_from_that);
 																			Out.WriteLine("radii_sum: " + radii_sum);
 																			if (distance_from_that > radii_sum)
@@ -713,7 +730,7 @@ namespace remonduk
 																			{
 																				double distance_from_collision_squared = radii_sum * radii_sum - distance_from_that * distance_from_that;
 																				double distance_from_collision = Math.Sqrt(distance_from_collision_squared);
-																				
+
 																				double reference_velocity = OrderedPair.magnitude(reference_vx, reference_vy);
 																				double collision_x = point.x - distance_from_collision * reference_vx / reference_velocity;
 																				double collision_y = point.y - distance_from_collision * reference_vy / reference_velocity;
@@ -730,7 +747,7 @@ namespace remonduk
 																				//return Tuple.Create(collision_x, collision_y);
 																			}
 																		}
-																		
+
 																		/// <summary>
 																		/// Calculates the closest point on the this' movement vector to that.
 																		/// </summary>
@@ -746,9 +763,9 @@ namespace remonduk
 																				double y = position.y;
 																				double constant_1 = reference_vy * x - reference_vx * y;
 																				double constant_2 = reference_vx * that_x + reference_vy * that_y;
-																				
+
 																				double determinant = reference_vx * reference_vx + reference_vy * reference_vy;
-																				
+
 																				double intersection_x;
 																				double intersection_y;
 																				if (determinant == 0)
@@ -761,10 +778,10 @@ namespace remonduk
 																					intersection_x = (constant_1 * reference_vy + constant_2 * reference_vx) / determinant;
 																					intersection_y = (constant_2 * reference_vy - constant_1 * reference_vx) / determinant;
 																				}
-																				
+
 																				Out.WriteLine("intersection_x: " + intersection_x);
 																				Out.WriteLine("intersection_y: " + intersection_y);
-																				
+
 																				double delta_x = intersection_x - x;
 																				double delta_y = intersection_y - y;
 																				if (OrderedPair.magnitude(intersection_x - x, intersection_y - y) >
@@ -777,7 +794,7 @@ namespace remonduk
 																				// this might automatically take care of the above case because time would be > 1
 																				return new OrderedPair(intersection_x, intersection_y);
 																			}
-																			
+
 																			public OrderedPair collideWith(List<Circle> circles)
 																			{
 																				double total_mass = 0;
@@ -789,18 +806,18 @@ namespace remonduk
 																					total_vx += circle.velocity.x;
 																					total_vy += circle.velocity.y;
 																				}
-																				
-																				
+
+
 																				double vx = (total_vx * (mass - total_mass) + 2 * total_mass * total_vx) / (mass + total_mass);
 																				double vy = (total_vy * (mass - total_mass) + 2 * total_mass * total_vy) / (mass + total_mass);
-																				
+
 																				return new OrderedPair(vx, vy);
 																				//setVelocity(vx, vy);
-																				
+
 																				//return velocity;
 																				//elastic(new Circle(0, 0, 1, total_mass))
 																			}
-																			
+
 																			/// <summary>
 																			/// This circles move method.  Updates the velocity, checks for collisions then updates the (x,y) coordinates.
 																			/// </summary>
@@ -824,7 +841,7 @@ namespace remonduk
 																							//}
 																							updatePosition(time);
 																						}
-																						
+
 																						/// <summary>
 																						/// Calculates the distance from this circle to that circle.
 																						/// </summary>
@@ -834,14 +851,14 @@ namespace remonduk
 																						{
 																							return position.magnitude(other.position);
 																						}
-																						
+
 																						public double distanceSquared(OrderedPair that)
 																						{
 																							double distx = that.x - position.x;
 																							double disty = that.y - position.y;
 																							return distx * distx + disty * disty;
 																						}
-																						
+
 																						/// <summary>
 																						/// This circles update method.  See move()
 																						/// </summary>
@@ -851,7 +868,7 @@ namespace remonduk
 																						{
 																							move(time);
 																						}
-																						
+
 																						/// <summary>
 																						/// Draws this circle.
 																						/// </summary>
@@ -861,7 +878,7 @@ namespace remonduk
 																							Brush brush = new SolidBrush(color);
 																							g.FillEllipse(brush, (float)(position.x - radius), (float)(position.y - radius), (float)(2 * radius), (float)(2 * radius));
 																						}
-																						
+
 																						/// <summary>
 																						/// This circles to string method.
 																						/// </summary>
@@ -883,7 +900,6 @@ namespace remonduk
 																						}
 																					}
 																				}
-																				
+
 																				// need to handle following differently
 																				// make crossing check if following target first, if so, update velocity first
-																				
