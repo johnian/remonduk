@@ -105,14 +105,14 @@ namespace remonduk
 		/// <summary>
 		/// If this circle exists (if it should interact with other objects in the physical system).
 		/// </summary>
-		bool exists;
+		public bool exists;
 
 		public QuadTreeTest.QuadTreePositionItem<Circle> q_tree_pos;
 
 		/// <summary>
 		/// Empty constructor. No values are set.
 		/// </summary>
-		public Circle() { }
+		public Circle() : this(RADIUS) { }
 
 		/// <summary>
 		/// Copy constructor

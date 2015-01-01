@@ -64,7 +64,7 @@ namespace TestSuite
 			Circle one = new Circle(2, 1, 2, 3);
 			Circle two = new Circle(13, 5, 6, 21);
 
-			Force gravity = new Gravity(Gravity.GRAVITY, Gravity.ANGLE);
+			Force gravity = new Gravity(0, Gravity.GRAVITY);
 			Force tether = new Tether(2.0, 3.0);
 
 			Interaction gravityOn12 = new Interaction(one, two, gravity);

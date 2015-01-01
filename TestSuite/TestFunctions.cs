@@ -27,6 +27,11 @@ namespace TestSuite
 			AreEqual(true, Math.Abs(expected - actual) < EPSILON);
 		}
 
+		public static void AreEqual(int expected, int actual)
+		{
+			Assert.AreEqual(expected, actual);
+		}
+
 		public static void AreEqual(bool expected, bool actual)
 		{
 			Assert.AreEqual(expected, actual);

@@ -30,7 +30,7 @@ namespace remonduk
 		/// <summary>
 		/// Default value for gravity.
 		/// </summary>
-		public bool GRAVITY = true;
+		public const bool GRAVITY = true;
 		/// <summary>
 		/// Global flag for gravity in this physical system.
 		/// </summary>
@@ -60,17 +60,26 @@ namespace remonduk
 		/// <param name="circle">The new circle to add.</param>
 		public void addCircle(Circle circle)
 		{
+			Out.WriteLine("1");
 			circles.Add(circle);
+			Out.WriteLine("2");
 			// need to figure out how to handle gravity
 			if (false /*gravity*/)
 			{
+				Out.WriteLine("3");
 				interactions.Add(new Interaction(circle, null, forces["Gravity"]));
 			}
 
+			Out.WriteLine("4");
 			netForces.Add(circle, new OrderedPair(0, 0));
 
+			Out.WriteLine("5");
 			interactionMap.Add(circle, new List<Interaction>());
+			Out.WriteLine("6");
+
+			// why does this throw a null pointer exception
 			tree.Insert(circle.q_tree_pos);
+			Out.WriteLine("7");
 		}
 
 		/// <summary>
@@ -125,9 +134,13 @@ namespace remonduk
 			for (int i = 0; i < netForces.Count; i++)
 			{
 				Circle circle = netForces.ElementAt(i).Key;
-				netForces[circle] = updateNetForceOn(circle);
+				Out.WriteLine(circle.GetHashCode() + "");
+
+				updateNetForceOn(circle);
+				//netForces[circle] = updateNetForceOn(circle);
 				double ax = netForces[circle].x / circle.mass;
 				double ay = netForces[circle].y / circle.mass;
+				Out.WriteLine(netForces[circle] + "");
 				circle.setAcceleration(ax, ay);
 			}
 		}
@@ -143,11 +156,12 @@ namespace remonduk
 		/// </summary>
 		/// <param name="circle">The circle to calculate net forces for.</param>
 		/// <returns>The net forces on the given circle.</returns>
-		public OrderedPair updateNetForceOn(Circle circle)
+		public void updateNetForceOn(Circle circle)
 		{
 			double fx = 0;
 			double fy = 0;
-			foreach (Interaction interaction in interactions)
+			Out.WriteLine(circle.GetHashCode() + "");
+			foreach (Interaction interaction in interactionMap[circle])
 			{
 				OrderedPair f;
 				if (interaction.first == circle)
@@ -161,8 +175,8 @@ namespace remonduk
 				fx += f.x;
 				fy += f.y;
 			}
+			netForces[circle].set(fx, fy);
 			//Out.WriteLine("f: " + fx + ", " + fy);
-			return new OrderedPair(fx, fy);
 		}
 
 		public void updatePositions()

@@ -10,13 +10,11 @@ namespace remonduk
 		public const double G = .0000000000667384;
 
 		
-		public Gravity(double gravity, double angle)
+		public Gravity(double fx, double fy)
 			: base(
 				delegate(Circle first, Circle second)
 				{
-					double ax = gravity * Math.Cos(angle);
-					double ay = gravity * Math.Sin(angle);
-					return new OrderedPair(ax, ay);
+					return new OrderedPair(fx, fy);
 				}
 			)
 		{ }

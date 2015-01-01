@@ -24,17 +24,24 @@ namespace remonduk
 			y = magnitude * Math.Sin(angle);
 		}
 
+		public void set(double x, double y)
+		{
+			this.x = x;
+			this.y = y;
+		}
+
 		public void get()
 		{
 
 		}
 
-		public String ToString()
+
+		public override String ToString()
 		{
 			return "(" + x + ", " + y + ")";
 		}
 
-		public bool Equals(Object obj)
+		public override bool Equals(Object obj)
 		{
 			if (obj == null) return false;
 			if (obj == this) return true;
