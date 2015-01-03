@@ -9,28 +9,28 @@ namespace remonduk
 		/// Precision for rounding to 0.
 		/// </summary>
 		public const int PRECISION = 8;
-		public double x, y;
+		public double X, Y;
 
 		public OrderedPair(double x, double y)
 		{
-			this.x = x;
-			this.y = y;
+			X = x;
+			Y = y;
 		}
 
-		public void set(double angle)
+		public void Set(double angle)
 		{
-			double magnitude = this.magnitude();
-			x = magnitude * Math.Cos(angle);
-			y = magnitude * Math.Sin(angle);
+			double magnitude = Magnitude();
+			X = magnitude * Math.Cos(angle);
+			Y = magnitude * Math.Sin(angle);
 		}
 
-		public void set(double x, double y)
+		public void Set(double X, double Y)
 		{
-			this.x = x;
-			this.y = y;
+			this.X = X;
+			this.Y = Y;
 		}
 
-		public void get()
+		public void Get()
 		{
 
 		}
@@ -38,7 +38,7 @@ namespace remonduk
 
 		public override String ToString()
 		{
-			return "(" + x + ", " + y + ")";
+			return "(" + X + ", " + Y + ")";
 		}
 
 		public override bool Equals(Object obj)
@@ -46,28 +46,28 @@ namespace remonduk
 			if (obj == null) return false;
 			if (obj == this) return true;
 			OrderedPair that = (OrderedPair)obj;
-			return x == that.x && y == that.y;
+			return X == that.X && Y == that.Y;
 		}
 
 		/// <summary>
-		/// Returns the magnitude of a vector based on it's x and y components.
+		/// Returns the magnitude of a vector based on its x and y components.
 		/// </summary>
 		/// <param name="x">The magnitude of the x component.</param>
 		/// <param name="y">The magnitude of the y component.</param>
 		/// <returns>The magnitude.</returns>
-		public static double magnitude(double x, double y)
+		public static double Magnitude(double x, double y)
 		{
 			return Math.Sqrt(x * x + y * y);
 		}
 
-		public double magnitude()
+		public double Magnitude()
 		{
-			return magnitude(x, y);
+			return Magnitude(X, Y);
 		}
 
-		public double magnitude(OrderedPair that)
+		public double Magnitude(OrderedPair that)
 		{
-			return magnitude(that.x - x, that.y - y);
+			return Magnitude(that.X - X, that.Y - Y);
 		}
 
 		/// <summary>
@@ -75,8 +75,8 @@ namespace remonduk
 		/// </summary>
 		/// <param name="y">The y value.</param>
 		/// <param name="x">The x value.</param>
-		/// <returns>tan(y,x) from 0 to 2PI</returns>
-		public static double angle(double y, double x)
+		/// <returns>tan(y, x) from 0 to 2PI</returns>
+		public static double Angle(double y, double x)
 		{
 			if (Math.Round(y, PRECISION) == 0 &&
 				Math.Round(x, PRECISION) == 0)
@@ -91,14 +91,14 @@ namespace remonduk
 			return theta;
 		}
 
-		public double angle()
+		public double Angle()
 		{
-			return angle(y, x);
+			return Angle(Y, X);
 		}
 
-		public double angle(OrderedPair that)
+		public double Angle(OrderedPair that)
 		{
-			return angle(that.y - y, that.x - x);
+			return Angle(that.Y - Y, that.X - X);
 		}
 	}
 }

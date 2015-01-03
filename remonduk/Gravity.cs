@@ -23,13 +23,13 @@ namespace remonduk
 			: base(
 				delegate(Circle first, Circle second)
 				{
-					double delta_x = second.px - first.px;
-					double delta_y = second.py - first.py;
-					double r = OrderedPair.magnitude(delta_x, delta_y);
-					double angle = OrderedPair.angle(delta_y, delta_x);
+					double delta_x = second.Px - first.Px;
+					double delta_y = second.Py - first.Py;
+					double r = OrderedPair.Magnitude(delta_x, delta_y);
+					double angle = OrderedPair.Angle(delta_y, delta_x);
 
 					
-					double f = g * first.mass * second.mass / (r * r);
+					double f = g * first.Mass * second.Mass / (r * r);
 					double fx = f * Math.Cos(angle);
 					double fy = f * Math.Sin(angle);
 					return new OrderedPair(fx, fy);

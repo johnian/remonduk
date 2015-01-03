@@ -199,7 +199,7 @@ namespace remonduk.QuadTreeTest
                        Left > Rect.Right ));
         }
 
-        public void draw(Graphics g)
+        public void Draw(Graphics g)
         {
             Pen pen = new Pen(Color.Black);
             //Out.WriteLine("Left: " + Left + " Top: " + Top + " W: " + Width + " H: " + Height);

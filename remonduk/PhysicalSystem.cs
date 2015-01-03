@@ -6,79 +6,79 @@ using remonduk.QuadTreeTest;
 namespace remonduk
 {
 	/// <summary>
-	/// The physical system represents the current existence the interactions are taking place in.  
-	/// It contains all of the circles and interactions.
+	/// The physical system represents the current existence the Interactions are taking place in.  
+	/// It contains all of the Circles and Interactions.
 	/// </summary>
 	public class PhysicalSystem
 	{
 		/// <summary>
-		/// This physical system's dictionary of net forces.
-		/// Looking up a circle will give the netforce exerted on that circle from within the physical system.
+		/// This physical system's dictionary of net Forces.
+		/// Looking up a Circle will give the netforce exerted on that Circle from within the physical system.
 		/// </summary>
-		public Dictionary<Circle, OrderedPair> netForces;
-		public List<Circle> circles;
+		public Dictionary<Circle, OrderedPair> NetForces;
+		public List<Circle> Circles;
 		/// <summary>
-		/// A list of all of the interactions in this physical system.
+		/// A list of all of the Interactions in this physical system.
 		/// </summary>
-		public List<Interaction> interactions; // ideally, i'd like to index into this by circle to get interactions associated with that circle
-		public Dictionary<Circle, List<Interaction>> interactionMap;
+		public List<Interaction> Interactions; // ideally, i'd like to index into this by Circle to get Interactions associated with that Circle
+		public Dictionary<Circle, List<Interaction>> InteractionMap;
 
-		public Dictionary<String, Force> forces;
+		public Dictionary<String, Force> Forces;
 
-		public QuadTree<Circle> tree;
-
-		/// <summary>
-		/// Default value for gravity.
-		/// </summary>
-		public const bool GRAVITY = true;
-		/// <summary>
-		/// Global flag for gravity in this physical system.
-		/// </summary>
-		public bool gravity;
+		public QuadTree<Circle> Tree;
 
 		/// <summary>
-		/// No-arg constructor to create a new physical system.  Inits lists, sets gravity to default.
+		/// Default value for Gravity.
+		/// </summary>
+		public const bool GRAVITY_ON = true;
+		/// <summary>
+		/// Global flag for GravityOn in this physical system.
+		/// </summary>
+		public bool GravityOn;
+
+		/// <summary>
+		/// No-arg constructor to create a new physical system.  Inits lists, sets GravityOn to default.
 		/// </summary>
 		public PhysicalSystem()
 		{
-			circles = new List<Circle>();
-			netForces = new Dictionary<Circle, OrderedPair>();
-			interactions = new List<Interaction>();
-			interactionMap = new Dictionary<Circle, List<Interaction>>();
+			Circles = new List<Circle>();
+			NetForces = new Dictionary<Circle, OrderedPair>();
+			Interactions = new List<Interaction>();
+			InteractionMap = new Dictionary<Circle, List<Interaction>>();
 
-			forces = new Dictionary<String, Force>();
+			Forces = new Dictionary<String, Force>();
 
-			tree = new QuadTree<Circle>(new FRect(0, 0, 600, 600), 10);
+			Tree = new QuadTree<Circle>(new FRect(0, 0, 600, 600), 10);
 
-			gravity = GRAVITY;
-			forces.Add("Gravity", new Gravity(Gravity.GRAVITY, Gravity.ANGLE));
+			GravityOn = GRAVITY_ON;
+			Forces.Add("Gravity", new Gravity(Gravity.GRAVITY, Gravity.ANGLE));
 		}
 
 		/// <summary>
 		/// Adds a new circle to this physical system.
 		/// </summary>
 		/// <param name="circle">The new circle to add.</param>
-		public void addCircle(Circle circle)
+		public void AddCircle(Circle circle)
 		{
 			//Out.WriteLine("1");
-			circles.Add(circle);
+			Circles.Add(circle);
 			//Out.WriteLine("2");
-			// need to figure out how to handle gravity
-			if (false /*gravity*/)
+			// need to figure out how to handle GravityOn
+			if (false /*GravityOn*/)
 			{
 				//Out.WriteLine("3");
-				interactions.Add(new Interaction(circle, null, forces["Gravity"]));
+				Interactions.Add(new Interaction(circle, null, Forces["Gravity"]));
 			}
 
 			//Out.WriteLine("4");
-			netForces.Add(circle, new OrderedPair(0, 0));
+			NetForces.Add(circle, new OrderedPair(0, 0));
 
 			//Out.WriteLine("5");
-			interactionMap.Add(circle, new List<Interaction>());
+			InteractionMap.Add(circle, new List<Interaction>());
 			//Out.WriteLine("6");
 
 			// why does this throw a null pointer exception
-			tree.Insert(circle.q_tree_pos);
+			Tree.Insert(circle.q_tree_pos);
 			//Out.WriteLine("7");
 		}
 
@@ -86,17 +86,17 @@ namespace remonduk
 		/// Removes a circle from this physical system.
 		/// </summary>
 		/// <param name="circle">The circle to remove from this system.</param>
-		public bool removeCircle(Circle circle)
+		public bool RemoveCircle(Circle circle)
 		{
-			if (circles.Remove(circle))
+			if (Circles.Remove(circle))
 			{
-				netForces.Remove(circle);
-				List<Interaction> associations = interactionMap[circle];
-				foreach (Interaction interaction in associations)
+				NetForces.Remove(circle);
+				List<Interaction> associations = InteractionMap[circle];
+				foreach (Interaction Interaction in associations)
 				{
-					Circle other = interaction.getOther(circle);
-					interactionMap[other].Remove(interaction);
-					interactions.Remove(interaction);
+					Circle other = Interaction.GetOther(circle);
+					InteractionMap[other].Remove(Interaction);
+					Interactions.Remove(Interaction);
 				}
 				return true;
 			}
@@ -107,81 +107,81 @@ namespace remonduk
 		/// Adds an interaction to this physical system.
 		/// </summary>
 		/// <param name="interaction">The interaction to add.</param>
-		public void addInteraction(Interaction interaction)
+		public void AddInteraction(Interaction interaction)
 		{
-			interactions.Add(interaction);
+			Interactions.Add(interaction);
 			// do a try get value here, else create a new list, then add
-			interactionMap[interaction.first].Add(interaction);
-			interactionMap[interaction.second].Add(interaction);
+			InteractionMap[interaction.First].Add(interaction);
+			InteractionMap[interaction.Second].Add(interaction);
 		}
 
 		/// <summary>
 		/// Removes an interaction from this physical system.
 		/// </summary>
 		/// <param name="interaction">The interaction to remove.</param>
-		public void removeInteraction(Interaction interaction)
+		public void RemoveInteraction(Interaction interaction)
 		{
-			interactions.Remove(interaction);
-			interactionMap[interaction.first].Remove(interaction);
-			interactionMap[interaction.second].Remove(interaction);
+			Interactions.Remove(interaction);
+			InteractionMap[interaction.First].Remove(interaction);
+			InteractionMap[interaction.Second].Remove(interaction);
 		}
 
 		/// <summary>
 		/// Updates circle velocities based on the netforces in the dictionary.
 		/// </summary>
-		public void updateNetForces()
+		public void UpdateNetForces()
 		{
-			for (int i = 0; i < netForces.Count; i++)
+			for (int i = 0; i < NetForces.Count; i++)
 			{
-				Circle circle = netForces.ElementAt(i).Key;
+				Circle circle = NetForces.ElementAt(i).Key;
 				//Out.WriteLine(circle.GetHashCode() + "");
 
-				updateNetForceOn(circle);
-				//netForces[circle] = updateNetForceOn(circle);
-				double ax = netForces[circle].x / circle.mass;
-				double ay = netForces[circle].y / circle.mass;
-				//Out.WriteLine(netForces[circle] + "");
-				circle.setAcceleration(ax, ay);
+				UpdateNetForceOn(circle);
+				//NetForces[circle] = UpdateNetForceOn(circle);
+				double ax = NetForces[circle].X / circle.Mass;
+				double ay = NetForces[circle].Y / circle.Mass;
+				//Out.WriteLine(NetForces[circle] + "");
+				circle.SetAcceleration(ax, ay);
 			}
 		}
 
 		public void update()
 		{
-			updateNetForces();
-			updatePositions();
+			UpdateNetForces();
+			UpdatePositions();
 		}
 
 		/// <summary>
-		/// Calculates the net forces acting on a circle.
+		/// Calculates the net Forces acting on a circle.
 		/// </summary>
-		/// <param name="circle">The circle to calculate net forces for.</param>
-		/// <returns>The net forces on the given circle.</returns>
-		public void updateNetForceOn(Circle circle)
+		/// <param name="circle">The circle to calculate net Forces for.</param>
+		/// <returns>The net Forces on the given circle.</returns>
+		public void UpdateNetForceOn(Circle circle)
 		{
 			double fx = 0;
 			double fy = 0;
-			//Out.WriteLine(circle.GetHashCode() + "");
-			foreach (Interaction interaction in interactionMap[circle])
+			//Out.WriteLine(Circle.GetHashCode() + "");
+			foreach (Interaction interaction in InteractionMap[circle])
 			{
 				OrderedPair f;
-				if (interaction.first == circle)
+				if (interaction.First == circle)
 				{
-					f = interaction.forceOnFirst();
+					f = interaction.ForceOnFirst();
 				}
 				else
 				{
-					f = interaction.forceOnSecond();
+					f = interaction.ForceOnSecond();
 				}
-				fx += f.x;
-				fy += f.y;
+				fx += f.X;
+				fy += f.Y;
 			}
-			netForces[circle].set(fx, fy);
+			NetForces[circle].Set(fx, fy);
 			//Out.WriteLine("f: " + fx + ", " + fy);
 		}
 
-		public void updatePositions()
+		public void UpdatePositions()
 		{
-			Dictionary<Circle, OrderedPair>.KeyCollection circles = netForces.Keys;
+			Dictionary<Circle, OrderedPair>.KeyCollection circles = NetForces.Keys;
 			double time = 1;
 			Dictionary<Circle, List<Circle>> collisionMap;
 			while (time > 0)
@@ -193,10 +193,10 @@ namespace remonduk
 					List<Circle> collisions = new List<Circle>();
 					foreach (Circle that in circles)
 					{
-						// use quad tree to get the list of circles to check against
-						// for now, just use circles
+						// use quad Tree to get the list of Circles to check against
+						// for now, just use Circles
 						
-						double value = circle.colliding(that, time);
+						double value = circle.Colliding(that, time);
 						//Out.WriteLine("collision time for " + this.GetHashCode() + "> " + that.GetHashCode() + ": " + value);
 						if (!Double.IsInfinity(value))
 						{
@@ -224,28 +224,28 @@ namespace remonduk
 				}
 				foreach (Circle circle in circles)
 				{
-					circle.update(min);
+					circle.Update(min);
 				}
-				updateVelocities(collisionMap);
+				UpdateVelocities(collisionMap);
 				time -= min;
 				//Out.WriteLine("time: " + time);
 				//Out.WriteLine("number of collisions: " + collisionMap.Count + "");
 			}
 		}
 
-		public void updateVelocities(Dictionary<Circle, List<Circle>> collisionMap)
+		public void UpdateVelocities(Dictionary<Circle, List<Circle>> collisionMap)
 		{
 			Dictionary<Circle, OrderedPair> velocityMap = new Dictionary<Circle, OrderedPair>();
 			foreach (Circle circle in collisionMap.Keys)
 			{
-				velocityMap.Add(circle, circle.collideWith(collisionMap[circle]));
+				velocityMap.Add(circle, circle.CollideWith(collisionMap[circle]));
 
-				//Out.WriteLine("updated velocity " + circle.GetHashCode() + " " + velocityMap[circle]);
+				//Out.WriteLine("updated velocity " + Circle.GetHashCode() + " " + velocityMap[Circle]);
 			}
 			foreach (Circle circle in velocityMap.Keys)
 			{
-				//Out.WriteLine(velocityMap[circle] + "");
-				circle.setVelocity(velocityMap[circle].x, velocityMap[circle].y);
+				//Out.WriteLine(velocityMap[Circle] + "");
+				circle.SetVelocity(velocityMap[circle].X, velocityMap[circle].Y);
 			}
 		}
 	}

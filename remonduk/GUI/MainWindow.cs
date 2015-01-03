@@ -67,16 +67,16 @@ namespace remonduk
 				ps.update();
 				//ps.updateNetForces();
 
-                foreach (Circle c in ps.circles)
+                foreach (Circle c in ps.Circles)
                 {
                     if (!pause)
                     {
                         List<QuadTreePositionItem<Circle>> cs = new List<QuadTreePositionItem<Circle>>();
-                        ps.tree.GetItems(new FRect(c.py-50, c.px-50, c.py + 50, c.px + 50), ref cs);
+                        ps.Tree.GetItems(new FRect(c.Py-50, c.Px-50, c.Py + 50, c.Px + 50), ref cs);
 						//c.update(cs);
                     }
 					//Out.WriteLine("Drawing");
-                    c.draw(this.CreateGraphics());
+                    c.Draw(this.CreateGraphics());
                 }
 
                 drawHUD(this.CreateGraphics());
@@ -92,16 +92,16 @@ namespace remonduk
 
         void drawInteractions(Graphics g)
         {
-            foreach(Interaction i in ps.interactions)
+            foreach(Interaction i in ps.Interactions)
             {
                 if (i == psdw.selected_interaction && psdw.Visible)
                 {
 
-                    i.draw(g, Color.CornflowerBlue);
+                    i.Draw(g, Color.CornflowerBlue);
                 }
                 else
                 {
-                    i.draw(g, Color.Red);
+                    i.Draw(g, Color.Red);
                 }
             }
         }
@@ -110,7 +110,7 @@ namespace remonduk
         {
             if(cdw.Visible && selected_circle != null)
             {
-                cdw.update_circle(selected_circle, ps.interactions);
+                cdw.update_circle(selected_circle, ps.Interactions);
             }
 
             if(psdw.Visible)
@@ -137,9 +137,9 @@ namespace remonduk
             {
                 drawSelected(g);
             }
-            foreach(Circle c in ps.netForces.Keys)
+            foreach(Circle c in ps.NetForces.Keys)
             {
-                c.q_tree_pos.Rect.draw(g);
+                c.q_tree_pos.Rect.Draw(g);
             }
             drawNewCircleAngles(g);
             drawInteractions(g);
@@ -148,7 +148,7 @@ namespace remonduk
         void drawSelected(Graphics g)
         {
             Pen pen = new Pen(Color.Black);
-            g.DrawEllipse(pen, (float)selected_circle.px-25, (float)selected_circle.py-25, 50, 50);
+            g.DrawEllipse(pen, (float)selected_circle.Px-25, (float)selected_circle.Py-25, 50, 50);
         }
 
         void drawPause(Graphics g)
@@ -227,22 +227,22 @@ namespace remonduk
 
             if (drag && selected_circle != null)
             {
-				selected_circle.setPosition(pos.X, pos.Y);
+				selected_circle.SetPosition(pos.X, pos.Y);
 				//selected_circle.x = pos.X;
 				//selected_circle.y = pos.Y;
             }
 
 
-            foreach (Circle c in ps.netForces.Keys)
+            foreach (Circle c in ps.NetForces.Keys)
             {
-				//double collide = click.colliding(c, 0);
-				bool collide = click.colliding(c);
+				//double collide = click.Colliding(c, 0);
+				bool collide = click.Colliding(c);
 
                 if(collide/*collide < 1*/ && selected_circle != null && tethering)
                 {
                     Tether t = new Tether(.002, 50);
                     Interaction i = new Interaction(selected_circle, c, t);
-                    ps.addInteraction(i);
+                    ps.AddInteraction(i);
                     found = true;
                 }
                 else if (collide /*!Double.IsInfinity(collide)*/)
@@ -251,13 +251,13 @@ namespace remonduk
                     psdw.selected_circle = c;
                     psdw.circle_list.SelectedItem = c;
 
-                    cdw.update_circle(selected_circle, ps.interactions);
+                    cdw.update_circle(selected_circle, ps.Interactions);
 
-                    new_circle_acceleration_angle_up_down.Value = (Decimal)(selected_circle.acceleration.angle() * 180.0 / Math.PI);
-                    new_circle_acceleration_up_down.Value = (Decimal)selected_circle.acceleration.magnitude();
-                    new_circle_velocity_angle_up_down.Value = (Decimal)(selected_circle.velocity.angle() * 180.0 / Math.PI);
-                    new_circle_velocity_up_down.Value = (Decimal)selected_circle.velocity.magnitude();
-                    circle_radius_up_down.Value = (Decimal)selected_circle.radius;
+                    new_circle_acceleration_angle_up_down.Value = (Decimal)(selected_circle.Acceleration.Angle() * 180.0 / Math.PI);
+                    new_circle_acceleration_up_down.Value = (Decimal)selected_circle.Acceleration.Magnitude();
+                    new_circle_velocity_angle_up_down.Value = (Decimal)(selected_circle.Velocity.Angle() * 180.0 / Math.PI);
+                    new_circle_velocity_up_down.Value = (Decimal)selected_circle.Velocity.Magnitude();
+                    circle_radius_up_down.Value = (Decimal)selected_circle.Radius;
 
                     found = true;
                 }
@@ -265,8 +265,8 @@ namespace remonduk
 
             if (!found)
             {
-                click.radius = (float)circle_radius_up_down.Value;
-                //click.setVelocity((float)new_circle_velocity_up_down.Value, 
+                click.Radius = (float)circle_radius_up_down.Value;
+                //click.SetVelocity((float)new_circle_velocity_up_down.Value, 
                     //((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180.0);
 
 				/*
@@ -275,8 +275,8 @@ namespace remonduk
 
 				//click.updateAcceleration((float)new_circle_acceleration_up_down.Value, 
 				//	((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
-                Out.WriteLine("Click Pos: " + click.position);
-                ps.addCircle(click);
+                Out.WriteLine("Click Pos: " + click.Position);
+                ps.AddCircle(click);
             }
         }
 
@@ -292,7 +292,7 @@ namespace remonduk
         {
             if(selected_circle != null)
             {
-                selected_circle.setVelocity((float)new_circle_velocity_up_down.Value, ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180);
+                selected_circle.SetVelocity((float)new_circle_velocity_up_down.Value, ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180);
             }
         }
 
@@ -300,7 +300,7 @@ namespace remonduk
         {
             if(selected_circle != null)
             {
-                selected_circle.setAcceleration((float)new_circle_acceleration_up_down.Value, ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
+                selected_circle.SetAcceleration((float)new_circle_acceleration_up_down.Value, ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
             }
         }
 
@@ -308,7 +308,7 @@ namespace remonduk
         {
             if(selected_circle != null)
             {
-                selected_circle.setVelocity((float)new_circle_velocity_up_down.Value, ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180);
+                selected_circle.SetVelocity((float)new_circle_velocity_up_down.Value, ((double)new_circle_velocity_angle_up_down.Value) * Math.PI / 180);
             }
         }
 
@@ -316,7 +316,7 @@ namespace remonduk
         {
             if (selected_circle != null)
             {
-                selected_circle.setAcceleration((float)new_circle_acceleration_up_down.Value, ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
+                selected_circle.SetAcceleration((float)new_circle_acceleration_up_down.Value, ((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
             }
         }
 
@@ -332,7 +332,7 @@ namespace remonduk
 
                 Circle click = new Circle(5, pos.X, pos.Y);
 
-                if(click.colliding(selected_circle)/*click.colliding(selected_circle, 0) >= 0*/)
+                if(click.Colliding(selected_circle)/*click.Colliding(selected_circle, 0) >= 0*/)
                 {
                     drag = true;
                 }
@@ -344,13 +344,15 @@ namespace remonduk
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Title = "SAVE YOUR CIRCLES FOR FUTURE CIRCLES TO BE THE SAME AS YOUR CURRENT CIRCLES";
             sfd.AddExtension = true;
+			// LOOK AT ME
+			// DOES THIS NEED TO BE CHANGED TO .Circles??
             sfd.DefaultExt = ".circles";
             sfd.Filter = "Circles|.circles";
             sfd.ShowDialog();
             using (var writer = new System.IO.StreamWriter(sfd.FileName))
             {
                 var serializer = new XmlSerializer(typeof(HashSet<Circle>));
-                serializer.Serialize(writer, ps.netForces.Keys);
+                serializer.Serialize(writer, ps.NetForces.Keys);
                 writer.Flush();
             }
         }
@@ -366,13 +368,13 @@ namespace remonduk
                 HashSet<Circle> circles = serializer.Deserialize(stream) as HashSet<Circle>;
                 foreach(Circle c in circles)
                 {
-                    ps.addCircle(c);
+                    ps.AddCircle(c);
                 }
                 //Out.WriteLine(circles.Count);
                 //Circle c1 = circles.ElementAt(0);
-                //c1.draw(this.CreateGraphics());
+                //c1.Draw(this.CreateGraphics());
                 //Out.WriteLine("X: " + c1.x + " Y: " + c1.y);
-                //Out.WriteLine("R: " + c1.radius);
+                //Out.WriteLine("R: " + c1.Radius);
             }
         }
 
@@ -380,7 +382,7 @@ namespace remonduk
         {
             if(selected_circle != null)
             {
-                selected_circle.radius = (float)circle_radius_up_down.Value;
+                selected_circle.Radius = (float)circle_radius_up_down.Value;
             }
         }
 
@@ -401,7 +403,7 @@ namespace remonduk
             }
             if(e.KeyCode == Keys.Q && selected_circle != null)
             {
-                cdw = new GUI.Circle_Detail_Window(selected_circle, ps.interactions);
+                cdw = new GUI.Circle_Detail_Window(selected_circle, ps.Interactions);
                 cdw.Show();
             }
         }

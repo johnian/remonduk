@@ -302,7 +302,7 @@ namespace remonduk.QuadTreeTest
             Items = new List<QuadTreePositionItem<T>>();
         }
 
-        public void draw(Graphics g)
+        public void Draw(Graphics g)
         {
             Pen pen = new Pen(Color.Black);
             g.DrawRectangle(pen, (float)rect.Left, (float)rect.Top, (float)rect.Width, (float)rect.Height);

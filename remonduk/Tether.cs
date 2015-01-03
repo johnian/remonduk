@@ -19,15 +19,15 @@ namespace remonduk
 			: base(
 				delegate(Circle first, Circle second)
 				{
-					double dist = first.distance(second);
+					double dist = first.Distance(second);
 					if (dist > equilibrium)
 					{
 						dist -= equilibrium;
 						double f = k * dist;
 
-						double delta_x = second.px - first.px;
-						double delta_y = second.py - first.py;
-						double angle = OrderedPair.angle(delta_y, delta_x);
+						double delta_x = second.Px - first.Px;
+						double delta_y = second.Py - first.Py;
+						double angle = OrderedPair.Angle(delta_y, delta_x);
 
 						double fx = f * Math.Cos(angle);
 						double fy = f * Math.Sin(angle);

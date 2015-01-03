@@ -9,7 +9,7 @@ namespace remonduk {
         /// <summary>
         /// The singleton instance of the Constants.
         /// </summary>
-        public static Constants instance;
+        private static Constants instance;
 
         /// <summary>
         /// Magnitude used for calculating gravity.
@@ -61,7 +61,5 @@ namespace remonduk {
                 return instance;
             }
         }
-
-        
 	}
 }

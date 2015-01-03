@@ -34,19 +34,19 @@ namespace remonduk.GUI
 
         public void update_ps(PhysicalSystem ps)
         {
-            if(last_interaction_count != ps.interactions.Count)
+            if(last_interaction_count != ps.Interactions.Count)
             {
                 interactions_list.DataSource = null;
-                interactions_list.DataSource = ps.interactions;
+                interactions_list.DataSource = ps.Interactions;
                 this.Invalidate();
-                last_interaction_count = ps.interactions.Count;
+                last_interaction_count = ps.Interactions.Count;
             }
-            if(last_circle_count != ps.netForces.Keys.Count)
+            if(last_circle_count != ps.NetForces.Keys.Count)
             {
                 circle_list.DataSource = null;
-                circle_list.DataSource = ps.netForces.Keys.ToArray();
+                circle_list.DataSource = ps.NetForces.Keys.ToArray();
                 this.Invalidate();
-                last_circle_count = ps.netForces.Keys.Count;
+                last_circle_count = ps.NetForces.Keys.Count;
             }
             if (interactions_list.SelectedItem != null)
             {
@@ -60,7 +60,7 @@ namespace remonduk.GUI
 
         private void interactions_remove_button_Click(object sender, EventArgs e)
         {
-            ps.removeInteraction(selected_interaction);
+            ps.RemoveInteraction(selected_interaction);
         }
 
         private void circle_list_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -76,7 +76,7 @@ namespace remonduk.GUI
 
         private void button2_Click(object sender, EventArgs e)
         {
-            ps.removeCircle(selected_circle);
+            ps.RemoveCircle(selected_circle);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -84,7 +84,7 @@ namespace remonduk.GUI
             if (selected_circle != null)
             {
                 GUI.Circle_Detail_Window cdw = GUI_Singleton.Instance.cdw;
-                cdw.update_circle(selected_circle, ps.interactions);
+                cdw.update_circle(selected_circle, ps.Interactions);
                 cdw.Visible = true;
                 cdw.Focus();
             }

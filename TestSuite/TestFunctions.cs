@@ -11,14 +11,14 @@ namespace TestSuite
 
 		public static void AreEqual(OrderedPair expected, OrderedPair actual)
 		{
-			AreEqual(expected.x, actual.x);
-			AreEqual(expected.y, actual.y);
+			AreEqual(expected.X, actual.X);
+			AreEqual(expected.Y, actual.Y);
 		}
 
 		public static void AreClose(OrderedPair expected, OrderedPair actual)
 		{
-			AreEqual(Math.Round(expected.x), Math.Round(actual.x));
-			AreEqual(Math.Round(expected.y), Math.Round(actual.y));
+			AreEqual(Math.Round(expected.X), Math.Round(actual.X));
+			AreEqual(Math.Round(expected.Y), Math.Round(actual.Y));
 		}
 
 		public static void AreEqual(double expected, double actual)

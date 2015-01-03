@@ -23,7 +23,7 @@ namespace remonduk.GUI
         {
             InitializeComponent();
             this.c = c;
-            color_button.BackColor = c.color;
+            color_button.BackColor = c.Color;
             update_circle(c, interactions);
             this.Paint += new PaintEventHandler(this.drawNewCircleAngles);
             
@@ -54,21 +54,21 @@ namespace remonduk.GUI
 
         public void update_circle(Circle c, List<Interaction> interactions)
         {
-            acceleration_up_down.Value = (Decimal)c.acceleration.magnitude();
-            velocity_up_down.Value = (Decimal)c.velocity.magnitude();
-            acceleration_angle_up_down.Value = (Decimal)(c.acceleration.angle() * 180.0/Math.PI);
-            velocity_angle_up_down.Value = (Decimal)(c.velocity.angle() * 180.0/Math.PI);
+            acceleration_up_down.Value = (Decimal)c.Acceleration.Magnitude();
+            velocity_up_down.Value = (Decimal)c.Velocity.Magnitude();
+            acceleration_angle_up_down.Value = (Decimal)(c.Acceleration.Angle() * 180.0/Math.PI);
+            velocity_angle_up_down.Value = (Decimal)(c.Velocity.Angle() * 180.0/Math.PI);
             List<Interaction> real = new List<Interaction>();
             foreach(Interaction interaction in interactions)
             {
-                if(interaction.first == c || interaction.second == c)
+                if(interaction.First == c || interaction.Second == c)
                 {
                     real.Add(interaction);
                 }
             }
             this.interactions_list.DataSource = real;
             this.interactions_list.DisplayMember = "Force";
-            color_button.BackColor = c.color;
+            color_button.BackColor = c.Color;
             this.c = c;
             this.Invalidate();
         }
@@ -76,7 +76,7 @@ namespace remonduk.GUI
         private void color_button_Click(object sender, EventArgs e)
         {
             circle_color_dialog.ShowDialog();
-            c.color = circle_color_dialog.Color;
+            c.Color = circle_color_dialog.Color;
             color_button.BackColor = circle_color_dialog.Color;
         }
     }

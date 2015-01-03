@@ -23,12 +23,12 @@ namespace TestSuite
 				}
 			);
 			Interaction interaction = new Interaction(first, second, force);
-			Test.AreEqual(new OrderedPair(5.0, 3.0), interaction.forceOnFirst());
-			Test.AreEqual(new OrderedPair(5.0, 3.0), interaction.forceOnSecond());
+			Test.AreEqual(new OrderedPair(5.0, 3.0), interaction.ForceOnFirst());
+			Test.AreEqual(new OrderedPair(5.0, 3.0), interaction.ForceOnSecond());
 
 			interaction = new Interaction(first, second, force, 0);
-			Test.AreEqual(new OrderedPair(0.0, 0.0), interaction.forceOnFirst());
-			Test.AreEqual(new OrderedPair(5.0, 3.0), interaction.forceOnSecond());
+			Test.AreEqual(new OrderedPair(0.0, 0.0), interaction.ForceOnFirst());
+			Test.AreEqual(new OrderedPair(5.0, 3.0), interaction.ForceOnSecond());
 		}
 
 		[TestMethod]
@@ -41,8 +41,8 @@ namespace TestSuite
 
 			Gravity gravity = new Gravity(Gravity.G);
 			Interaction interaction = new Interaction(earth, person, gravity);
-			Test.AreClose(new OrderedPair(60 * 9.81, 0.0), interaction.forceOnFirst());
-			Test.AreClose(new OrderedPair(-60 * 9.81, 0.0), interaction.forceOnSecond());
+			Test.AreClose(new OrderedPair(60 * 9.81, 0.0), interaction.ForceOnFirst());
+			Test.AreClose(new OrderedPair(-60 * 9.81, 0.0), interaction.ForceOnSecond());
 		}
 
 		[TestMethod]
@@ -55,8 +55,8 @@ namespace TestSuite
 			Interaction interaction = new Interaction(one, two, tether);
 
 			double force = 2 * (Math.Sqrt(32) - 3);
-			Test.AreEqual(new OrderedPair(force * Math.Cos(Math.PI / 4), force * Math.Sin(Math.PI / 4)), interaction.forceOnFirst());
-			Test.AreEqual(new OrderedPair(force * Math.Cos(5 * Math.PI / 4), force * Math.Sin(5 * Math.PI / 4)), interaction.forceOnSecond());
+			Test.AreEqual(new OrderedPair(force * Math.Cos(Math.PI / 4), force * Math.Sin(Math.PI / 4)), interaction.ForceOnFirst());
+			Test.AreEqual(new OrderedPair(force * Math.Cos(5 * Math.PI / 4), force * Math.Sin(5 * Math.PI / 4)), interaction.ForceOnSecond());
 		}
 
 		[TestMethod]
@@ -71,33 +71,33 @@ namespace TestSuite
 			Interaction tetherOn12 = new Interaction(one, two, tether);
 
 			PhysicalSystem world = new PhysicalSystem();
-			world.addCircle(one);
-			world.addCircle(two);
-			Test.AreEqual(new OrderedPair(0.0, 0.0), world.netForces[one]);
-			Test.AreEqual(new OrderedPair(0.0, 0.0), world.netForces[two]);
+			world.AddCircle(one);
+			world.AddCircle(two);
+			Test.AreEqual(new OrderedPair(0.0, 0.0), world.NetForces[one]);
+			Test.AreEqual(new OrderedPair(0.0, 0.0), world.NetForces[two]);
 
-			world.addInteraction(gravityOn12);
-			world.addInteraction(tetherOn12);
+			world.AddInteraction(gravityOn12);
+			world.AddInteraction(tetherOn12);
 
 			// 8, 8
 			double value = (Math.Sqrt(32) - 3) * Math.Sqrt(2);
-			world.updateNetForces();
-			Test.AreEqual(new OrderedPair(value, Gravity.GRAVITY + value), world.netForces[one]);
-			Test.AreEqual(new OrderedPair(-value, Gravity.GRAVITY - value), world.netForces[two]);
+			world.UpdateNetForces();
+			Test.AreEqual(new OrderedPair(value, Gravity.GRAVITY + value), world.NetForces[one]);
+			Test.AreEqual(new OrderedPair(-value, Gravity.GRAVITY - value), world.NetForces[two]);
 
-			world.updateNetForces();
-			Test.AreEqual(new OrderedPair(value, Gravity.GRAVITY + value), world.netForces[one]);
-			Test.AreEqual(new OrderedPair(-value, Gravity.GRAVITY - value), world.netForces[two]);
+			world.UpdateNetForces();
+			Test.AreEqual(new OrderedPair(value, Gravity.GRAVITY + value), world.NetForces[one]);
+			Test.AreEqual(new OrderedPair(-value, Gravity.GRAVITY - value), world.NetForces[two]);
 
-			world.removeInteraction(gravityOn12);
-			world.updateNetForces();
-			Test.AreEqual(new OrderedPair(value, value), world.netForces[one]);
-			Test.AreEqual(new OrderedPair(-value, -value), world.netForces[two]);
+			world.RemoveInteraction(gravityOn12);
+			world.UpdateNetForces();
+			Test.AreEqual(new OrderedPair(value, value), world.NetForces[one]);
+			Test.AreEqual(new OrderedPair(-value, -value), world.NetForces[two]);
 
-			world.removeInteraction(tetherOn12);
-			world.updateNetForces();
-			Test.AreEqual(new OrderedPair(0.0, 0.0), world.netForces[one]);
-			Test.AreEqual(new OrderedPair(0.0, 0.0), world.netForces[two]);
+			world.RemoveInteraction(tetherOn12);
+			world.UpdateNetForces();
+			Test.AreEqual(new OrderedPair(0.0, 0.0), world.NetForces[one]);
+			Test.AreEqual(new OrderedPair(0.0, 0.0), world.NetForces[two]);
 		}
 	}
 }

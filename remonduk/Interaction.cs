@@ -11,49 +11,49 @@ namespace remonduk
         /// <summary>
         /// The first circle involved in this interaction.
         /// </summary>
-		public Circle first;
+		public Circle First;
         /// <summary>
         /// The second circle involved in this interaction.
         /// </summary>
-		public Circle second;
+		public Circle Second;
         /// <summary>
         /// The force exerted in this interaction.
         /// </summary>
-		public Force force;
+		public Force ActingForce;
         /// <summary>
         /// A scalar to modify the force for this interaction.
         /// </summary>
-		public double scalar;
+		public double Scalar;
 
 		public Interaction(Circle first, Circle second, Force force, double scalar = 1) {
-			this.first = first;
-			this.second = second;
-			this.force = force;
-			this.scalar = scalar;
+			First = first;
+			Second = second;
+			ActingForce = force;
+			Scalar = scalar;
 		}
 
-		public Circle getOther(Circle circle) {
-			if (circle == first) {
-				return second;
+		public Circle GetOther(Circle circle) {
+			if (circle == First) {
+				return Second;
 			}
-			return first;
+			return First;
 		}
 
         /// <summary>
         /// Calculates the force exterted on the first circle.
         /// </summary>
         /// <returns>The force on the first circle.</returns>
-		public OrderedPair forceOnFirst() {
-			OrderedPair f = force.calculate(first, second);
-			return new OrderedPair(scalar * f.x, scalar * f.y);
+		public OrderedPair ForceOnFirst() {
+			OrderedPair f = ActingForce.Calculate(First, Second);
+			return new OrderedPair(Scalar * f.X, Scalar * f.Y);
 		}
 
         /// <summary>
         /// Calculates the force exerted on the second circle.
         /// </summary>
         /// <returns>The force on the second circle.</returns>
-		public OrderedPair forceOnSecond() {
-			return force.calculate(second, first);
+		public OrderedPair ForceOnSecond() {
+			return ActingForce.Calculate(Second, First);
 		}
 
         /// <summary>
@@ -61,11 +61,11 @@ namespace remonduk
         /// </summary>
         /// <param name="g">The graphics object to draw this interaction on.</param>
         /// <param name="color">The color to draw this interaction.</param>
-        public void draw(Graphics g, Color color)
+        public void Draw(Graphics g, Color color)
         {
             Pen pen = new Pen(color);
-            Point p1 = new Point((int)first.px, (int)first.py);
-            Point p2 = new Point((int)second.px, (int)second.py);
+            Point p1 = new Point((int)First.Px, (int)First.Py);
+            Point p2 = new Point((int)Second.Px, (int)Second.Py);
             g.DrawLine(pen, p1, p2);
         }
 	}

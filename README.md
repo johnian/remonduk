@@ -14,6 +14,17 @@ Floid
 [networking] (#7)  
 [sound] (#8)  
 
+for juliono:
+move all constants to constant file
+reorganize folder hierarchy
+optimize code
+finish test cases
+utilize quad tree in collision detection
+break down classes into smaller chunks
+break down functions into smaller chunks
+
+game update -- if previous time was 0, ignore this second one
+
 partial ghostiness? what if a circle can pass through some things, but not others
 	ie. pass through people, but not through environment
 

@@ -13,12 +13,12 @@ namespace TestSuite
 		public void PhysicalSystemTestNoArg()
 		{
 			PhysicalSystem world = new PhysicalSystem();
-			Test.AreEqual(0, world.circles.Count);
-			Test.AreEqual(0, world.netForces.Keys.Count);
-			Test.AreEqual(0, world.interactions.Count);
-			Test.AreEqual(0, world.interactionMap.Keys.Count);
-			Test.AreEqual(1, world.forces.Keys.Count);
-			Test.AreEqual(true, world.forces.ContainsKey("Gravity"));
+			Test.AreEqual(0, world.Circles.Count);
+			Test.AreEqual(0, world.NetForces.Keys.Count);
+			Test.AreEqual(0, world.Interactions.Count);
+			Test.AreEqual(0, world.InteractionMap.Keys.Count);
+			Test.AreEqual(1, world.Forces.Keys.Count);
+			Test.AreEqual(true, world.Forces.ContainsKey("Gravity"));
 			Test.AreEqual(true, false);
 
 			//Test.AreEqual(quad tree);
@@ -30,9 +30,9 @@ namespace TestSuite
 		{
 			PhysicalSystem world = new PhysicalSystem();
 			Circle circle = new Circle();
-			world.addCircle(circle);
-			Test.AreEqual(true, world.circles.Contains(circle));
-			Test.AreEqual(new OrderedPair(0, 0), world.netForces[circle]);
+			world.AddCircle(circle);
+			Test.AreEqual(true, world.Circles.Contains(circle));
+			Test.AreEqual(new OrderedPair(0, 0), world.NetForces[circle]);
 		}
 
 		[TestMethod]
@@ -40,10 +40,10 @@ namespace TestSuite
 		{
 			PhysicalSystem world = new PhysicalSystem();
 			Circle circle = new Circle();
-			world.addCircle(circle);
-			world.removeCircle(circle);
-			Test.AreEqual(false, world.circles.Contains(circle));
-			Test.AreEqual(false, world.netForces.ContainsKey(circle));
+			world.AddCircle(circle);
+			world.RemoveCircle(circle);
+			Test.AreEqual(false, world.Circles.Contains(circle));
+			Test.AreEqual(false, world.NetForces.ContainsKey(circle));
 			//Test.AreEqual(true, false);
 			// add the interactions and check interactions are updated properly
 		}
@@ -54,13 +54,13 @@ namespace TestSuite
 			PhysicalSystem world = new PhysicalSystem();
 			Circle one = new Circle();
 			Circle two = new Circle();
-			world.addCircle(one);
-			world.addCircle(two);
-			Interaction interaction = new Interaction(one, two, world.forces["Gravity"]);
-			world.addInteraction(interaction);
-			Test.AreEqual(interaction, world.interactions[0]);
-			Test.AreEqual(interaction, world.interactionMap[one][0]);
-			Test.AreEqual(interaction, world.interactionMap[two][0]);
+			world.AddCircle(one);
+			world.AddCircle(two);
+			Interaction interaction = new Interaction(one, two, world.Forces["Gravity"]);
+			world.AddInteraction(interaction);
+			Test.AreEqual(interaction, world.Interactions[0]);
+			Test.AreEqual(interaction, world.InteractionMap[one][0]);
+			Test.AreEqual(interaction, world.InteractionMap[two][0]);
 		}
 
 		[TestMethod]
@@ -69,14 +69,14 @@ namespace TestSuite
 			PhysicalSystem world = new PhysicalSystem();
 			Circle one = new Circle();
 			Circle two = new Circle();
-			world.addCircle(one);
-			world.addCircle(two);
-			Interaction interaction = new Interaction(one, two, world.forces["Gravity"]);
-			world.addInteraction(interaction);
-			world.removeInteraction(interaction);
-			Test.AreEqual(0, world.interactions.Count);
-			Test.AreEqual(0, world.interactionMap[one].Count);
-			Test.AreEqual(0, world.interactionMap[two].Count);
+			world.AddCircle(one);
+			world.AddCircle(two);
+			Interaction interaction = new Interaction(one, two, world.Forces["Gravity"]);
+			world.AddInteraction(interaction);
+			world.RemoveInteraction(interaction);
+			Test.AreEqual(0, world.Interactions.Count);
+			Test.AreEqual(0, world.InteractionMap[one].Count);
+			Test.AreEqual(0, world.InteractionMap[two].Count);
 		}
 
 		[TestMethod]
@@ -86,19 +86,19 @@ namespace TestSuite
 			Circle one = new Circle();
 			Circle two = new Circle();
 			Circle three = new Circle();
-			world.addCircle(one);
-			world.addCircle(two);
-			world.addCircle(three);
+			world.AddCircle(one);
+			world.AddCircle(two);
+			world.AddCircle(three);
 			Gravity gravity = new Gravity(0, 9.8);
 			Interaction interaction1 = new Interaction(one, two, gravity);
 			Interaction interaction2 = new Interaction(one, two, gravity);
 
-			world.addInteraction(interaction1);
-			world.addInteraction(interaction2);
-			world.updateNetForceOn(one);
-			Test.AreEqual(new OrderedPair(0, 19.6), world.netForces[one]);
-			Test.AreEqual(new OrderedPair(0, 0), world.netForces[two]);
-			Test.AreEqual(new OrderedPair(0, 0), world.netForces[three]);
+			world.AddInteraction(interaction1);
+			world.AddInteraction(interaction2);
+			world.UpdateNetForceOn(one);
+			Test.AreEqual(new OrderedPair(0, 19.6), world.NetForces[one]);
+			Test.AreEqual(new OrderedPair(0, 0), world.NetForces[two]);
+			Test.AreEqual(new OrderedPair(0, 0), world.NetForces[three]);
 		}
 
 		[TestMethod]
@@ -108,19 +108,19 @@ namespace TestSuite
 			Circle one = new Circle();
 			Circle two = new Circle();
 			Circle three = new Circle();
-			world.addCircle(one);
-			world.addCircle(two);
-			world.addCircle(three);
+			world.AddCircle(one);
+			world.AddCircle(two);
+			world.AddCircle(three);
 			Gravity gravity = new Gravity(0, 9.8);
 			Interaction interaction1 = new Interaction(one, two, gravity);
 			Interaction interaction2 = new Interaction(one, two, gravity);
 
-			world.addInteraction(interaction1);
-			world.addInteraction(interaction2);
-			world.updateNetForces();
-			Test.AreEqual(new OrderedPair(0, 19.6), world.netForces[one]);
-			Test.AreEqual(new OrderedPair(0, 19.6), world.netForces[two]);
-			Test.AreEqual(new OrderedPair(0, 0), world.netForces[three]);
+			world.AddInteraction(interaction1);
+			world.AddInteraction(interaction2);
+			world.UpdateNetForces();
+			Test.AreEqual(new OrderedPair(0, 19.6), world.NetForces[one]);
+			Test.AreEqual(new OrderedPair(0, 19.6), world.NetForces[two]);
+			Test.AreEqual(new OrderedPair(0, 0), world.NetForces[three]);
 		}
 
 		[TestMethod]
