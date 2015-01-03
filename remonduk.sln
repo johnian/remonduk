@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2013 for Web
+# Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "remonduk", "remonduk\remonduk.csproj", "{DB083B2D-01DF-4532-9D7B-3FAC293D33C5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Remonduk", "remonduk\Remonduk.csproj", "{DB083B2D-01DF-4532-9D7B-3FAC293D33C5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSuite", "TestSuite\TestSuite.csproj", "{BE018F64-8347-4134-A7D5-D518704BB24F}"
 EndProject

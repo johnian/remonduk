@@ -59,9 +59,9 @@
     <Compile Include="TetherTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\remonduk\remonduk.csproj">
+    <ProjectReference Include="..\remonduk\Remonduk.csproj">
       <Project>{db083b2d-01df-4532-9d7b-3fac293d33c5}</Project>
-      <Name>remonduk</Name>
+      <Name>Remonduk</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
