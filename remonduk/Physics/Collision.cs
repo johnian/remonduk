@@ -11,6 +11,47 @@ namespace Remonduk.Physics
 		/// <summary>
 		/// 
 		/// </summary>
+		private const int PRECISION = 8;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="time"></param>
+		/// <returns></returns>
+		public OrderedPair NextVelocity(double time)
+		{
+			double thisVx = Ax * time / 2 + Vx;
+			double thisVy = Ay * time / 2 + Vy;
+			return new OrderedPair(thisVx, thisVy);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="time"></param>
+		/// <returns></returns>
+		public OrderedPair NextPosition(double time)
+		{
+			double potentialX = Ax * time * time / 2 + Vx * time + Px;
+			double potentialY = Ay * time * time / 2 + Vy * time + Py;
+			return new OrderedPair(potentialX, potentialY);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public OrderedPair NextPosition()
+		{
+			double potentialX = Ax / 2 + Vx + Px;
+			double potentialY = Ay / 2 + Vy + Py;
+			return new OrderedPair(potentialX, potentialY);
+		}
+
+
+		/// <summary>
+		/// 
+		/// </summary>
 		/// <param name="that"></param>
 		/// <returns></returns>
 		public double DistanceSquared(Circle that)
@@ -23,7 +64,7 @@ namespace Remonduk.Physics
 		/// <summary>
 		/// Calculates the distance from this circle to that circle.
 		/// </summary>
-		/// <param name="other">The other circle to calculate distance to.</param>
+		/// <param name="that">The other circle to calculate distance to.</param>
 		/// <returns>The distance to the other circle.</returns>
 		public double Distance(Circle that)
 		{
@@ -33,32 +74,32 @@ namespace Remonduk.Physics
 		/// <summary>
 		/// Calculates the closest point on the this' movement vector to that.
 		/// </summary>
-		/// <param name="that_x">That circles x value.</param>
-		/// <param name="that_y">That circles y value</param>
-		/// <param name="reference_vx">This circles reference vx.</param>
-		/// <param name="reference_vy">This circles reference vy.</param>
-		/// <returns>The closest point on this' movement vector to that_x and that_y</returns>
-		public OrderedPair ClosestPoint(double that_x, double that_y,
-			double reference_vx, double reference_vy)
+		/// <param name="thatX">That circles x value.</param>
+		/// <param name="thatY">That circles y value</param>
+		/// <param name="referenceVx">This circles reference vx.</param>
+		/// <param name="referenceVy">This circles reference vy.</param>
+		/// <returns>The closest point on this' movement vector to thatX and thatY</returns>
+		public OrderedPair ClosestPoint(double thatX, double thatY,
+			double referenceVx, double referenceVy)
 		{
-			double constant_1 = reference_vy * Px - reference_vx * Py;
-			double constant_2 = reference_vx * that_x + reference_vy * that_y;
+			double constant_1 = referenceVy * Px - referenceVx * Py;
+			double constant_2 = referenceVx * thatX + referenceVy * thatY;
 
-			double determinant = reference_vx * reference_vx + reference_vy * reference_vy;
+			double determinant = referenceVx * referenceVx + referenceVy * referenceVy;
 
-			double intersection_x;
-			double intersection_y;
+			double intersectionX;
+			double intersectionY;
 			if (determinant == 0)
 			{
-				intersection_x = Px;
-				intersection_y = Py;
+				intersectionX = Px;
+				intersectionY = Py;
 			}
 			else
 			{
-				intersection_x = (constant_1 * reference_vy + constant_2 * reference_vx) / determinant;
-				intersection_y = (constant_2 * reference_vy - constant_1 * reference_vx) / determinant;
+				intersectionX = (constant_1 * referenceVy + constant_2 * referenceVx) / determinant;
+				intersectionY = (constant_2 * referenceVy - constant_1 * referenceVx) / determinant;
 			}
-			return new OrderedPair(intersection_x, intersection_y);
+			return new OrderedPair(intersectionX, intersectionY);
 		}
 
 		/// <summary>
@@ -69,62 +110,56 @@ namespace Remonduk.Physics
 		/// <returns></returns>
 		public double Crossing(Circle that, double time)
 		{
-			double this_vx = Acceleration.X * time / 2 + Velocity.X;
-			double this_vy = Acceleration.Y * time / 2 + Velocity.Y;
-			double that_vx = that.Acceleration.X * time / 2 + that.Velocity.X;
-			double that_vy = that.Acceleration.Y * time / 2 + that.Velocity.Y;
-			double reference_vx = this_vx - that_vx;
-			double reference_vy = this_vy - that_vy;
+			OrderedPair thisV = NextVelocity(time);
+			OrderedPair thatV = that.NextVelocity(time);
+			double referenceVx = thisV.X - thatV.X;
+			double referenceVy = thisV.X - thatV.Y;
 
-			OrderedPair point = ClosestPoint(that.Position.X, that.Position.Y, reference_vx, reference_vy);
+			OrderedPair point = ClosestPoint(that.Px, that.Py, referenceVx, referenceVy);
 			if (point == null)
 			{
 				return Double.PositiveInfinity;
 			}
-			double distance_from_that = OrderedPair.Magnitude(point.X - that.Position.X, point.Y - that.Position.Y);
-			double radii_sum = that.Radius + Radius;
+			double distanceFromThat = OrderedPair.Magnitude(point.X - that.Px, point.Y - that.Py);
+			//double distanceFromThat = point.Magnitude(that.Position);
+			double radiiSum = that.Radius + Radius;
 
-			if (distance_from_that > radii_sum)
+			if (distanceFromThat > radiiSum)
 			{
 				return Double.PositiveInfinity;
 			}
 			else
 			{
-				double distance_from_collision_squared = radii_sum * radii_sum - distance_from_that * distance_from_that;
-				double distance_from_collision = Math.Sqrt(distance_from_collision_squared);
+				double distanceFromCollision = Math.Sqrt(radiiSum * radiiSum - distanceFromThat * distanceFromThat);
+				double referenceVelocity = OrderedPair.Magnitude(referenceVx, referenceVy);
+				double collisionX = point.X - referenceVx * distanceFromCollision / referenceVelocity;
+				double collisionY = point.Y - referenceVy * distanceFromCollision / referenceVelocity;
 
-				double reference_velocity = OrderedPair.Magnitude(reference_vx, reference_vy);
-				double collision_x = point.X - distance_from_collision * reference_vx / reference_velocity;
-				double collision_y = point.Y - distance_from_collision * reference_vy / reference_velocity;
-				double time_x;
-				if (reference_vx == 0)
+				double timeX = TimeTo(referenceVx, collisionX, Px);
+				double timeY = TimeTo(referenceVy, collisionY, Py);
+
+				if (timeX >= 0 && timeX <= time &&
+					timeY >= 0 && timeY <= time)
 				{
-					if (collision_x == Px) time_x = 0;
-					else time_x = Double.PositiveInfinity;
+					return Math.Round((timeX > timeY) ? timeX : timeY, PRECISION);
 				}
-				else
+				else return Double.PositiveInfinity;
+			}
+		}
+
+		private double TimeTo(double referenceVelocity, double end, double start)
+		{
+			if (referenceVelocity == 0)
+			{
+				if (end == start)
 				{
-					time_x = (collision_x - Px) / reference_vx;
+					return 0;
 				}
-				double time_y;
-				if (reference_vy == 0)
-				{
-					if (collision_y == Py) time_y = 0;
-					else time_y = Double.PositiveInfinity;
-				}
-				else
-				{
-					time_y = (collision_y - Py) / reference_vy;
-				}
-				if (time_x >= 0 && time_x <= time &&
-					time_y >= 0 && time_y <= time)
-				{
-					return Math.Round((time_x > time_y) ? time_x : time_y, PRECISION);
-				}
-				else
-				{
-					return Double.PositiveInfinity;
-				}
+				return Double.PositiveInfinity;
+			}
+			else
+			{
+				return (end - start) / referenceVelocity;
 			}
 		}
 

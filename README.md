@@ -23,6 +23,8 @@ utilize quad tree in collision detection
 break down classes into smaller chunks
 break down functions into smaller chunks
 
+fix collision bug
+
 game update -- if previous time was 0, ignore this second one
 
 partial ghostiness? what if a circle can pass through some things, but not others

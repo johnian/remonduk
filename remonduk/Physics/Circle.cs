@@ -17,12 +17,7 @@ namespace Remonduk.Physics
 		////
 		// Constants
 		////
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public const int PRECISION = 8;
-
+		
 		/// <summary>
 		/// Default radius.
 		/// </summary>
@@ -305,8 +300,8 @@ namespace Remonduk.Physics
 		/// Sets a circle for this circle to Follow.
 		/// </summary>
 		/// <param name="target">The target circle this circle should Follow.</param>
-		/// <param name="min_distance">The minimum distance this circle will start following at.</param>
-		/// <param name="max_distance">The maximum distance this circle will start following at.</param>
+		/// <param name="minDistance">The minimum distance this circle will start following at.</param>
+		/// <param name="maxDistance">The maximum distance this circle will start following at.</param>
 		public void Follow(Circle target, double minDistance, double maxDistance)
 		{
 			if (target == null || target == this)
@@ -327,29 +322,6 @@ namespace Remonduk.Physics
 		public void FaceTarget()
 		{
 			Velocity.SetXY(OrderedPair.Angle(Target.Py - Py, Target.Px - Px));
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="time"></param>
-		/// <returns></returns>
-		public OrderedPair NextPosition(double time)
-		{
-			double potentialX = Ax * time * time / 2 + Vx * time + Px;
-			double potentialY = Ay * time * time / 2 + Vy * time + Py;
-			return new OrderedPair(potentialX, potentialY);
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
-		public OrderedPair NextPosition()
-		{
-			double potentialX = Ax / 2 + Vx + Px;
-			double potentialY = Ay / 2 + Vy + Py;
-			return new OrderedPair(potentialX, potentialY);
 		}
 
 		/// <summary>
@@ -383,6 +355,7 @@ namespace Remonduk.Physics
 		/// <param name="time"></param>
 		public void Update(double time)
 		{
+			// will this ever need to do anything else??
 			UpdatePosition(time);
 		}
 
