@@ -1,4 +1,4 @@
-﻿namespace remonduk.GUI
+﻿namespace Remonduk.GUI
 {
     partial class Interaction_Detail_Window
     {

@@ -1,4 +1,4 @@
-﻿namespace remonduk
+﻿namespace Remonduk
 {
     partial class MainWindow
     {

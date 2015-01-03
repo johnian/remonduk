@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace remonduk
+namespace Remonduk
 {
     /// <summary>
     /// Simplified debug printing.

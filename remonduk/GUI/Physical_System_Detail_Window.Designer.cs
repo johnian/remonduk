@@ -1,4 +1,4 @@
-﻿namespace remonduk.GUI
+﻿namespace Remonduk.GUI
 {
     partial class Physical_System_Detail_Window
     {

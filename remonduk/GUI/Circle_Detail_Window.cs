@@ -7,8 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Remonduk.Physics;
 
-namespace remonduk.GUI
+namespace Remonduk.GUI
 {
     public partial class Circle_Detail_Window : Form
     {

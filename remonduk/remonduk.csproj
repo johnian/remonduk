@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Physics\Circle.cs" />
+    <Compile Include="Physics\Collision.cs" />
     <Compile Include="Physics\Constants.cs" />
     <Compile Include="Physics\Force.cs" />
     <Compile Include="Physics\Gravity.cs" />

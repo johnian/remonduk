@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using remonduk.QuadTreeTest;
+using Remonduk.QuadTreeTest;
 
-namespace remonduk
+namespace Remonduk.Physics
 {
 	/// <summary>
 	/// The physical system represents the current existence the Interactions are taking place in.  
@@ -175,7 +175,7 @@ namespace remonduk
 				fx += f.X;
 				fy += f.Y;
 			}
-			NetForces[circle].Set(fx, fy);
+			NetForces[circle].SetXY(fx, fy);
 			//Out.WriteLine("f: " + fx + ", " + fy);
 		}
 
@@ -195,7 +195,7 @@ namespace remonduk
 					{
 						// use quad Tree to get the list of Circles to check against
 						// for now, just use Circles
-						
+
 						double value = circle.Colliding(that, time);
 						//Out.WriteLine("collision time for " + this.GetHashCode() + "> " + that.GetHashCode() + ": " + value);
 						if (!Double.IsInfinity(value))

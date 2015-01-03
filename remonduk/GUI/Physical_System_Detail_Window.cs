@@ -8,7 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace remonduk.GUI
+using Remonduk.Physics;
+
+namespace Remonduk.GUI
 {
     public partial class Physical_System_Detail_Window : Form
     {

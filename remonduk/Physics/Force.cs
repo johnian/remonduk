@@ -1,6 +1,6 @@
 using System;
 
-namespace remonduk
+namespace Remonduk.Physics
 {
 	public class Force
 	{

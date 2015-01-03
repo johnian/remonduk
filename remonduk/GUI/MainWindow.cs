@@ -9,9 +9,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
-using remonduk.QuadTreeTest;
+using Remonduk.QuadTreeTest;
+using Remonduk.Physics;
 
-namespace remonduk
+namespace Remonduk
 {
     public partial class MainWindow : Form
     {

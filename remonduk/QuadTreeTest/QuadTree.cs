@@ -28,7 +28,7 @@ using System.Text;
 
 #endregion
 
-namespace remonduk.QuadTreeTest
+namespace Remonduk.QuadTreeTest
 {
     /// <summary>
     /// A position item in a quadtree

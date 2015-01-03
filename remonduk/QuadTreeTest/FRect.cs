@@ -9,7 +9,7 @@ using System.Text;
 
 #endregion
 
-namespace remonduk.QuadTreeTest
+namespace Remonduk.QuadTreeTest
 {
     /// <summary>
     /// A floating-point rectangle

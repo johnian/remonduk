@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace remonduk.Properties
+namespace Remonduk.Properties
 {
 
 
