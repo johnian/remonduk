@@ -2,8 +2,8 @@ using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-using remonduk;
+using Remonduk;
+using Remonduk.Physics;
 
 namespace TestSuite
 {
@@ -68,26 +68,5 @@ namespace TestSuite
 		//	AreEqual(.18, c3.velocity);
 		//	AreEqual(.36, c1.velocity);
 		//}
-
-		private void AreEqual(double expected, double actual)
-		{
-			System.Diagnostics.Debug.WriteLine("expected: " + expected + " actual: " + actual);
-			AreEqual(true, Math.Abs(expected - actual) < EPSILON);
-		}
-
-		private void AreEqual(bool expected, bool actual)
-		{
-			Assert.AreEqual(expected, actual);
-		}
-
-		private void AreEqual(Object expected, Object actual)
-		{
-			Assert.AreEqual(expected, actual);
-		}
-
-		private double round(double value)
-		{
-			return Math.Round(value, PRECISION);
-		}
 	}
 }

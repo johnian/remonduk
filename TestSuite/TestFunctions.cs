@@ -1,6 +1,7 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using remonduk;
+using Remonduk;
+using Remonduk.Physics;
 
 namespace TestSuite
 {
@@ -23,7 +24,7 @@ namespace TestSuite
 
 		public static void AreEqual(double expected, double actual)
 		{
-			System.Diagnostics.Debug.WriteLine("expected: " + expected + " actual: " + actual);
+			Out.WriteLine("expected: " + expected + " actual: " + actual);
 			AreEqual(true, Math.Abs(expected - actual) < EPSILON);
 		}
 

@@ -15,7 +15,7 @@ Floid
 [sound] (#8)  
 
 for juliono:
-move all constants to constant file
+update comments	
 reorganize folder hierarchy
 optimize code
 finish test cases
