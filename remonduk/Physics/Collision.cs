@@ -20,8 +20,8 @@ namespace Remonduk.Physics
 		/// <returns></returns>
 		public OrderedPair NextVelocity(double time)
 		{
-			double thisVx = Ax * time / 2 + Vx;
-			double thisVy = Ay * time / 2 + Vy;
+			double thisVx = Ax * time + Vx;
+			double thisVy = Ay * time + Vy;
 			return new OrderedPair(thisVx, thisVy);
 		}
 
@@ -47,7 +47,6 @@ namespace Remonduk.Physics
 			double potentialY = Ay / 2 + Vy + Py;
 			return new OrderedPair(potentialX, potentialY);
 		}
-
 
 		/// <summary>
 		/// 
@@ -82,24 +81,20 @@ namespace Remonduk.Physics
 		public OrderedPair ClosestPoint(double thatX, double thatY,
 			double referenceVx, double referenceVy)
 		{
-			double constant_1 = referenceVy * Px - referenceVx * Py;
-			double constant_2 = referenceVx * thatX + referenceVy * thatY;
-
+			double thisConstant = referenceVy * Px - referenceVx * Py;
+			double thatConstant = referenceVx * thatX + referenceVy * thatY;
 			double determinant = referenceVx * referenceVx + referenceVy * referenceVy;
 
-			double intersectionX;
-			double intersectionY;
 			if (determinant == 0)
 			{
-				intersectionX = Px;
-				intersectionY = Py;
+				return new OrderedPair(Px, Py);
 			}
 			else
 			{
-				intersectionX = (constant_1 * referenceVy + constant_2 * referenceVx) / determinant;
-				intersectionY = (constant_2 * referenceVy - constant_1 * referenceVx) / determinant;
+				double intersectionX = (thisConstant * referenceVy + thatConstant * referenceVx) / determinant;
+				double intersectionY = (thatConstant * referenceVy - thisConstant * referenceVx) / determinant;
+				return new OrderedPair(intersectionX, intersectionY);
 			}
-			return new OrderedPair(intersectionX, intersectionY);
 		}
 
 		/// <summary>
@@ -120,38 +115,37 @@ namespace Remonduk.Physics
 			{
 				return Double.PositiveInfinity;
 			}
-			double distanceFromThat = OrderedPair.Magnitude(point.X - that.Px, point.Y - that.Py);
-			//double distanceFromThat = point.Magnitude(that.Position);
+			//double distanceFromThat = OrderedPair.Magnitude(point.X - that.Px, point.Y - that.Py);
+			double distanceFromThat = point.Magnitude(that.Position);
 			double radiiSum = that.Radius + Radius;
+			double distanceFromCollision = Math.Sqrt(radiiSum * radiiSum - distanceFromThat * distanceFromThat);
 
-			if (distanceFromThat > radiiSum)
-			{
-				return Double.PositiveInfinity;
-			}
-			else
-			{
-				double distanceFromCollision = Math.Sqrt(radiiSum * radiiSum - distanceFromThat * distanceFromThat);
-				double referenceVelocity = OrderedPair.Magnitude(referenceVx, referenceVy);
-				double collisionX = point.X - referenceVx * distanceFromCollision / referenceVelocity;
-				double collisionY = point.Y - referenceVy * distanceFromCollision / referenceVelocity;
-
-				double timeX = TimeTo(referenceVx, collisionX, Px);
-				double timeY = TimeTo(referenceVy, collisionY, Py);
-
-				if (timeX >= 0 && timeX <= time &&
-					timeY >= 0 && timeY <= time)
-				{
-					return Math.Round((timeX > timeY) ? timeX : timeY, PRECISION);
-				}
-				else return Double.PositiveInfinity;
-			}
+			return CollisionTime(distanceFromCollision, referenceVx, referenceVy, point, time);
 		}
 
-		private double TimeTo(double referenceVelocity, double end, double start)
+		private double CollisionTime(double distanceFromCollision,
+			double referenceVx, double referenceVy, OrderedPair point, double time)
+		{
+			double referenceVelocity = OrderedPair.Magnitude(referenceVx, referenceVy);
+			double collisionX = point.X - referenceVx * distanceFromCollision / referenceVelocity;
+			double collisionY = point.Y - referenceVy * distanceFromCollision / referenceVelocity;
+
+			double timeX = TimeTo(referenceVx, collisionX - Px);
+			double timeY = TimeTo(referenceVy, collisionY - Py);
+
+			if (timeX >= 0 && timeX <= time &&
+				timeY >= 0 && timeY <= time)
+			{
+				return Math.Round((timeX > timeY) ? timeX : timeY, PRECISION);
+			}
+			return Double.PositiveInfinity;
+		}
+
+		private double TimeTo(double referenceVelocity, double distance)
 		{
 			if (referenceVelocity == 0)
 			{
-				if (end == start)
+				if (Math.Round(distance, PRECISION) == 0)
 				{
 					return 0;
 				}
@@ -159,8 +153,30 @@ namespace Remonduk.Physics
 			}
 			else
 			{
-				return (end - start) / referenceVelocity;
+				return distance / referenceVelocity;
 			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="circles"></param>
+		/// <returns></returns>
+		public OrderedPair CollideWith(List<Circle> circles)
+		{
+			double totalVx = 0;
+			double totalVy = 0;
+			foreach (Circle that in circles)
+			{
+				if (that == this) continue;
+
+				totalVx += (Vx * (Mass - that.Mass) + 2 * that.Vx * that.Mass) / (Mass + that.Mass);
+				totalVy += (Vy * (Mass - that.Mass) + 2 * that.Vy * that.Mass) / (Mass + that.Mass);
+				// modify for elasticity
+				// use average elasticity between two Colliding objects for simplicity
+				// try to derive a formula for it
+			}
+			return new OrderedPair(totalVx, totalVy);
 		}
 
 		/// <summary>
@@ -175,15 +191,15 @@ namespace Remonduk.Physics
 			{
 				if (that != this)
 				{
-					double old_distance = Distance(that);
+					double oldDistance = Distance(that);
 
-					double this_px = Ax / 2 + Vx + Px;
-					double this_py = Ay / 2 + Vy + Py;
-					double that_px = that.Ax / 2 + that.Vx + that.Px;
-					double that_py = that.Ay / 2 + that.Vy + that.Py;
-					double new_distance = OrderedPair.Magnitude(that_px - this_px, that_py - this_py);
+					double thisPx = Ax / 2 + Vx + Px;
+					double thisPy = Ay / 2 + Vy + Py;
+					double thatPx = that.Ax / 2 + that.Vx + that.Px;
+					double thatPy = that.Ay / 2 + that.Vy + that.Py;
+					double newDistance = OrderedPair.Magnitude(thatPx - thisPx, thatPy - thisPy);
 
-					if (new_distance < old_distance)
+					if (newDistance < oldDistance)
 					{
 						return 0;
 					}
@@ -201,31 +217,6 @@ namespace Remonduk.Physics
 		public bool Colliding(Circle that)
 		{
 			return (DistanceSquared(that) <= (that.Radius + Radius) * (that.Radius + Radius));
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="circles"></param>
-		/// <returns></returns>
-		public OrderedPair CollideWith(List<Circle> circles)
-		{
-			double total_vx = 0;
-			double total_vy = 0;
-			foreach (Circle that in circles)
-			{
-				if (that == this)
-				{
-					continue;
-				}
-
-				total_vx += (Vx * (Mass - that.Mass) + 2 * that.Vx * that.Mass) / (Mass + that.Mass);
-				total_vy += (Vy * (Mass - that.Mass) + 2 * that.Vy * that.Mass) / (Mass + that.Mass);
-				// modify for elasticity
-				// use average elasticity between two Colliding objects for simplicity
-				// try to derive a formula for it
-			}
-			return new OrderedPair(total_vx, total_vy);
 		}
 	}
 }

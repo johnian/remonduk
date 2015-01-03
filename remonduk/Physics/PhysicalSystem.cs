@@ -184,6 +184,7 @@ namespace Remonduk.Physics
 			Dictionary<Circle, OrderedPair>.KeyCollection circles = NetForces.Keys;
 			double time = 1;
 			Dictionary<Circle, List<Circle>> collisionMap;
+			bool overlapped = false;
 			while (time > 0)
 			{
 				collisionMap = new Dictionary<Circle, List<Circle>>();
@@ -197,10 +198,15 @@ namespace Remonduk.Physics
 						// for now, just use Circles
 
 						double value = circle.Colliding(that, time);
-						//Out.WriteLine("collision time for " + this.GetHashCode() + "> " + that.GetHashCode() + ": " + value);
+						
 						if (!Double.IsInfinity(value))
 						{
-							if (value < min)
+							Out.WriteLine("collision time for " + GetHashCode() + "> " + that.GetHashCode() + ": " + value);
+							if (value == 0 && overlapped)
+							{
+								continue;
+							}
+							if (Math.Round(value - min, 8) < 0)
 							{
 								min = value;
 								collisionMap = new Dictionary<Circle, List<Circle>>();
@@ -218,19 +224,29 @@ namespace Remonduk.Physics
 						//Out.WriteLine("min: " + min);
 					}
 				}
-				if (Double.IsInfinity(min))
-				{
-					min = time;
-				}
-				foreach (Circle circle in circles)
-				{
-					circle.Update(min);
-				}
-				UpdateVelocities(collisionMap);
+				overlapped = (min == 0);
+				UpdateCircles(min, time, circles, collisionMap);
 				time -= min;
 				//Out.WriteLine("time: " + time);
-				//Out.WriteLine("number of collisions: " + collisionMap.Count + "");
+				if (collisionMap.Count % 2 == 1) {
+					Out.WriteLine("number of collisions: " + collisionMap.Count + "");
+				}
 			}
+		}
+
+		public void UpdateCircles(double min, double time,
+			Dictionary<Circle, OrderedPair>.KeyCollection circles,
+			Dictionary<Circle, List<Circle>> collisionMap)
+		{
+			if (Double.IsInfinity(min))
+			{
+				min = time;
+			}
+			foreach (Circle circle in circles)
+			{
+				circle.Update(min);
+			}
+			UpdateVelocities(collisionMap);
 		}
 
 		public void UpdateVelocities(Dictionary<Circle, List<Circle>> collisionMap)
