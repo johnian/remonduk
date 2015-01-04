@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Diagnostics;
 using Remonduk.QuadTreeTest;
+using remonduk.QuadTreeTest;
 
 namespace Remonduk.Physics
 {
@@ -145,7 +146,7 @@ namespace Remonduk.Physics
 		/// </summary>
 		public Color Color;
 
-		public QuadTreeTest.QuadTreePositionItem<Circle> q_tree_pos;
+		public QuadTreePositionItem<Circle> q_tree_pos;
 
 		////
 		// Constructors
@@ -219,7 +220,7 @@ namespace Remonduk.Physics
 			Follow(TARGET);
 
 			Color = COLOR;
-			q_tree_pos = new QuadTreeTest.QuadTreePositionItem<Circle>(this, new Tuple<double, double>(Position.X, Position.Y), new Tuple<double, double>(radius, radius));
+			q_tree_pos = new QuadTreePositionItem<Circle>(this, new Tuple<double, double>(Position.X, Position.Y), new Tuple<double, double>(radius, radius));
 		}
 
 		/// <summary>
@@ -368,6 +369,14 @@ namespace Remonduk.Physics
 			Brush brush = new SolidBrush(Color.Chartreuse);
 			g.FillEllipse(brush, (float)(Px - Radius), (float)(Py - Radius), (float)(2 * Radius), (float)(2 * Radius));
 		}
+
+        public bool Contains(OrderedPair point)
+        {
+            return (point.X < Px + Radius &&
+                    point.X > Px - Radius &&
+                    point.Y < Py + Radius &&
+                    point.Y > Py - Radius);
+        }
 
 		/// <summary>
 		/// 

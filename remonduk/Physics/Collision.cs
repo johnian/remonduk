@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Remonduk.QuadTreeTest;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -228,5 +229,13 @@ namespace Remonduk.Physics
 		{
 			return (DistanceSquared(that) <= (that.Radius + Radius) * (that.Radius + Radius));
 		}
+
+        public bool Intersects(FRect rect)
+        {
+            return (rect.Left < Px + Radius &&
+                    rect.Right > Px - Radius &&
+                    rect.Top < Py + Radius &&
+                    rect.Bottom > Py - Radius);
+        }
 	}
 }

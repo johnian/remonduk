@@ -78,7 +78,7 @@ namespace Remonduk.Physics
 			//Out.WriteLine("6");
 
 			// why does this throw a null pointer exception
-			Tree.Insert(circle.q_tree_pos);
+			Tree.Insert(circle);
 			//Out.WriteLine("7");
 		}
 

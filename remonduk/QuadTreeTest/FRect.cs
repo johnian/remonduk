@@ -2,6 +2,7 @@
 
 #region Using declarations
 
+using Remonduk.Physics;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -180,10 +181,10 @@ namespace Remonduk.QuadTreeTest
         /// </summary>
         /// <param name="Point">The point to test</param>
         /// <returns>Whether or not this rectangle contains the point</returns>
-        public bool Contains(Tuple<double, double> Point)
+        public bool Contains(OrderedPair Point)
         {
-            return (topLeft.Item1 <= Point.Item1 && bottomRight.Item1 >= Point.Item1 &&
-                    topLeft.Item2 <= Point.Item2 && bottomRight.Item2 >= Point.Item2);
+            return (topLeft.Item1 <= Point.X && bottomRight.Item1 >= Point.X &&
+                    topLeft.Item2 <= Point.Y && bottomRight.Item2 >= Point.Y);
         }
 
         /// <summary>

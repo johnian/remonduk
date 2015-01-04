@@ -85,6 +85,8 @@
     <Compile Include="QuadTreeTest\FRect.cs" />
     <Compile Include="QuadTreeTest\QuadTree.cs" />
     <Compile Include="Physics\Tether.cs" />
+    <Compile Include="QuadTreeTest\QuadTreeNode.cs" />
+    <Compile Include="QuadTreeTest\QuadTreePositionItem.cs" />
     <EmbeddedResource Include="GUI\Circle_Detail_Window.resx">
       <DependentUpon>Circle_Detail_Window.cs</DependentUpon>
     </EmbeddedResource>
