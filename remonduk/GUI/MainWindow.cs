@@ -65,7 +65,9 @@ namespace Remonduk
             {
                 this.CreateGraphics().Clear(System.Drawing.Color.Gray);
 				
-				ps.update();
+				if (!pause) {
+					ps.update();
+				}
 				//ps.updateNetForces();
 
                 foreach (Circle c in ps.Circles)
@@ -221,7 +223,7 @@ namespace Remonduk
             drag = false;
 
             Point pos = this.PointToClient(Control.MousePosition);
-            Out.WriteLine("Original Click Pos: " + pos.ToString());
+			//Out.WriteLine("Original Click Pos: " + pos.ToString());
             Circle click = new Circle(5, pos.X, pos.Y);
 
             bool found = false;
@@ -276,7 +278,8 @@ namespace Remonduk
 
 				//click.updateAcceleration((float)new_circle_acceleration_up_down.Value, 
 				//	((double)new_circle_acceleration_angle_up_down.Value) * Math.PI / 180.0);
-                Out.WriteLine("Click Pos: " + click.Position);
+				//Out.WriteLine("Click Pos: " + click.Position);
+				Out.WriteLine("new circle: " + click.GetHashCode());
                 ps.AddCircle(click);
             }
         }

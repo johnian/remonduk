@@ -11,7 +11,7 @@ namespace Remonduk.Physics
 		/// <summary>
 		/// 
 		/// </summary>
-		private const int PRECISION = 8;
+		private const int PRECISION = 1;
 
 		/// <summary>
 		/// 
@@ -136,7 +136,10 @@ namespace Remonduk.Physics
 			if (timeX >= 0 && timeX <= time &&
 				timeY >= 0 && timeY <= time)
 			{
-				return Math.Round((timeX > timeY) ? timeX : timeY, PRECISION);
+				//Out.WriteLine("(" + timeX + ", " + timeY + ")");
+				timeX = Math.Round(timeX, PRECISION);
+				timeY = Math.Round(timeY, PRECISION);
+				return (timeX > timeY) ? timeX : timeY;
 			}
 			return Double.PositiveInfinity;
 		}
@@ -201,12 +204,19 @@ namespace Remonduk.Physics
 
 					if (newDistance < oldDistance)
 					{
+						//Out.WriteLine("overlapping collision: " + GetHashCode() + " ~ " + that.GetHashCode());
 						return 0;
 					}
+					return 0;
 				}
 				return Double.PositiveInfinity;
 			}
-			return Crossing(that, time);
+			double value = Crossing(that, time);
+			if (!Double.IsInfinity(value)) {
+				//Out.WriteLine("colliding collision: " + GetHashCode() + " ~ " + that.GetHashCode());
+			}
+			//return Crossing(that, time);
+			return value;
 		}
 
 		/// <summary>

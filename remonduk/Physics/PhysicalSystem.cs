@@ -181,68 +181,81 @@ namespace Remonduk.Physics
 
 		public void UpdatePositions()
 		{
-			Dictionary<Circle, OrderedPair>.KeyCollection circles = NetForces.Keys;
 			double time = 1;
-			Dictionary<Circle, List<Circle>> collisionMap;
 			bool overlapped = false;
+
 			while (time > 0)
 			{
-				collisionMap = new Dictionary<Circle, List<Circle>>();
-				double min = Double.PositiveInfinity;
-				foreach (Circle circle in circles)
+				Dictionary<Circle, List<Circle>> collisionMap = new Dictionary<Circle, List<Circle>>();
+				double min = CheckCollisions(ref collisionMap, ref Circles, time, overlapped);
+				if (collisionMap.Count != 0)
 				{
-					List<Circle> collisions = new List<Circle>();
-					foreach (Circle that in circles)
-					{
-						// use quad Tree to get the list of Circles to check against
-						// for now, just use Circles
-
-						double value = circle.Colliding(that, time);
-						
-						if (!Double.IsInfinity(value))
-						{
-							Out.WriteLine("collision time for " + GetHashCode() + "> " + that.GetHashCode() + ": " + value);
-							if (value == 0 && overlapped)
-							{
-								continue;
-							}
-							if (Math.Round(value - min, 8) < 0)
-							{
-								min = value;
-								collisionMap = new Dictionary<Circle, List<Circle>>();
-								collisions = new List<Circle>();
-								collisionMap.Add(circle, collisions);
-								collisions.Add(that);
-							}
-							else if (value == min)
-							{
-								collisionMap.Add(circle, collisions);
-								collisions.Add(that);
-							}
-						}
-						//Out.WriteLine("value: " + value);
-						//Out.WriteLine("min: " + min);
-					}
+					//Out.WriteLine("collision count: " + collisionMap.Count);
+					//Out.WriteLine("circle count: " + Circles.Count);
+					//Out.WriteLine("number of collisions: " + collisionMap.Count + "");
+					Out.WriteLine("");
 				}
 				overlapped = (min == 0);
-				UpdateCircles(min, time, circles, collisionMap);
+
+				UpdateCircles(min, time, collisionMap);
 				time -= min;
-				//Out.WriteLine("time: " + time);
-				if (collisionMap.Count % 2 == 1) {
-					Out.WriteLine("number of collisions: " + collisionMap.Count + "");
-				}
 			}
 		}
 
+		public double CheckCollisions(ref Dictionary<Circle, List<Circle>> collisionMap, ref List<Circle> near,
+			double time, bool overlapped)
+		{
+			//Out.WriteLine("");
+			double min = Double.PositiveInfinity;
+			foreach (Circle circle in Circles)
+			{
+				List<Circle> collisions = new List<Circle>();
+				foreach (Circle that in near)
+				{
+					// use quad Tree to get the list of Circles to check against
+					// for now, just use Circles
+					double value = circle.Colliding(that, time);
+
+					if (!Double.IsInfinity(value))
+					{
+						Out.WriteLine("collision time for [" + circle.GetHashCode() + " & " + that.GetHashCode() + "]: " + value + " < " + min);
+						Out.WriteLine(circle.Velocity + " : " + that.Velocity);
+						if (value == 0 && overlapped)
+						{
+							//continue;
+						}
+						else if (value < min)
+						{
+							//Out.WriteLine("updating collision map: " + value);
+							min = value;
+							collisionMap = new Dictionary<Circle, List<Circle>>();
+							collisions = new List<Circle>();
+							collisionMap.Add(circle, collisions);
+							collisions.Add(that);
+						}
+						else if (value == min)
+						{
+							//Out.WriteLine("adding to collision map: " + value);
+							if (collisionMap != null && !collisionMap.ContainsKey(circle)) {
+								// is this needed in the first place
+								collisionMap.Add(circle, collisions);
+							}
+							collisions.Add(that);
+						}
+					}
+				}
+			}
+			return min;
+		}
+
 		public void UpdateCircles(double min, double time,
-			Dictionary<Circle, OrderedPair>.KeyCollection circles,
 			Dictionary<Circle, List<Circle>> collisionMap)
 		{
 			if (Double.IsInfinity(min))
 			{
 				min = time;
 			}
-			foreach (Circle circle in circles)
+			foreach (Circle circle in Circles)
 			{
 				circle.Update(min);
 			}
@@ -260,7 +273,7 @@ namespace Remonduk.Physics
 			}
 			foreach (Circle circle in velocityMap.Keys)
 			{
-				//Out.WriteLine(velocityMap[Circle] + "");
+				//Out.WriteLine(velocityMap[circle] + " <= " + circle.Velocity);
 				circle.SetVelocity(velocityMap[circle].X, velocityMap[circle].Y);
 			}
 		}
