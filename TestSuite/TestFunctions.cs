@@ -14,6 +14,7 @@ namespace TestSuite
 		{
 			AreEqual(expected.X, actual.X);
 			AreEqual(expected.Y, actual.Y);
+            
 		}
 
 		public static void AreClose(OrderedPair expected, OrderedPair actual)

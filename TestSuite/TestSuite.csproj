@@ -55,6 +55,7 @@
     <Compile Include="OrderedPairTest.cs" />
     <Compile Include="PhysicalSystemTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuadTreeTest.cs" />
     <Compile Include="TestFunctions.cs" />
     <Compile Include="TetherTest.cs" />
   </ItemGroup>

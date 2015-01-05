@@ -23,4 +23,3 @@ C:\Users\julian\johnian\remonduk\remonduk\obj\Debug\Remonduk.csproj.GenerateReso
 C:\Users\julian\johnian\remonduk\remonduk\obj\Debug\remonduk.exe
 C:\Users\julian\johnian\remonduk\remonduk\obj\Debug\remonduk.pdb
 C:\Users\julian\johnian\remonduk\remonduk\obj\Debug\Remonduk.csprojResolveAssemblyReference.cache
-C:\Users\Sid\documents\visual studio 2013\Projects\remonduk\remonduk\obj\Debug\Remonduk.csprojResolveAssemblyReference.cache
