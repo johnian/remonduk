@@ -84,7 +84,7 @@ namespace Remonduk
                 }
 
                 drawHUD(this.CreateGraphics());
-
+                ps.Tree.draw(this.CreateGraphics());
                 selected_interaction = psdw.selected_interaction;
                 selected_circle = psdw.selected_circle;
 
