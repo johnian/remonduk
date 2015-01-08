@@ -137,14 +137,50 @@ namespace TestSuite
 			Test.AreEqual(10, two.Distance(one));
 		}
 
-		//[TestMethod]
-		//public void ReferenceVelocity() {
-		//	Circle one = new Circle(1, 1, 2, 3, 5, 8, 13);
-		//	Circle two = new Circle(21, 34, 55, 89, 144, 233, 377);
-		//	double time = 1;
-		//	OrderedPair ReferenceVelocity;
-		//	one.ReferenceVelocity(two,
-		//}
+		[TestMethod]
+		public void ReferenceVelocity() {
+			Circle one = new Circle(1);
+			Circle two = new Circle(2);
+			double time = 0;
+			Test.AreEqual(new OrderedPair(0, 0), one.ReferenceVelocity(two, time));
+			Test.AreEqual(new OrderedPair(0, 0), two.ReferenceVelocity(one, time));
+
+			time = .5;
+			Test.AreEqual(new OrderedPair(0, 0), one.ReferenceVelocity(two, time));
+			Test.AreEqual(new OrderedPair(0, 0), two.ReferenceVelocity(one, time));
+
+			time = 1;
+			Test.AreEqual(new OrderedPair(0, 0), one.ReferenceVelocity(two, time));
+			Test.AreEqual(new OrderedPair(0, 0), two.ReferenceVelocity(one, time));
+
+			one = new Circle(1, 1, 2, 1, 2);
+			two = new Circle(3, 5, 8, 5, 8);
+			time = 0;
+			Test.AreEqual(new OrderedPair(-4, -6), one.ReferenceVelocity(two, time));
+			Test.AreEqual(new OrderedPair(4, 6), two.ReferenceVelocity(one, time));
+
+			time = .5;
+			Test.AreEqual(new OrderedPair(-4, -6), one.ReferenceVelocity(two, time));
+			Test.AreEqual(new OrderedPair(4, 6), two.ReferenceVelocity(one, time));
+
+			time = 1;
+			Test.AreEqual(new OrderedPair(-4, -6), one.ReferenceVelocity(two, time));
+			Test.AreEqual(new OrderedPair(4, 6), two.ReferenceVelocity(one, time));
+
+			one = new Circle(1, 1, 2, 1, 2, 3, 5);
+			two = new Circle(3, 5, 8, 5, 8, 13, 21);
+			time = 0;
+			Test.AreEqual(new OrderedPair(-4, -6), one.ReferenceVelocity(two, time));
+			Test.AreEqual(new OrderedPair(4, 6), two.ReferenceVelocity(one, time));
+
+			time = .5;
+			Test.AreEqual(new OrderedPair(-9, -14), one.ReferenceVelocity(two, time));
+			Test.AreEqual(new OrderedPair(9, 14), two.ReferenceVelocity(one, time));
+
+			time = 1;
+			Test.AreEqual(new OrderedPair(-14, -22), one.ReferenceVelocity(two, time));
+			Test.AreEqual(new OrderedPair(14, 22), two.ReferenceVelocity(one, time));
+		}
 
 		[TestMethod]
 		public void ClosestPointTest()
@@ -152,24 +188,18 @@ namespace TestSuite
 			Circle one = new Circle(1);
 			Circle two = new Circle(1);
 			double time = 1;
-
-			Test.AreEqual(new OrderedPair(0, 0), one.ClosestPoint(two, 0, 0));
-			Test.AreEqual(new OrderedPair(0, 0), two.ClosestPoint(one, 0, 0));
+			OrderedPair referenceV = one.ReferenceVelocity(two, time);
+			Test.AreEqual(new OrderedPair(0, 0), one.ClosestPoint(two, referenceV));
+			referenceV = two.ReferenceVelocity(one, time);
+			Test.AreEqual(new OrderedPair(0, 0), two.ClosestPoint(one, referenceV));
 
 			one = new Circle(1, 1, 2, 3, 5);
-			two = new Circle(1, 8, 13, 0, 0);
+			two = new Circle(4, 8, 13, 0, 0);
 
-			OrderedPair thisV = one.NextVelocity(time);
-			OrderedPair thatV = two.NextVelocity(time);
-
-			double referenceVx = thisV.X - thatV.X;
-			double referenceVy = thisV.Y - thatV.Y;
-
-			Test.AreEqual(new OrderedPair(7.8755364806867, 13.0772532188841), one.ClosestPoint(two, referenceVx, referenceVy));
-			Test.AreEqual(new OrderedPair(1.1244635193133, 1.92274678111588), two.ClosestPoint(one, -referenceVx, -referenceVy));
-
-			//Test.AreEqual(.124, one.Colliding(one.ClosestPoint(two, referenceVx, referenceVy), 1000));
-			//Test.AreEqual(1, two.Colliding(one, 10));
+			referenceV = one.ReferenceVelocity(two, time);
+			Test.AreEqual(new OrderedPair(7.70588235294118, 13.1764705882353), one.ClosestPoint(two, referenceV));
+			referenceV = two.ReferenceVelocity(one, time);
+			Test.AreEqual(new OrderedPair(1.29411764705882, 1.82352941176471), two.ClosestPoint(one, referenceV));
 		}
 
 		[TestMethod]
