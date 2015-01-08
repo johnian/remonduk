@@ -11,11 +11,6 @@ namespace Remonduk.Physics
 		/// <summary>
 		/// 
 		/// </summary>
-		private const int PRECISION = 1;
-
-		/// <summary>
-		/// 
-		/// </summary>
 		/// <param name="time"></param>
 		/// <returns></returns>
 		public OrderedPair NextVelocity(double time)
@@ -23,6 +18,17 @@ namespace Remonduk.Physics
 			double thisVx = Ax * time + Vx;
 			double thisVy = Ay * time + Vy;
 			return new OrderedPair(thisVx, thisVy);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public OrderedPair NextPosition()
+		{
+			double potentialX = Ax / 2 + Vx + Px;
+			double potentialY = Ay / 2 + Vy + Py;
+			return new OrderedPair(potentialX, potentialY);
 		}
 
 		/// <summary>
@@ -40,24 +46,11 @@ namespace Remonduk.Physics
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <returns></returns>
-		public OrderedPair NextPosition()
-		{
-			double potentialX = Ax / 2 + Vx + Px;
-			double potentialY = Ay / 2 + Vy + Py;
-			return new OrderedPair(potentialX, potentialY);
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
 		/// <param name="that"></param>
 		/// <returns></returns>
 		public double DistanceSquared(Circle that)
 		{
-			double deltaX = that.Px - Px;
-			double deltaY = that.Py - Py;
-			return OrderedPair.MagnitudeSquared(deltaX, deltaY);
+			return Position.MagnitudeSquared(that.Position);
 		}
 
 		/// <summary>
@@ -78,11 +71,14 @@ namespace Remonduk.Physics
 		/// <param name="referenceVx">This circles reference vx.</param>
 		/// <param name="referenceVy">This circles reference vy.</param>
 		/// <returns>The closest point on this' movement vector to thatX and thatY</returns>
-		public OrderedPair ClosestPoint(double thatX, double thatY,
+		public OrderedPair ClosestPoint(Circle that,
 			double referenceVx, double referenceVy)
 		{
+			//double thisConstant = referenceVy * Px - referenceVx * Py;
+			//double thatConstant = referenceVx * thatX + referenceVy * thatY;
+
 			double thisConstant = referenceVy * Px - referenceVx * Py;
-			double thatConstant = referenceVx * thatX + referenceVy * thatY;
+			double thatConstant = referenceVx * that.Px + referenceVy * that.Py;
 			double determinant = referenceVx * referenceVx + referenceVy * referenceVy;
 
 			if (determinant == 0)
@@ -110,7 +106,7 @@ namespace Remonduk.Physics
 			double referenceVx = thisV.X - thatV.X;
 			double referenceVy = thisV.X - thatV.Y;
 
-			OrderedPair point = ClosestPoint(that.Px, that.Py, referenceVx, referenceVy);
+			OrderedPair point = ClosestPoint(that, referenceVx, referenceVy);
 			if (point == null)
 			{
 				return Double.PositiveInfinity;
@@ -137,8 +133,8 @@ namespace Remonduk.Physics
 				timeY >= 0 && timeY <= time)
 			{
 				//Out.WriteLine("(" + timeX + ", " + timeY + ")");
-				timeX = Math.Round(timeX, PRECISION);
-				timeY = Math.Round(timeY, PRECISION);
+				timeX = Math.Round(timeX, Constants.PRECISION);
+				timeY = Math.Round(timeY, Constants.PRECISION);
 				return (timeX > timeY) ? timeX : timeY;
 			}
 			return Double.PositiveInfinity;
@@ -148,7 +144,7 @@ namespace Remonduk.Physics
 		{
 			if (referenceVelocity == 0)
 			{
-				if (Math.Round(distance, PRECISION) == 0)
+				if (Math.Round(distance, Constants.PRECISION) == 0)
 				{
 					return 0;
 				}
@@ -207,14 +203,17 @@ namespace Remonduk.Physics
 						//Out.WriteLine("overlapping collision: " + GetHashCode() + " ~ " + that.GetHashCode());
 						return 0;
 					}
-					return 0;
+					//return 0;
 				}
 				return Double.PositiveInfinity;
 			}
 			double value = Crossing(that, time);
-			if (!Double.IsInfinity(value)) {
+			if (!Double.IsInfinity(value))
+			{
 				//Out.WriteLine("colliding collision: " + GetHashCode() + " ~ " + that.GetHashCode());
 			}
+			
+				Out.WriteLine("what the fnogg");
 			//return Crossing(that, time);
 			return value;
 		}
