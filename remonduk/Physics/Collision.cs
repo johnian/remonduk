@@ -105,48 +105,58 @@ namespace Remonduk.Physics
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="referenceVelocity"></param>
-		/// <param name="distance"></param>
+		/// <param name="point"></param>
+		/// <param name="referenceV"></param>
+		/// <param name="distanceFromCollision"></param>
 		/// <returns></returns>
-		public double TimeTo(double referenceV, double distance)
+		public OrderedPair CollisionPoint(OrderedPair point, OrderedPair referenceV,
+			double distanceFromCollision)
 		{
-			if (referenceV == 0)
-			{
-				if (Math.Round(distance, Constants.PRECISION) == 0)
-				{
-					return 0;
-				}
-				return Double.PositiveInfinity;
-			}
-			return distance / referenceV;
+			double referenceVelocity = referenceV.Magnitude();
+			double collisionX = point.X - referenceV.X * distanceFromCollision / referenceVelocity;
+			double collisionY = point.Y - referenceV.Y * distanceFromCollision / referenceVelocity;
+			return new OrderedPair(collisionX, collisionY);
 		}
 
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="distanceFromCollision"></param>
-		/// <param name="referenceVx"></param>
-		/// <param name="referenceVy"></param>
+		/// <param name="collisionPoint"></param>
+		/// <param name="referenceV"></param>
+		/// <returns></returns>
+		public double TimeTo(OrderedPair collisionPoint, OrderedPair referenceV)
+		{
+			OrderedPair distance = new OrderedPair(collisionPoint.X - Px, collisionPoint.Y - Py);
+			if (distance.X == 0 && distance.Y == 0)
+			{
+				return 0;
+			}
+			if ((distance.X != 0 && referenceV.X == 0) ||
+				(distance.Y != 0 && referenceV.Y == 0))
+			{
+				return Double.PositiveInfinity;
+			}
+			double timeX = (referenceV.X == 0) ? 0 : distance.X / referenceV.X;
+			double timeY = (referenceV.Y == 0) ? 0 : distance.Y / referenceV.Y;
+			return (timeX > timeY) ? timeX : timeY;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
 		/// <param name="point"></param>
+		/// <param name="referenceV"></param>
+		/// <param name="distanceFromCollision"></param>
 		/// <param name="time"></param>
 		/// <returns></returns>
-		public double CollisionTime(double distanceFromCollision,
-			OrderedPair referenceV, OrderedPair point, double time)
+		public double CollisionTime(OrderedPair point, OrderedPair referenceV,
+			double distanceFromCollision, double time)
 		{
-			double referenceVelocity = OrderedPair.Magnitude(referenceV.X, referenceV.Y);
-			double collisionX = point.X - referenceV.X * distanceFromCollision / referenceVelocity;
-			double collisionY = point.Y - referenceV.X * distanceFromCollision / referenceVelocity;
-
-			double timeX = TimeTo(referenceV.X, collisionX - Px);
-			double timeY = TimeTo(referenceV.Y, collisionY - Py);
-
-			if (timeX >= 0 && timeX <= time &&
-				timeY >= 0 && timeY <= time)
+			OrderedPair collisionPoint = CollisionPoint(point, referenceV, distanceFromCollision);
+			double t = TimeTo(collisionPoint, referenceV);
+			if (t >= 0 && t <= time)
 			{
-				//Out.WriteLine("(" + timeX + ", " + timeY + ")");
-				timeX = Math.Round(timeX, Constants.PRECISION);
-				timeY = Math.Round(timeY, Constants.PRECISION);
-				return (timeX > timeY) ? timeX : timeY;
+				return t;
 			}
 			return Double.PositiveInfinity;
 		}
@@ -171,7 +181,7 @@ namespace Remonduk.Physics
 			double radiiSum = that.Radius + Radius;
 			double distanceFromCollision = Math.Sqrt(radiiSum * radiiSum - distanceFromThat * distanceFromThat);
 
-			return CollisionTime(distanceFromCollision, referenceV, point, time);
+			return CollisionTime(point, referenceV, distanceFromCollision, time);
 		}
 
 		/// <summary>

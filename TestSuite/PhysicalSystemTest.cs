@@ -11,7 +11,7 @@ namespace TestSuite
 	public class PhysicalSystemTest
 	{
 		[TestMethod]
-		public void PhysicalSystemTestNoArg()
+		public void PhysicalSystemTest0()
 		{
 			PhysicalSystem world = new PhysicalSystem();
 			Test.AreEqual(0, world.Circles.Count);

@@ -110,7 +110,7 @@ namespace TestSuite
 		}
 
 		[TestMethod]
-		public void DistanceSquared()
+		public void DistanceSquaredTest()
 		{
 			Circle one = new Circle(1, 0, 0);
 			Circle two = new Circle(1, 3, 4);
@@ -124,7 +124,7 @@ namespace TestSuite
 		}
 
 		[TestMethod]
-		public void Distance()
+		public void DistanceTest()
 		{
 			Circle one = new Circle(1, 0, 0);
 			Circle two = new Circle(1, 3, 4);
@@ -138,7 +138,8 @@ namespace TestSuite
 		}
 
 		[TestMethod]
-		public void ReferenceVelocity() {
+		public void ReferenceVelocityTest()
+		{
 			Circle one = new Circle(1);
 			Circle two = new Circle(2);
 			double time = 0;
@@ -193,19 +194,104 @@ namespace TestSuite
 			referenceV = two.ReferenceVelocity(one, time);
 			Test.AreEqual(new OrderedPair(0, 0), two.ClosestPoint(one, referenceV));
 
-			one = new Circle(1, 1, 2, 3, 5);
-			two = new Circle(4, 8, 13, 0, 0);
-
+			one = new Circle(1, 1, 2);
+			two = new Circle(3, 5, 8);
 			referenceV = one.ReferenceVelocity(two, time);
-			Test.AreEqual(new OrderedPair(7.70588235294118, 13.1764705882353), one.ClosestPoint(two, referenceV));
+			Test.AreEqual(new OrderedPair(1, 2), one.ClosestPoint(two, referenceV));
 			referenceV = two.ReferenceVelocity(one, time);
-			Test.AreEqual(new OrderedPair(1.29411764705882, 1.82352941176471), two.ClosestPoint(one, referenceV));
+			Test.AreEqual(new OrderedPair(5, 8), two.ClosestPoint(one, referenceV));
+
+			one = new Circle(1, 1, 1, 1, 2);
+			two = new Circle(1, 3, 3, 0, 0);
+			referenceV = one.ReferenceVelocity(two, time);
+			Test.AreEqual(new OrderedPair(2.2, 3.4), one.ClosestPoint(two, referenceV));
+			referenceV = two.ReferenceVelocity(one, time);
+			Test.AreEqual(new OrderedPair(1.8, .6), two.ClosestPoint(one, referenceV));
+
+			one = new Circle(4, 1, 1, 1, 2);
+			two = new Circle(4, 3, 3, 0, 0);
+			referenceV = one.ReferenceVelocity(two, time);
+			Test.AreEqual(new OrderedPair(2.2, 3.4), one.ClosestPoint(two, referenceV));
+			referenceV = two.ReferenceVelocity(one, time);
+			Test.AreEqual(new OrderedPair(1.8, .6), two.ClosestPoint(one, referenceV));
+
+			one = new Circle(4, 1, 1, 2, 1);
+			two = new Circle(4, 3, 3, 1, -1);
+			referenceV = one.ReferenceVelocity(two, time);
+			Test.AreEqual(new OrderedPair(2.2, 3.4), one.ClosestPoint(two, referenceV));
+			referenceV = two.ReferenceVelocity(one, time);
+			Test.AreEqual(new OrderedPair(1.8, .6), two.ClosestPoint(one, referenceV));
 		}
 
 		[TestMethod]
-		public void collidingTestT()
+		public void CollisionPointTest()
 		{
-			Test.AreEqual(true, false);
+			Circle circle = new Circle(1);
+			OrderedPair point = new OrderedPair(0, 0);
+			OrderedPair referenceV = new OrderedPair(0, 0);
+			double distanceFromCollision = 0;
+		}
+
+		[TestMethod]
+		public void TimeToTest()
+		{
+			Circle circle = new Circle(1);
+
+			OrderedPair collisionPoint = new OrderedPair(0, 0);
+			OrderedPair referenceV = new OrderedPair(0, 0);
+			Test.AreEqual(0, circle.TimeTo(collisionPoint, referenceV));
+
+			collisionPoint = new OrderedPair(0, 3);
+			referenceV = new OrderedPair(0, 0);
+			Test.AreEqual(true, Double.IsInfinity(circle.TimeTo(collisionPoint, referenceV)));
+
+			collisionPoint = new OrderedPair(3, 0);
+			referenceV = new OrderedPair(0, 0);
+			Test.AreEqual(true, Double.IsInfinity(circle.TimeTo(collisionPoint, referenceV)));
+
+			collisionPoint = new OrderedPair(0, 0);
+			referenceV = new OrderedPair(0, 3);
+			Test.AreEqual(0, circle.TimeTo(collisionPoint, referenceV));
+
+			collisionPoint = new OrderedPair(0, 0);
+			referenceV = new OrderedPair(3, 0);
+			Test.AreEqual(0, circle.TimeTo(collisionPoint, referenceV));
+
+			collisionPoint = new OrderedPair(3, 3);
+			referenceV = new OrderedPair(0, 0);
+			Test.AreEqual(true, Double.IsInfinity(circle.TimeTo(collisionPoint, referenceV)));
+
+			collisionPoint = new OrderedPair(0, 0);
+			referenceV = new OrderedPair(3, 3);
+			Test.AreEqual(0, circle.TimeTo(collisionPoint, referenceV));
+
+			collisionPoint = new OrderedPair(3, 0);
+			referenceV = new OrderedPair(3, 0);
+			Test.AreEqual(1, circle.TimeTo(collisionPoint, referenceV));
+
+			collisionPoint = new OrderedPair(0, 3);
+			referenceV = new OrderedPair(0, 3);
+			Test.AreEqual(1, circle.TimeTo(collisionPoint, referenceV));
+
+			collisionPoint = new OrderedPair(3, 0);
+			referenceV = new OrderedPair(3, 3);
+			Test.AreEqual(1, circle.TimeTo(collisionPoint, referenceV));
+
+			collisionPoint = new OrderedPair(0, 3);
+			referenceV = new OrderedPair(3, 3);
+			Test.AreEqual(1, circle.TimeTo(collisionPoint, referenceV));
+
+			collisionPoint = new OrderedPair(3, 3);
+			referenceV = new OrderedPair(0, 3);
+			Test.AreEqual(true, Double.IsInfinity(circle.TimeTo(collisionPoint, referenceV)));
+
+			collisionPoint = new OrderedPair(3, 3);
+			referenceV = new OrderedPair(3, 0);
+			Test.AreEqual(true, Double.IsInfinity(circle.TimeTo(collisionPoint, referenceV)));
+
+			collisionPoint = new OrderedPair(3, 3);
+			referenceV = new OrderedPair(3, 3);
+			Test.AreEqual(1, circle.TimeTo(collisionPoint, referenceV));
 		}
 
 		[TestMethod]
@@ -213,18 +299,20 @@ namespace TestSuite
 		{
 			Circle one = new Circle(1, 0, 0, 0, 0, 0, 0);
 			Circle two = new Circle(1, 0, 0, 0, 0, 0, 0);
-
 			double time = 1;
+
 			Test.AreEqual(true, Double.IsInfinity(one.Colliding(one, time)));
 			Test.AreEqual(true, Double.IsInfinity(two.Colliding(two, time)));
 
-			Test.AreEqual(0, one.Colliding(two, time));
-			Test.AreEqual(0, two.Colliding(one, time));
+			//Test.AreEqual(false, one.Colliding(one));
+			//Test.AreEqual(false, two.Colliding(two));
 
 			two = new Circle(1, 0, 2);
 
-			Test.AreEqual(0, one.Colliding(two, time));
-			Test.AreEqual(0, two.Colliding(one, time));
+			Test.AreEqual(true, Double.IsInfinity(one.Colliding(two, time)));
+			Test.AreEqual(true, Double.IsInfinity(two.Colliding(one, time)));
+			Test.AreEqual(true, one.Colliding(two));
+			Test.AreEqual(true, two.Colliding(one));
 
 			two = new Circle(1, 2, 2);
 			Test.AreEqual(true, Double.IsInfinity(one.Colliding(two, time)));
@@ -284,7 +372,7 @@ namespace TestSuite
 		{
 			Test.AreEqual(true, false);
 		}
-		
+
 		//[TestMethod]
 		//public void magnitude()
 		//{
