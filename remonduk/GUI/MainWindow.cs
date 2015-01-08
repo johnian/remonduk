@@ -37,6 +37,8 @@ namespace Remonduk
         bool tethering;
         bool drag;
 
+        QTree tree;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -58,6 +60,7 @@ namespace Remonduk
 
             frame_count = 0;
             Out.WriteLine("MAIN WINDOW CREATED");
+            tree = new QTree(new OrderedPair(0, 0), new OrderedPair(800, 800), 4);
         }
 
         void HandleApplicationIdle(object sender, EventArgs e)
@@ -84,10 +87,10 @@ namespace Remonduk
                 }
 
                 drawHUD(this.CreateGraphics());
-                ps.Tree.draw(this.CreateGraphics());
+                //ps.Tree.draw(this.CreateGraphics());
                 selected_interaction = psdw.selected_interaction;
                 selected_circle = psdw.selected_circle;
-
+                tree.draw(this.CreateGraphics());
                 frame_count++;
 
                 System.Threading.Thread.Sleep(50);
@@ -278,6 +281,7 @@ namespace Remonduk
 				//Out.WriteLine("Click Pos: " + click.Position);
 				Out.WriteLine("new circle: " + click.GetHashCode());
                 ps.AddCircle(click);
+                tree.Insert(click);
             }
         }
 

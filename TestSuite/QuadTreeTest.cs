@@ -37,10 +37,10 @@ namespace TestSuite
         [TestMethod]
         public void InsertToQuadTreeManyTest()
         {
-            QTree tree = new QTree(new OrderedPair(0, 0), new OrderedPair(600, 600), 8);
+            QTree tree = new QTree(new OrderedPair(0, 0), new OrderedPair(600, 600), 4);
             Random rand = new Random();
             List<Circle> CirclesIn = new List<Circle>();
-            for(int i = 0; i < 35; i++)
+            for(int i = 0; i < 75; i++)
             {
                 Circle c = new Circle(5, 600 * rand.NextDouble(), 600 * rand.NextDouble());
                 CirclesIn.Add(c);
@@ -54,6 +54,7 @@ namespace TestSuite
             {
                 Test.AreEqual(true, CirclesIn.ElementAt(i) == CirclesOut.ElementAt(i));
             }
+            Out.WriteLine("" + tree.nodes.Count);
         }
 
         [TestMethod]
@@ -113,6 +114,43 @@ namespace TestSuite
             Test.AreEqual(300, tree.HeadNode.SouthEast.dim.Y);
             Test.AreEqual(1, nodes.Count);
             Test.AreEqual(nodes.ElementAt(0) == tree.HeadNode.SouthEast, true);
+        }
+
+        [TestMethod]
+        public void QuadTreeSplitTestDeep()
+        {
+            QTree tree = new QTree(new OrderedPair(0, 0), new OrderedPair(600, 600), 4);
+            Circle c1 = new Circle(1, 100, 100);
+            Circle c2 = new Circle(1, 400, 100);
+            Circle c3 = new Circle(1, 100, 400);
+            Circle c4 = new Circle(1, 400, 400);
+            tree.Insert(c1);
+            tree.Insert(c2);
+            tree.Insert(c3);
+            tree.Insert(c4);
+
+            Test.AreEqual(5, tree.nodes.Count);
+
+            List<QTreeNode> nodes = new List<QTreeNode>();
+
+            Circle c5 = new Circle(1, 147, 148);
+            tree.Insert(c5);
+            Circle c6 = new Circle(1, 75, 90);
+            tree.Insert(c6);
+            Circle c7 = new Circle(1, 100, 125);
+            tree.Insert(c7);
+            Circle c8 = new Circle(1, 5, 5);
+            tree.Insert(c8);
+
+            Test.AreEqual(9, tree.nodes.Count);
+
+            nodes = tree.getNodes(c5);
+            Test.AreEqual(1, nodes.Count);
+            Test.AreEqual(false, nodes.Contains(tree.HeadNode.NorthWest));
+            Test.AreEqual(true, nodes.Contains(tree.HeadNode.NorthWest.NorthWest));
+
+
+
         }
 
         [TestMethod]

@@ -1,6 +1,7 @@
 ﻿using Remonduk.Physics;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -53,25 +54,32 @@ namespace remonduk.QuadTreeTest
         /// </summary>
         public void Split()
         {
-            //Can probably do this a little cleaner
-            OrderedPair MidPoint = new OrderedPair(pos.X + (dim.X / 2.0), pos.Y + (dim.Y / 2.0) );
-            OrderedPair NewDim = new OrderedPair(dim.X / 2.0, dim.Y / 2.0);
-            
-            NorthWest = new QTreeNode(pos, NewDim, parent);
-            parent.nodes.Add(NorthWest);
-            NorthEast = new QTreeNode(new OrderedPair(pos.X + NewDim.X, pos.Y), NewDim, parent);
-            parent.nodes.Add(NorthEast);
-            SouthWest = new QTreeNode(new OrderedPair(pos.X, pos.Y + NewDim.Y), NewDim, parent);
-            parent.nodes.Add(SouthWest);
-            SouthEast = new QTreeNode(MidPoint, NewDim, parent);
-            parent.nodes.Add(SouthEast);
-            
-            split = true;
-            
-            //I'd like for this to not be needed...but I'm not seeing how.  Spliting can/will be costly.
-            foreach (Circle c in circles)
+            if (!split)
             {
-                Insert(c);
+                //Can probably do this a little cleaner
+                OrderedPair MidPoint = new OrderedPair(pos.X + (dim.X / 2.0), pos.Y + (dim.Y / 2.0));
+                OrderedPair NewDim = new OrderedPair(dim.X / 2.0, dim.Y / 2.0);
+
+                NorthWest = new QTreeNode(pos, NewDim, parent);
+                parent.nodes.Add(NorthWest);
+                NorthEast = new QTreeNode(new OrderedPair(pos.X + NewDim.X, pos.Y), NewDim, parent);
+                parent.nodes.Add(NorthEast);
+                SouthWest = new QTreeNode(new OrderedPair(pos.X, pos.Y + NewDim.Y), NewDim, parent);
+                parent.nodes.Add(SouthWest);
+                SouthEast = new QTreeNode(MidPoint, NewDim, parent);
+                parent.nodes.Add(SouthEast);
+
+                split = true;
+
+                //I'd like for this to not be needed...but I'm not seeing how.  Spliting can/will be costly.
+                Circle[] temp = new Circle[circles.Count];
+                circles.CopyTo(temp);
+                Remonduk.Out.WriteLine("" + temp.Length);
+                circles.Clear();
+                foreach (Circle c in temp)
+                {
+                    Insert(c);
+                }
             }
         }
 
@@ -96,9 +104,10 @@ namespace remonduk.QuadTreeTest
                 {
                     circles.Add(c);
                     nodes.Add(this);
-                    if(nodes.Count >= MaxCount)
+                    if(circles.Count > MaxCount)
                     {
                         Split();
+
                     }
                 }
             }
@@ -176,6 +185,22 @@ namespace remonduk.QuadTreeTest
                 }
             }
             return nodes;
+        }
+
+        public void draw(Graphics g)
+        {
+            if(split)
+            {
+                NorthWest.draw(g);
+                NorthEast.draw(g);
+                SouthWest.draw(g);
+                SouthEast.draw(g);
+            }
+            else
+            {
+                Pen pen = new Pen(Color.Black);
+                g.DrawRectangle(pen, (float)pos.X, (float)pos.Y, (float)dim.X, (float)dim.Y);
+            }
         }
     }
 }
