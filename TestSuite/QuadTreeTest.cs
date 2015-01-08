@@ -18,7 +18,7 @@ namespace TestSuite
         public void InsertToQuadTreeTest()
         {
             QTree tree;
-            tree = new QTree(new OrderedPair(0, 0), new OrderedPair(600, 600));
+            tree = new QTree(new OrderedPair(0, 0), new OrderedPair(600, 600), 16);
             Circle c = new Circle(5, 25, 25);
             tree.Insert(c);
             Test.AreEqual(tree.circles.Contains(c), true);
@@ -26,15 +26,21 @@ namespace TestSuite
             Circle c2 = new Circle(5, 120, 50);
             tree.Insert(c2);
             Test.AreEqual(tree.circles.Contains(c2), true);
+
+            //Not sure if this is actually how we want it to work...
+            //See QTree and QTreeNode Resize() methods for more.
+            Circle c3 = new Circle(5, 750, 400);
+            tree.Insert(c3);
+            Test.AreEqual(tree.circles.Contains(c3), false);
         }
 
         [TestMethod]
         public void InsertToQuadTreeManyTest()
         {
-            QTree tree = new QTree(new OrderedPair(0, 0), new OrderedPair(600, 600));
+            QTree tree = new QTree(new OrderedPair(0, 0), new OrderedPair(600, 600), 8);
             Random rand = new Random();
             List<Circle> CirclesIn = new List<Circle>();
-            for(int i = 0; i < 30; i++)
+            for(int i = 0; i < 35; i++)
             {
                 Circle c = new Circle(5, 600 * rand.NextDouble(), 600 * rand.NextDouble());
                 CirclesIn.Add(c);
@@ -53,7 +59,7 @@ namespace TestSuite
         [TestMethod]
         public void QuadTreeSplitTest()
         {
-            QTree tree = new QTree(new OrderedPair(0, 0), new OrderedPair(600, 600));
+            QTree tree = new QTree(new OrderedPair(0, 0), new OrderedPair(600, 600), 4);
             Circle c1 = new Circle(5, 100, 100);
             Circle c2 = new Circle(5, 400, 100);
             Circle c3 = new Circle(5, 100, 400);
@@ -63,7 +69,8 @@ namespace TestSuite
             tree.Insert(c3);
             tree.Insert(c4);
 
-            tree.HeadNode.Split();
+            //Splits automatically at 4, see constructor
+            //tree.HeadNode.Split();
 
             Test.AreEqual(5, tree.nodes.Count);
 
@@ -106,6 +113,31 @@ namespace TestSuite
             Test.AreEqual(300, tree.HeadNode.SouthEast.dim.Y);
             Test.AreEqual(1, nodes.Count);
             Test.AreEqual(nodes.ElementAt(0) == tree.HeadNode.SouthEast, true);
+        }
+
+        [TestMethod]
+        public void QuadTreeNodeEdgeTest()
+        {
+            QTree tree = new QTree(new OrderedPair(0, 0), new OrderedPair(600, 600), 2);
+            Circle c1 = new Circle(5, 300, 300);
+            Circle c2 = new Circle(5, 300, 100);
+            tree.Insert(c1);
+            tree.Insert(c2);
+
+            List<QTreeNode> nodes = new List<QTreeNode>();
+
+            nodes = tree.getNodes(c1);
+            Test.AreEqual(4, nodes.Count);
+            Test.AreEqual(true, nodes.Contains(tree.HeadNode.NorthWest));
+            Test.AreEqual(true, nodes.Contains(tree.HeadNode.NorthEast));
+            Test.AreEqual(true, nodes.Contains(tree.HeadNode.SouthWest));
+            Test.AreEqual(true, nodes.Contains(tree.HeadNode.SouthEast));
+
+            nodes.Clear();
+            nodes = tree.getNodes(c2);
+            Test.AreEqual(2, nodes.Count);
+            Test.AreEqual(true, nodes.Contains(tree.HeadNode.NorthWest));
+            Test.AreEqual(true, nodes.Contains(tree.HeadNode.NorthEast));
         }
 
 

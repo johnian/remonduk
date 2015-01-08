@@ -33,7 +33,7 @@ namespace TestSuite
 			//Test.AreEqual(Circle.MAX_DISTANCE, circle.MaxDistance);
 
 			Test.AreEqual(circle.COLOR, circle.Color);
-			Test.AreEqual(false, circle.QTreePos == null);
+			//Test.AreEqual(false, circle.QTreePos == null);
 		}
 
 		[TestMethod]
@@ -57,7 +57,7 @@ namespace TestSuite
 			//Test.AreEqual(Circle.MAX_DISTANCE, circle.MaxDistance);
 
 			Test.AreEqual(circle.COLOR, circle.Color);
-			Test.AreEqual(false, circle.QTreePos == null);
+			//Test.AreEqual(false, circle.QTreePos == null);
 		}
 
 		[TestMethod]
@@ -81,7 +81,7 @@ namespace TestSuite
 			//Test.AreEqual(Circle.MAX_DISTANCE, circle.MaxDistance);
 
 			Test.AreEqual(circle.COLOR, circle.Color);
-			Test.AreEqual(false, circle.QTreePos == null);
+			//Test.AreEqual(false, circle.QTreePos == null);
 
 			circle = new Circle(3, 5);
 			Test.AreEqual(5, circle.Mass);
@@ -108,7 +108,7 @@ namespace TestSuite
 			//Test.AreEqual(Circle.MAX_DISTANCE, circle.MaxDistance);
 
 			Test.AreEqual(circle.COLOR, circle.Color);
-			Test.AreEqual(false, circle.QTreePos == null);
+			//Test.AreEqual(false, circle.QTreePos == null);
 
 			circle = new Circle(3, 5, 8, 13);
 			Test.AreEqual(13, circle.Mass);
@@ -135,7 +135,7 @@ namespace TestSuite
 			//Test.AreEqual(Circle.MAX_DISTANCE, circle.MaxDistance);
 
 			Test.AreEqual(circle.COLOR, circle.Color);
-			Test.AreEqual(false, circle.QTreePos == null);
+			//Test.AreEqual(false, circle.QTreePos == null);
 
 			circle = new Circle(3, 5, 8, 13, 21, 34);
 			Test.AreEqual(34, circle.Mass);
@@ -162,7 +162,7 @@ namespace TestSuite
 			//Test.AreEqual(Circle.MAX_DISTANCE, circle.MaxDistance);
 
 			Test.AreEqual(circle.COLOR, circle.Color);
-			Test.AreEqual(false, circle.QTreePos == null);
+			//Test.AreEqual(false, circle.QTreePos == null);
 
 			circle = new Circle(3, 5, 8, 13, 21, 34, 55, 89);
 			Test.AreEqual(89, circle.Mass);

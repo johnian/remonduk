@@ -191,6 +191,7 @@ namespace Remonduk.QuadTreeTest
             {
                 headNode.Insert(m);
             }
+            Out.WriteLine("RESIZING");
         }
 
         #endregion
@@ -232,6 +233,18 @@ namespace Remonduk.QuadTreeTest
             if (ItemsList != null)
             {
                 headNode.GetAllItems(ref ItemsList);
+            }
+        }
+
+        public void draw(Graphics g)
+        {
+            HashSet<QuadTreeNode<T>> nodes = new HashSet<QuadTreeNode<T>>();
+            headNode.getAllNodes(ref nodes);
+            Out.WriteLine("Count of nodes: " + nodes.Count);
+            foreach(QuadTreeNode<T> node in nodes)
+            {
+                Out.WriteLine(node.ToString());
+                node.Draw(g);
             }
         }
 

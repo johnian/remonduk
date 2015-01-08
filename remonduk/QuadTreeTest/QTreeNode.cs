@@ -30,6 +30,8 @@ namespace remonduk.QuadTreeTest
         /// </summary>
         QTree parent;
 
+        public int MaxCount;
+
         /// <summary>
         /// QTreeNode Constructor.
         /// </summary>
@@ -43,6 +45,7 @@ namespace remonduk.QuadTreeTest
             this.parent = parent;
             this.split = false;
             this.circles = new HashSet<Circle>();
+            this.MaxCount = parent.MaxCount;
         }
 
         /// <summary>
@@ -92,8 +95,12 @@ namespace remonduk.QuadTreeTest
                 if(Contains(c))
                 {
                     circles.Add(c);
+                    nodes.Add(this);
+                    if(nodes.Count >= MaxCount)
+                    {
+                        Split();
+                    }
                 }
-                nodes.Add(this);
             }
 
             return nodes;

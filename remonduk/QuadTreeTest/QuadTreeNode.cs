@@ -309,8 +309,23 @@ namespace remonduk.QuadTreeTest
             }
         }
 
-        public void getAllNodes()
+        public void getAllNodes(ref HashSet<QuadTreeNode<T>> nodes)
         {
+            if (ParentNode != null)
+            {
+                nodes.Add(ParentNode);
+            }
+            if (IsPartitioned)
+            {
+                nodes.Add(TopLeftNode);
+                nodes.Add(TopRightNode);
+                nodes.Add(BottomLeftNode);
+                nodes.Add(BottomRightNode);
+                TopLeftNode.getAllNodes(ref nodes);
+                TopRightNode.getAllNodes(ref nodes);
+                BottomLeftNode.getAllNodes(ref nodes);
+                BottomRightNode.getAllNodes(ref nodes);
+            }
 
         }
 
@@ -497,10 +512,34 @@ namespace remonduk.QuadTreeTest
 
         public bool ContainsCircle(Circle c)
         {
-            return (rect.TopLeft.Item1 >= c.Px - c.Radius &&
-                    rect.TopLeft.Item2 >= c.Py - c.Radius &&
-                    rect.BottomRight.Item1 <= c.Px + c.Radius &&
-                    rect.BottomRight.Item2 <= c.Py + c.Radius);
+            return (rect.TopLeft.Item1 <= c.Px - c.Radius &&
+                    rect.TopLeft.Item2 <= c.Py - c.Radius &&
+                    rect.BottomRight.Item1 >= c.Px + c.Radius &&
+                    rect.BottomRight.Item2 >= c.Py + c.Radius);
+        }
+
+        public String ToString()
+        {
+            String str = "Parent: ";
+            if(ParentNode == null)
+            {
+                str += "null";
+            }
+            else
+            {
+                str += "not null";
+            }
+            str += " Partioned: ";
+            if(IsPartitioned)
+            {
+                str += "True";
+            }
+            else
+            {
+                str += "False";
+            }
+            str += "X: " + rect.Left + " Y: " + rect.Top + " W: " + rect.Width + " H: " + rect.Height;
+            return str;
         }
 
         #endregion

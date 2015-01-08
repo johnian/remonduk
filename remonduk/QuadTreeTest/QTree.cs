@@ -24,6 +24,8 @@ namespace remonduk.QuadTreeTest
         /// </summary>
         OrderedPair pos, dim;
 
+        public int MaxCount;
+
         /// <summary>
         /// Default constructor...silly values.
         /// </summary>
@@ -35,6 +37,7 @@ namespace remonduk.QuadTreeTest
             nodes = new HashSet<QTreeNode>();
             nodes.Add(HeadNode);
             circles = new HashSet<Circle>();
+            MaxCount = 16;
         }
 
         /// <summary>
@@ -42,7 +45,8 @@ namespace remonduk.QuadTreeTest
         /// </summary>
         /// <param name="pos">This quad tree's position.</param>
         /// <param name="dim">This quad tree's dimensions.</param>
-        public QTree(OrderedPair pos, OrderedPair dim)
+        /// <param name="MaxCount">The max count before splitting</param>
+        public QTree(OrderedPair pos, OrderedPair dim, int MaxCount)
         {
             this.pos = pos;
             this.dim = dim;
@@ -50,6 +54,7 @@ namespace remonduk.QuadTreeTest
             nodes = new HashSet<QTreeNode>();
             nodes.Add(HeadNode);
             circles = new HashSet<Circle>();
+            this.MaxCount = MaxCount;
         }
 
         /// <summary>
@@ -59,7 +64,11 @@ namespace remonduk.QuadTreeTest
         /// <returns></returns>
         public List<QTreeNode> Insert(Circle c)
         {
-            circles.Add(c);
+            List<QTreeNode> nodes = HeadNode.Insert(c);
+            if (nodes.Count > 0)
+            {
+                circles.Add(c);
+            }
             return HeadNode.Insert(c);
         }
 

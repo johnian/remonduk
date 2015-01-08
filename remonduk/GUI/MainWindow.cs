@@ -141,10 +141,6 @@ namespace Remonduk
             {
                 drawSelected(g);
             }
-            foreach(Circle c in ps.NetForces.Keys)
-            {
-                c.QTreePos.Rect.Draw(g);
-            }
             drawNewCircleAngles(g);
             drawInteractions(g);
         }
