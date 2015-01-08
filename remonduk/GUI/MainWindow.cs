@@ -143,7 +143,7 @@ namespace Remonduk
             }
             foreach(Circle c in ps.NetForces.Keys)
             {
-                c.q_tree_pos.Rect.Draw(g);
+                c.QTreePos.Rect.Draw(g);
             }
             drawNewCircleAngles(g);
             drawInteractions(g);

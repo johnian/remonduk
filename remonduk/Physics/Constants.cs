@@ -13,6 +13,8 @@ namespace Remonduk.Physics
 		/// </summary>
 		private static Constants instance;
 
+		public const int PRECISION = 8;
+
 		/// <summary>
 		/// Magnitude used for calculating gravity.
 		/// </summary>

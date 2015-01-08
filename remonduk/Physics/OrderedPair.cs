@@ -8,14 +8,9 @@ namespace Remonduk.Physics
 	public class OrderedPair
 	{
 		/// <summary>
-		/// Precision for rounding to 0.
-		/// </summary>
-		public const int PRECISION = 8;
-		/// <summary>
 		/// 
 		/// </summary>
 		public double X;
-
 		/// <summary>
 		/// 
 		/// </summary>
@@ -64,6 +59,11 @@ namespace Remonduk.Physics
 			return x * x + y * y;
 		}
 
+		public double MagnitudeSquared(OrderedPair that)
+		{
+			return MagnitudeSquared(that.X - X, that.Y - Y);
+		}
+
 		/// <summary>
 		/// Returns the magnitude of a vector based on its x and y components.
 		/// </summary>
@@ -102,8 +102,8 @@ namespace Remonduk.Physics
 		/// <returns>tan(y, x) from 0 to 2PI</returns>
 		public static double Angle(double y, double x)
 		{
-			if (Math.Round(y, PRECISION) == 0 &&
-				Math.Round(x, PRECISION) == 0)
+			if (Math.Round(y, Constants.PRECISION) == 0 &&
+				Math.Round(x, Constants.PRECISION) == 0)
 			{
 				return 0;
 			}

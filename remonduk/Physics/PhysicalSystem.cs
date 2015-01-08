@@ -78,6 +78,7 @@ namespace Remonduk.Physics
 			//Out.WriteLine("6");
 
 			// why does this throw a null pointer exception
+
 			Tree.Insert(circle);
 			//Out.WriteLine("7");
 		}
@@ -236,7 +237,8 @@ namespace Remonduk.Physics
 						else if (value == min)
 						{
 							//Out.WriteLine("adding to collision map: " + value);
-							if (collisionMap != null && !collisionMap.ContainsKey(circle)) {
+							if (collisionMap != null && !collisionMap.ContainsKey(circle))
+							{
 								// is this needed in the first place
 								collisionMap.Add(circle, collisions);
 							}
