@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using remonduk.QuadTreeTest;
 using Remonduk;
 using Remonduk.Physics;
 using Remonduk.QuadTreeTest;
@@ -16,20 +17,21 @@ namespace TestSuite
         [TestMethod]
         public void InsertToQuadTreeTest()
         {
-            QuadTree<Circle> tree;
-            tree = new QuadTree<Circle>(new FRect(new Tuple<double, double>(0, 0), new Tuple<double, double>(600, 600)), 16);
+            QTree tree;
+            tree = new QTree(new OrderedPair(0, 0), new OrderedPair(600, 600));
             Circle c = new Circle(5, 25, 25);
             tree.Insert(c);
-            List<Circle> circles = new List<Circle>();
-            tree.GetAllItems(ref circles);
-            Test.AreEqual(circles.Contains(c), true);
+            Test.AreEqual(tree.circles.Contains(c), true);
+
+            Circle c2 = new Circle(5, 120, 50);
+            tree.Insert(c2);
+            Test.AreEqual(tree.circles.Contains(c2), true);
         }
 
         [TestMethod]
         public void InsertToQuadTreeManyTest()
         {
-            QuadTree<Circle> tree;
-            tree = new QuadTree<Circle>(new FRect(new Tuple<double, double>(0, 0), new Tuple<double, double>(600, 600)), 4);
+            QTree tree = new QTree(new OrderedPair(0, 0), new OrderedPair(600, 600));
             Random rand = new Random();
             List<Circle> CirclesIn = new List<Circle>();
             for(int i = 0; i < 30; i++)
@@ -38,10 +40,8 @@ namespace TestSuite
                 CirclesIn.Add(c);
                 tree.Insert(c);
             }
-            
-            List<Circle> CirclesOut = new List<Circle>();
 
-            tree.GetAllItems(ref CirclesOut);
+            HashSet<Circle> CirclesOut = tree.circles;
 
             Test.AreEqual(true, CirclesIn.Count == CirclesOut.Count);
             for(int i = 0; i < CirclesIn.Count; i++)
@@ -51,36 +51,61 @@ namespace TestSuite
         }
 
         [TestMethod]
-        public void QuadTreeResizeTest()
+        public void QuadTreeSplitTest()
         {
-            QuadTree<Circle> tree;
-            tree = new QuadTree<Circle>(new FRect(new Tuple<double, double>(0, 0), new Tuple<double, double>(600, 600)), 4);
+            QTree tree = new QTree(new OrderedPair(0, 0), new OrderedPair(600, 600));
+            Circle c1 = new Circle(5, 100, 100);
+            Circle c2 = new Circle(5, 400, 100);
+            Circle c3 = new Circle(5, 100, 400);
+            Circle c4 = new Circle(5, 400, 400);
+            tree.Insert(c1);
+            tree.Insert(c2);
+            tree.Insert(c3);
+            tree.Insert(c4);
 
-            Circle c = new Circle(5, 650, 650);
-            tree.Insert(c);
-            List<Circle> circles = new List<Circle>();
-            tree.GetAllItems(ref circles);
+            tree.HeadNode.Split();
 
-            Test.AreEqual(circles.Contains(c), true);
-            Test.AreEqual(0, tree.WorldRect.Left);
-            Test.AreEqual(0, tree.WorldRect.Top);
-            Test.AreEqual(1310, tree.WorldRect.Right);
-            Test.AreEqual(1310, tree.WorldRect.Bottom);
+            Test.AreEqual(5, tree.nodes.Count);
 
-            c = new Circle(5, -25, -25);
-            tree.Insert(c);
-            circles = new List<Circle>();
-            tree.GetAllItems(ref circles);
-            Test.AreEqual(circles.Contains(c), true);
-            Test.AreEqual(-30, tree.WorldRect.Left);
-            Test.AreEqual(-30, tree.WorldRect.Top);
-            Test.AreEqual(2620, tree.WorldRect.Right);
-            Test.AreEqual(2620, tree.WorldRect.Bottom);
+            List<QTreeNode> nodes = new List<QTreeNode>();
 
-            //NOT SURE THESE ARE HANDLED THE WAY THEY SHOULD BE...
-            //ALL CORNERS INCREASE REGARDLESS OF WHAT SIDE SHOULD BE EXPANDED
-            //WELL...BOTTOM RIGHT IS DOUBLED, TOP LEFT IS SET TO MINIMUM
-            //SOMETHING TO THINK ABOUT
+            nodes = tree.getNodes(c1);
+            Test.AreEqual(0, tree.HeadNode.NorthWest.pos.X);
+            Test.AreEqual(0, tree.HeadNode.NorthWest.pos.Y);
+            Test.AreEqual(300, tree.HeadNode.NorthWest.dim.X);
+            Test.AreEqual(300, tree.HeadNode.NorthWest.dim.Y);
+            Test.AreEqual(1, nodes.Count);
+            Test.AreEqual(nodes.ElementAt(0) == tree.HeadNode.NorthWest, true);
+
+            nodes.Clear();
+
+            nodes = tree.getNodes(c2);
+            Test.AreEqual(300, tree.HeadNode.NorthEast.pos.X);
+            Test.AreEqual(0, tree.HeadNode.NorthEast.pos.Y);
+            Test.AreEqual(300, tree.HeadNode.NorthEast.dim.X);
+            Test.AreEqual(300, tree.HeadNode.NorthEast.dim.Y);
+            Test.AreEqual(1, nodes.Count);
+            Test.AreEqual(nodes.ElementAt(0) == tree.HeadNode.NorthEast, true);
+
+            nodes.Clear();
+
+            nodes = tree.getNodes(c3);
+            Test.AreEqual(0, tree.HeadNode.SouthWest.pos.X);
+            Test.AreEqual(300, tree.HeadNode.SouthWest.pos.Y);
+            Test.AreEqual(300, tree.HeadNode.SouthWest.dim.X);
+            Test.AreEqual(300, tree.HeadNode.SouthWest.dim.Y);
+            Test.AreEqual(1, nodes.Count);
+            Test.AreEqual(nodes.ElementAt(0) == tree.HeadNode.SouthWest, true);
+
+            nodes.Clear();
+
+            nodes = tree.getNodes(c4);
+            Test.AreEqual(300, tree.HeadNode.SouthEast.pos.X);
+            Test.AreEqual(300, tree.HeadNode.SouthEast.pos.Y);
+            Test.AreEqual(300, tree.HeadNode.SouthEast.dim.X);
+            Test.AreEqual(300, tree.HeadNode.SouthEast.dim.Y);
+            Test.AreEqual(1, nodes.Count);
+            Test.AreEqual(nodes.ElementAt(0) == tree.HeadNode.SouthEast, true);
         }
 
 
