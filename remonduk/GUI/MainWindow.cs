@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using Remonduk.QuadTreeTest;
 using Remonduk.Physics;
+using remonduk.QuadTreeTest;
 
 namespace Remonduk
 {
@@ -74,7 +75,7 @@ namespace Remonduk
                 {
                     if (!pause)
                     {
-                        List<QuadTreePositionItem<Circle>> cs = new List<QuadTreePositionItem<Circle>>();
+                        List<Circle> cs = new List<Circle>();
                         ps.Tree.GetItems(new FRect(c.Py-50, c.Px-50, c.Py + 50, c.Px + 50), ref cs);
 						//c.update(cs);
                     }

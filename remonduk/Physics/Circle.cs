@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Diagnostics;
 using Remonduk.QuadTreeTest;
+using remonduk.QuadTreeTest;
 
 namespace Remonduk.Physics
 {
@@ -144,10 +145,12 @@ namespace Remonduk.Physics
 		/// The circle's color.
 		/// </summary>
 		public Color Color;
+
 		/// <summary>
 		/// 
 		/// </summary>
-		public QuadTreeTest.QuadTreePositionItem<Circle> QTreePos;
+		//public QuadTreeTest.QuadTreePositionItem<Circle> QTreePos;
+
 
 		////
 		// Constructors
@@ -221,7 +224,8 @@ namespace Remonduk.Physics
 			//Follow(TARGET);
 
 			Color = COLOR;
-			QTreePos = new QuadTreeTest.QuadTreePositionItem<Circle>(this, new Tuple<double, double>(Position.X, Position.Y), new Tuple<double, double>(radius, radius));
+
+			//QTreePos = new QuadTreePositionItem<Circle>(this, new Tuple<double, double>(Position.X, Position.Y), new Tuple<double, double>(radius, radius));
 		}
 
 		/// <summary>
@@ -348,7 +352,7 @@ namespace Remonduk.Physics
 		{
 			SetPosition(Ax * time * time / 2 + Vx * time + Px,
 				Ay * time * time / 2 + Vy * time + Py);
-			QTreePos.Position = new Tuple<double, double>(Position.X, Position.Y);
+			//QTreePos.Position = new Tuple<double, double>(Position.X, Position.Y);
 			UpdateVelocity(time);
 		}
 
@@ -371,6 +375,14 @@ namespace Remonduk.Physics
 			Brush brush = new SolidBrush(Color.Chartreuse);
 			g.FillEllipse(brush, (float)(Px - Radius), (float)(Py - Radius), (float)(2 * Radius), (float)(2 * Radius));
 		}
+
+        public bool Contains(OrderedPair point)
+        {
+            return (point.X < Px + Radius &&
+                    point.X > Px - Radius &&
+                    point.Y < Py + Radius &&
+                    point.Y > Py - Radius);
+        }
 
 		/// <summary>
 		/// 

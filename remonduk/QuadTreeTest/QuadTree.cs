@@ -25,663 +25,15 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using Remonduk.QuadTreeTest;
+using remonduk.QuadTreeTest;
+using Remonduk.Physics;
+
 
 #endregion
 
 namespace Remonduk.QuadTreeTest
 {
-    /// <summary>
-    /// A position item in a quadtree
-    /// </summary>
-    /// <typeparam name="T">The type of the QuadTree item's parent</typeparam>
-    public class QuadTreePositionItem<T>
-    {
-        #region Events and Event Handlers
-
-        /// <summary>
-        /// A movement handler delegate
-        /// </summary>
-        /// <param name="positionItem">The item that fired the event</param>
-        public delegate void MoveHandler(QuadTreePositionItem<T> positionItem);
-
-        /// <summary>
-        /// A destruction handler delegate - fired when the item is destroyed
-        /// </summary>
-        /// <param name="positionItem">The item that fired the event</param>
-        public delegate void DestroyHandler(QuadTreePositionItem<T> positionItem);
-
-        /// <summary>
-        /// Event handler for the move action
-        /// </summary>
-        public event MoveHandler Move;
-
-        /// <summary>
-        /// Event handler for the destroy action
-        /// </summary>
-        public event DestroyHandler Destroy;
-
-        /// <summary>
-        /// Handles the move event
-        /// </summary>
-        protected void OnMove()
-        {
-            // Update rectangles
-            rect.TopLeft = new Tuple<double, double>(position.Item1 - (size.Item1 * .5), position.Item2 - (size.Item2 * .5));
-            rect.BottomRight = new Tuple<double, double>(position.Item1 + (size.Item1 * .5), position.Item2 + (size.Item2 * .5));
-            //rect.TopLeft = position - (size * .5f);
-            //rect.BottomRight = position + (size * .5f);
-
-            // Call event handler
-            if (Move != null) Move(this);
-        }
-
-        /// <summary>
-        /// Handles the destroy event
-        /// </summary>
-        protected void OnDestroy()
-        {
-            if (Destroy != null) Destroy(this);
-        }
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// The center position of this item
-        /// </summary>
-        private Tuple<double, double> position;
-
-        /// <summary>
-        /// Gets or sets the center position of this item
-        /// </summary>
-        public Tuple<double, double> Position
-        {
-            get { return position; }
-            set
-            {
-                position = value;
-                OnMove();
-            }
-        }
-
-        /// <summary>
-        /// The size of this item
-        /// </summary>
-        private Tuple<double, double> size;
-
-        /// <summary>
-        /// Gets or sets the size of this item
-        /// </summary>
-        public Tuple<double, double> Size
-        {
-            get { return size; }
-            set
-            {
-                size = value;
-                rect.TopLeft = new Tuple<double, double>(position.Item1 - (size.Item1 * .5), rect.TopLeft.Item2 - (size.Item2 * .5));
-                rect.BottomRight = new Tuple<double, double>(position.Item1 + (size.Item1 * .5), rect.TopLeft.Item2 + (size.Item2 * .5));
-                //rect.TopLeft = position - (size / 2f);
-                //rect.BottomRight = position + (size / 2f);
-                OnMove();
-            }
-        }
-
-        /// <summary>
-        /// The rectangle containing this item
-        /// </summary>
-        private FRect rect;
-
-        /// <summary>
-        /// Gets a rectangle containing this item
-        /// </summary>
-        public FRect Rect
-        {
-            get { return rect; }
-        }
-
-        /// <summary>
-        /// The parent of this item
-        /// </summary>
-        /// <remarks>The Parent accessor is used to gain access to the item controlling this position item</remarks>
-        private T parent;
-
-        /// <summary>
-        /// Gets the parent of this item
-        /// </summary>
-        public T Parent
-        {
-            get { return parent; }
-        }
-
-        #endregion
-
-        #region Initialization
-
-        /// <summary>
-        /// Creates a position item in a QuadTree
-        /// </summary>
-        /// <param name="parent">The parent of this item</param>
-        /// <param name="position">The position of this item</param>
-        /// <param name="size">The size of this item</param>
-        public QuadTreePositionItem(T parent, Tuple<double, double> position, Tuple<double, double> size)
-        {
-            this.rect = new FRect(0f, 0f, 1f, 1f);
-
-            this.parent = parent;
-            this.position = position;
-            this.size = size;
-            OnMove();
-        }
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Destroys this item and removes it from the QuadTree
-        /// </summary>
-        public void Delete()
-        {
-            OnDestroy();
-        }
-
-        #endregion
-    }
-
-    /// <summary>
-    /// A node in a QuadTree
-    /// </summary>
-    /// <typeparam name="T">The type of the QuadTree's items' parents</typeparam>
-    public class QuadTreeNode<T>
-    {
-        #region Delegates
-
-        /// <summary>
-        /// World resize delegate
-        /// </summary>
-        /// <param name="newSize">The new world size</param>
-        public delegate void ResizeDelegate(FRect newSize);
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// The rectangle of this node
-        /// </summary>
-        protected FRect rect;
-
-        /// <summary>
-        /// Gets the rectangle of this node
-        /// </summary>
-        public FRect Rect
-        {
-            get { return rect; }
-            protected set { rect = value; }
-        }
-
-        /// <summary>
-        /// The maximum number of items in this node before partitioning
-        /// </summary>
-        protected int MaxItems;
-
-        /// <summary>
-        /// Whether or not this node has been partitioned
-        /// </summary>
-        protected bool IsPartitioned;
-
-        /// <summary>
-        /// The parent node
-        /// </summary>
-        protected QuadTreeNode<T> ParentNode;
-
-        /// <summary>
-        /// The top left node
-        /// </summary>
-        protected QuadTreeNode<T> TopLeftNode;
-
-        /// <summary>
-        /// The top right node
-        /// </summary>
-        protected QuadTreeNode<T> TopRightNode;
-
-        /// <summary>
-        /// The bottom left node
-        /// </summary>
-        protected QuadTreeNode<T> BottomLeftNode;
-
-        /// <summary>
-        /// The bottom right node
-        /// </summary>
-        protected QuadTreeNode<T> BottomRightNode;
-
-        /// <summary>
-        /// The items in this node
-        /// </summary>
-        protected List<QuadTreePositionItem<T>> Items;
-
-        /// <summary>
-        /// Resize the world
-        /// </summary>
-        /// <param name="newSize">The new world size</param>
-        protected ResizeDelegate WorldResize;
-
-        #endregion
-
-        #region Initialization
-
-        /// <summary>
-        /// QuadTreeNode constructor
-        /// </summary>
-        /// <param name="parentNode">The parent node of this QuadTreeNode</param>
-        /// <param name="rect">The rectangle of the QuadTreeNode</param>
-        /// <param name="maxItems">Maximum number of items in the QuadTreeNode before partitioning</param>
-        public QuadTreeNode(QuadTreeNode<T> parentNode, FRect rect, int maxItems)
-        {
-            ParentNode = parentNode;
-            Rect = rect;
-            MaxItems = maxItems;
-            IsPartitioned = false;
-            Items = new List<QuadTreePositionItem<T>>();
-        }
-
-        /// <summary>
-        /// QuadTreeNode constructor
-        /// </summary>
-        /// <param name="rect">The rectangle of the QuadTreeNode</param>
-        /// <param name="maxItems">Maximum number of items in the QuadTreeNode before partitioning</param>
-        /// <param name="worldResize">The function to return the size</param>
-        public QuadTreeNode(FRect rect, int maxItems, ResizeDelegate worldResize)
-        {
-            ParentNode = null;
-            Rect = rect;
-            MaxItems = maxItems;
-            WorldResize = worldResize;
-            IsPartitioned = false;
-            Items = new List<QuadTreePositionItem<T>>();
-        }
-
-        public void Draw(Graphics g)
-        {
-            Pen pen = new Pen(Color.Black);
-            g.DrawRectangle(pen, (float)rect.Left, (float)rect.Top, (float)rect.Width, (float)rect.Height);
-        }
-
-        #endregion
-
-        #region Insertion methods
-
-        /// <summary>
-        /// Insert an item in this node
-        /// </summary>
-        /// <param name="item">The item to insert</param>
-        public void Insert(QuadTreePositionItem<T> item)
-        {
-            // If partitioned, try to find child node to add to
-            if (!InsertInChild(item))
-            {
-                item.Destroy += new QuadTreePositionItem<T>.DestroyHandler(ItemDestroy);
-                item.Move += new QuadTreePositionItem<T>.MoveHandler(ItemMove);
-                Items.Add(item);
-
-                // Check if this node needs to be partitioned
-                if (!IsPartitioned && Items.Count >= MaxItems)
-                {
-                    Partition();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Inserts an item into one of this node's children
-        /// </summary>
-        /// <param name="item">The item to insert in a child</param>
-        /// <returns>Whether or not the insert succeeded</returns>
-        protected bool InsertInChild(QuadTreePositionItem<T> item)
-        {
-            if (!IsPartitioned) return false;
-
-            if (TopLeftNode.ContainsRect(item.Rect))
-                TopLeftNode.Insert(item);
-            else if (TopRightNode.ContainsRect(item.Rect))
-                TopRightNode.Insert(item);
-            else if (BottomLeftNode.ContainsRect(item.Rect))
-                BottomLeftNode.Insert(item);
-            else if (BottomRightNode.ContainsRect(item.Rect))
-                BottomRightNode.Insert(item);
-
-            else return false; // insert in child failed
-
-            return true;
-        }
-
-        /// <summary>
-        /// Pushes an item down to one of this node's children
-        /// </summary>
-        /// <param name="i">The index of the item to push down</param>
-        /// <returns>Whether or not the push was successful</returns>
-        public bool PushItemDown(int i)
-        {
-            if (InsertInChild(Items[i]))
-            {
-                RemoveItem(i);
-                return true;
-            }
-
-            else return false;
-        }
-
-        /// <summary>
-        /// Push an item up to this node's parent
-        /// </summary>
-        /// <param name="i">The index of the item to push up</param>
-        public void PushItemUp(int i)
-        {
-            QuadTreePositionItem<T> m = Items[i];
-
-            RemoveItem(i);
-            ParentNode.Insert(m);
-        }
-
-        /// <summary>
-        /// Repartitions this node
-        /// </summary>
-        protected void Partition()
-        {
-            // Create the nodes
-            Tuple<double, double> MidPoint = new Tuple<double, double>(rect.TopLeft.Item1 + rect.Width / 2.0, 
-                rect.TopLeft.Item2 + rect.Height / 2.0);
-            //Vector2 MidPoint = Vector2.Divide(Vector2.Add(Rect.TopLeft, Rect.BottomRight), 2.0f);
-
-            TopLeftNode = new QuadTreeNode<T>(this,new FRect(Rect.TopLeft, MidPoint), MaxItems);
-            TopRightNode = new QuadTreeNode<T>(this, new FRect(new Tuple<double, double>(MidPoint.Item1, Rect.Top),
-                new Tuple<double, double>(Rect.Right, MidPoint.Item2)), MaxItems);
-            BottomLeftNode = new QuadTreeNode<T>(this, new FRect(new Tuple<double, double>(Rect.Left, MidPoint.Item2), 
-                new Tuple<double, double>(MidPoint.Item1, Rect.Bottom)), MaxItems);
-            BottomRightNode = new QuadTreeNode<T>(this, new FRect(MidPoint, Rect.BottomRight), MaxItems);
-
-            IsPartitioned = true;
-
-            // Try to push items down to child nodes
-            int i = 0;
-            while (i < Items.Count)
-            {
-                if (!PushItemDown(i))
-                {
-                    i++;
-                }
-            }
-        }
-
-        #endregion
-
-        #region Query methods
-
-        /// <summary>
-        /// Gets a list of items containing a specified point
-        /// </summary>
-        /// <param name="Point">The point</param>
-        /// <param name="ItemsFound">The list to add found items to (list will not be cleared first)</param>
-        /// <remarks>ItemsFound is assumed to be initialized, and will not be cleared</remarks>
-        public void GetItems(Tuple<double, double> Point, ref List<QuadTreePositionItem<T>> ItemsFound)
-        {
-            // test the point against this node
-            if (Rect.Contains(Point))
-            {
-                // test the point in each item
-                foreach (QuadTreePositionItem<T> Item in Items)
-                {
-                    if (Item.Rect.Contains(Point)) ItemsFound.Add(Item);
-                }
-
-                // query all subtrees
-                if (IsPartitioned)
-                {
-                    TopLeftNode.GetItems(Point, ref ItemsFound);
-                    TopRightNode.GetItems(Point, ref ItemsFound);
-                    BottomLeftNode.GetItems(Point, ref ItemsFound);
-                    BottomRightNode.GetItems(Point, ref ItemsFound);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets a list of items intersecting a specified rectangle
-        /// </summary>
-        /// <param name="Rect">The rectangle</param>
-        /// <param name="ItemsFound">The list to add found items to (list will not be cleared first)</param>
-        /// <remarks>ItemsFound is assumed to be initialized, and will not be cleared</remarks>
-        public void GetItems(FRect Rect, ref List<QuadTreePositionItem<T>> ItemsFound)
-        {
-            // test the point against this node
-            if (Rect.Intersects(Rect))
-            {
-                // test the point in each item
-                foreach (QuadTreePositionItem<T> Item in Items)
-                {
-                    if (Item.Rect.Intersects(Rect)) ItemsFound.Add(Item);
-                }
-
-                // query all subtrees
-                if (IsPartitioned)
-                {
-                    TopLeftNode.GetItems(Rect, ref ItemsFound);
-                    TopRightNode.GetItems(Rect, ref ItemsFound);
-                    BottomLeftNode.GetItems(Rect, ref ItemsFound);
-                    BottomRightNode.GetItems(Rect, ref ItemsFound);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets a list of all items within this node
-        /// </summary>
-        /// <param name="ItemsFound">The list to add found items to (list will not be cleared first)</param>
-        /// <remarks>ItemsFound is assumed to be initialized, and will not be cleared</remarks>
-        public void GetAllItems(ref List<QuadTreePositionItem<T>> ItemsFound)
-        {
-            ItemsFound.AddRange(Items);
-
-            // query all subtrees
-            if (IsPartitioned)
-            {
-                TopLeftNode.GetAllItems(ref ItemsFound);
-                TopRightNode.GetAllItems(ref ItemsFound);
-                BottomLeftNode.GetAllItems(ref ItemsFound);
-                BottomRightNode.GetAllItems(ref ItemsFound);
-            }
-        }
-
-        public void getAllNodes()
-        {
-
-        }
-
-        /// <summary>
-        /// Finds the node containing a specified item
-        /// </summary>
-        /// <param name="Item">The item to find</param>
-        /// <returns>The node containing the item</returns>
-        public QuadTreeNode<T> FindItemNode(QuadTreePositionItem<T> Item)
-        {
-            if (Items.Contains(Item)) return this;
-
-            else if (IsPartitioned)
-            {
-                QuadTreeNode<T> n = null;
-
-                // Check the nodes that could contain the item
-                if (TopLeftNode.ContainsRect(Item.Rect))
-                {
-                    n = TopLeftNode.FindItemNode(Item);
-                }
-                if (n == null &&
-                    TopRightNode.ContainsRect(Item.Rect))
-                {
-                    n = TopRightNode.FindItemNode(Item);
-                }
-                if (n == null &&
-                    BottomLeftNode.ContainsRect(Item.Rect))
-                {
-                    n = BottomLeftNode.FindItemNode(Item);
-                }
-                if (n == null &&
-                    BottomRightNode.ContainsRect(Item.Rect))
-                {
-                    n = BottomRightNode.FindItemNode(Item);
-                }
-                
-                return n;
-            }
-
-            else return null;
-        }
-
-        #endregion
-
-        #region Destruction
-
-        /// <summary>
-        /// Destroys this node
-        /// </summary>
-        public void Destroy()
-        {
-            // Destroy all child nodes
-            if (IsPartitioned)
-            {
-                TopLeftNode.Destroy();
-                TopRightNode.Destroy();
-                BottomLeftNode.Destroy();
-                BottomRightNode.Destroy();
-
-                TopLeftNode = null;
-                TopRightNode = null;
-                BottomLeftNode = null;
-                BottomRightNode = null;
-            }
-
-            // Remove all items
-            while (Items.Count > 0)
-            {
-                RemoveItem(0);
-            }
-        }
-
-        /// <summary>
-        /// Removes an item from this node
-        /// </summary>
-        /// <param name="item">The item to remove</param>
-        public void RemoveItem(QuadTreePositionItem<T> item)
-        {
-            // Find and remove the item
-            if (Items.Contains(item))
-            {
-                item.Move -= new QuadTreePositionItem<T>.MoveHandler(ItemMove);
-                item.Destroy -= new QuadTreePositionItem<T>.DestroyHandler(ItemDestroy);
-                Items.Remove(item);
-            }
-        }
-
-        /// <summary>
-        /// Removes an item from this node at a specific index
-        /// </summary>
-        /// <param name="i">the index of the item to remove</param>
-        protected void RemoveItem(int i)
-        {
-            if (i < Items.Count)
-            {
-                Items[i].Move -= new QuadTreePositionItem<T>.MoveHandler(ItemMove);
-                Items[i].Destroy -= new QuadTreePositionItem<T>.DestroyHandler(ItemDestroy);
-                Items.RemoveAt(i);
-            }
-        }
-
-        #endregion
-
-        #region Observer methods
-
-        /// <summary>
-        /// Handles item movement
-        /// </summary>
-        /// <param name="item">The item that moved</param>
-        public void ItemMove(QuadTreePositionItem<T> item)
-        {
-            // Find the item
-            if (Items.Contains(item))
-            {
-                int i = Items.IndexOf(item);
-
-                // Try to push the item down to the child
-                if (!PushItemDown(i))
-                {
-                    // otherwise, if not root, push up
-                    if (ParentNode != null)
-                    {
-                        PushItemUp(i);
-                    }
-                    else if (!ContainsRect(item.Rect))
-                    {
-                        double minx = Rect.Left;
-                        if (minx > item.Rect.Left)
-                            minx = item.Rect.Left;
-
-                        double miny = Rect.Top;
-                        if (miny > item.Rect.Top)
-                            miny = item.Rect.Top;
-
-                        double maxx = Rect.Right;
-                        if (maxx < item.Rect.Right)
-                            maxx = item.Rect.Right;
-
-                        double maxy = Rect.Bottom;
-                        if (maxy < item.Rect.Bottom)
-                            maxy = item.Rect.Bottom;
-                        WorldResize(new FRect(
-                            minx, miny, maxx * 2, maxy * 2));
-                        //WorldResize(new FRect(
-                        //     Vector2.Min(Rect.TopLeft, item.Rect.TopLeft) * 2,
-                        //     Vector2.Max(Rect.BottomRight, item.Rect.BottomRight) * 2));
-                    }
-
-                }
-            }
-            else
-            {
-                // this node doesn't contain that item, stop notifying it about it
-                item.Move -= new QuadTreePositionItem<T>.MoveHandler(ItemMove);
-            }
-        }
-
-        /// <summary>
-        /// Handles item destruction
-        /// </summary>
-        /// <param name="item">The item that is being destroyed</param>
-        public void ItemDestroy(QuadTreePositionItem<T> item)
-        {
-            RemoveItem(item);
-        }
-
-        #endregion
-
-        #region Helper methods
-
-        /// <summary>
-        /// Tests whether this node contains a rectangle
-        /// </summary>
-        /// <param name="rect">The rectangle to test</param>
-        /// <returns>Whether or not this node contains the specified rectangle</returns>
-        public bool ContainsRect(FRect rect)
-        {
-            return (rect.TopLeft.Item1 >= Rect.TopLeft.Item1 &&
-                    rect.TopLeft.Item2 >= Rect.TopLeft.Item2 &&
-                    rect.BottomRight.Item1 <= Rect.BottomRight.Item1 &&
-                    rect.BottomRight.Item2 <= Rect.BottomRight.Item2);
-        }
-
-        #endregion
-    }
-
     /// <summary>
     /// A QuadTree for partitioning a space into rectangles
     /// </summary>
@@ -745,26 +97,26 @@ namespace Remonduk.QuadTreeTest
         /// </summary>
         /// <param name="item">The item to insert</param>
         /// <remarks>Checks to see if the world needs resizing and does so if needed</remarks>
-        public void Insert(QuadTreePositionItem<T> item)
+        public void Insert(Circle item)
         {
             // check if the world needs resizing
-            if (!headNode.ContainsRect(item.Rect))
+            if (!headNode.ContainsCircle(item))
             {
                 double minx = headNode.Rect.Left;
-                if (minx > item.Rect.Left)
-                    minx = item.Rect.Left;
+                if (minx > item.Px - item.Radius)
+                    minx = item.Px - item.Radius;
 
                 double miny = headNode.Rect.Top;
-                if (miny > item.Rect.Top)
-                    miny = item.Rect.Top;
+                if (miny > item.Py - item.Radius)
+                    miny = item.Px - item.Radius;
 
                 double maxx = headNode.Rect.Right;
-                if (maxx < item.Rect.Right)
-                    maxx = item.Rect.Right;
+                if (maxx < item.Px + item.Radius)
+                    maxx = item.Px + item.Radius;
 
                 double maxy = headNode.Rect.Bottom;
-                if (maxy < item.Rect.Bottom)
-                    maxy = item.Rect.Bottom;
+                if (maxy < item.Py + item.Radius)
+                    maxy = item.Py + item.Radius;
                 Resize(new FRect(
                     minx, miny, maxx*2, maxy*2));
                     //Vector2.Min(headNode.Rect.TopLeft, item.Rect.TopLeft)*2,
@@ -782,28 +134,28 @@ namespace Remonduk.QuadTreeTest
         /// <param name="size">The size of the new position item</param>
         /// <returns>A new position item</returns>
         /// <remarks>Checks to see if the world needs resizing and does so if needed</remarks>
-        public QuadTreePositionItem<T> Insert(T parent, Tuple<double, double> position, Tuple<double, double> size)
+        public Circle Insert(Circle parent, Tuple<double, double> position, Tuple<double, double> size)
         {
-            QuadTreePositionItem<T> item = new QuadTreePositionItem<T>(parent, position, size);
+            Circle item = new Circle(parent);
 
             // check if the world needs resizing
-            if (!headNode.ContainsRect(item.Rect))
+            if (!headNode.ContainsCircle(item))
             {
                 double minx = headNode.Rect.Left;
-                if (minx > item.Rect.Left)
-                    minx = item.Rect.Left;
+                if (minx > item.Px - item.Radius)
+                    minx = item.Px - item.Radius;
 
                 double miny = headNode.Rect.Top;
-                if (miny > item.Rect.Top)
-                    miny = item.Rect.Top;
+                if (miny > item.Py - item.Radius)
+                    miny = item.Px - item.Radius;
 
                 double maxx = headNode.Rect.Right;
-                if (maxx < item.Rect.Right)
-                    maxx = item.Rect.Right;
+                if (maxx < item.Px + item.Radius)
+                    maxx = item.Px + item.Radius;
 
                 double maxy = headNode.Rect.Bottom;
-                if (maxy < item.Rect.Bottom)
-                    maxy = item.Rect.Bottom;
+                if (maxy < item.Py + item.Radius)
+                    maxy = item.Py + item.Radius;
                 Resize(new FRect(
                     minx, miny, maxx * 2, maxy * 2));
                 //Resize(new FRect(
@@ -824,7 +176,7 @@ namespace Remonduk.QuadTreeTest
         public void Resize(FRect newWorld)
         {
             // Get all of the items in the tree
-            List<QuadTreePositionItem<T>> Components = new List<QuadTreePositionItem<T>>();
+            List<Circle> Components = new List<Circle>();
             GetAllItems(ref Components);
 
             // Destroy the head node
@@ -835,7 +187,7 @@ namespace Remonduk.QuadTreeTest
             headNode = new QuadTreeNode<T>(newWorld, maxItems, Resize);
 
             // Reinsert the items
-            foreach (QuadTreePositionItem<T> m in Components)
+            foreach (Circle m in Components)
             {
                 headNode.Insert(m);
             }
@@ -850,7 +202,7 @@ namespace Remonduk.QuadTreeTest
         /// </summary>
         /// <param name="Point">The point</param>
         /// <param name="ItemsFound">The list to add found items to (list will not be cleared first)</param>
-        public void GetItems(Tuple<double, double> Point, ref List<QuadTreePositionItem<T>> ItemsList)
+        public void GetItems(OrderedPair Point, ref List<Circle> ItemsList)
         {
             if (ItemsList != null)
             {
@@ -863,7 +215,7 @@ namespace Remonduk.QuadTreeTest
         /// </summary>
         /// <param name="Rect">The rectangle</param>
         /// <param name="ItemsFound">The list to add found items to (list will not be cleared first)</param>
-        public void GetItems(FRect Rect, ref List<QuadTreePositionItem<T>> ItemsList)
+        public void GetItems(FRect Rect, ref List<Circle> ItemsList)
         {
             if (ItemsList != null)
             {
@@ -875,7 +227,7 @@ namespace Remonduk.QuadTreeTest
         /// Get a list of all items in the quadtree
         /// </summary>
         /// <param name="ItemsFound">The list to add found items to (list will not be cleared first)</param>
-        public void GetAllItems(ref List<QuadTreePositionItem<T>> ItemsList)
+        public void GetAllItems(ref List<Circle> ItemsList)
         {
             if (ItemsList != null)
             {

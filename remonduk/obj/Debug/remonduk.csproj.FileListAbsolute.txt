@@ -10,7 +10,6 @@ C:\Users\Sid\Documents\Visual Studio 2013\Projects\remonduk\remonduk\obj\Debug\r
 C:\Users\Sid\Documents\Visual Studio 2013\Projects\remonduk\remonduk\obj\Debug\remonduk.GUI.Physical_System_Detail_Window.resources
 C:\Users\Sid\documents\visual studio 2013\Projects\Remonduk\remonduk\obj\Debug\remonduk.GUI.Interaction_Detail_Window.resources
 C:\Users\Sid\documents\visual studio 2013\Projects\Remonduk\remonduk\bin\Debug\remonduk.XML
-C:\Users\Sid\documents\visual studio 2013\Projects\Remonduk\remonduk\obj\Debug\remonduk.csprojResolveAssemblyReference.cache
 C:\Users\julian\johnian\remonduk\remonduk\bin\Debug\remonduk.exe.config
 C:\Users\julian\johnian\remonduk\remonduk\bin\Debug\remonduk.XML
 C:\Users\julian\johnian\remonduk\remonduk\bin\Debug\remonduk.exe
