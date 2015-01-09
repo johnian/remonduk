@@ -34,9 +34,9 @@ namespace remonduk.QuadTreeTest
         {
             pos = new OrderedPair(0, 0);
             dim = new OrderedPair(100, 100);
-            HeadNode = new QTreeNode(pos, dim, this);
+            HeadNode = new QTreeNode(pos, dim, this, "Head");
             nodes = new HashSet<QTreeNode>();
-            nodes.Add(HeadNode);
+            //nodes.Add(HeadNode);
             circles = new HashSet<Circle>();
             MaxCount = 16;
         }
@@ -51,11 +51,11 @@ namespace remonduk.QuadTreeTest
         {
             this.pos = pos;
             this.dim = dim;
-            HeadNode = new QTreeNode(pos, dim, this);
-            nodes = new HashSet<QTreeNode>();
-            nodes.Add(HeadNode);
-            circles = new HashSet<Circle>();
             this.MaxCount = MaxCount;
+            HeadNode = new QTreeNode(pos, dim, this, "Head");
+            nodes = new HashSet<QTreeNode>();
+            //nodes.Add(HeadNode);
+            circles = new HashSet<Circle>();
         }
 
         /// <summary>
@@ -66,11 +66,8 @@ namespace remonduk.QuadTreeTest
         public List<QTreeNode> Insert(Circle c)
         {
             List<QTreeNode> nodes = HeadNode.Insert(c);
-            if (nodes.Count > 0)
-            {
-                circles.Add(c);
-            }
-            return HeadNode.Insert(c);
+            circles.Add(c);
+            return nodes;
         }
 
         /// <summary>

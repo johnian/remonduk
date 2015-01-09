@@ -17,7 +17,7 @@ namespace remonduk.QuadTreeTest
         /// <summary>
         /// If this node has been split.  Turns some single rectangle into 4.
         /// </summary>
-        bool split;
+        public bool split;
         /// <summary>
         /// This nodes position and dimensions.
         /// </summary>
@@ -30,6 +30,7 @@ namespace remonduk.QuadTreeTest
         /// The QuadTree this node belongs to.
         /// </summary>
         QTree parent;
+        public String name;
 
         public int MaxCount;
 
@@ -39,7 +40,7 @@ namespace remonduk.QuadTreeTest
         /// <param name="pos">The position for this node (top left)</param>
         /// <param name="dim">The dimensions for this node (width, height)</param>
         /// <param name="parent">The Quad Tree this node belongs to.</param>
-        public QTreeNode(OrderedPair pos, OrderedPair dim, QTree parent)
+        public QTreeNode(OrderedPair pos, OrderedPair dim, QTree parent, String name)
         {
             this.pos = pos;
             this.dim = dim;
@@ -47,6 +48,7 @@ namespace remonduk.QuadTreeTest
             this.split = false;
             this.circles = new HashSet<Circle>();
             this.MaxCount = parent.MaxCount;
+            this.name = name;
         }
 
         /// <summary>
@@ -57,26 +59,20 @@ namespace remonduk.QuadTreeTest
             if (!split)
             {
                 //Can probably do this a little cleaner
-                OrderedPair MidPoint = new OrderedPair(pos.X + (dim.X / 2.0), pos.Y + (dim.Y / 2.0));
                 OrderedPair NewDim = new OrderedPair(dim.X / 2.0, dim.Y / 2.0);
 
-                NorthWest = new QTreeNode(pos, NewDim, parent);
+                NorthWest = new QTreeNode(pos, NewDim, parent, name + ".NorthWest");
                 parent.nodes.Add(NorthWest);
-                NorthEast = new QTreeNode(new OrderedPair(pos.X + NewDim.X, pos.Y), NewDim, parent);
+                NorthEast = new QTreeNode(new OrderedPair(pos.X + NewDim.X, pos.Y), NewDim, parent, name + ".NorthEast");
                 parent.nodes.Add(NorthEast);
-                SouthWest = new QTreeNode(new OrderedPair(pos.X, pos.Y + NewDim.Y), NewDim, parent);
+                SouthWest = new QTreeNode(new OrderedPair(pos.X, pos.Y + NewDim.Y), NewDim, parent, name + ".SouthWest");
                 parent.nodes.Add(SouthWest);
-                SouthEast = new QTreeNode(MidPoint, NewDim, parent);
+                SouthEast = new QTreeNode(new OrderedPair(pos.X + NewDim.X, pos.Y + NewDim.Y), NewDim, parent, name + ".SouthEast");
                 parent.nodes.Add(SouthEast);
 
                 split = true;
 
-                //I'd like for this to not be needed...but I'm not seeing how.  Spliting can/will be costly.
-                Circle[] temp = new Circle[circles.Count];
-                circles.CopyTo(temp);
-                Remonduk.Out.WriteLine("" + temp.Length);
-                circles.Clear();
-                foreach (Circle c in temp)
+                foreach (Circle c in circles)
                 {
                     Insert(c);
                 }
@@ -102,13 +98,17 @@ namespace remonduk.QuadTreeTest
             {
                 if(Contains(c))
                 {
-                    circles.Add(c);
-                    nodes.Add(this);
-                    if(circles.Count > MaxCount)
+                    if (circles.Count + 1 >= MaxCount)
                     {
                         Split();
-
+                        nodes.AddRange(Insert(c));
                     }
+                    else
+                    {
+                        circles.Add(c);
+                        nodes.Add(this);
+                    }
+
                 }
             }
 
@@ -162,19 +162,19 @@ namespace remonduk.QuadTreeTest
             {
                 if(NorthWest.HasA(c))
                 {
-                    nodes.Add(NorthWest);
+                    nodes.AddRange(NorthWest.GetAllNodes(c));
                 }
                 if(NorthEast.HasA(c))
                 {
-                    nodes.Add(NorthEast);
+                    nodes.AddRange(NorthEast.GetAllNodes(c));
                 }
                 if(SouthWest.HasA(c))
                 {
-                    nodes.Add(SouthWest);
+                    nodes.AddRange(SouthWest.GetAllNodes(c));
                 }
                 if(SouthEast.HasA(c))
                 {
-                    nodes.Add(SouthEast);
+                    nodes.AddRange(SouthEast.GetAllNodes(c));
                 }
             }
             else
@@ -201,6 +201,11 @@ namespace remonduk.QuadTreeTest
                 Pen pen = new Pen(Color.Black);
                 g.DrawRectangle(pen, (float)pos.X, (float)pos.Y, (float)dim.X, (float)dim.Y);
             }
+        }
+
+        public String ToString()
+        {
+            return name;
         }
     }
 }
