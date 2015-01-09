@@ -7,14 +7,13 @@ namespace TestSuite
 {
 	public static class Test
 	{
-		public const int PRECISION = 6;
+		public const int PRECISION = 8;
 		public const double EPSILON = .0001;
 
 		public static void AreEqual(OrderedPair expected, OrderedPair actual)
 		{
 			AreEqual(expected.X, actual.X);
 			AreEqual(expected.Y, actual.Y);
-            
 		}
 
 		public static void AreClose(OrderedPair expected, OrderedPair actual)
@@ -26,6 +25,16 @@ namespace TestSuite
 		public static void AreEqual(double expected, double actual)
 		{
 			Out.WriteLine("expected: " + expected + " actual: " + actual);
+			if (Double.IsPositiveInfinity(expected))
+			{
+				AreEqual(true, Double.IsPositiveInfinity(actual));
+				return;
+			}
+			if (Double.IsNegativeInfinity(expected))
+			{
+				AreEqual(true, Double.IsNegativeInfinity(actual));
+				return;
+			}
 			AreEqual(true, Math.Abs(expected - actual) < EPSILON);
 		}
 

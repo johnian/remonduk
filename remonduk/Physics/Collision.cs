@@ -109,12 +109,17 @@ namespace Remonduk.Physics
 		/// <param name="referenceV"></param>
 		/// <param name="distanceFromCollision"></param>
 		/// <returns></returns>
-		public OrderedPair CollisionPoint(OrderedPair point, OrderedPair referenceV,
-			double distanceFromCollision)
+		public OrderedPair CollisionPoint(OrderedPair closest, OrderedPair referenceV, Circle that)
 		{
+			//double distanceFromThat = OrderedPair.Magnitude(point.X - that.Px, point.Y - that.Py);
+
+			double distanceFromThat = closest.Magnitude(that.Position);
+			double radiiSum = that.Radius + Radius;
+			double distanceFromCollision = Math.Sqrt(radiiSum * radiiSum - distanceFromThat * distanceFromThat);
 			double referenceVelocity = referenceV.Magnitude();
-			double collisionX = point.X - referenceV.X * distanceFromCollision / referenceVelocity;
-			double collisionY = point.Y - referenceV.Y * distanceFromCollision / referenceVelocity;
+			// this is the center of the circle when it would collide
+			double collisionX = closest.X - referenceV.X * distanceFromCollision / referenceVelocity;
+			double collisionY = closest.Y - referenceV.Y * distanceFromCollision / referenceVelocity;
 			return new OrderedPair(collisionX, collisionY);
 		}
 
@@ -149,16 +154,14 @@ namespace Remonduk.Physics
 		/// <param name="distanceFromCollision"></param>
 		/// <param name="time"></param>
 		/// <returns></returns>
-		public double CollisionTime(OrderedPair point, OrderedPair referenceV,
-			double distanceFromCollision, double time)
+		public double CollisionTime(OrderedPair closest, OrderedPair referenceV,
+			Circle that, double time)
 		{
-			OrderedPair collisionPoint = CollisionPoint(point, referenceV, distanceFromCollision);
+			OrderedPair collisionPoint = CollisionPoint(closest, referenceV, that);
+			Out.WriteLine("collision point: " + collisionPoint);
 			double t = TimeTo(collisionPoint, referenceV);
-			if (t >= 0 && t <= time)
-			{
-				return t;
-			}
-			return Double.PositiveInfinity;
+			Out.WriteLine("time to: " + t);
+			return (t >= 0 && t <= time) ? t : Double.PositiveInfinity;
 		}
 
 		/// <summary>
@@ -170,18 +173,16 @@ namespace Remonduk.Physics
 		public double Crossing(Circle that, double time)
 		{
 			OrderedPair referenceV = ReferenceVelocity(that, time);
-			OrderedPair point = ClosestPoint(that, referenceV);
-
-			if (point == null)
+			if (referenceV.X == 0 && referenceV.Y == 0)
 			{
 				return Double.PositiveInfinity;
 			}
-			//double distanceFromThat = OrderedPair.Magnitude(point.X - that.Px, point.Y - that.Py);
-			double distanceFromThat = point.Magnitude(that.Position);
-			double radiiSum = that.Radius + Radius;
-			double distanceFromCollision = Math.Sqrt(radiiSum * radiiSum - distanceFromThat * distanceFromThat);
-
-			return CollisionTime(point, referenceV, distanceFromCollision, time);
+			OrderedPair closest = ClosestPoint(that, referenceV);
+			if (closest == null)
+			{
+				return Double.PositiveInfinity;
+			}
+			return CollisionTime(closest, referenceV, that, time);
 		}
 
 		/// <summary>

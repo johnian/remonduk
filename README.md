@@ -15,13 +15,11 @@ Floid
 [sound] (#8)  
 
 for juliono:
+add checks for valid paremeters?
 update comments	
-reorganize folder hierarchy
 optimize code
 finish test cases
 utilize quad tree in collision detection
-break down classes into smaller chunks
-break down functions into smaller chunks
 
 fix collision bug
 

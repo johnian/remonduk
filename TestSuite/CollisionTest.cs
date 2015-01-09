@@ -226,10 +226,62 @@ namespace TestSuite
 		[TestMethod]
 		public void CollisionPointTest()
 		{
-			Circle circle = new Circle(1);
-			OrderedPair point = new OrderedPair(0, 0);
-			OrderedPair referenceV = new OrderedPair(0, 0);
-			double distanceFromCollision = 0;
+			// shouldn't have to worry about overlapping circles
+			double time = 1;
+
+			Circle one = new Circle(1, 0, 0, 1, 2);
+			Circle two = new Circle(2, 4, 4, 0, 0);
+			OrderedPair referenceV = one.ReferenceVelocity(two, time);
+			OrderedPair closest = one.ClosestPoint(two, referenceV);
+			OrderedPair collision = one.CollisionPoint(closest, referenceV, two);
+			double collisionTimeX = (collision.X - one.Px) / referenceV.X;
+			double collisionTimeY = (collision.Y - one.Py) / referenceV.Y;
+			Test.AreEqual(collisionTimeX, collisionTimeY);
+			Test.AreEqual(one.Radius + two.Radius, two.Position.Magnitude(collision));
+
+			referenceV = two.ReferenceVelocity(one, time);
+			closest = two.ClosestPoint(one, referenceV);
+			collision = two.CollisionPoint(closest, referenceV, one);
+			collisionTimeX = (collision.X - two.Px) / referenceV.X;
+			collisionTimeY = (collision.Y - two.Py) / referenceV.Y;
+			Test.AreEqual(collisionTimeX, collisionTimeY);
+			Test.AreEqual(one.Radius + two.Radius, one.Position.Magnitude(collision));
+
+			one = new Circle(1, 0, 0, 12, 21);
+			two = new Circle(2, 4, 4, 4, 5);
+			referenceV = one.ReferenceVelocity(two, time);
+			closest = one.ClosestPoint(two, referenceV);
+			collision = one.CollisionPoint(closest, referenceV, two);
+			collisionTimeX = (collision.X - one.Px) / referenceV.X;
+			collisionTimeY = (collision.Y - one.Py) / referenceV.Y;
+			Test.AreEqual(collisionTimeX, collisionTimeY);
+			Test.AreEqual(one.Radius + two.Radius, two.Position.Magnitude(collision));
+
+			referenceV = two.ReferenceVelocity(one, time);
+			closest = two.ClosestPoint(one, referenceV);
+			collision = two.CollisionPoint(closest, referenceV, one);
+			collisionTimeX = (collision.X - two.Px) / referenceV.X;
+			collisionTimeY = (collision.Y - two.Py) / referenceV.Y;
+			Test.AreEqual(collisionTimeX, collisionTimeY);
+			Test.AreEqual(one.Radius + two.Radius, one.Position.Magnitude(collision));
+
+			one = new Circle(3, 0, 0, 12, 21);
+			two = new Circle(4, 4, 4, 4, 5);
+			referenceV = one.ReferenceVelocity(two, time);
+			closest = one.ClosestPoint(two, referenceV);
+			collision = one.CollisionPoint(closest, referenceV, two);
+			collisionTimeX = (collision.X - one.Px) / referenceV.X;
+			collisionTimeY = (collision.Y - one.Py) / referenceV.Y;
+			Test.AreEqual(collisionTimeX, collisionTimeY);
+			Test.AreEqual(one.Radius + two.Radius, two.Position.Magnitude(collision));
+
+			referenceV = two.ReferenceVelocity(one, time);
+			closest = two.ClosestPoint(one, referenceV);
+			collision = two.CollisionPoint(closest, referenceV, one);
+			collisionTimeX = (collision.X - two.Px) / referenceV.X;
+			collisionTimeY = (collision.Y - two.Py) / referenceV.Y;
+			Test.AreEqual(collisionTimeX, collisionTimeY);
+			Test.AreEqual(one.Radius + two.Radius, one.Position.Magnitude(collision));
 		}
 
 		[TestMethod]
@@ -295,7 +347,78 @@ namespace TestSuite
 		}
 
 		[TestMethod]
-		public void collidingTestTT()
+		public void CollisionTimeTest()
+		{
+			// this returns weird values for overlapping circles
+
+			double time = 1;
+			Circle one = new Circle(1);
+			Circle two = new Circle(2);
+			OrderedPair referenceV = one.ReferenceVelocity(two, time);
+			OrderedPair closest = one.ClosestPoint(two, referenceV);
+			Test.AreEqual(Double.PositiveInfinity, one.CollisionTime(closest, referenceV, two, time));
+
+			one = new Circle(1, 0, 0, 1, 1);
+			two = new Circle(2, 0, 0, 0, 0);
+			referenceV = one.ReferenceVelocity(two, time);
+			closest = one.ClosestPoint(two, referenceV);
+			Test.AreEqual(Double.PositiveInfinity, one.CollisionTime(closest, referenceV, two, time));
+
+			one = new Circle(1, 0, 0, 1, 1);
+			two = new Circle(2, 0, 0, 1, 1);
+			referenceV = one.ReferenceVelocity(two, time);
+			closest = one.ClosestPoint(two, referenceV);
+			Test.AreEqual(Double.PositiveInfinity, one.CollisionTime(closest, referenceV, two, time));
+
+			//
+			one = new Circle(1, 0, 0, 1, 1);
+			two = new Circle(1, 1, 1, 0, 0);
+			referenceV = one.ReferenceVelocity(two, time);
+			Out.WriteLine("reference V: " + referenceV);
+			closest = one.ClosestPoint(two, referenceV);
+			Out.WriteLine("closest: " + closest);
+			double collisionTime = one.CollisionTime(closest, referenceV, two, time);
+			one.UpdatePosition(collisionTime);
+			two.UpdatePosition(collisionTime);
+			Test.AreEqual(one.Radius + two.Radius, one.Distance(two));
+			//
+
+			one = new Circle(1, 0, 0, 3, 3);
+			two = new Circle(2, 3, 3, 0, 0);
+			referenceV = one.ReferenceVelocity(two, time);
+			closest = one.ClosestPoint(two, referenceV);
+			collisionTime = one.CollisionTime(closest, referenceV, two, time);
+			one.UpdatePosition(collisionTime);
+			two.UpdatePosition(collisionTime);
+			Test.AreEqual(one.Radius + two.Radius, one.Distance(two));
+
+			one = new Circle(1, 0, 0, 3, 3);
+			two = new Circle(2, 3, 3, 0, 0);
+			referenceV = one.ReferenceVelocity(two, time);
+			closest = one.ClosestPoint(two, referenceV);
+			collisionTime = one.CollisionTime(closest, referenceV, two, time);
+			one.UpdatePosition(collisionTime);
+			two.UpdatePosition(collisionTime);
+			Test.AreEqual(one.Radius + two.Radius, one.Distance(two));
+
+			one = new Circle(1, 0, 0, 1.5, 1.5);
+			two = new Circle(2, 3, 3, -1.5, -1.5);
+			referenceV = one.ReferenceVelocity(two, time);
+			closest = one.ClosestPoint(two, referenceV);
+			collisionTime = one.CollisionTime(closest, referenceV, two, time);
+			one.UpdatePosition(collisionTime);
+			two.UpdatePosition(collisionTime);
+			Test.AreEqual(one.Radius + two.Radius, one.Distance(two));
+		}
+
+		[TestMethod]
+		public void CrossingTest()
+		{
+
+		}
+
+		[TestMethod]
+		public void CollidingTest2()
 		{
 			Circle one = new Circle(1, 0, 0, 0, 0, 0, 0);
 			Circle two = new Circle(1, 0, 0, 0, 0, 0, 0);
@@ -362,13 +485,13 @@ namespace TestSuite
 		}
 
 		[TestMethod]
-		public void collideWithTest()
+		public void CollisingTest1()
 		{
-			Test.AreEqual(true, false);
+
 		}
 
 		[TestMethod]
-		public void crossingTest()
+		public void CollideWithTest()
 		{
 			Test.AreEqual(true, false);
 		}
