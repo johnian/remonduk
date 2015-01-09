@@ -219,6 +219,7 @@ namespace Remonduk.Physics
 
 					if (!Double.IsInfinity(value))
 					{
+						value = Math.Round(value, 8);
 						Out.WriteLine("collision time for [" + circle.GetHashCode() + " & " + that.GetHashCode() + "]: " + value + " < " + min);
 						Out.WriteLine(circle.Velocity + " : " + that.Velocity);
 						if (value == 0 && overlapped)
@@ -261,15 +262,15 @@ namespace Remonduk.Physics
 			{
 				circle.Update(min);
 			}
-			UpdateVelocities(collisionMap);
+			UpdateVelocities(collisionMap, time);
 		}
 
-		public void UpdateVelocities(Dictionary<Circle, List<Circle>> collisionMap)
+		public void UpdateVelocities(Dictionary<Circle, List<Circle>> collisionMap, double time)
 		{
 			Dictionary<Circle, OrderedPair> velocityMap = new Dictionary<Circle, OrderedPair>();
 			foreach (Circle circle in collisionMap.Keys)
 			{
-				velocityMap.Add(circle, circle.CollideWith(collisionMap[circle]));
+				velocityMap.Add(circle, circle.CollideWith(collisionMap[circle], time));
 
 				//Out.WriteLine("updated velocity " + Circle.GetHashCode() + " " + velocityMap[Circle]);
 			}

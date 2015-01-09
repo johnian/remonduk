@@ -194,6 +194,7 @@ namespace Remonduk.Physics
 		/// <returns></returns>
 		public double Colliding(Circle that, double time)
 		{
+			//if (Distance(that) <= (that.Radius + Radius))
 			if (DistanceSquared(that) <= (that.Radius + Radius) * (that.Radius + Radius))
 			{
 				if (that != this)
@@ -220,7 +221,9 @@ namespace Remonduk.Physics
 		/// <returns></returns>
 		public bool Colliding(Circle that)
 		{
-			return (DistanceSquared(that) <= (that.Radius + Radius) * (that.Radius + Radius));
+			if (this == that) return false;
+			//return Distance(that) <= (that.Radius + Radius);
+			return DistanceSquared(that) <= (that.Radius + Radius) * (that.Radius + Radius);
 		}
 
 		/// <summary>
@@ -228,7 +231,7 @@ namespace Remonduk.Physics
 		/// </summary>
 		/// <param name="circles"></param>
 		/// <returns></returns>
-		public OrderedPair CollideWith(List<Circle> circles)
+		public OrderedPair CollideWith(List<Circle> circles, double time)
 		{
 			double totalVx = 0;
 			double totalVy = 0;
@@ -236,8 +239,13 @@ namespace Remonduk.Physics
 			{
 				if (that == this) continue;
 
-				totalVx += (Vx * (Mass - that.Mass) + 2 * that.Vx * that.Mass) / (Mass + that.Mass);
-				totalVy += (Vy * (Mass - that.Mass) + 2 * that.Vy * that.Mass) / (Mass + that.Mass);
+				OrderedPair thisV = NextVelocity(time);
+				OrderedPair thatV = that.NextVelocity(time);
+				totalVx += (thisV.X * (Mass - that.Mass) + 2 * thatV.X * that.Mass) / (Mass + that.Mass);
+				totalVy += (thisV.Y * (Mass - that.Mass) + 2 * thatV.Y * that.Mass) / (Mass + that.Mass);
+
+				//totalVx += (Vx * (Mass - that.Mass) + 2 * that.Vx * that.Mass) / (Mass + that.Mass);
+				//totalVy += (Vy * (Mass - that.Mass) + 2 * that.Vy * that.Mass) / (Mass + that.Mass);
 				// modify for elasticity
 				// use average elasticity between two Colliding objects for simplicity
 				// try to derive a formula for it

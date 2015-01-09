@@ -490,12 +490,48 @@ namespace TestSuite
 		[TestMethod]
 		public void CollidingTest1()
 		{
-			Test.AreEqual(true, false);
+			Circle one = new Circle(1);
+			Circle two = new Circle(1);
+			
+			Test.AreEqual(false, one.Colliding(one));
+			Test.AreEqual(false, two.Colliding(two));
+
+			Test.AreEqual(true, one.Colliding(two));
+			Test.AreEqual(true, two.Colliding(one));
+			
+			two = new Circle(2);
+			Test.AreEqual(true, one.Colliding(two));
+			Test.AreEqual(true, two.Colliding(one));
+
+			two = new Circle(1, 1, 1);
+			Test.AreEqual(true, one.Colliding(two));
+			Test.AreEqual(true, two.Colliding(one));
+
+			two = new Circle(1, 1, 1, 1, 1);
+			Test.AreEqual(true, one.Colliding(two));
+			Test.AreEqual(true, two.Colliding(one));
+
+			two = new Circle(1, 2, 2);
+			Test.AreEqual(false, one.Colliding(two));
+			Test.AreEqual(false, two.Colliding(one));
+
+			two = new Circle(1, 1.42, 1.42);
+			Test.AreEqual(false, one.Colliding(two));
+			Test.AreEqual(false, two.Colliding(one));
+
+			//two = new Circle(1, Math.Round(Math.Sqrt(2), 8), Math.Round(Math.Sqrt(2), 8));
+			two = new Circle(1, Math.Sqrt(2), Math.Sqrt(2));
+			Test.AreEqual(true, one.Colliding(two));
+			Test.AreEqual(true, two.Colliding(one));
 		}
 
 		[TestMethod]
 		public void CollideWithTest()
 		{
+			Circle one = new Circle(1, 1, 2);
+			Circle two = new Circle(3, 5, 8);
+			Circle three = new Circle(1, 1, 2, 3, 5);
+			Circle four = new Circle(1, 1);
 			Test.AreEqual(true, false);
 		}
 
