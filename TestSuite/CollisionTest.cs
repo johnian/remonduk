@@ -370,24 +370,11 @@ namespace TestSuite
 			closest = one.ClosestPoint(two, referenceV);
 			Test.AreEqual(Double.PositiveInfinity, one.CollisionTime(closest, referenceV, two, time));
 
-			//
 			one = new Circle(1, 0, 0, 1, 1);
-			two = new Circle(1, 1, 1, 0, 0);
+			two = new Circle(1, 2, 2, 0, 0);
 			referenceV = one.ReferenceVelocity(two, time);
-			Out.WriteLine("reference V: " + referenceV);
 			closest = one.ClosestPoint(two, referenceV);
-			Out.WriteLine("closest: " + closest);
 			double collisionTime = one.CollisionTime(closest, referenceV, two, time);
-			one.UpdatePosition(collisionTime);
-			two.UpdatePosition(collisionTime);
-			Test.AreEqual(one.Radius + two.Radius, one.Distance(two));
-			//
-
-			one = new Circle(1, 0, 0, 3, 3);
-			two = new Circle(2, 3, 3, 0, 0);
-			referenceV = one.ReferenceVelocity(two, time);
-			closest = one.ClosestPoint(two, referenceV);
-			collisionTime = one.CollisionTime(closest, referenceV, two, time);
 			one.UpdatePosition(collisionTime);
 			two.UpdatePosition(collisionTime);
 			Test.AreEqual(one.Radius + two.Radius, one.Distance(two));
@@ -414,7 +401,14 @@ namespace TestSuite
 		[TestMethod]
 		public void CrossingTest()
 		{
+			double time = 1;
+			Circle one = new Circle(1);
+			Circle two = new Circle(2);
+			Test.AreEqual(Double.PositiveInfinity, one.Crossing(two, time));
 
+			one = new Circle(1, 0, 0, 1, 0);
+			two = new Circle(1, 3, 3, 1, 0);
+			Test.AreEqual(Double.PositiveInfinity, one.Crossing(two, time));
 		}
 
 		[TestMethod]
@@ -424,30 +418,39 @@ namespace TestSuite
 			Circle two = new Circle(1, 0, 0, 0, 0, 0, 0);
 			double time = 1;
 
-			Test.AreEqual(true, Double.IsInfinity(one.Colliding(one, time)));
-			Test.AreEqual(true, Double.IsInfinity(two.Colliding(two, time)));
+			Test.AreEqual(Double.PositiveInfinity, one.Colliding(one, time));
+			Test.AreEqual(Double.PositiveInfinity, two.Colliding(two, time));
 
-			//Test.AreEqual(false, one.Colliding(one));
-			//Test.AreEqual(false, two.Colliding(two));
+			Test.AreEqual(Double.PositiveInfinity, one.Colliding(two, time));
+			Test.AreEqual(Double.PositiveInfinity, two.Colliding(one, time));
+
+			two = new Circle(1, 1, 1);
+			Test.AreEqual(Double.PositiveInfinity, one.Colliding(two, time));
+			Test.AreEqual(Double.PositiveInfinity, two.Colliding(one, time));
 
 			two = new Circle(1, 0, 2);
+			Test.AreEqual(Double.PositiveInfinity, one.Colliding(two, time));
+			Test.AreEqual(Double.PositiveInfinity, two.Colliding(one, time));
 
-			Test.AreEqual(true, Double.IsInfinity(one.Colliding(two, time)));
-			Test.AreEqual(true, Double.IsInfinity(two.Colliding(one, time)));
-			Test.AreEqual(true, one.Colliding(two));
-			Test.AreEqual(true, two.Colliding(one));
+			two = new Circle(1, 1, 1, -1, -1);
+			Test.AreEqual(0, one.Colliding(two, time));
+			Test.AreEqual(0, two.Colliding(one, time));
+
+			two = new Circle(1, 1, 1, 1, 1);
+			Test.AreEqual(Double.PositiveInfinity, one.Colliding(two, time));
+			Test.AreEqual(Double.PositiveInfinity, two.Colliding(one, time));
 
 			two = new Circle(1, 2, 2);
-			Test.AreEqual(true, Double.IsInfinity(one.Colliding(two, time)));
-			Test.AreEqual(true, Double.IsInfinity(two.Colliding(one, time)));
+			Test.AreEqual(Double.PositiveInfinity, one.Colliding(two, time));
+			Test.AreEqual(Double.PositiveInfinity, two.Colliding(one, time));
 
 			two.SetVelocity(2, 0);
-			Test.AreEqual(true, Double.IsInfinity(one.Colliding(two, time)));
-			Test.AreEqual(true, Double.IsInfinity(two.Colliding(one, time)));
+			Test.AreEqual(Double.PositiveInfinity, one.Colliding(two, time));
+			Test.AreEqual(Double.PositiveInfinity, two.Colliding(one, time));
 
 			two.SetVelocity(0, 2);
-			Test.AreEqual(true, Double.IsInfinity(one.Colliding(two, time)));
-			Test.AreEqual(true, Double.IsInfinity(two.Colliding(one, time)));
+			Test.AreEqual(Double.PositiveInfinity, one.Colliding(two, time));
+			Test.AreEqual(Double.PositiveInfinity, two.Colliding(one, time));
 
 			two.SetVelocity(-2, 0);
 			Test.AreEqual(1, one.Colliding(two, time));
@@ -458,16 +461,16 @@ namespace TestSuite
 			Test.AreEqual(1, two.Colliding(one, time));
 
 			two.SetVelocity(1.42, 1.42);
-			Test.AreEqual(true, Double.IsInfinity(one.Colliding(two, time)));
-			Test.AreEqual(true, Double.IsInfinity(two.Colliding(one, time)));
+			Test.AreEqual(Double.PositiveInfinity, one.Colliding(two, time));
+			Test.AreEqual(Double.PositiveInfinity, two.Colliding(one, time));
 
 			two.SetVelocity(1.42, -1.42);
-			Test.AreEqual(true, Double.IsInfinity(one.Colliding(two, time)));
-			Test.AreEqual(true, Double.IsInfinity(two.Colliding(one, time)));
+			Test.AreEqual(Double.PositiveInfinity, one.Colliding(two, time));
+			Test.AreEqual(Double.PositiveInfinity, two.Colliding(one, time));
 
 			two.SetVelocity(-1.42, 1.42);
-			Test.AreEqual(true, Double.IsInfinity(one.Colliding(two, time)));
-			Test.AreEqual(true, Double.IsInfinity(two.Colliding(one, time)));
+			Test.AreEqual(Double.PositiveInfinity, one.Colliding(two, time));
+			Test.AreEqual(Double.PositiveInfinity, two.Colliding(one, time));
 
 			two.SetVelocity(2 * Math.Sqrt(2) - 4, 2 * Math.Sqrt(2) - 4);
 			Test.AreEqual(.5, one.Colliding(two, time));
@@ -485,9 +488,9 @@ namespace TestSuite
 		}
 
 		[TestMethod]
-		public void CollisingTest1()
+		public void CollidingTest1()
 		{
-
+			Test.AreEqual(true, false);
 		}
 
 		[TestMethod]

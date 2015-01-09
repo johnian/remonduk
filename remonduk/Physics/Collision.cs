@@ -117,7 +117,6 @@ namespace Remonduk.Physics
 			double radiiSum = that.Radius + Radius;
 			double distanceFromCollision = Math.Sqrt(radiiSum * radiiSum - distanceFromThat * distanceFromThat);
 			double referenceVelocity = referenceV.Magnitude();
-			// this is the center of the circle when it would collide
 			double collisionX = closest.X - referenceV.X * distanceFromCollision / referenceVelocity;
 			double collisionY = closest.Y - referenceV.Y * distanceFromCollision / referenceVelocity;
 			return new OrderedPair(collisionX, collisionY);
@@ -143,6 +142,10 @@ namespace Remonduk.Physics
 			}
 			double timeX = (referenceV.X == 0) ? 0 : distance.X / referenceV.X;
 			double timeY = (referenceV.Y == 0) ? 0 : distance.Y / referenceV.Y;
+			if (timeX < 0 || timeY < 0)
+			{
+				return Double.PositiveInfinity;
+			}
 			return (timeX > timeY) ? timeX : timeY;
 		}
 
@@ -158,9 +161,7 @@ namespace Remonduk.Physics
 			Circle that, double time)
 		{
 			OrderedPair collisionPoint = CollisionPoint(closest, referenceV, that);
-			Out.WriteLine("collision point: " + collisionPoint);
 			double t = TimeTo(collisionPoint, referenceV);
-			Out.WriteLine("time to: " + t);
 			return (t >= 0 && t <= time) ? t : Double.PositiveInfinity;
 		}
 
