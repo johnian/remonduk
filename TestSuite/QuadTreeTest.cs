@@ -32,6 +32,7 @@ namespace TestSuite
             Circle c3 = new Circle(5, 750, 400);
             List<QTreeNode> nodes = tree.Insert(c3);
             Test.AreEqual(0, nodes.Count);
+            Test.AreEqual(true, tree.circles.Contains(c3));
         }
 
         [TestMethod]
@@ -140,30 +141,35 @@ namespace TestSuite
             Circle c2 = new Circle(1, 75, 10);
             Circle c3 = new Circle(1, 10, 75);
             Circle c4 = new Circle(1, 75, 75);
+            Circle c5 = new Circle(1, 5, 5);
+            Circle c6 = new Circle(1, 30, 30);
+            Circle c7 = new Circle(1, 25, 25);
+            
             tree.Insert(c1);
             tree.Insert(c2);
             tree.Insert(c3);
             tree.Insert(c4);
-
             Test.AreEqual(4, tree.nodes.Count);
+            Test.AreEqual(true, tree.HeadNode.split);
+
+            tree.Insert(c5);
+            tree.Insert(c6);
+            List<QTreeNode> node7 = tree.Insert(c7);
+            Test.AreEqual(8, tree.nodes.Count);
+            Test.AreEqual(true, tree.HeadNode.NorthWest.split);
 
             List<QTreeNode> nodes = new List<QTreeNode>();
-
-            Circle c5 = new Circle(1, 5, 5);
-            tree.Insert(c5);
-            Circle c6 = new Circle(1, 30, 30);
-            tree.Insert(c6);
-            Circle c7 = new Circle(1, 25, 25);
-            tree.Insert(c7);
-
-            Test.AreEqual(8, tree.nodes.Count);
-
             nodes = tree.getNodes(c5);
             Test.AreEqual(1, nodes.Count);
             Test.AreEqual(true, nodes.Contains(tree.HeadNode.NorthWest.NorthWest));
 
-
-
+            Test.AreEqual(4, node7.Count);
+            node7 = tree.getNodes(c7);
+            Test.AreEqual(4, node7.Count);
+            Test.AreEqual(true, node7.Contains(tree.HeadNode.NorthWest.NorthWest));
+            Test.AreEqual(true, node7.Contains(tree.HeadNode.NorthWest.NorthEast));
+            Test.AreEqual(true, node7.Contains(tree.HeadNode.NorthWest.SouthWest));
+            Test.AreEqual(true, node7.Contains(tree.HeadNode.NorthWest.SouthEast));
         }
 
         [TestMethod]
@@ -195,8 +201,49 @@ namespace TestSuite
             Out.WriteLine("Checking Southeast");
             Out.WriteLine(nodes1.ElementAt(3).name);
             Test.AreEqual(true, nodes1.Contains(tree.HeadNode.SouthEast));
+        }
+
+        [TestMethod]
+        public void QuadTreeRemoveTest()
+        {
+            QTree tree = new QTree(new OrderedPair(0, 0), new OrderedPair(100, 100), 4);
+            Circle c1 = new Circle(1, 10, 10);
+            tree.Insert(c1);
+            List<QTreeNode> nodes = tree.Remove(c1);
+            Test.AreEqual(1, nodes.Count);
+            Test.AreEqual(0, tree.circles.Count);
+            //Test.AreEqual(false, tree.HeadNode.HasA(c1));
 
 
+            Circle c2 = new Circle(1, 75, 10);
+            Circle c3 = new Circle(1, 10, 75);
+            Circle c4 = new Circle(1, 75, 75);
+            tree.Insert(c1);
+            tree.Insert(c2);
+            tree.Insert(c3);
+            tree.Insert(c4);
+
+            Test.AreEqual(true, tree.HeadNode.split);
+
+            tree.Remove(c2);
+
+            Test.AreEqual(false, tree.HeadNode.split);
+        }
+
+        [TestMethod]
+        public void QuadTreeMoveTest()
+        {
+            QTree tree = new QTree(new OrderedPair(0, 0), new OrderedPair(100, 100), 2);
+            Circle c1 = new Circle(1, 10, 10);
+            Circle c2 = new Circle(1, 75, 10);
+            tree.Insert(c1);
+            tree.Insert(c2);
+            Test.AreEqual(true, tree.HeadNode.NorthWest.Contains(c1));
+
+            c1.SetPosition(75, 75);
+            tree.move(c1);
+            Test.AreEqual(true, tree.HeadNode.SouthEast.Contains(c1));
+            Test.AreEqual(false, tree.HeadNode.NorthWest.Contains(c1));
 
         }
 

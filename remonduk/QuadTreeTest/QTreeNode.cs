@@ -1,4 +1,5 @@
-﻿using Remonduk.Physics;
+﻿using Remonduk;
+using Remonduk.Physics;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -79,6 +80,16 @@ namespace remonduk.QuadTreeTest
             }
         }
 
+        public void UnSplit()
+        {
+            Out.WriteLine("UNSPLITTING");
+                split = false;
+                parent.nodes.Remove(NorthWest);
+                parent.nodes.Remove(NorthEast);
+                parent.nodes.Remove(SouthWest);
+                parent.nodes.Remove(SouthEast);
+        }
+
         /// <summary>
         /// Inserts a circle into this node.  If split will insert into quadrants.
         /// </summary>
@@ -115,6 +126,39 @@ namespace remonduk.QuadTreeTest
             return nodes;
         }
 
+        public List<QTreeNode> Remove(Circle c)
+        {
+            List<QTreeNode> nodes = new List<QTreeNode>();
+            if(split)
+            {
+                if (HasA(c))
+                {
+                    if (circles.Count - 1 < MaxCount && split)
+                    {
+                        circles.Remove(c);
+                        UnSplit();
+                        nodes.AddRange(Remove(c));
+                    }
+                }
+                else
+                {
+                    nodes.AddRange(NorthWest.Remove(c));
+                    nodes.AddRange(NorthEast.Remove(c));
+                    nodes.AddRange(SouthWest.Remove(c));
+                    nodes.AddRange(SouthEast.Remove(c));
+                }
+            }
+            else
+            {
+                if(HasA(c))
+                {
+                    circles.Remove(c);
+                    nodes.Add(this);
+                }
+            }
+            return nodes;
+        }
+
         /// <summary>
         /// Resizes this node.  This will be very costly...will only happen if a circle is inserted outside of the area of the quad tree
         /// We can make sure this never actually happens but probably would be safe to have this.  Unless we decide that if it ever does happen
@@ -134,6 +178,11 @@ namespace remonduk.QuadTreeTest
         /// <returns></returns>
         public bool HasA(Circle c)
         {
+            if(split)
+            {
+                return (NorthWest.HasA(c) || NorthEast.HasA(c) ||
+                        SouthWest.HasA(c) || SouthEast.HasA(c));
+            }
             return circles.Contains(c);
         }
 

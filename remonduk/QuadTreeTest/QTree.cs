@@ -70,6 +70,12 @@ namespace remonduk.QuadTreeTest
             return nodes;
         }
 
+        public List<QTreeNode> Remove(Circle c)
+        {
+            circles.Remove(c);
+            return HeadNode.Remove(c);
+        }
+
         /// <summary>
         /// Gets all of the nodes that has the given circle.
         /// </summary>
@@ -90,6 +96,13 @@ namespace remonduk.QuadTreeTest
             OrderedPair NewSize = new OrderedPair(0, 0);
 
             return NewSize;
+        }
+
+        public List<QTreeNode> move(Circle c)
+        {
+            HeadNode.Remove(c);
+            List<QTreeNode> nodes = Insert(c);
+            return nodes;
         }
 
         public void draw(Graphics g)

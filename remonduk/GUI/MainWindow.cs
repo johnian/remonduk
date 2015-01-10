@@ -79,7 +79,7 @@ namespace Remonduk
                     if (!pause)
                     {
                         List<Circle> cs = new List<Circle>();
-                        ps.Tree.GetItems(new FRect(c.Py-50, c.Px-50, c.Py + 50, c.Px + 50), ref cs);
+                        tree.move(c);
 						//c.update(cs);
                     }
 					//Out.WriteLine("Drawing");
