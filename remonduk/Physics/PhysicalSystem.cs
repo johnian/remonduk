@@ -194,7 +194,7 @@ namespace Remonduk.Physics
 					//Out.WriteLine("collision count: " + collisionMap.Count);
 					//Out.WriteLine("circle count: " + Circles.Count);
 					//Out.WriteLine("number of collisions: " + collisionMap.Count + "");
-					Out.WriteLine("");
+					//Out.WriteLine("");
 				}
 				overlapped = (min == 0);
 
@@ -220,8 +220,8 @@ namespace Remonduk.Physics
 					if (!Double.IsInfinity(value))
 					{
 						value = Math.Round(value, 8);
-						Out.WriteLine("collision time for [" + circle.GetHashCode() + " & " + that.GetHashCode() + "]: " + value + " < " + min);
-						Out.WriteLine(circle.Velocity + " : " + that.Velocity);
+						//Out.WriteLine("collision time for [" + circle.GetHashCode() + " & " + that.GetHashCode() + "]: " + value + " < " + min);
+						//Out.WriteLine(circle.Velocity + " : " + that.Velocity);
 						if (value == 0 && overlapped)
 						{
 							//continue;
@@ -278,6 +278,10 @@ namespace Remonduk.Physics
 			{
 				//Out.WriteLine(velocityMap[circle] + " <= " + circle.Velocity);
 				circle.SetVelocity(velocityMap[circle].X, velocityMap[circle].Y);
+			}
+			if (velocityMap.Keys.Count % 2 == 1)
+			{
+				Out.WriteLine("" + velocityMap.Keys.Count);
 			}
 		}
 	}

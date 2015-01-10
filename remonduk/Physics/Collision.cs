@@ -235,14 +235,34 @@ namespace Remonduk.Physics
 		{
 			double totalVx = 0;
 			double totalVy = 0;
+
 			foreach (Circle that in circles)
 			{
 				if (that == this) continue;
 
 				OrderedPair thisV = NextVelocity(time);
 				OrderedPair thatV = that.NextVelocity(time);
-				totalVx += (thisV.X * (Mass - that.Mass) + 2 * thatV.X * that.Mass) / (Mass + that.Mass);
-				totalVy += (thisV.Y * (Mass - that.Mass) + 2 * thatV.Y * that.Mass) / (Mass + that.Mass);
+				double totalV = (thisV.Magnitude() * (Mass - that.Mass) + 2 * thatV.Magnitude() * that.Mass) / (Mass + that.Mass);
+
+				double angle = that.NextPosition(time).Angle(NextPosition(time));
+				double orthogonal = angle + Math.PI / 2;
+				double delta = thisV.Angle() - orthogonal;
+				double reflection = orthogonal - delta;
+
+				reflection = 2 * angle + Math.PI - thisV.Angle();
+				//Out.WriteLine("");
+				//Out.WriteLine("angle: " + angle);
+				//Out.WriteLine("orthogonal: " + orthogonal);
+				//Out.WriteLine("delta: " + delta);
+				//Out.WriteLine("reflection: " + reflection);		
+
+				totalVx += totalV * Math.Cos(reflection);
+				totalVy += totalV * Math.Sin(reflection);
+
+
+				//totalVx += (thisV.X * (Mass - that.Mass) + 2 * thatV.X * that.Mass) / (Mass + that.Mass);
+				//totalVy += (thisV.Y * (Mass - that.Mass) + 2 * thatV.Y * that.Mass) / (Mass + that.Mass);
+
 
 				//totalVx += (Vx * (Mass - that.Mass) + 2 * that.Vx * that.Mass) / (Mass + that.Mass);
 				//totalVy += (Vy * (Mass - that.Mass) + 2 * that.Vy * that.Mass) / (Mass + that.Mass);

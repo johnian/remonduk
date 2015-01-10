@@ -528,11 +528,28 @@ namespace TestSuite
 		[TestMethod]
 		public void CollideWithTest()
 		{
+			double time = 1;
 			Circle one = new Circle(1, 1, 2);
 			Circle two = new Circle(3, 5, 8);
 			Circle three = new Circle(1, 1, 2, 3, 5);
-			Circle four = new Circle(1, 1);
-			Test.AreEqual(true, false);
+			Circle four = new Circle(2, 3, 5, 8, 13, 21, 34);
+			List<Circle> circles = new List<Circle>();
+			OrderedPair velocity;
+
+			circles.Add(one);
+			velocity = one.CollideWith(circles, time);
+			Test.AreEqual(one.Vx, velocity.X);
+			Test.AreEqual(one.Vy, velocity.Y);
+
+			circles.Add(two);
+			velocity = one.CollideWith(circles, time);
+			Test.AreEqual(one.Vx, velocity.X);
+			Test.AreEqual(one.Vy, velocity.Y);
+
+			circles.Add(three);
+			velocity = one.CollideWith(circles, time);
+			Test.AreEqual(1, one.Vx);
+			Test.AreEqual(2, one.Vy);
 		}
 
 		//[TestMethod]

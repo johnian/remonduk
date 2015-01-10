@@ -15,6 +15,8 @@ Floid
 [sound] (#8)  
 
 for juliono:
+use epsilons instead of rounding
+randomize tests
 add checks for valid paremeters?
 update comments	
 optimize code
