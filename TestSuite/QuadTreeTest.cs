@@ -55,7 +55,6 @@ namespace TestSuite
             {
                 Test.AreEqual(true, CirclesIn.ElementAt(i) == CirclesOut.ElementAt(i));
             }
-            Out.WriteLine("" + tree.nodes.Count);
         }
 
         [TestMethod]
@@ -212,7 +211,7 @@ namespace TestSuite
             List<QTreeNode> nodes = tree.Remove(c1);
             Test.AreEqual(1, nodes.Count);
             Test.AreEqual(0, tree.circles.Count);
-            //Test.AreEqual(false, tree.HeadNode.HasA(c1));
+            Test.AreEqual(false, tree.HeadNode.HasA(c1));
 
 
             Circle c2 = new Circle(1, 75, 10);
@@ -226,7 +225,8 @@ namespace TestSuite
             Test.AreEqual(true, tree.HeadNode.split);
 
             tree.Remove(c2);
-
+            Test.AreEqual(false, tree.circles.Contains(c2));
+            Test.AreEqual(0, tree.getNodes(c2).Count);
             Test.AreEqual(false, tree.HeadNode.split);
         }
 
@@ -244,7 +244,6 @@ namespace TestSuite
             tree.move(c1);
             Test.AreEqual(true, tree.HeadNode.SouthEast.Contains(c1));
             Test.AreEqual(false, tree.HeadNode.NorthWest.Contains(c1));
-
         }
 
 
