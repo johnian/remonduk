@@ -519,7 +519,6 @@ namespace TestSuite
 			Test.AreEqual(false, one.Colliding(two));
 			Test.AreEqual(false, two.Colliding(one));
 
-			//two = new Circle(1, Math.Round(Math.Sqrt(2), 8), Math.Round(Math.Sqrt(2), 8));
 			two = new Circle(1, Math.Sqrt(2), Math.Sqrt(2));
 			Test.AreEqual(true, one.Colliding(two));
 			Test.AreEqual(true, two.Colliding(one));
@@ -528,7 +527,6 @@ namespace TestSuite
 		[TestMethod]
 		public void CollideWithTest()
 		{
-			double time = 1;
 			Circle one = new Circle(1, 1, 2);
 			Circle two = new Circle(3, 5, 8);
 			Circle three = new Circle(1, 1, 2, 3, 5);
@@ -537,38 +535,19 @@ namespace TestSuite
 			OrderedPair velocity;
 
 			circles.Add(one);
-			velocity = one.CollideWith(circles, time);
+			velocity = one.CollideWith(circles);
 			Test.AreEqual(one.Vx, velocity.X);
 			Test.AreEqual(one.Vy, velocity.Y);
 
 			circles.Add(two);
-			velocity = one.CollideWith(circles, time);
+			velocity = one.CollideWith(circles);
 			Test.AreEqual(one.Vx, velocity.X);
 			Test.AreEqual(one.Vy, velocity.Y);
 
 			circles.Add(three);
-			velocity = one.CollideWith(circles, time);
+			velocity = one.CollideWith(circles);
 			Test.AreEqual(1, one.Vx);
 			Test.AreEqual(2, one.Vy);
 		}
-
-		//[TestMethod]
-		//public void magnitude()
-		//{
-		//	Test.AreEqual(10, OrderedPair.Magnitude(6.0, 8.0));
-		//}
-
-		//[TestMethod]
-		//public void angle()
-		//{
-		//	Test.AreEqual(0.0, OrderedPair.Angle(0.0, 1.0));
-		//	Test.AreEqual(Math.PI / 4, OrderedPair.Angle(1.0, 1.0));
-		//	Test.AreEqual(2 * Math.PI / 4, OrderedPair.Angle(1.0, 0.0));
-		//	Test.AreEqual(3 * Math.PI / 4, OrderedPair.Angle(1.0, -1.0));
-		//	Test.AreEqual(4 * Math.PI / 4, OrderedPair.Angle(0.0, -1.0));
-		//	Test.AreEqual(5 * Math.PI / 4, OrderedPair.Angle(-1.0, -1.0));
-		//	Test.AreEqual(6 * Math.PI / 4, OrderedPair.Angle(-1.0, 0.0));
-		//	Test.AreEqual(7 * Math.PI / 4, OrderedPair.Angle(-1.0, 1.0));
-		//}
 	}
 }

@@ -194,22 +194,19 @@ namespace Remonduk.Physics
 		/// <returns></returns>
 		public double Colliding(Circle that, double time)
 		{
-			//if (Distance(that) <= (that.Radius + Radius))
-			if (DistanceSquared(that) <= (that.Radius + Radius) * (that.Radius + Radius))
+			if (that == this) return Double.PositiveInfinity;
+			double oldDistance = DistanceSquared(that);
+			if (oldDistance- (that.Radius + Radius) * (that.Radius + Radius) <= Constants.EPSILON)
 			{
-				if (that != this)
+				
+				OrderedPair thisNext = NextPosition(time);
+				OrderedPair thatNext = that.NextPosition(time);
+				double newDistance = thisNext.MagnitudeSquared(thatNext);
+				if (newDistance - oldDistance > -Constants.EPSILON)
 				{
-					double oldDistance = Distance(that);
-					OrderedPair thisNext = NextPosition(time);
-					OrderedPair thatNext = that.NextPosition(time);
-					double newDistance = thisNext.Magnitude(thatNext);
-
-					if (newDistance < oldDistance)
-					{
-						return 0;
-					}
+					return Double.PositiveInfinity;
 				}
-				return Double.PositiveInfinity;
+				return 0;
 			}
 			return Crossing(that, time);
 		}
@@ -221,9 +218,8 @@ namespace Remonduk.Physics
 		/// <returns></returns>
 		public bool Colliding(Circle that)
 		{
-			if (this == that) return false;
-			//return Distance(that) <= (that.Radius + Radius);
-			return DistanceSquared(that) <= (that.Radius + Radius) * (that.Radius + Radius);
+			if (that == this) return false;
+			return DistanceSquared(that) - (that.Radius + Radius) * (that.Radius + Radius) <= Constants.EPSILON;
 		}
 
 		/// <summary>
@@ -231,7 +227,7 @@ namespace Remonduk.Physics
 		/// </summary>
 		/// <param name="circles"></param>
 		/// <returns></returns>
-		public OrderedPair CollideWith(List<Circle> circles, double time)
+		public OrderedPair CollideWith(List<Circle> circles)
 		{
 			double totalVx = 0;
 			double totalVy = 0;
@@ -239,22 +235,22 @@ namespace Remonduk.Physics
 			foreach (Circle that in circles)
 			{
 				if (that == this) continue;
+				double totalV = (Velocity.Magnitude() * (Mass - that.Mass) + 2 * that.Velocity.Magnitude() * that.Mass) / (Mass + that.Mass);
+				//double totalV = that.Mass * that.Velocity.Magnitude() / Mass;
 
-				OrderedPair thisV = NextVelocity(time);
-				OrderedPair thatV = that.NextVelocity(time);
-				double totalV = (thisV.Magnitude() * (Mass - that.Mass) + 2 * thatV.Magnitude() * that.Mass) / (Mass + that.Mass);
-
-				double angle = that.NextPosition(time).Angle(NextPosition(time));
+				double angle = that.Position.Angle(Position);
 				double orthogonal = angle + Math.PI / 2;
-				double delta = thisV.Angle() - orthogonal;
+				double delta = Velocity.Angle() - orthogonal;
 				double reflection = orthogonal - delta;
 
-				reflection = 2 * angle + Math.PI - thisV.Angle();
-				//Out.WriteLine("");
+				reflection = 2 * angle + Math.PI - Velocity.Angle();
+				Out.WriteLine("");
 				//Out.WriteLine("angle: " + angle);
 				//Out.WriteLine("orthogonal: " + orthogonal);
 				//Out.WriteLine("delta: " + delta);
-				//Out.WriteLine("reflection: " + reflection);		
+				Out.WriteLine("reflection: " + reflection);
+				Out.WriteLine("total V: " + totalV);
+				Out.WriteLine("that velocity: " + that.Velocity.Magnitude());
 
 				totalVx += totalV * Math.Cos(reflection);
 				totalVy += totalV * Math.Sin(reflection);
@@ -262,6 +258,9 @@ namespace Remonduk.Physics
 
 				//totalVx += (thisV.X * (Mass - that.Mass) + 2 * thatV.X * that.Mass) / (Mass + that.Mass);
 				//totalVy += (thisV.Y * (Mass - that.Mass) + 2 * thatV.Y * that.Mass) / (Mass + that.Mass);
+
+				Out.WriteLine("momentum = " + Math.Sqrt((totalVx * totalVx + totalVy * totalVy)));
+				Out.WriteLine("" + totalVx + ", " + totalVy);
 
 
 				//totalVx += (Vx * (Mass - that.Mass) + 2 * that.Vx * that.Mass) / (Mass + that.Mass);

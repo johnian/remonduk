@@ -148,7 +148,7 @@ namespace Remonduk.Physics
 
 		public void update()
 		{
-			UpdateNetForces();
+			//UpdateNetForces();
 			UpdatePositions();
 		}
 
@@ -187,6 +187,7 @@ namespace Remonduk.Physics
 
 			while (time > 0)
 			{
+				UpdateNetForces();
 				Dictionary<Circle, List<Circle>> collisionMap = new Dictionary<Circle, List<Circle>>();
 				double min = CheckCollisions(ref collisionMap, ref Circles, time, overlapped);
 				if (collisionMap.Count != 0)
@@ -201,6 +202,10 @@ namespace Remonduk.Physics
 				UpdateCircles(min, time, collisionMap);
 				time -= min;
 			}
+			//if (Circles.Count != 0)
+			//{
+			//	Out.WriteLine("" + Circles[0].Acceleration);
+			//}
 		}
 
 		public double CheckCollisions(ref Dictionary<Circle, List<Circle>> collisionMap, ref List<Circle> near,
@@ -262,22 +267,25 @@ namespace Remonduk.Physics
 			{
 				circle.Update(min);
 			}
-			UpdateVelocities(collisionMap, time);
+			//UpdateNetForces();
+			UpdateVelocities(collisionMap);
+			
 		}
 
-		public void UpdateVelocities(Dictionary<Circle, List<Circle>> collisionMap, double time)
+		public void UpdateVelocities(Dictionary<Circle, List<Circle>> collisionMap)
 		{
 			Dictionary<Circle, OrderedPair> velocityMap = new Dictionary<Circle, OrderedPair>();
 			foreach (Circle circle in collisionMap.Keys)
 			{
-				velocityMap.Add(circle, circle.CollideWith(collisionMap[circle], time));
+				velocityMap.Add(circle, circle.CollideWith(collisionMap[circle]));
 
-				//Out.WriteLine("updated velocity " + Circle.GetHashCode() + " " + velocityMap[Circle]);
+				Out.WriteLine("updated velocity " + circle.GetHashCode() + " " + velocityMap[circle]);
 			}
 			foreach (Circle circle in velocityMap.Keys)
 			{
-				//Out.WriteLine(velocityMap[circle] + " <= " + circle.Velocity);
+				Out.WriteLine(velocityMap[circle] + " <= " + circle.Velocity);
 				circle.SetVelocity(velocityMap[circle].X, velocityMap[circle].Y);
+				Out.WriteLine("velocity: " + circle.Velocity.Magnitude());
 			}
 			if (velocityMap.Keys.Count % 2 == 1)
 			{

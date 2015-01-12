@@ -14,6 +14,7 @@ namespace Remonduk.Physics
 		private static Constants instance;
 
 		public const int PRECISION = 8;
+		public const double EPSILON = .00000001;
 
 		/// <summary>
 		/// Magnitude used for calculating gravity.
