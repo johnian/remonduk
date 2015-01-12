@@ -536,19 +536,66 @@ namespace TestSuite
 
 			circles.Add(one);
 			velocity = one.CollideWith(circles);
-			Test.AreEqual(0, velocity.X);
-			Test.AreEqual(0, velocity.Y);
+			Test.AreEqual(new OrderedPair(0, 0), velocity);
 
 			circles.Add(two);
 			velocity = one.CollideWith(circles);
-			Test.AreEqual(0, velocity.X);
-			Test.AreEqual(0, velocity.Y);
+			Test.AreEqual(new OrderedPair(0, 0), velocity);
+
+			velocity = two.CollideWith(circles);
+			Test.AreEqual(new OrderedPair(0, 0), velocity);
 
 			circles.Add(three);
 			velocity = one.CollideWith(circles);
-			Out.WriteLine("" + velocity);
-			Test.AreEqual(8, velocity.X);
-			Test.AreEqual(8, velocity.Y);
+			Test.AreEqual(new OrderedPair(8, 8), velocity);
+
+			velocity = two.CollideWith(circles);
+			Test.AreEqual(new OrderedPair(8, 8), velocity);
+
+			velocity = three.CollideWith(circles);
+			Test.AreEqual(new OrderedPair(0, 0), velocity);
+
+			circles.Add(four);
+			velocity = one.CollideWith(circles);
+			Test.AreEqual(new OrderedPair(-8, -8), velocity);
+
+			velocity = two.CollideWith(circles);
+			Test.AreEqual(new OrderedPair(-8, -8), velocity);
+
+			velocity = three.CollideWith(circles);
+			Test.AreEqual(new OrderedPair(-16, -16), velocity);
+
+			velocity = four.CollideWith(circles);
+			Test.AreEqual(new OrderedPair(8, 8), velocity);
+
+			circles = new List<Circle>();
+			one = new Circle(2, 4, 3, 0, 0, 2);
+			two = new Circle(3, 0, 0, 10, 20, 5);
+			circles.Add(one);
+			circles.Add(two);
+
+			velocity = one.CollideWith(circles);
+			Test.AreEqual(new OrderedPair(44.7213595499958, 33.54101966242969), velocity);
+
+			velocity = two.CollideWith(circles);
+			Test.AreEqual(new OrderedPair(0, 0), velocity);
+
+			circles = new List<Circle>();
+			one = new Circle(1, 0, 0, 15, 5, 2);
+			two = new Circle(1, 3, 4, -10, -20, 5);
+			circles.Add(one);
+			circles.Add(two);
+
+			double before = one.Velocity.Magnitude() * one.Mass + two.Velocity.Magnitude() * two.Mass;
+			velocity = one.CollideWith(circles);
+			double after = velocity.Magnitude() * one.Mass;
+			Test.AreEqual(two.Velocity.Magnitude() * two.Mass, velocity.Magnitude() * one.Mass);
+
+			velocity = two.CollideWith(circles);
+			after += velocity.Magnitude() * two.Mass;
+			Test.AreEqual(one.Velocity.Magnitude() * one.Mass, velocity.Magnitude() * two.Mass);
+
+			Test.AreEqual(before, after);
 		}
 	}
 }
