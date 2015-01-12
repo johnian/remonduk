@@ -519,7 +519,6 @@ namespace TestSuite
 			Test.AreEqual(false, one.Colliding(two));
 			Test.AreEqual(false, two.Colliding(one));
 
-			//two = new Circle(1, Math.Round(Math.Sqrt(2), 8), Math.Round(Math.Sqrt(2), 8));
 			two = new Circle(1, Math.Sqrt(2), Math.Sqrt(2));
 			Test.AreEqual(true, one.Colliding(two));
 			Test.AreEqual(true, two.Colliding(one));
@@ -528,30 +527,75 @@ namespace TestSuite
 		[TestMethod]
 		public void CollideWithTest()
 		{
-			Circle one = new Circle(1, 1, 2);
-			Circle two = new Circle(3, 5, 8);
-			Circle three = new Circle(1, 1, 2, 3, 5);
-			Circle four = new Circle(1, 1);
-			Test.AreEqual(true, false);
+			Circle one = new Circle(1, 0, 0);
+			Circle two = new Circle(3, 6, 6);
+			Circle three = new Circle(1, -2, -2, 8, 8);
+			Circle four = new Circle(2, 8, 8, -16, -16);
+			List<Circle> circles = new List<Circle>();
+			OrderedPair velocity;
+
+			circles.Add(one);
+			velocity = one.CollideWith(circles);
+			Test.AreEqual(new OrderedPair(0, 0), velocity);
+
+			circles.Add(two);
+			velocity = one.CollideWith(circles);
+			Test.AreEqual(new OrderedPair(0, 0), velocity);
+
+			velocity = two.CollideWith(circles);
+			Test.AreEqual(new OrderedPair(0, 0), velocity);
+
+			circles.Add(three);
+			velocity = one.CollideWith(circles);
+			Test.AreEqual(new OrderedPair(8, 8), velocity);
+
+			velocity = two.CollideWith(circles);
+			Test.AreEqual(new OrderedPair(8, 8), velocity);
+
+			velocity = three.CollideWith(circles);
+			Test.AreEqual(new OrderedPair(0, 0), velocity);
+
+			circles.Add(four);
+			velocity = one.CollideWith(circles);
+			Test.AreEqual(new OrderedPair(-8, -8), velocity);
+
+			velocity = two.CollideWith(circles);
+			Test.AreEqual(new OrderedPair(-8, -8), velocity);
+
+			velocity = three.CollideWith(circles);
+			Test.AreEqual(new OrderedPair(-16, -16), velocity);
+
+			velocity = four.CollideWith(circles);
+			Test.AreEqual(new OrderedPair(8, 8), velocity);
+
+			circles = new List<Circle>();
+			one = new Circle(2, 4, 3, 0, 0, 2);
+			two = new Circle(3, 0, 0, 10, 20, 5);
+			circles.Add(one);
+			circles.Add(two);
+
+			velocity = one.CollideWith(circles);
+			Test.AreEqual(new OrderedPair(44.7213595499958, 33.54101966242969), velocity);
+
+			velocity = two.CollideWith(circles);
+			Test.AreEqual(new OrderedPair(0, 0), velocity);
+
+			circles = new List<Circle>();
+			one = new Circle(1, 0, 0, 15, 5, 2);
+			two = new Circle(1, 3, 4, -10, -20, 5);
+			circles.Add(one);
+			circles.Add(two);
+
+			double before = one.Velocity.Magnitude() * one.Mass + two.Velocity.Magnitude() * two.Mass;
+			velocity = one.CollideWith(circles);
+			double after = velocity.Magnitude() * one.Mass;
+			Test.AreEqual(two.Velocity.Magnitude() * two.Mass, velocity.Magnitude() * one.Mass);
+
+			velocity = two.CollideWith(circles);
+			after += velocity.Magnitude() * two.Mass;
+			Test.AreEqual(one.Velocity.Magnitude() * one.Mass, velocity.Magnitude() * two.Mass);
+
+			Test.AreEqual(before, after);
 		}
-
-		//[TestMethod]
-		//public void magnitude()
-		//{
-		//	Test.AreEqual(10, OrderedPair.Magnitude(6.0, 8.0));
-		//}
-
-		//[TestMethod]
-		//public void angle()
-		//{
-		//	Test.AreEqual(0.0, OrderedPair.Angle(0.0, 1.0));
-		//	Test.AreEqual(Math.PI / 4, OrderedPair.Angle(1.0, 1.0));
-		//	Test.AreEqual(2 * Math.PI / 4, OrderedPair.Angle(1.0, 0.0));
-		//	Test.AreEqual(3 * Math.PI / 4, OrderedPair.Angle(1.0, -1.0));
-		//	Test.AreEqual(4 * Math.PI / 4, OrderedPair.Angle(0.0, -1.0));
-		//	Test.AreEqual(5 * Math.PI / 4, OrderedPair.Angle(-1.0, -1.0));
-		//	Test.AreEqual(6 * Math.PI / 4, OrderedPair.Angle(-1.0, 0.0));
-		//	Test.AreEqual(7 * Math.PI / 4, OrderedPair.Angle(-1.0, 1.0));
-		//}
 	}
 }

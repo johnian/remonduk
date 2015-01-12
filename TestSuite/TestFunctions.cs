@@ -7,9 +7,6 @@ namespace TestSuite
 {
 	public static class Test
 	{
-		public const int PRECISION = 8;
-		public const double EPSILON = .0001;
-
 		public static void AreEqual(OrderedPair expected, OrderedPair actual)
 		{
 			AreEqual(expected.X, actual.X);
@@ -35,7 +32,7 @@ namespace TestSuite
 				AreEqual(true, Double.IsNegativeInfinity(actual));
 				return;
 			}
-			AreEqual(true, Math.Abs(expected - actual) < EPSILON);
+			AreEqual(true, Math.Abs(expected - actual) < Constants.EPSILON);
 		}
 
 		public static void AreEqual(int expected, int actual)
@@ -55,7 +52,7 @@ namespace TestSuite
 
 		public static double round(double value)
 		{
-			return Math.Round(value, PRECISION);
+			return Math.Round(value, Constants.PRECISION);
 		}
 	}
 }
