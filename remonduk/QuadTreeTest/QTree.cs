@@ -110,6 +110,14 @@ namespace remonduk.QuadTreeTest
             HeadNode.draw(g);
         }
 
+        public List<Circle> Possible(Circle circle, double time)
+        {
+            OrderedPair start = circle.Position;
+            OrderedPair end = circle.NextPosition(time);
+
+            return HeadNode.Possible(start, end);
+        }
+
 
     }
 }

@@ -252,6 +252,29 @@ namespace remonduk.QuadTreeTest
             }
         }
 
+        public List<Circle> Possible(OrderedPair start, OrderedPair end)
+        {
+            List<Circle> possible = new List<Circle>();
+
+            if(split)
+            {
+                possible.AddRange(NorthWest.Possible(start, end));
+                possible.AddRange(NorthEast.Possible(start, end));
+                possible.AddRange(SouthWest.Possible(start, end));
+                possible.AddRange(SouthEast.Possible(start, end));
+            }
+            else
+            {
+                if (start.X < pos.X + dim.X &&
+                    start.Y < pos.Y + dim.Y &&
+                    end.X > pos.X && end.Y > pos.Y)
+                {
+                    possible.AddRange(circles);
+                }
+            }
+            return possible;
+        }
+
         public String ToString()
         {
             return name;

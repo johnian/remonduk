@@ -246,7 +246,19 @@ namespace TestSuite
             Test.AreEqual(false, tree.HeadNode.NorthWest.Contains(c1));
         }
 
+        [TestMethod]
+        public void QuadTreePossibleTest()
+        {
+            QTree tree = new QTree(new OrderedPair(0, 0), new OrderedPair(100, 100), 2);
+            Circle c1 = new Circle(1, 10, 10);
+            Circle c2 = new Circle(1, 90, 10);
+            c1.SetVelocity(50, 0);
+            tree.Insert(c1);
+            tree.Insert(c2);
 
+            List<Circle> circles = tree.Possible(c1, 1.0);
+            Test.AreEqual(true, circles.Contains(c2));
+        }
 
     }
 }
