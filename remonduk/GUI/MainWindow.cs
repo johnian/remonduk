@@ -250,7 +250,7 @@ namespace Remonduk
                 }
                 else if (collide /*!Double.IsInfinity(collide)*/)
                 {
-					Out.WriteLine("selected");
+					Out.WriteLine("selected: [" + c.GetHashCode() + "]");
                     selected_circle = c;
                     psdw.selected_circle = c;
                     psdw.circle_list.SelectedItem = c;

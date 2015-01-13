@@ -173,7 +173,10 @@ namespace Remonduk.Physics
 			double time, bool overlapped, Circle circle, double min)
 		{
 			List<Circle> collisions = new List<Circle>();
-			Out.WriteLine("[" + circle.GetHashCode() + "]" + Tree.Possible(circle, time).Count);
+			if (Tree.Possible(circle, time).Count == 0)
+			{
+				Out.WriteLine("[" + circle.GetHashCode() + "]" + Tree.Possible(circle, time).Count);
+			}
 			foreach (Circle that in Tree.Possible(circle, time))
 			{
 				double collisionTime = circle.Colliding(that, time);
@@ -181,6 +184,7 @@ namespace Remonduk.Physics
 				if (!Double.IsInfinity(collisionTime) && (collisionTime != 0 || !overlapped))
 				{
 					double delta = collisionTime - min;
+					Out.WriteLine("delta: " + delta);
 					if (delta < -Constants.EPSILON)
 					{
 						Out.WriteLine("new");
