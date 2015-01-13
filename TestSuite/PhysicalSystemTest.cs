@@ -16,15 +16,19 @@ namespace TestSuite
 			PhysicalSystem world = new PhysicalSystem();
 			Test.AreEqual(0, world.Circles.Count);
 			Test.AreEqual(0, world.NetForces.Keys.Count);
+
 			Test.AreEqual(0, world.Interactions.Count);
 			Test.AreEqual(0, world.InteractionMap.Keys.Count);
-			Test.AreEqual(1, world.Forces.Keys.Count);
-			Test.AreEqual(true, world.Forces.ContainsKey("Gravity"));
-			Test.AreEqual(true, false);
 
-			//Test.AreEqual(quad tree);
-			//Test.AreEqual(world.GRAVITY, world.gravity);
-		} 
+			Test.AreEqual(1, world.Forces.Keys.Count);
+			//if (world.GravityOn)
+			//{
+				Test.AreEqual(true, world.Forces.ContainsKey("Gravity"));
+				//Test.AreEqual(new Force(), world.Forces["Gravity"].Force);
+			//}
+
+			Test.AreEqual(false, world.Tree == null);
+		}
 
 		[TestMethod]
 		public void addCircleTest()
@@ -153,6 +157,6 @@ namespace TestSuite
 		public void updateTest()
 		{
 			// nothing to do for this really
-		}		
+		}
 	}
 }

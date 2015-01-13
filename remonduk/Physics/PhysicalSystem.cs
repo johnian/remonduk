@@ -11,47 +11,62 @@ namespace Remonduk.Physics
 	/// </summary>
 	public class PhysicalSystem
 	{
+		public const double TIME_STEP = 1;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public Dictionary<String, Force> FundamentalForces;
+		/// <summary>
+		/// 
+		/// </summary>
+		public Dictionary<String, Force> Forces;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public List<Circle> Circles;
+		/// <summary>
+		/// A list of all of the Interactions in this physical system.
+		/// Iterate over this list to determine accelerations for all circles.
+		/// </summary>
+		public List<Interaction> Interactions;
+
 		/// <summary>
 		/// This physical system's dictionary of net Forces.
 		/// Looking up a Circle will give the netforce exerted on that Circle from within the physical system.
 		/// </summary>
 		public Dictionary<Circle, OrderedPair> NetForces;
-		public List<Circle> Circles;
 		/// <summary>
-		/// A list of all of the Interactions in this physical system.
+		/// 
 		/// </summary>
-		public List<Interaction> Interactions; // ideally, i'd like to index into this by Circle to get Interactions associated with that Circle
 		public Dictionary<Circle, List<Interaction>> InteractionMap;
 
-		public Dictionary<String, Force> Forces;
+		public double TimeStep;
 
+
+		/// <summary>
+		/// 
+		/// </summary>
 		public QuadTree<Circle> Tree;
-
-		/// <summary>
-		/// Default value for Gravity.
-		/// </summary>
-		public const bool GRAVITY_ON = true;
-		/// <summary>
-		/// Global flag for GravityOn in this physical system.
-		/// </summary>
-		public bool GravityOn;
 
 		/// <summary>
 		/// No-arg constructor to create a new physical system.  Inits lists, sets GravityOn to default.
 		/// </summary>
-		public PhysicalSystem()
+		public PhysicalSystem(double timeStep = TIME_STEP)
 		{
 			Circles = new List<Circle>();
 			NetForces = new Dictionary<Circle, OrderedPair>();
+
 			Interactions = new List<Interaction>();
 			InteractionMap = new Dictionary<Circle, List<Interaction>>();
 
 			Forces = new Dictionary<String, Force>();
+			FundamentalForces = new Dictionary<String, Force>();
+
+			TimeStep = timeStep;
 
 			Tree = new QuadTree<Circle>(new FRect(0, 0, 600, 600), 10);
-
-			GravityOn = GRAVITY_ON;
-			Forces.Add("Gravity", new Gravity(Gravity.GRAVITY, Gravity.ANGLE));
 		}
 
 		/// <summary>
@@ -60,27 +75,10 @@ namespace Remonduk.Physics
 		/// <param name="circle">The new circle to add.</param>
 		public void AddCircle(Circle circle)
 		{
-			//Out.WriteLine("1");
 			Circles.Add(circle);
-			//Out.WriteLine("2");
-			// need to figure out how to handle GravityOn
-			if (false /*GravityOn*/)
-			{
-				//Out.WriteLine("3");
-				Interactions.Add(new Interaction(circle, null, Forces["Gravity"]));
-			}
-
-			//Out.WriteLine("4");
 			NetForces.Add(circle, new OrderedPair(0, 0));
-
-			//Out.WriteLine("5");
 			InteractionMap.Add(circle, new List<Interaction>());
-			//Out.WriteLine("6");
-
-			// why does this throw a null pointer exception
-
 			Tree.Insert(circle);
-			//Out.WriteLine("7");
 		}
 
 		/// <summary>
@@ -93,11 +91,11 @@ namespace Remonduk.Physics
 			{
 				NetForces.Remove(circle);
 				List<Interaction> associations = InteractionMap[circle];
-				foreach (Interaction Interaction in associations)
+				foreach (Interaction interaction in associations)
 				{
-					Circle other = Interaction.GetOther(circle);
-					InteractionMap[other].Remove(Interaction);
-					Interactions.Remove(Interaction);
+					Circle other = interaction.GetOther(circle);
+					InteractionMap[other].Remove(interaction);
+					Interactions.Remove(interaction);
 				}
 				return true;
 			}
@@ -132,24 +130,13 @@ namespace Remonduk.Physics
 		/// </summary>
 		public void UpdateNetForces()
 		{
-			for (int i = 0; i < NetForces.Count; i++)
+			foreach (Circle circle in Circles)
 			{
-				Circle circle = NetForces.ElementAt(i).Key;
-				//Out.WriteLine(circle.GetHashCode() + "");
-
 				UpdateNetForceOn(circle);
-				//NetForces[circle] = UpdateNetForceOn(circle);
 				double ax = NetForces[circle].X / circle.Mass;
 				double ay = NetForces[circle].Y / circle.Mass;
-				//Out.WriteLine(NetForces[circle] + "");
 				circle.SetAcceleration(ax, ay);
 			}
-		}
-
-		public void update()
-		{
-			//UpdateNetForces();
-			UpdatePositions();
 		}
 
 		/// <summary>
@@ -159,12 +146,11 @@ namespace Remonduk.Physics
 		/// <returns>The net Forces on the given circle.</returns>
 		public void UpdateNetForceOn(Circle circle)
 		{
+			OrderedPair f;
 			double fx = 0;
 			double fy = 0;
-			//Out.WriteLine(Circle.GetHashCode() + "");
 			foreach (Interaction interaction in InteractionMap[circle])
 			{
-				OrderedPair f;
 				if (interaction.First == circle)
 				{
 					f = interaction.ForceOnFirst();
@@ -177,63 +163,42 @@ namespace Remonduk.Physics
 				fy += f.Y;
 			}
 			NetForces[circle].SetXY(fx, fy);
-			//Out.WriteLine("f: " + fx + ", " + fy);
 		}
 
 		public void UpdatePositions()
 		{
-			double time = 1;
+			double time = TimeStep;
 			bool overlapped = false;
-
 			while (time > 0)
 			{
 				UpdateNetForces();
 				Dictionary<Circle, List<Circle>> collisionMap = new Dictionary<Circle, List<Circle>>();
-				double min = CheckCollisions(ref collisionMap, ref Circles, time, overlapped);
-				if (collisionMap.Count != 0)
-				{
-					//Out.WriteLine("collision count: " + collisionMap.Count);
-					//Out.WriteLine("circle count: " + Circles.Count);
-					//Out.WriteLine("number of collisions: " + collisionMap.Count + "");
-					//Out.WriteLine("");
-				}
+				double min = CheckCollisions(ref collisionMap, time, overlapped);
 				overlapped = (min == 0);
-
-				UpdateCircles(min, time, collisionMap);
+				UpdateCircles(min, collisionMap);
 				time -= min;
 			}
-			//if (Circles.Count != 0)
-			//{
-			//	Out.WriteLine("" + Circles[0].Acceleration);
-			//}
 		}
 
-		public double CheckCollisions(ref Dictionary<Circle, List<Circle>> collisionMap, ref List<Circle> near,
+		public double CheckCollisions(ref Dictionary<Circle, List<Circle>> collisionMap,
 			double time, bool overlapped)
 		{
-			//Out.WriteLine("");
 			double min = Double.PositiveInfinity;
 			foreach (Circle circle in Circles)
 			{
 				List<Circle> collisions = new List<Circle>();
-				foreach (Circle that in near)
+				foreach (Circle that in Circles) // use quad Tree to get the list of Circles to check against
 				{
-					// use quad Tree to get the list of Circles to check against
-					// for now, just use Circles
 					double value = circle.Colliding(that, time);
 
 					if (!Double.IsInfinity(value))
 					{
 						value = Math.Round(value, 8);
-						//Out.WriteLine("collision time for [" + circle.GetHashCode() + " & " + that.GetHashCode() + "]: " + value + " < " + min);
-						//Out.WriteLine(circle.Velocity + " : " + that.Velocity);
 						if (value == 0 && overlapped)
 						{
-							//continue;
 						}
 						else if (value < min)
 						{
-							//Out.WriteLine("updating collision map: " + value);
 							min = value;
 							collisionMap = new Dictionary<Circle, List<Circle>>();
 							collisions = new List<Circle>();
@@ -242,10 +207,8 @@ namespace Remonduk.Physics
 						}
 						else if (value == min)
 						{
-							//Out.WriteLine("adding to collision map: " + value);
 							if (collisionMap != null && !collisionMap.ContainsKey(circle))
 							{
-								// is this needed in the first place
 								collisionMap.Add(circle, collisions);
 							}
 							collisions.Add(that);
@@ -253,23 +216,21 @@ namespace Remonduk.Physics
 					}
 				}
 			}
-			return min;
-		}
-
-		public void UpdateCircles(double min, double time,
-			Dictionary<Circle, List<Circle>> collisionMap)
-		{
 			if (Double.IsInfinity(min))
 			{
 				min = time;
 			}
+			return min;
+		}
+
+		public void UpdateCircles(double time,
+			Dictionary<Circle, List<Circle>> collisionMap)
+		{
 			foreach (Circle circle in Circles)
 			{
-				circle.Update(min);
+				circle.Update(time);
 			}
-			//UpdateNetForces();
 			UpdateVelocities(collisionMap);
-			
 		}
 
 		public void UpdateVelocities(Dictionary<Circle, List<Circle>> collisionMap)
@@ -278,19 +239,21 @@ namespace Remonduk.Physics
 			foreach (Circle circle in collisionMap.Keys)
 			{
 				velocityMap.Add(circle, circle.CollideWith(collisionMap[circle]));
-
-				Out.WriteLine("updated velocity " + circle.GetHashCode() + " " + velocityMap[circle]);
 			}
 			foreach (Circle circle in velocityMap.Keys)
 			{
-				Out.WriteLine(velocityMap[circle] + " <= " + circle.Velocity);
+				Out.WriteLine(circle.Velocity + " => " + velocityMap[circle]);
 				circle.SetVelocity(velocityMap[circle].X, velocityMap[circle].Y);
-				Out.WriteLine("velocity: " + circle.Velocity.Magnitude());
 			}
 			if (velocityMap.Keys.Count % 2 == 1)
 			{
 				Out.WriteLine("" + velocityMap.Keys.Count);
 			}
+		}
+
+		public void Update()
+		{
+			UpdatePositions();
 		}
 	}
 }

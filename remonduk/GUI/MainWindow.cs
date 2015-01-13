@@ -70,7 +70,7 @@ namespace Remonduk
                 this.CreateGraphics().Clear(System.Drawing.Color.Gray);
 				
 				if (!pause) {
-					ps.update();
+					ps.Update();
 				}
 				//ps.updateNetForces();
 

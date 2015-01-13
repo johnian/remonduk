@@ -238,9 +238,9 @@ namespace Remonduk.Physics
 				double totalV = that.Mass * that.Velocity.Magnitude() / Mass;
 
 				double angle = that.Position.Angle(Position);
-				double orthogonal = angle + Math.PI / 2;
-				double delta = Velocity.Angle() - orthogonal;
-				double reflection = orthogonal + delta;
+				//double orthogonal = angle + Math.PI / 2;
+				//double delta = Velocity.Angle() - orthogonal;
+				//double reflection = orthogonal + delta;
 
 				//reflection = 2 * angle + Math.PI - Velocity.Angle();
 				//Out.WriteLine("");
