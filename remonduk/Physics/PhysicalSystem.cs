@@ -131,13 +131,13 @@ namespace Remonduk.Physics
 			}
 			foreach (Circle circle in velocityMap.Keys)
 			{
-				//Out.WriteLine(circle.Velocity + " => " + velocityMap[circle]);
+				Out.WriteLine(circle.Velocity + " => " + velocityMap[circle]);
 				circle.SetVelocity(velocityMap[circle].X, velocityMap[circle].Y);
 			}
-			//if (velocityMap.Keys.Count % 2 == 1)
-			//{
-			//	Out.WriteLine("" + velocityMap.Keys.Count);
-			//}
+			if (velocityMap.Keys.Count % 2 == 1)
+			{
+				Out.WriteLine("" + velocityMap.Keys.Count);
+			}
 		}
 
 		public void UpdateCircles(double time,
@@ -153,7 +153,7 @@ namespace Remonduk.Physics
 		public void UpdateCollisionMap(ref Dictionary<Circle, List<Circle>> collisionMap,
 			ref List<Circle> collisions, Circle circle, Circle that)
 		{
-			if (collisionMap != null && !collisionMap.ContainsKey(circle))
+			if (/*collisionMap != null && */!collisionMap.ContainsKey(circle))
 			{
 				collisionMap.Add(circle, collisions);
 			}
@@ -172,22 +172,24 @@ namespace Remonduk.Physics
 		public double FirstCollision(ref Dictionary<Circle, List<Circle>> collisionMap,
 			double time, bool overlapped, Circle circle, double min)
 		{
-			List<Circle> possible = Tree.Possible(circle, time);
-			//List<Circle> possible = Circles;
 			List<Circle> collisions = new List<Circle>();
-			foreach (Circle that in possible)
+			Out.WriteLine("[" + circle.GetHashCode() + "]" + Tree.Possible(circle, time).Count);
+			foreach (Circle that in Tree.Possible(circle, time))
 			{
 				double collisionTime = circle.Colliding(that, time);
-				collisionTime = Math.Round(collisionTime, 8);	// change this to use epsilons
-				if (!Double.IsInfinity(collisionTime) && (collisionTime > Constants.EPSILON || !overlapped))
+				//collisionTime = Math.Round(collisionTime, 8);
+				if (!Double.IsInfinity(collisionTime) && (collisionTime != 0 || !overlapped))
 				{
-					if (collisionTime < min)			// change this to use epsilons
+					double delta = collisionTime - min;
+					if (delta < -Constants.EPSILON)
 					{
+						Out.WriteLine("new");
 						min = collisionTime;
 						NewCollisionMap(ref collisionMap, ref collisions, circle, that);
 					}
-					else if (collisionTime == min)			// change this to use epsilons
+					else if (Math.Abs(delta) <= Constants.EPSILON)
 					{
+						Out.WriteLine("update");
 						UpdateCollisionMap(ref collisionMap, ref collisions, circle, that);
 					}
 				}

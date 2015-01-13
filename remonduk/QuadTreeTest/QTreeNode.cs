@@ -82,12 +82,12 @@ namespace Remonduk.QuadTreeTest
 
         public void UnSplit()
         {
-            Out.WriteLine("UNSPLITTING");
-                split = false;
-                parent.nodes.Remove(NorthWest);
-                parent.nodes.Remove(NorthEast);
-                parent.nodes.Remove(SouthWest);
-                parent.nodes.Remove(SouthEast);
+			//Out.WriteLine("UNSPLITTING");
+            split = false;
+            parent.nodes.Remove(NorthWest);
+            parent.nodes.Remove(NorthEast);
+            parent.nodes.Remove(SouthWest);
+            parent.nodes.Remove(SouthEast);
         }
 
         /// <summary>
