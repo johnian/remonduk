@@ -31,7 +31,7 @@ namespace TestSuite
 		}
 
 		[TestMethod]
-		public void addCircleTest()
+		public void AddCircleTest()
 		{
 			PhysicalSystem world = new PhysicalSystem();
 			Circle circle = new Circle();
@@ -41,7 +41,7 @@ namespace TestSuite
 		}
 
 		[TestMethod]
-		public void removeCircleTest()
+		public void RemoveCircleTest()
 		{
 			PhysicalSystem world = new PhysicalSystem();
 			Circle circle = new Circle();
@@ -54,7 +54,7 @@ namespace TestSuite
 		}
 
 		[TestMethod]
-		public void addInteractionTest()
+		public void AddInteractionTest()
 		{
 			PhysicalSystem world = new PhysicalSystem();
 			Circle one = new Circle();
@@ -69,7 +69,7 @@ namespace TestSuite
 		}
 
 		[TestMethod]
-		public void removeInteractionTest()
+		public void RemoveInteractionTest()
 		{
 			PhysicalSystem world = new PhysicalSystem();
 			Circle one = new Circle();
@@ -100,7 +100,7 @@ namespace TestSuite
 
 			world.AddInteraction(interaction1);
 			world.AddInteraction(interaction2);
-			world.UpdateNetForceOn(one);
+			//world.UpdateNetForceOn(one);
 			Test.AreEqual(new OrderedPair(0, 19.6), world.NetForces[one]);
 			Test.AreEqual(new OrderedPair(0, 0), world.NetForces[two]);
 			Test.AreEqual(new OrderedPair(0, 0), world.NetForces[three]);
@@ -122,7 +122,7 @@ namespace TestSuite
 
 			world.AddInteraction(interaction1);
 			world.AddInteraction(interaction2);
-			world.UpdateNetForces();
+			//world.UpdateNetForces();
 			Test.AreEqual(new OrderedPair(0, 19.6), world.NetForces[one]);
 			Test.AreEqual(new OrderedPair(0, 19.6), world.NetForces[two]);
 			Test.AreEqual(new OrderedPair(0, 0), world.NetForces[three]);

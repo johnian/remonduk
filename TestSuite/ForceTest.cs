@@ -82,21 +82,21 @@ namespace TestSuite
 
 			// 8, 8
 			double value = (Math.Sqrt(32) - 3) * Math.Sqrt(2);
-			world.UpdateNetForces();
+			//world.UpdateNetForces();
 			Test.AreEqual(new OrderedPair(value, Gravity.GRAVITY + value), world.NetForces[one]);
 			Test.AreEqual(new OrderedPair(-value, Gravity.GRAVITY - value), world.NetForces[two]);
 
-			world.UpdateNetForces();
+			//world.UpdateNetForces();
 			Test.AreEqual(new OrderedPair(value, Gravity.GRAVITY + value), world.NetForces[one]);
 			Test.AreEqual(new OrderedPair(-value, Gravity.GRAVITY - value), world.NetForces[two]);
 
 			world.RemoveInteraction(gravityOn12);
-			world.UpdateNetForces();
+			//world.UpdateNetForces();
 			Test.AreEqual(new OrderedPair(value, value), world.NetForces[one]);
 			Test.AreEqual(new OrderedPair(-value, -value), world.NetForces[two]);
 
 			world.RemoveInteraction(tetherOn12);
-			world.UpdateNetForces();
+			//world.UpdateNetForces();
 			Test.AreEqual(new OrderedPair(0.0, 0.0), world.NetForces[one]);
 			Test.AreEqual(new OrderedPair(0.0, 0.0), world.NetForces[two]);
 		}

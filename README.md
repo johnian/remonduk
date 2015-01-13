@@ -36,19 +36,15 @@ optimize code
 finish test cases
 utilize quad tree in collision detection
 
-fix collision bug
+change lists to hashsets where it makes sense
 
-game update -- if previous time was 0, ignore this second one
+fix collision bug
 
 partial ghostiness? what if a circle can pass through some things, but not others
 	ie. pass through people, but not through environment
 
 test classes
 make it work with quad tree
-
-game update consists of two events
-update accelerations based on forces
-update positions of all circles
 
 flag for whether the stage wraps around or has hard boundaries
 

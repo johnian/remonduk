@@ -43,12 +43,19 @@ namespace Remonduk.GUI
                 this.Invalidate();
                 last_interaction_count = ps.Interactions.Count;
             }
-            if(last_circle_count != ps.NetForces.Keys.Count)
+			//if(last_circle_count != ps.NetForces.Keys.Count)
+			//{
+			//	circle_list.DataSource = null;
+			//	circle_list.DataSource = ps.NetForces.Keys.ToArray();
+			//	this.Invalidate();
+			//	last_circle_count = ps.NetForces.Keys.Count;
+			//}
+            if(last_circle_count != ps.Circles.Count)
             {
                 circle_list.DataSource = null;
-                circle_list.DataSource = ps.NetForces.Keys.ToArray();
+                circle_list.DataSource = ps.Circles.ToArray();
                 this.Invalidate();
-                last_circle_count = ps.NetForces.Keys.Count;
+                last_circle_count = ps.Circles.Count;
             }
             if (interactions_list.SelectedItem != null)
             {

@@ -236,7 +236,7 @@ namespace Remonduk
             }
 
 
-            foreach (Circle c in ps.NetForces.Keys)
+            foreach (Circle c in ps.Circles)
             {
 				//double collide = click.Colliding(c, 0);
 				bool collide = click.Colliding(c);
@@ -250,6 +250,7 @@ namespace Remonduk
                 }
                 else if (collide /*!Double.IsInfinity(collide)*/)
                 {
+					Out.WriteLine("selected");
                     selected_circle = c;
                     psdw.selected_circle = c;
                     psdw.circle_list.SelectedItem = c;
@@ -357,7 +358,8 @@ namespace Remonduk
             using (var writer = new System.IO.StreamWriter(sfd.FileName))
             {
                 var serializer = new XmlSerializer(typeof(HashSet<Circle>));
-                serializer.Serialize(writer, ps.NetForces.Keys);
+				serializer.Serialize(writer, ps.Circles);
+				//serializer.Serialize(writer, ps.NetForces.Keys);
                 writer.Flush();
             }
         }

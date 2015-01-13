@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace remonduk.QuadTreeTest
+namespace Remonduk.QuadTreeTest
 {
     public class QTreeNode
     {
