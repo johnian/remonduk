@@ -15,7 +15,20 @@ Floid
 [sound] (#8)  
 
 for juliono:
-use epsilons instead of rounding
+
+tethers are like springs - try to keep at an equilibrium point -
+pull when too far away - push when too close
+
+things that don't move
+anchor them to boundaries
+world boundaries
+
+send the quad tree a circle, and the time
+
+forces should have a boolean field - Constant
+
+check- if Constant, no need to recalculate force
+
 randomize tests
 add checks for valid paremeters?
 update comments	

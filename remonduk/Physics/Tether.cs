@@ -10,7 +10,7 @@ namespace Remonduk.Physics
 	public class Tether : Force
 	{
 		public const double K = 2;
-		public const double EQUILIBRIUM = 3;
+		public const double EQUILIBRIUM = 20;
 
 		public Tether()
 			: this(K, EQUILIBRIUM) { }
@@ -19,6 +19,7 @@ namespace Remonduk.Physics
 			: base(
 				delegate(Circle first, Circle second)
 				{
+					equilibrium = first.Radius + second.Radius;
 					double dist = first.Distance(second);
 					if (dist > equilibrium)
 					{

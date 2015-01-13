@@ -575,6 +575,7 @@ namespace TestSuite
 			circles.Add(two);
 
 			velocity = one.CollideWith(circles);
+			Out.WriteLine("" + velocity);
 			Test.AreEqual(new OrderedPair(44.7213595499958, 33.54101966242969), velocity);
 
 			velocity = two.CollideWith(circles);
