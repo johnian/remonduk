@@ -252,12 +252,15 @@ namespace TestSuite
             QTree tree = new QTree(new OrderedPair(0, 0), new OrderedPair(100, 100), 2);
             Circle c1 = new Circle(1, 10, 10);
             Circle c2 = new Circle(1, 90, 10);
+            Circle c3 = new Circle(1, 10, 90);
             c1.SetVelocity(50, 0);
             tree.Insert(c1);
             tree.Insert(c2);
+            tree.Insert(c3);
 
             List<Circle> circles = tree.Possible(c1, 1.0);
             Test.AreEqual(true, circles.Contains(c2));
+            Test.AreEqual(false, circles.Contains(c3));
         }
 
     }

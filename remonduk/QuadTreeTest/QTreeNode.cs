@@ -265,9 +265,23 @@ namespace Remonduk.QuadTreeTest
             }
             else
             {
-                if (start.X < pos.X + dim.X &&
-                    start.Y < pos.Y + dim.Y &&
-                    end.X > pos.X && end.Y > pos.Y)
+                double MinX = start.X;
+                double MaxX = end.X;
+                if(MinX > end.X)
+                {
+                    MinX = end.X;
+                    MaxX = start.X;
+                }
+                double MinY = start.Y;
+                double MaxY = end.Y;
+                if(MinY > end.Y)
+                {
+                    MinY = end.Y;
+                    MaxY = start.Y;
+                }
+                if (MinX < pos.X + dim.X &&
+                    MinY < pos.Y + dim.Y &&
+                    MaxX > pos.X && MaxY > pos.Y)
                 {
                     possible.AddRange(circles);
                 }
