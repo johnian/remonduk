@@ -12,6 +12,8 @@ namespace Remonduk.Physics
 	public class PhysicalSystem
 	{
 		public const double TIME_STEP = 1;
+		public const double WIDTH = 800;
+		public const double HEIGHT = 800;
 
 		/// <summary>
 		/// 
@@ -21,27 +23,31 @@ namespace Remonduk.Physics
 		/// 
 		/// </summary>
 		public Dictionary<String, Force> Forces;
+
 		/// <summary>
 		/// A list of all of the Interactions in this physical system.
 		/// Iterate over this list to determine accelerations for all circles.
 		/// </summary>
 		public List<Interaction> Interactions;
-
-		/// <summary>
-		/// This physical system's dictionary of net Forces.
-		/// Looking up a Circle will give the netforce exerted on that Circle from within the physical system.
-		/// </summary>
-		//public Dictionary<Circle, OrderedPair> NetForces; // remove this - not necessary
 		/// <summary>
 		/// 
 		/// </summary>
 		public Dictionary<Circle, List<Interaction>> InteractionMap;
 
 		/// <summary>
+		/// This physical system's dictionary of net Forces.
+		/// Looking up a Circle will give the netforce exerted on that Circle from within the physical system.
+		/// </summary>
+		//public Dictionary<Circle, OrderedPair> NetForces; // remove this - not necessary
+
+		/// <summary>
 		/// 
 		/// </summary>
 		public double TimeStep;
-
+		/// <summary>
+		/// 
+		/// </summary>
+		public OrderedPair Dimensions;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -50,21 +56,16 @@ namespace Remonduk.Physics
 		/// <summary>
 		/// No-arg constructor to create a new physical system.  Inits lists, sets GravityOn to default.
 		/// </summary>
-		public PhysicalSystem(double timeStep = TIME_STEP)
+		public PhysicalSystem(double width = WIDTH, double height = HEIGHT, double timeStep = TIME_STEP)
 		{
 			Circles = new List<Circle>();
 			Forces = new Dictionary<String, Force>();
-			//NetForces = new Dictionary<Circle, OrderedPair>();
-
 			Interactions = new List<Interaction>();
 			InteractionMap = new Dictionary<Circle, List<Interaction>>();
 
-
-			//FundamentalForces = new Dictionary<String, Force>();
-
 			TimeStep = timeStep;
-
-			Tree = new QTree(new OrderedPair(0, 0), new OrderedPair(600, 600), 10);
+			Dimensions = new OrderedPair(width, height);
+			Tree = new QTree(Dimensions);
 		}
 
 		/// <summary>
@@ -74,7 +75,6 @@ namespace Remonduk.Physics
 		public void AddCircle(Circle circle)
 		{
 			Circles.Add(circle);
-			//NetForces.Add(circle, new OrderedPair(0, 0));
 			InteractionMap.Add(circle, new List<Interaction>());
 			Tree.Insert(circle);
 		}
@@ -115,11 +115,14 @@ namespace Remonduk.Physics
 		/// Removes an interaction from this physical system.
 		/// </summary>
 		/// <param name="interaction">The interaction to remove.</param>
-		public void RemoveInteraction(Interaction interaction)
+		public bool RemoveInteraction(Interaction interaction)
 		{
-			Interactions.Remove(interaction);
-			InteractionMap[interaction.First].Remove(interaction);
-			InteractionMap[interaction.Second].Remove(interaction);
+			if (Interactions.Remove(interaction))
+			{
+				InteractionMap[interaction.First].Remove(interaction);
+				return InteractionMap[interaction.Second].Remove(interaction);
+			}
+			return false;
 		}
 
 		public void UpdateVelocities(Dictionary<Circle, List<Circle>> collisionMap)
@@ -173,27 +176,19 @@ namespace Remonduk.Physics
 			double time, bool overlapped, Circle circle, double min)
 		{
 			List<Circle> collisions = new List<Circle>();
-			if (Tree.Possible(circle, time).Count == 0)
-			{
-				Out.WriteLine("[" + circle.GetHashCode() + "]" + Tree.Possible(circle, time).Count);
-			}
 			foreach (Circle that in Tree.Possible(circle, time))
 			{
 				double collisionTime = circle.Colliding(that, time);
-				//collisionTime = Math.Round(collisionTime, 8);
 				if (!Double.IsInfinity(collisionTime) && (collisionTime != 0 || !overlapped))
 				{
 					double delta = collisionTime - min;
-					Out.WriteLine("delta: " + delta);
 					if (delta < -Constants.EPSILON)
 					{
-						Out.WriteLine("new");
 						min = collisionTime;
 						NewCollisionMap(ref collisionMap, ref collisions, circle, that);
 					}
 					else if (Math.Abs(delta) <= Constants.EPSILON)
 					{
-						Out.WriteLine("update");
 						UpdateCollisionMap(ref collisionMap, ref collisions, circle, that);
 					}
 				}

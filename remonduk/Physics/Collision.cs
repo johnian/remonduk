@@ -196,7 +196,7 @@ namespace Remonduk.Physics
 		{
 			if (that == this) return Double.PositiveInfinity;
 			double oldDistance = DistanceSquared(that);
-			if (oldDistance- (that.Radius + Radius) * (that.Radius + Radius) <= Constants.EPSILON)
+			if (oldDistance - (that.Radius + Radius) * (that.Radius + Radius) <= Constants.EPSILON)
 			{
 				OrderedPair thisNext = NextPosition(time);
 				OrderedPair thatNext = that.NextPosition(time);

@@ -63,13 +63,13 @@ namespace Remonduk.QuadTreeTest
                 OrderedPair NewDim = new OrderedPair(dim.X / 2.0, dim.Y / 2.0);
 
                 NorthWest = new QTreeNode(pos, NewDim, parent, name + ".NorthWest");
-                parent.nodes.Add(NorthWest);
+                parent.Nodes.Add(NorthWest);
                 NorthEast = new QTreeNode(new OrderedPair(pos.X + NewDim.X, pos.Y), NewDim, parent, name + ".NorthEast");
-                parent.nodes.Add(NorthEast);
+                parent.Nodes.Add(NorthEast);
                 SouthWest = new QTreeNode(new OrderedPair(pos.X, pos.Y + NewDim.Y), NewDim, parent, name + ".SouthWest");
-                parent.nodes.Add(SouthWest);
+                parent.Nodes.Add(SouthWest);
                 SouthEast = new QTreeNode(new OrderedPair(pos.X + NewDim.X, pos.Y + NewDim.Y), NewDim, parent, name + ".SouthEast");
-                parent.nodes.Add(SouthEast);
+                parent.Nodes.Add(SouthEast);
 
                 split = true;
 
@@ -84,10 +84,10 @@ namespace Remonduk.QuadTreeTest
         {
 			//Out.WriteLine("UNSPLITTING");
             split = false;
-            parent.nodes.Remove(NorthWest);
-            parent.nodes.Remove(NorthEast);
-            parent.nodes.Remove(SouthWest);
-            parent.nodes.Remove(SouthEast);
+            parent.Nodes.Remove(NorthWest);
+            parent.Nodes.Remove(NorthEast);
+            parent.Nodes.Remove(SouthWest);
+            parent.Nodes.Remove(SouthEast);
         }
 
         /// <summary>

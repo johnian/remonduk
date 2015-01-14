@@ -78,7 +78,7 @@ namespace Remonduk
                     if (!pause)
                     {
                         List<Circle> cs = new List<Circle>();
-                        tree.move(c);
+                        tree.Move(c);
 						//c.update(cs);
                     }
 					//Out.WriteLine("Drawing");
@@ -89,7 +89,7 @@ namespace Remonduk
                 //ps.Tree.draw(this.CreateGraphics());
                 selected_interaction = psdw.selected_interaction;
                 selected_circle = psdw.selected_circle;
-                ps.Tree.draw(this.CreateGraphics());
+                ps.Tree.Draw(this.CreateGraphics());
                 frame_count++;
 
                 System.Threading.Thread.Sleep(50);
