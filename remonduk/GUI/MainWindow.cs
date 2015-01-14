@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using Remonduk.QuadTreeTest;
 using Remonduk.Physics;
-using remonduk.QuadTreeTest;
 
 namespace Remonduk
 {
@@ -90,7 +89,7 @@ namespace Remonduk
                 //ps.Tree.draw(this.CreateGraphics());
                 selected_interaction = psdw.selected_interaction;
                 selected_circle = psdw.selected_circle;
-                tree.draw(this.CreateGraphics());
+                ps.Tree.draw(this.CreateGraphics());
                 frame_count++;
 
                 System.Threading.Thread.Sleep(50);

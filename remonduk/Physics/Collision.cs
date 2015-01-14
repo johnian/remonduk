@@ -270,13 +270,5 @@ namespace Remonduk.Physics
 			}
 			return new OrderedPair(totalVx, totalVy);
 		}
-
-		public bool Intersects(FRect rect)
-		{
-			return (rect.Left < Px + Radius &&
-					rect.Right > Px - Radius &&
-					rect.Top < Py + Radius &&
-					rect.Bottom > Py - Radius);
-		}
 	}
 }

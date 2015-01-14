@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using remonduk.QuadTreeTest;
 using Remonduk;
 using Remonduk.Physics;
 using Remonduk.QuadTreeTest;

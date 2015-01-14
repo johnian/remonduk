@@ -5,8 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Diagnostics;
-using Remonduk.QuadTreeTest;
-using remonduk.QuadTreeTest;
 
 namespace Remonduk.Physics
 {
