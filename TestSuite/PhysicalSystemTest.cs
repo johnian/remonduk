@@ -154,8 +154,8 @@ namespace TestSuite
 			Interaction interaction2 = new Interaction(two, one, new Gravity(0, 9.8));
 			world.AddInteraction(interaction2);
 
-			Interaction interaction3 =new Interaction(two, one, new Gravity(0, 9.8));
-			Test.AreEqual(false,  world.RemoveInteraction(interaction3));
+			Interaction interaction3 = new Interaction(two, one, new Gravity(0, 9.8));
+			Test.AreEqual(false, world.RemoveInteraction(interaction3));
 
 			Test.AreEqual(true, world.RemoveInteraction(interaction1));
 			Test.AreEqual(1, world.Interactions.Count);
@@ -174,13 +174,17 @@ namespace TestSuite
 		[TestMethod]
 		public void UpdateVelocitiesTest()
 		{
-
+			List<Circle> circles = new List<Circle>();
+			for (int i = 0; i < 5; i++)
+			{
+			}
+			Test.AreEqual(true, false);
 		}
 
 		[TestMethod]
 		public void UpdateCirclesTest()
 		{
-
+			Test.AreEqual(true, false);
 		}
 
 		[TestMethod]

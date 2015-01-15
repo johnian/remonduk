@@ -348,8 +348,8 @@ namespace Remonduk.Physics
 		/// <param name="time"></param>
 		public void UpdatePosition(double time)
 		{
-			SetPosition(Ax * time * time / 2 + Vx * time + Px,
-				Ay * time * time / 2 + Vy * time + Py);
+			SetPosition((Ax * time / 2 + Vx) * time + Px,
+				(Ay * time / 2 + Vy) * time + Py);
 			//QTreePos.Position = new Tuple<double, double>(Position.X, Position.Y);
 			UpdateVelocity(time);
 		}
@@ -362,6 +362,8 @@ namespace Remonduk.Physics
 		{
 			// will this ever need to do anything else??
 			UpdatePosition(time);
+			// UpdateVelocity
+			// UpdateAcceleration
 		}
 
 		/// <summary>

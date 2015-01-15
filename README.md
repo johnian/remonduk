@@ -14,37 +14,42 @@ Floid
 [networking] (#7)  
 [sound] (#8)  
 
+target: platformer genre
+
+Remonduck
+
+basic pool of forces
+	1] electromagnetic (em)
+	2] spring
+	3] constant
+	
+	-> bake the integration formulas into the position formula
+
 for juliono:
 
-tethers are like springs - try to keep at an equilibrium point -
-pull when too far away - push when too close
+	update comments
+	add file comments at top
 
-things that don't move
-anchor them to boundaries
-world boundaries
+	tethers are like springs - try to keep at an equilibrium point -
+	pull when too far away - push when too close
 
-send the quad tree a circle, and the time
+	things that don't move
+	anchor them to boundaries
+	world boundaries
 
-forces should have a boolean field - Constant
+	randomize tests
+	optimize code
+	finish test cases
+	change lists to hashsets where it makes sense
+	
+	
+have the ONLY force be spring and gravity
 
-check- if Constant, no need to recalculate force
-
-randomize tests
-add checks for valid paremeters?
-update comments	
-optimize code
-finish test cases
-utilize quad tree in collision detection
-
-change lists to hashsets where it makes sense
-
-fix collision bug
+if the spring force is what holds everything together,
+	we should at least design the system to handle that properly
 
 partial ghostiness? what if a circle can pass through some things, but not others
 	ie. pass through people, but not through environment
-
-test classes
-make it work with quad tree
 
 flag for whether the stage wraps around or has hard boundaries
 

@@ -125,6 +125,7 @@ namespace Remonduk.Physics
 			return false;
 		}
 
+		// CollisionVelocities
 		public void UpdateVelocities(Dictionary<Circle, List<Circle>> collisionMap)
 		{
 			Dictionary<Circle, OrderedPair> velocityMap = new Dictionary<Circle, OrderedPair>();
@@ -255,6 +256,7 @@ namespace Remonduk.Physics
 		/// <summary>
 		/// 
 		/// </summary>
+		// Update
 		public void UpdatePositions()
 		{
 			double time = TimeStep;
