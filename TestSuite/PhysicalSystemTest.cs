@@ -172,12 +172,8 @@ namespace TestSuite
 		}
 
 		[TestMethod]
-		public void UpdateVelocitiesTest()
+		public void CollisionVelocitiesTest()
 		{
-			List<Circle> circles = new List<Circle>();
-			for (int i = 0; i < 5; i++)
-			{
-			}
 			Test.AreEqual(true, false);
 		}
 
@@ -190,43 +186,43 @@ namespace TestSuite
 		[TestMethod]
 		public void UpdateCollisionMapTest()
 		{
-
+			Test.AreEqual(true, false);
 		}
 
 		[TestMethod]
 		public void NewCollisionMapTest()
 		{
-
+			Test.AreEqual(true, false);
 		}
 
 		[TestMethod]
 		public void FirstCollisionTest()
 		{
-
+			Test.AreEqual(true, false);
 		}
 
 		[TestMethod]
 		public void CheckCollisionsTest()
 		{
-
+			Test.AreEqual(true, false);
 		}
 
 		[TestMethod]
-		public void UpdateAccelerationTest()
+		public void CalculateAccelerationTest()
 		{
-
+			Test.AreEqual(true, false);
 		}
 
 		[TestMethod]
-		public void UpdateAccelerationsTest()
+		public void CalculateAccelerationsTest()
 		{
-
+			Test.AreEqual(true, false);
 		}
 
 		[TestMethod]
-		public void UpdatePositions()
+		public void UpdateTest()
 		{
-
+			Test.AreEqual(true, false);
 		}
 	}
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Remonduk;
 using Remonduk.Physics;
-using Remonduk.QuadTreeTest;
+using Remonduk.Physics.QuadTree;
 using System;
 using System.Collections.Generic;
 using System.Linq;

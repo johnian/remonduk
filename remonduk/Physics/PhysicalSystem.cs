@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Remonduk.QuadTreeTest;
+using Remonduk.Physics.QuadTree;
 
 namespace Remonduk.Physics
 {
@@ -11,8 +11,17 @@ namespace Remonduk.Physics
 	/// </summary>
 	public class PhysicalSystem
 	{
+		/// <summary>
+		/// 
+		/// </summary>
 		public const double TIME_STEP = 1;
+		/// <summary>
+		/// 
+		/// </summary>
 		public const double WIDTH = 800;
+		/// <summary>
+		/// 
+		/// </summary>
 		public const double HEIGHT = 800;
 
 		/// <summary>
@@ -33,12 +42,6 @@ namespace Remonduk.Physics
 		/// 
 		/// </summary>
 		public Dictionary<Circle, List<Interaction>> InteractionMap;
-
-		/// <summary>
-		/// This physical system's dictionary of net Forces.
-		/// Looking up a Circle will give the netforce exerted on that Circle from within the physical system.
-		/// </summary>
-		//public Dictionary<Circle, OrderedPair> NetForces; // remove this - not necessary
 
 		/// <summary>
 		/// 
@@ -87,7 +90,6 @@ namespace Remonduk.Physics
 		{
 			if (Circles.Remove(circle))
 			{
-				//NetForces.Remove(circle);
 				foreach (Interaction interaction in InteractionMap[circle])
 				{
 					Circle other = interaction.GetOther(circle);
@@ -126,7 +128,7 @@ namespace Remonduk.Physics
 		}
 
 		// CollisionVelocities
-		public void UpdateVelocities(Dictionary<Circle, List<Circle>> collisionMap)
+		public void CollisionVelocities(Dictionary<Circle, List<Circle>> collisionMap)
 		{
 			Dictionary<Circle, OrderedPair> velocityMap = new Dictionary<Circle, OrderedPair>();
 			foreach (Circle circle in collisionMap.Keys)
@@ -151,7 +153,7 @@ namespace Remonduk.Physics
 			{
 				circle.Update(time);
 			}
-			UpdateVelocities(collisionMap);
+			CollisionVelocities(collisionMap);
 		}
 
 		public void UpdateCollisionMap(ref Dictionary<Circle, List<Circle>> collisionMap,
@@ -217,7 +219,7 @@ namespace Remonduk.Physics
 		/// </summary>
 		/// <param name="circle">The circle to calculate net Forces for.</param>
 		/// <returns>The net Forces on the given circle.</returns>
-		public void UpdateAcceleration(Circle circle)
+		public void CalculateAcceleration(Circle circle)
 		{
 			OrderedPair f;
 			double fx = 0;
@@ -243,49 +245,40 @@ namespace Remonduk.Physics
 					fy += f.Y;
 				}
 			}
-			foreach (Interaction interaction in removable) {
+			foreach (Interaction interaction in removable)
+			{
 				RemoveInteraction(interaction);
 			}
-			//NetForces[circle].SetXY(fx, fy);
 			circle.SetAcceleration(fx / circle.Mass, fy / circle.Mass);
 		}
 
 		/// <summary>
 		/// Updates circle velocities based on the netforces in the dictionary.
 		/// </summary>
-		public void UpdateAccelerations()
+		public void CalculateAccelerations()
 		{
 			foreach (Circle circle in Circles)
 			{
-				UpdateAcceleration(circle);
-				//double ax = NetForces[circle].X / circle.Mass;
-				//double ay = NetForces[circle].Y / circle.Mass;
-				//circle.SetAcceleration(ax, ay);
+				CalculateAcceleration(circle);
 			}
 		}
 
 		/// <summary>
 		/// 
 		/// </summary>
-		// Update
-		public void UpdatePositions()
+		public void Update()
 		{
 			double time = TimeStep;
 			bool overlapped = false;
 			while (time > 0)
 			{
-				UpdateAccelerations();
+				CalculateAccelerations();
 				Dictionary<Circle, List<Circle>> collisionMap = new Dictionary<Circle, List<Circle>>();
 				double min = CheckCollisions(ref collisionMap, time, overlapped);
 				overlapped = (min == 0);
 				UpdateCircles(min, collisionMap);
 				time -= min;
 			}
-		}
-
-		public void Update()
-		{
-			UpdatePositions();
 		}
 	}
 }

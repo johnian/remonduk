@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Remonduk.QuadTreeTest
+namespace Remonduk.Physics.QuadTree
 {
 	public class QTree
 	{
-		public const int MAX_COUNT = 16;
+		public const int MAX_COUNT = 8;
 		/// <summary>
 		/// The starting node for this Quad Tree
 		/// </summary>

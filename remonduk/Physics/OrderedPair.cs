@@ -16,6 +16,10 @@ namespace Remonduk.Physics
 		/// </summary>
 		public double Y;
 
+		public OrderedPair()
+			: this(0, 0)
+		{ }
+
 		/// <summary>
 		/// 
 		/// </summary>

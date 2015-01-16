@@ -335,10 +335,6 @@ namespace Remonduk.Physics
 		/// <param name="time"></param>
 		public void UpdateVelocity(double time)
 		{
-			//if (Target != null)
-			//{
-			//	FaceTarget();
-			//}
 			SetVelocity(Ax * time + Vx, Ay * time + Vy);
 		}
 
@@ -351,7 +347,6 @@ namespace Remonduk.Physics
 			SetPosition((Ax * time / 2 + Vx) * time + Px,
 				(Ay * time / 2 + Vy) * time + Py);
 			//QTreePos.Position = new Tuple<double, double>(Position.X, Position.Y);
-			UpdateVelocity(time);
 		}
 
 		/// <summary>
@@ -362,6 +357,7 @@ namespace Remonduk.Physics
 		{
 			// will this ever need to do anything else??
 			UpdatePosition(time);
+			UpdateVelocity(time);
 			// UpdateVelocity
 			// UpdateAcceleration
 		}
@@ -376,13 +372,13 @@ namespace Remonduk.Physics
 			g.FillEllipse(brush, (float)(Px - Radius), (float)(Py - Radius), (float)(2 * Radius), (float)(2 * Radius));
 		}
 
-        public bool Contains(OrderedPair point)
-        {
-            return (point.X < Px + Radius &&
-                    point.X > Px - Radius &&
-                    point.Y < Py + Radius &&
-                    point.Y > Py - Radius);
-        }
+		public bool Contains(OrderedPair point)
+		{
+			return (point.X < Px + Radius &&
+					point.X > Px - Radius &&
+					point.Y < Py + Radius &&
+					point.Y > Py - Radius);
+		}
 
 		/// <summary>
 		/// 

@@ -23,16 +23,10 @@ basic pool of forces
 	2] spring
 	3] constant
 	
-	-> implement damping forces so system doesn't blow up
-
 for juliono:
 
-	tethers have a max distance they can extend
 	update comments
 	add file comments at top
-
-	tethers are like springs - try to keep at an equilibrium point -
-	pull when too far away - push when too close
 
 	things that don't move
 	anchor them to boundaries
@@ -44,7 +38,13 @@ for juliono:
 	change lists to hashsets where it makes sense
 	
 	
-have the ONLY force be spring and gravity
+implement a max velocity for the world
+	- utilize this in quad tree ->
+	draw a box that's 2x the max velocity in any direction
+	- or take the current velocity
+- also, any circle that spans multiple nodes should be kept in parent node
+- also, what happens if multiple circles are added at the same exact spot
+	- a number great than max count
 
 if the spring force is what holds everything together,
 	we should at least design the system to handle that properly
