@@ -94,30 +94,30 @@ namespace Remonduk.Physics.QuadTree
         public List<QTreeNode> Insert(Circle c)
         {
             List<QTreeNode> nodes = new List<QTreeNode>();
-            if(split)
-            {
-                nodes.AddRange(NorthWest.Insert(c));
-                nodes.AddRange(NorthEast.Insert(c));
-                nodes.AddRange(SouthWest.Insert(c));
-                nodes.AddRange(SouthEast.Insert(c));
-            }
-            else
-            {
-                if(Contains(c))
-                {
-                    if (circles.Count + 1 >= MaxCount)
-                    {
-                        Split();
-                        nodes.AddRange(Insert(c));
-                    }
-                    else
-                    {
-                        circles.Add(c);
-                        nodes.Add(this);
-                    }
+			if(split)
+			{
+				nodes.AddRange(NorthWest.Insert(c));
+				nodes.AddRange(NorthEast.Insert(c));
+				nodes.AddRange(SouthWest.Insert(c));
+				nodes.AddRange(SouthEast.Insert(c));
+			}
+			else
+			{
+				if(Contains(c))
+				{
+					if (circles.Count + 1 >= MaxCount)
+					{
+						Split();
+						nodes.AddRange(Insert(c));
+					}
+					else
+					{
+						circles.Add(c);
+						nodes.Add(this);
+					}
 
-                }
-            }
+				}
+			}
 
             return nodes;
         }
