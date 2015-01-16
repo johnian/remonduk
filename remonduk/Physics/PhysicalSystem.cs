@@ -222,6 +222,7 @@ namespace Remonduk.Physics
 			OrderedPair f;
 			double fx = 0;
 			double fy = 0;
+			List<Interaction> removable = new List<Interaction>();
 			foreach (Interaction interaction in InteractionMap[circle])
 			{
 				if (interaction.First == circle)
@@ -232,8 +233,18 @@ namespace Remonduk.Physics
 				{
 					f = interaction.ForceOnSecond();
 				}
-				fx += f.X;
-				fy += f.Y;
+				if (f == null)
+				{
+					removable.Add(interaction);
+				}
+				else
+				{
+					fx += f.X;
+					fy += f.Y;
+				}
+			}
+			foreach (Interaction interaction in removable) {
+				RemoveInteraction(interaction);
 			}
 			//NetForces[circle].SetXY(fx, fy);
 			circle.SetAcceleration(fx / circle.Mass, fy / circle.Mass);

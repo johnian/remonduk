@@ -9,7 +9,7 @@ namespace Remonduk.Physics
 {
 	public class Tether : Force
 	{
-		public const double K = .005;
+		public const double K = .002;
 		public const double C = K / 2;
 
 		public Tether(double k = K, double c = C)
