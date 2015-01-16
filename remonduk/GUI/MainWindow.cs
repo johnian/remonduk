@@ -242,7 +242,7 @@ namespace Remonduk
 
                 if(collide/*collide < 1*/ && selected_circle != null && tethering)
                 {
-                    Tether t = new Tether(.002, 50);
+                    Tether t = new Tether();
                     Interaction i = new Interaction(selected_circle, c, t);
                     ps.AddInteraction(i);
                     found = true;

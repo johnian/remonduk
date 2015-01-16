@@ -9,40 +9,55 @@ namespace Remonduk.Physics
 {
 	public class Tether : Force
 	{
-		public const double K = 2;
-		public const double EQUILIBRIUM = 20;
+		public const double K = .005;
+		public const double C = K / 2;
 
-		public Tether()
-			: this(K, EQUILIBRIUM) { }
-
-		public Tether(double k, double equilibrium)
+		public Tether(double k = K, double c = C)
 			: base(
 				delegate(Circle first, Circle second)
 				{
-					equilibrium = first.Radius + second.Radius;
+					double equilibrium = first.Radius + second.Radius;
+					double angle = first.Position.Angle(second.Position);
+					double ex = equilibrium * Math.Cos(angle);
+					double ey = equilibrium * Math.Sin(angle);
 
-					double fx = k * (second.Px - first.Px) + .01 * (second.Vx - first.Vx);
-					double fy = k * (second.Py - first.Py) + .01 * (second.Vy - first.Vy);
-
+					double fx = k * (second.Px - first.Px - ex) - c * (first.Vx - second.Vx);
+					double fy = k * (second.Py - first.Py - ey) - c * (first.Vy - second.Vy);
 					return new OrderedPair(fx, fy);
-					//double dist = first.Distance(second);
-					//if (dist > equilibrium)
-					//{
-					//	dist -= equilibrium;
-					//	double f = k * dist;
+				}
+			)
+		{ }
 
-					//	double delta_x = second.Px - first.Px;
-					//	double delta_y = second.Py - first.Py;
-					//	double angle = OrderedPair.Angle(delta_y, delta_x);
+		public Tether(double k, double c, double equilibrium)
+			: base(
+				delegate(Circle first, Circle second)
+				{
+					double angle = first.Position.Angle(second.Position);
+					double ex = equilibrium * Math.Cos(angle);
+					double ey = equilibrium * Math.Sin(angle);
 
-					//	double fx = f * Math.Cos(angle);
-					//	double fy = f * Math.Sin(angle);
-					//	return new OrderedPair(fx, fy);
-					//}
-					//else
-					//{
-					//	return new OrderedPair(0.0, 0.0);
-					//}
+					double fx = k * (second.Px - first.Px - ex) - c * (first.Vx - second.Vx);
+					double fy = k * (second.Py - first.Py - ey) - c * (first.Vy - second.Vy);
+					return new OrderedPair(fx, fy);
+				}
+			)
+		{ }
+
+		public Tether(double k, double c, double equilibrium, double max)
+			: base(
+				delegate(Circle first, Circle second)
+				{
+					if (first.Distance(second) > max)
+					{
+						return null;
+					}
+					double angle = first.Position.Angle(second.Position);
+					double ex = equilibrium * Math.Cos(angle);
+					double ey = equilibrium * Math.Sin(angle);
+
+					double fx = k * (second.Px - first.Px - ex) - c * (first.Vx - second.Vx);
+					double fy = k * (second.Py - first.Py - ey) - c * (first.Vy - second.Vy);
+					return new OrderedPair(fx, fy);
 				}
 			)
 		{ }
