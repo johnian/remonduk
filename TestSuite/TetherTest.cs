@@ -5,38 +5,39 @@ namespace TestSuite
 	[TestClass]
 	public class TetherTest
 	{
-		//[TestMethod]
-		//public void tether1Test()
-		//{
-		//	Circle c1 = new Circle(0, 0, 2, 0, 0, 0, 0);
-		//	Circle c2 = new Circle(200, 0, 2, 0, 0, 0, 0);
-		//	double max_dist = 20;
-		//	double k = .001;
+		[TestMethod]
+		public void tether1Test()
+		{
+			Test.AreEqual(true, false);
+			//Circle c1 = new Circle(0, 0, 2, 0, 0, 0, 0);
+			//Circle c2 = new Circle(200, 0, 2, 0, 0, 0, 0);
+			//double max_dist = 20;
+			//double k = .001;
 
-		//	Tether t = new Tether(c1, c2, max_dist, k);
+			//Tether t = new Tether(c1, c2, max_dist, k);
 
-		//	AreEqual(c1, t.c1);
-		//	AreEqual(c2, t.c2);
-		//	AreEqual(max_dist, t.max_dist);
-		//	AreEqual(k, t.k);
+			//AreEqual(c1, t.c1);
+			//AreEqual(c2, t.c2);
+			//AreEqual(max_dist, t.max_dist);
+			//AreEqual(k, t.k);
 
-		//	t.pull();
+			//t.pull();
 
-		//	//AreEqual(t.c1.acceleration_angle, 0);
-		//	//AreEqual(t.c2.acceleration_angle, Math.PI);
-		//	//AreEqual(t.c1.acceleration, .18);
-		//	//AreEqual(t.c2.acceleration, .18);
+			////AreEqual(t.c1.acceleration_angle, 0);
+			////AreEqual(t.c2.acceleration_angle, Math.PI);
+			////AreEqual(t.c1.acceleration, .18);
+			////AreEqual(t.c2.acceleration, .18);
 
-		//	t.c1.update(new HashSet<Circle>());
-		//	t.c2.update(new HashSet<Circle>());
+			//t.c1.update(new HashSet<Circle>());
+			//t.c2.update(new HashSet<Circle>());
 
-		//	AreEqual(t.c1.velocity_angle, 0);
-		//	AreEqual(t.c2.velocity_angle, Math.PI);
-		//	AreEqual(t.c1.velocity, .18);
-		//	AreEqual(t.c2.velocity, .18);
-		//	AreEqual(t.c1.x, .18);
-		//	AreEqual(t.c2.x, 199.82);
-		//}
+			//AreEqual(t.c1.velocity_angle, 0);
+			//AreEqual(t.c2.velocity_angle, Math.PI);
+			//AreEqual(t.c1.velocity, .18);
+			//AreEqual(t.c2.velocity, .18);
+			//AreEqual(t.c1.x, .18);
+			//AreEqual(t.c2.x, 199.82);
+		}
 
 		//[TestMethod]
 		//public void tether2Test()

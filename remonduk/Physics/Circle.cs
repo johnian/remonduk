@@ -273,7 +273,6 @@ namespace Remonduk.Physics
 		/// <param name="time"></param>
 		public void Update(double time)
 		{
-			// will this ever need to do anything else??
 			UpdatePosition(time);
 			UpdateVelocity(time);
 			// UpdateVelocity

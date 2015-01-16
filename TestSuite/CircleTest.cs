@@ -254,72 +254,6 @@ namespace TestSuite
 			Test.AreEqual(13, circle.Ay);
 		}
 
-		//[TestMethod]
-		//public void FollowTest1()
-		//{
-		//	Circle leader = new Circle(1, 1, 2);
-		//	Circle sheep = new Circle(3, 5, 8);
-
-		//	sheep.Follow(leader);
-		//	Test.AreEqual(Circle.TARGET, leader.Target);
-		//	Test.AreEqual(Circle.MIN_DISTANCE, leader.MinDistance);
-		//	Test.AreEqual(Circle.MAX_DISTANCE, leader.MaxDistance);
-
-		//	Test.AreEqual(leader, sheep.Target);
-		//	Test.AreEqual(leader.Radius + sheep.Radius, sheep.MinDistance);
-		//	Test.AreEqual(leader.Radius + sheep.Radius, sheep.MaxDistance);
-
-		//	sheep.Follow();
-		//	Test.AreEqual(null, leader.Target);
-		//	Test.AreEqual(0, leader.MinDistance);
-		//	Test.AreEqual(0, leader.MaxDistance);
-
-		//	Test.AreEqual(null, sheep.Target);
-		//	Test.AreEqual(0, sheep.MinDistance);
-		//	Test.AreEqual(0, sheep.MaxDistance);
-		//}
-
-		//[TestMethod]
-		//public void FollowTest3()
-		//{
-		//	Circle leader = new Circle(1, 1, 2);
-		//	Circle sheep = new Circle(3, 5, 8);
-
-		//	sheep.Follow(leader, 13, 21);
-		//	Test.AreEqual(Circle.TARGET, leader.Target);
-		//	Test.AreEqual(Circle.MIN_DISTANCE, leader.MinDistance);
-		//	Test.AreEqual(Circle.MAX_DISTANCE, leader.MaxDistance);
-
-		//	Test.AreEqual(leader, sheep.Target);
-		//	Test.AreEqual(13, sheep.MinDistance);
-		//	Test.AreEqual(21, sheep.MaxDistance);
-
-		//	sheep.Follow(null, 34, 55);
-		//	Test.AreEqual(null, leader.Target);
-		//	Test.AreEqual(0, leader.MinDistance);
-		//	Test.AreEqual(0, leader.MaxDistance);
-
-		//	Test.AreEqual(null, sheep.Target);
-		//	Test.AreEqual(0, sheep.MinDistance);
-		//	Test.AreEqual(0, sheep.MaxDistance);
-		//}
-
-		//[TestMethod]
-		//public void FaceTargetTest()
-		//{
-		//	Circle leader = new Circle(1, 1, 2, 3, 5);
-		//	Circle sheep = new Circle(8, 13, 21, 34, 55);
-		//	sheep.Follow(leader);
-			
-		//	sheep.FaceTarget();
-		//	Test.AreEqual(new OrderedPair(3, 5), leader.Velocity);
-		//	double magnitude = Math.Sqrt(34 * 34 + 55 * 55);
-		//	double angle = OrderedPair.Angle(2 - 21, 1 - 13);
-		//	double vx = magnitude * Math.Cos(angle);
-		//	double vy = magnitude * Math.Sin(angle);
-		//	Out.WriteLine(sheep.Velocity.ToString());
-		//	Test.AreEqual(new OrderedPair(vx, vy), sheep.Velocity);
-		//}
 		[TestMethod]
 		public void UpdateVelocityTest()
 		{
@@ -397,16 +331,21 @@ namespace TestSuite
 				Test.AreEqual(i * vy, circle.Py);
 			}
 
+			double px = circle.Px;
+			double py = circle.Py;
+
 			double gravity = constants.GRAVITY;
 			double gravityAngle = Math.PI / 4;
 			double gx = gravity * Math.Cos(gravityAngle);
 			double gy = gravity * Math.Sin(gravityAngle);
+
 			circle.SetAcceleration(gx, gy);
 			for (int i = 1; i <= 10; i++)
 			{
 				circle.UpdatePosition(time);
-				Test.AreEqual(gx * i * i / 2 + vx * i + 10 * vx, circle.Px);
-				Test.AreEqual(gy * i * i / 2 + vy * i + 10 * vy, circle.Py);
+				circle.UpdateVelocity(time);
+				Test.AreEqual(gx * i * i / 2 + vx * i + px, circle.Px);
+				Test.AreEqual(gy * i * i / 2 + vy * i + py, circle.Py);
 			}
 		}
 	}
