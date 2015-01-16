@@ -1,11 +1,6 @@
-﻿using Remonduk;
-using Remonduk.Physics;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Remonduk.Physics.QuadTree
 {
@@ -41,6 +36,7 @@ namespace Remonduk.Physics.QuadTree
         /// <param name="pos">The position for this node (top left)</param>
         /// <param name="dim">The dimensions for this node (width, height)</param>
         /// <param name="parent">The Quad Tree this node belongs to.</param>
+		/// <param name="name"></param>
         public QTreeNode(OrderedPair pos, OrderedPair dim, QTree parent, String name)
         {
             this.pos = pos;
@@ -236,14 +232,14 @@ namespace Remonduk.Physics.QuadTree
             return nodes;
         }
 
-        public void draw(Graphics g)
+        public void Draw(Graphics g)
         {
             if(split)
             {
-                NorthWest.draw(g);
-                NorthEast.draw(g);
-                SouthWest.draw(g);
-                SouthEast.draw(g);
+                NorthWest.Draw(g);
+                NorthEast.Draw(g);
+                SouthWest.Draw(g);
+                SouthEast.Draw(g);
             }
             else
             {
@@ -289,7 +285,7 @@ namespace Remonduk.Physics.QuadTree
             return possible;
         }
 
-        public String ToString()
+        public override String ToString()
         {
             return name;
         }

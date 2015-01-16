@@ -16,16 +16,12 @@ namespace Remonduk.Physics
 		/// </summary>
 		public double Y;
 
-		public OrderedPair()
-			: this(0, 0)
-		{ }
-
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="x"></param>
 		/// <param name="y"></param>
-		public OrderedPair(double x, double y)
+		public OrderedPair(double x = 0, double y = 0)
 		{
 			SetXY(x, y);
 		}
@@ -63,6 +59,11 @@ namespace Remonduk.Physics
 			return x * x + y * y;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="that"></param>
+		/// <returns></returns>
 		public double MagnitudeSquared(OrderedPair that)
 		{
 			return MagnitudeSquared(that.X - X, that.Y - Y);

@@ -1,9 +1,5 @@
-﻿using Remonduk.Physics.QuadTree;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Remonduk.Physics
 {
@@ -80,13 +76,11 @@ namespace Remonduk.Physics
 		}
 
 		/// <summary>
-		/// Calculates the closest point on the this' movement vector to that.
+		/// 
 		/// </summary>
-		/// <param name="thatX">That circles x value.</param>
-		/// <param name="thatY">That circles y value</param>
-		/// <param name="referenceVx">This circles reference vx.</param>
-		/// <param name="referenceVy">This circles reference vy.</param>
-		/// <returns>The closest point on this' movement vector to thatX and thatY</returns>
+		/// <param name="that"></param>
+		/// <param name="referenceV"></param>
+		/// <returns></returns>
 		public OrderedPair ClosestPoint(Circle that, OrderedPair referenceV)
 		{
 			double thisConstant = referenceV.Y * Px - referenceV.X * Py;
@@ -105,9 +99,9 @@ namespace Remonduk.Physics
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="point"></param>
+		/// <param name="closest"></param>
 		/// <param name="referenceV"></param>
-		/// <param name="distanceFromCollision"></param>
+		/// <param name="that"></param>
 		/// <returns></returns>
 		public OrderedPair CollisionPoint(OrderedPair closest, OrderedPair referenceV, Circle that)
 		{
@@ -152,9 +146,9 @@ namespace Remonduk.Physics
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="point"></param>
+		/// <param name="closest"></param>
 		/// <param name="referenceV"></param>
-		/// <param name="distanceFromCollision"></param>
+		/// <param name="that"></param>
 		/// <param name="time"></param>
 		/// <returns></returns>
 		public double CollisionTime(OrderedPair closest, OrderedPair referenceV,

@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
-using System.Diagnostics;
 
 namespace Remonduk.Physics
 {
@@ -55,18 +50,6 @@ namespace Remonduk.Physics
 		/// Default Exists.
 		/// </summary>
 		public const bool EXISTS = true;
-		/// <summary>
-		/// Default Target.
-		/// </summary>
-		//public const Circle TARGET = null;
-		/// <summary>
-		/// Default MinDistance.
-		/// </summary>
-		//public const double MIN_DISTANCE = 0;
-		/// <summary>
-		/// Default MaxDistance.
-		/// </summary>
-		//public const double MAX_DISTANCE = 0;
 
 		/// <summary>
 		/// Default Color.
@@ -126,29 +109,11 @@ namespace Remonduk.Physics
 		/// Whether this circle exists (if other objects in the physical system can interact with it).
 		/// </summary>
 		public bool Exists;
-		/// <summary>
-		/// The circle's target. Used for non-physics interactions.
-		/// </summary>
-		//public Circle Target;
-		/// <summary>
-		/// The minimum distance this circle will Follow the target to.
-		/// </summary>
-		//public double MinDistance;
-		/// <summary>
-		/// The maximum distance this circle will Follow the target from.
-		/// </summary>
-		//public double MaxDistance;
 
 		/// <summary>
 		/// The circle's color.
 		/// </summary>
 		public Color Color;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		//public QuadTreeTest.QuadTreePositionItem<Circle> QTreePos;
-
 
 		////
 		// Constructors
@@ -281,53 +246,6 @@ namespace Remonduk.Physics
 		{
 			Acceleration.SetXY(ax, ay);
 		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="target"></param>
-		//public void Follow(Circle target = null)
-		//{
-		//	if (target == null || target == this)
-		//	{
-		//		Target = null;
-		//		MinDistance = MIN_DISTANCE;
-		//		MaxDistance = MAX_DISTANCE;
-		//	}
-		//	else
-		//	{
-		//		Follow(target, target.Radius + Radius, target.Radius + Radius);
-		//	}
-		//}
-
-		/// <summary>
-		/// Sets a circle for this circle to Follow.
-		/// </summary>
-		/// <param name="target">The target circle this circle should Follow.</param>
-		/// <param name="minDistance">The minimum distance this circle will start following at.</param>
-		/// <param name="maxDistance">The maximum distance this circle will start following at.</param>
-		//public void Follow(Circle target, double minDistance, double maxDistance)
-		//{
-		//	if (target == null || target == this)
-		//	{
-		//		Follow();
-		//	}
-		//	else
-		//	{
-		//		Target = target;
-		//		MinDistance = minDistance;
-		//		MaxDistance = maxDistance;
-		//	}
-		//}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		//public void FaceTarget()
-		//{
-		//	double angle = OrderedPair.Angle(Target.Py - Py, Target.Px - Px);
-		//	Velocity.SetXY(angle);
-		//}
 
 		/// <summary>
 		/// 

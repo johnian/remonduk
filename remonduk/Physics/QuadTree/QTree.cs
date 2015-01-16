@@ -1,4 +1,5 @@
-﻿using Remonduk.Physics;
+﻿using Remonduk;
+using Remonduk.Physics;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -45,9 +46,9 @@ namespace Remonduk.Physics.QuadTree
 		/// <summary>
 		/// Quad Tree Constructor
 		/// </summary>
-		/// <param name="Pos">This quad tree's position.</param>
-		/// <param name="Dim">This quad tree's dimensions.</param>
-		/// <param name="MaxCount">The max count before splitting</param>
+		/// <param name="pos">This quad tree's position.</param>
+		/// <param name="dim">This quad tree's dimensions.</param>
+		/// <param name="maxCount">The max count before splitting</param>
 		public QTree(OrderedPair pos, OrderedPair dim, int maxCount = MAX_COUNT)
 		{
 			Pos = pos;
@@ -119,7 +120,7 @@ namespace Remonduk.Physics.QuadTree
 
 		public void Draw(Graphics g)
 		{
-			HeadNode.draw(g);
+			HeadNode.Draw(g);
 		}
 
 		public List<Circle> Possible(Circle circle, double time)
