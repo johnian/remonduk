@@ -146,67 +146,92 @@ namespace TestSuite
 		[TestMethod]
 		public void MagnitudeTest0()
 		{
-			//OrderedPair orderedPair = new OrderedPair();
-			//Test.AreEqual(0, orderedPair.Magnitude());
-			//orderedPair.SetXY(3, 4);
-			//Test.AreEqual(5, orderedPair.Magnitude());
+			OrderedPair orderedPair = new OrderedPair();
+			Test.AreEqual(0, orderedPair.Magnitude());
+			orderedPair.SetXY(3, 4);
+			Test.AreEqual(5, orderedPair.Magnitude());
 		}
 
 		[TestMethod]
 		public void AngleTest2()
 		{
-			//Test.AreEqual(0, OrderedPair.Angle(0, 0));
-			//Test.AreEqual(0, OrderedPair.Angle(0.0, 1.0));
-			//Test.AreEqual(1 * Math.PI / 4, OrderedPair.Angle(1.0, 1.0));
-			//Test.AreEqual(2 * Math.PI / 4, OrderedPair.Angle(1.0, 0.0));
-			//Test.AreEqual(3 * Math.PI / 4, OrderedPair.Angle(1.0, -1.0));
-			//Test.AreEqual(4 * Math.PI / 4, OrderedPair.Angle(0.0, -1.0));
-			//Test.AreEqual(5 * Math.PI / 4, OrderedPair.Angle(-1.0, -1.0));
-			//Test.AreEqual(6 * Math.PI / 4, OrderedPair.Angle(-1.0, 0.0));
-			//Test.AreEqual(7 * Math.PI / 4, OrderedPair.Angle(-1.0, 1.0));
+			Test.AreEqual(0, OrderedPair.Angle(0, 0));
+			Test.AreEqual(0, OrderedPair.Angle(1.0, 0.0));
+			Test.AreEqual(1 * Math.PI / 4, OrderedPair.Angle(1.0, 1.0));
+			Test.AreEqual(2 * Math.PI / 4, OrderedPair.Angle(0.0, 1.0));
+			Test.AreEqual(3 * Math.PI / 4, OrderedPair.Angle(-1.0, 1.0));
+			Test.AreEqual(4 * Math.PI / 4, OrderedPair.Angle(-1.0, 0.0));
+			Test.AreEqual(5 * Math.PI / 4, OrderedPair.Angle(-1.0, -1.0));
+			Test.AreEqual(6 * Math.PI / 4, OrderedPair.Angle(0.0, -1.0));
+			Test.AreEqual(7 * Math.PI / 4, OrderedPair.Angle(1.0, -1.0));
 		}
 
 		[TestMethod]
 		public void AngleTest1()
 		{
-			//OrderedPair first = new OrderedPair();
-			//OrderedPair second = new OrderedPair();
-			//Test.AreEqual(0, second.Angle(first));
+			OrderedPair first = new OrderedPair();
+			OrderedPair second = new OrderedPair();
+			Test.AreEqual(0, second.Angle(first));
+			Test.AreEqual(0, first.Angle(second));
 
-			//first.SetXY(0, -.5);
-			//second.SetXY(0, .5);
-			//Test.AreEqual(0, second.Angle(first));
+			first.SetXY(-.5, 0);
+			second.SetXY(.5, 0);
+			Test.AreEqual(0, first.Angle(second));
 
-			//first.SetXY(-.5, -.5);
-			//second.SetXY(.5, .5);
-			//Test.AreEqual(1 * Math.PI / 4, second.Angle(first));
+			first.SetXY(-.5, -.5);
+			second.SetXY(.5, .5);
+			Test.AreEqual(1 * Math.PI / 4, first.Angle(second));
 
-			//Test.AreEqual(2 * Math.PI / 4, OrderedPair.Angle(1.0, 0.0));
-			//Test.AreEqual(3 * Math.PI / 4, OrderedPair.Angle(1.0, -1.0));
-			//Test.AreEqual(4 * Math.PI / 4, OrderedPair.Angle(0.0, -1.0));
-			//Test.AreEqual(5 * Math.PI / 4, OrderedPair.Angle(-1.0, -1.0));
-			//Test.AreEqual(6 * Math.PI / 4, OrderedPair.Angle(-1.0, 0.0));
-			//Test.AreEqual(7 * Math.PI / 4, OrderedPair.Angle(-1.0, 1.0));
+			first.SetXY(0, -.5);
+			second.SetXY(0, .5);
+			Test.AreEqual(2 * Math.PI / 4, first.Angle(second));
+
+			first.SetXY(.5, -.5);
+			second.SetXY(-.5, .5);
+			Test.AreEqual(3 * Math.PI / 4, first.Angle(second));
+
+			first.SetXY(.5, 0);
+			second.SetXY(-.5, 0);
+			Test.AreEqual(4 * Math.PI / 4, first.Angle(second));
+
+			first.SetXY(.5, .5);
+			second.SetXY(-.5, -.5);
+			Test.AreEqual(5 * Math.PI / 4, first.Angle(second));
+
+			first.SetXY(0, .5);
+			second.SetXY(0, -.5);
+			Test.AreEqual(6 * Math.PI / 4, first.Angle(second));
+
+			first.SetXY(-.5, .5);
+			second.SetXY(.5, -.5);
+			Test.AreEqual(7 * Math.PI / 4, first.Angle(second));
 		}
 
 		[TestMethod]
 		public void AngleTest0()
 		{
-			//Test.AreEqual(0, OrderedPair.Angle(0, 0));
-			//Test.AreEqual(0, OrderedPair.Angle(0.0, 1.0));
-			//Test.AreEqual(1 * Math.PI / 4, OrderedPair.Angle(1.0, 1.0));
-			//Test.AreEqual(2 * Math.PI / 4, OrderedPair.Angle(1.0, 0.0));
-			//Test.AreEqual(3 * Math.PI / 4, OrderedPair.Angle(1.0, -1.0));
-			//Test.AreEqual(4 * Math.PI / 4, OrderedPair.Angle(0.0, -1.0));
-			//Test.AreEqual(5 * Math.PI / 4, OrderedPair.Angle(-1.0, -1.0));
-			//Test.AreEqual(6 * Math.PI / 4, OrderedPair.Angle(-1.0, 0.0));
-			//Test.AreEqual(7 * Math.PI / 4, OrderedPair.Angle(-1.0, 1.0));
+			Test.AreEqual(0, OrderedPair.Angle(0, 0));
+			Test.AreEqual(0, OrderedPair.Angle(1.0, 0.0));
+			Test.AreEqual(1 * Math.PI / 4, OrderedPair.Angle(1.0, 1.0));
+			Test.AreEqual(2 * Math.PI / 4, OrderedPair.Angle(0.0, 1.0));
+			Test.AreEqual(3 * Math.PI / 4, OrderedPair.Angle(-1.0, 1.0));
+			Test.AreEqual(4 * Math.PI / 4, OrderedPair.Angle(-1.0, 0.0));
+			Test.AreEqual(5 * Math.PI / 4, OrderedPair.Angle(-1.0, -1.0));
+			Test.AreEqual(6 * Math.PI / 4, OrderedPair.Angle(0.0, -1.0));
+			Test.AreEqual(7 * Math.PI / 4, OrderedPair.Angle(1.0, -1.0));
 		}
 
 		[TestMethod]
 		public void EqualsTest()
 		{
+			Circle one = new Circle();
+			Circle two = new Circle();
 
+			Test.AreEqual(true, one.Equals(one));
+			Test.AreEqual(false, one.Equals(two));
+
+			Test.AreEqual(true, two.Equals(two));
+			Test.AreEqual(false, two.Equals(one));
 		}
 	}
 }

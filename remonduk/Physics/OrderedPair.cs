@@ -102,10 +102,10 @@ namespace Remonduk.Physics
 		/// <summary>
 		/// Returns the angle of a vector between [0, 2PI].
 		/// </summary>
-		/// <param name="y">The y value.</param>
 		/// <param name="x">The x value.</param>
+		/// <param name="y">The y value.</param>
 		/// <returns>tan(y, x) from 0 to 2PI</returns>
-		public static double Angle(double y, double x)
+		public static double Angle(double x, double y)
 		{
 			if (Math.Round(y, Constants.PRECISION) == 0 &&
 				Math.Round(x, Constants.PRECISION) == 0)
@@ -127,7 +127,7 @@ namespace Remonduk.Physics
 		/// <returns></returns>
 		public double Angle(OrderedPair that)
 		{
-			return Angle(that.Y - Y, that.X - X);
+			return Angle(that.X - X, that.Y - Y);
 		}
 
 		/// <summary>
@@ -136,7 +136,7 @@ namespace Remonduk.Physics
 		/// <returns></returns>
 		public double Angle()
 		{
-			return Angle(Y, X);
+			return Angle(X, Y);
 		}
 
 		/// <summary>

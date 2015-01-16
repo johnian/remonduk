@@ -45,6 +45,9 @@ implement a max velocity for the world
 - also, any circle that spans multiple nodes should be kept in parent node
 - also, what happens if multiple circles are added at the same exact spot
 	- a number great than max count
+	
+store qtrees as an array
+make count correspond only correspond to unique circles? non colliding?
 
 if the spring force is what holds everything together,
 	we should at least design the system to handle that properly

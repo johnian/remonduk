@@ -71,41 +71,43 @@ namespace TestSuite
 		[TestMethod]
 		public void AddCircleTest()
 		{
-			PhysicalSystem world = new PhysicalSystem();
-			for (int i = 1; i <= 10; i++)
-			{
-				Circle circle = new Circle();
-				world.AddCircle(circle);
-				//Test.AreEqual(true, world.Circles.Contains(circle));
-				//Test.AreEqual(i, world.Circles.Count);
-				//Test.AreEqual(true, world.Tree.Circles.Contains(circle));
-				//Test.AreEqual(i, world.Tree.Circles.Count);
-			}
+			Test.AreEqual(true, false);
+			//PhysicalSystem world = new PhysicalSystem();
+			//for (int i = 1; i <= 10; i++)
+			//{
+			//	Circle circle = new Circle();
+			//	world.AddCircle(circle);
+			//Test.AreEqual(true, world.Circles.Contains(circle));
+			//Test.AreEqual(i, world.Circles.Count);
+			//Test.AreEqual(true, world.Tree.Circles.Contains(circle));
+			//Test.AreEqual(i, world.Tree.Circles.Count);
+			//}
 		}
 
-		//[TestMethod]
-		//public void RemoveCircleTest()
-		//{
-		//	PhysicalSystem world = new PhysicalSystem();
-		//	List<Circle> circles = new List<Circle>();
-		//	int count = 10;
-		//	for (int i = 1; i <= count; i++)
-		//	{
-		//		Circle circle = new Circle();
-		//		world.AddCircle(circle);
-		//		circles.Add(circle);
-		//	}
-		//	Test.AreEqual(false, world.RemoveCircle(new Circle()));
-		//	for (int i = count - 1; i >= 0; i--)
-		//	{
-		//		Circle circle = circles[i];
-		//		world.RemoveCircle(circle);
-		//		Test.AreEqual(false, world.Circles.Contains(circle));
-		//		Test.AreEqual(i, world.Circles.Count);
-		//		Test.AreEqual(false, world.Tree.Circles.Contains(circle));
-		//		Test.AreEqual(i, world.Tree.Circles.Count);
-		//	}
-		//}
+		[TestMethod]
+		public void RemoveCircleTest()
+		{
+			Test.AreEqual(true, false);
+			//PhysicalSystem world = new PhysicalSystem();
+			//List<Circle> circles = new List<Circle>();
+			//int count = 10;
+			//for (int i = 1; i <= count; i++)
+			//{
+			//	Circle circle = new Circle();
+			//	world.AddCircle(circle);
+			//	circles.Add(circle);
+			//}
+			//Test.AreEqual(false, world.RemoveCircle(new Circle()));
+			//for (int i = count - 1; i >= 0; i--)
+			//{
+			//	Circle circle = circles[i];
+			//	world.RemoveCircle(circle);
+			//	Test.AreEqual(false, world.Circles.Contains(circle));
+			//	Test.AreEqual(i, world.Circles.Count);
+			//	Test.AreEqual(false, world.Tree.Circles.Contains(circle));
+			//	Test.AreEqual(i, world.Tree.Circles.Count);
+			//}
+		}
 
 		[TestMethod]
 		public void AddInteractionTest()
@@ -167,58 +169,58 @@ namespace TestSuite
 			Test.AreEqual(0, world.InteractionMap[two].Count);
 		}
 
-		[TestMethod]
-		public void CollisionVelocitiesTest()
-		{
-			Test.AreEqual(true, false);
-		}
+		//[TestMethod]
+		//public void CollisionVelocitiesTest()
+		//{
+		//	Test.AreEqual(true, false);
+		//}
 
-		[TestMethod]
-		public void UpdateCirclesTest()
-		{
-			Test.AreEqual(true, false);
-		}
+		//[TestMethod]
+		//public void UpdateCirclesTest()
+		//{
+		//	Test.AreEqual(true, false);
+		//}
 
-		[TestMethod]
-		public void UpdateCollisionMapTest()
-		{
-			Test.AreEqual(true, false);
-		}
+		//[TestMethod]
+		//public void UpdateCollisionMapTest()
+		//{
+		//	Test.AreEqual(true, false);
+		//}
 
-		[TestMethod]
-		public void NewCollisionMapTest()
-		{
-			Test.AreEqual(true, false);
-		}
+		//[TestMethod]
+		//public void NewCollisionMapTest()
+		//{
+		//	Test.AreEqual(true, false);
+		//}
 
-		[TestMethod]
-		public void FirstCollisionTest()
-		{
-			Test.AreEqual(true, false);
-		}
+		//[TestMethod]
+		//public void FirstCollisionTest()
+		//{
+		//	Test.AreEqual(true, false);
+		//}
 
-		[TestMethod]
-		public void CheckCollisionsTest()
-		{
-			Test.AreEqual(true, false);
-		}
+		//[TestMethod]
+		//public void CheckCollisionsTest()
+		//{
+		//	Test.AreEqual(true, false);
+		//}
 
-		[TestMethod]
-		public void CalculateAccelerationTest()
-		{
-			Test.AreEqual(true, false);
-		}
+		//[TestMethod]
+		//public void CalculateAccelerationTest()
+		//{
+		//	Test.AreEqual(true, false);
+		//}
 
-		[TestMethod]
-		public void CalculateAccelerationsTest()
-		{
-			Test.AreEqual(true, false);
-		}
+		//[TestMethod]
+		//public void CalculateAccelerationsTest()
+		//{
+		//	Test.AreEqual(true, false);
+		//}
 
-		[TestMethod]
-		public void UpdateTest()
-		{
-			Test.AreEqual(true, false);
-		}
+		//[TestMethod]
+		//public void UpdateTest()
+		//{
+		//	Test.AreEqual(true, false);
+		//}
 	}
 }

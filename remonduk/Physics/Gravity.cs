@@ -26,7 +26,7 @@ namespace Remonduk.Physics
 					double delta_x = second.Px - first.Px;
 					double delta_y = second.Py - first.Py;
 					double r = OrderedPair.Magnitude(delta_x, delta_y);
-					double angle = OrderedPair.Angle(delta_y, delta_x);
+					double angle = OrderedPair.Angle(delta_x, delta_y);
 
 					
 					double f = g * first.Mass * second.Mass / (r * r);

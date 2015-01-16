@@ -79,7 +79,7 @@ namespace Remonduk.Physics.QuadTree
 		public List<QTreeNode> Insert(Circle c)
 		{
 			List<QTreeNode> Nodes = HeadNode.Insert(c);
-			//Circles.Add(c);
+			Circles.Add(c);
 			return Nodes;
 		}
 
