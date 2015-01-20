@@ -30,6 +30,8 @@ namespace Remonduk.Physics.QuadTree
 
 		public int MaxCount;
 
+        int level;
+
 		/// <summary>
 		/// QTreeNode Constructor.
 		/// </summary>
@@ -37,7 +39,7 @@ namespace Remonduk.Physics.QuadTree
 		/// <param name="dim">The dimensions for this node (width, height)</param>
 		/// <param name="parent">The Quad Tree this node belongs to.</param>
 		/// <param name="name"></param>
-		public QTreeNode(OrderedPair pos, OrderedPair dim, QTree parent, String name)
+		public QTreeNode(OrderedPair pos, OrderedPair dim, QTree parent, String name, int level)
 		{
 			this.pos = pos;
 			this.dim = dim;
@@ -46,6 +48,7 @@ namespace Remonduk.Physics.QuadTree
 			Circles = new HashSet<Circle>();
 			this.MaxCount = parent.MaxCount;
 			this.name = name;
+            this.level = level;
 		}
 
 		/// <summary>
@@ -58,13 +61,13 @@ namespace Remonduk.Physics.QuadTree
 				//Can probably do this a little cleaner
 				OrderedPair NewDim = new OrderedPair(dim.X / 2.0, dim.Y / 2.0);
 
-				NorthWest = new QTreeNode(pos, NewDim, parent, name + ".NorthWest");
+				NorthWest = new QTreeNode(pos, NewDim, parent, name + ".NorthWest", level + 1);
 				parent.Nodes.Add(NorthWest);
-				NorthEast = new QTreeNode(new OrderedPair(pos.X + NewDim.X, pos.Y), NewDim, parent, name + ".NorthEast");
+				NorthEast = new QTreeNode(new OrderedPair(pos.X + NewDim.X, pos.Y), NewDim, parent, name + ".NorthEast", level + 1);
 				parent.Nodes.Add(NorthEast);
-				SouthWest = new QTreeNode(new OrderedPair(pos.X, pos.Y + NewDim.Y), NewDim, parent, name + ".SouthWest");
+				SouthWest = new QTreeNode(new OrderedPair(pos.X, pos.Y + NewDim.Y), NewDim, parent, name + ".SouthWest", level + 1);
 				parent.Nodes.Add(SouthWest);
-				SouthEast = new QTreeNode(new OrderedPair(pos.X + NewDim.X, pos.Y + NewDim.Y), NewDim, parent, name + ".SouthEast");
+				SouthEast = new QTreeNode(new OrderedPair(pos.X + NewDim.X, pos.Y + NewDim.Y), NewDim, parent, name + ".SouthEast", level + 1);
 				parent.Nodes.Add(SouthEast);
 
 				split = true;
@@ -105,7 +108,7 @@ namespace Remonduk.Physics.QuadTree
 			{
 				if (Contains(c))
 				{
-					if (Circles.Count + 1 >= MaxCount)
+					if (Circles.Count + 1 >= MaxCount && level < parent.MaxLevel)
 					{
 						Split();
 						////

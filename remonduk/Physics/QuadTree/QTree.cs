@@ -29,14 +29,17 @@ namespace Remonduk.Physics.QuadTree
 
 		public int MaxCount;
 
+        public int MaxLevel;
+
 		/// <summary>
 		/// Default constructor...silly values.
 		/// </summary>
 		public QTree()
 		{
 			Pos = new OrderedPair(0, 0);
-			Dim = new OrderedPair(100, 100);
-			HeadNode = new QTreeNode(Pos, Dim, this, "Head");
+            Dim = new OrderedPair(100, 100);
+            MaxLevel = 16;
+			HeadNode = new QTreeNode(Pos, Dim, this, "Head", 0);
 			Nodes = new HashSet<QTreeNode>();
 			//Nodes.Add(HeadNode);
 			Circles = new HashSet<Circle>();
@@ -54,7 +57,8 @@ namespace Remonduk.Physics.QuadTree
 			Pos = pos;
 			Dim = dim;
 			MaxCount = maxCount;
-			HeadNode = new QTreeNode(Pos, Dim, this, "Head");
+            HeadNode = new QTreeNode(Pos, Dim, this, "Head", 0);
+            MaxLevel = 16;
 			Nodes = new HashSet<QTreeNode>();
 			//Nodes.Add(HeadNode);
 			Circles = new HashSet<Circle>();
@@ -64,8 +68,9 @@ namespace Remonduk.Physics.QuadTree
 		{
 			Pos = new OrderedPair(0, 0);
 			Dim = dim;
-			MaxCount = maxCount;
-			HeadNode = new QTreeNode(Pos, Dim, this, "Head");
+            MaxCount = maxCount;
+            MaxLevel = 16;
+			HeadNode = new QTreeNode(Pos, Dim, this, "Head", 0);
 			Nodes = new HashSet<QTreeNode>();
 			//Nodes.Add(HeadNode);
 			Circles = new HashSet<Circle>();

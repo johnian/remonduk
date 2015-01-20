@@ -15,12 +15,12 @@ namespace TestSuite
         public void InsertToQuadTreeTest()
         {
             QTree tree;
-            tree = new QTree(new OrderedPair(0, 0), new OrderedPair(600, 600), 16);
+            tree = new QTree(new OrderedPair(0, 0), new OrderedPair(600, 600), 2);
             Circle c = new Circle(5, 25, 25);
             tree.Insert(c);
             Test.AreEqual(tree.Circles.Contains(c), true);
 
-            Circle c2 = new Circle(5, 120, 50);
+            Circle c2 = new Circle(5, 25, 25);
             tree.Insert(c2);
             Test.AreEqual(tree.Circles.Contains(c2), true);
 
