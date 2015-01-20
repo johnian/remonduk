@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Remonduk.Physics;
+using System.Collections.Generic;
 
 namespace TestSuite
 {
@@ -71,42 +72,40 @@ namespace TestSuite
 		[TestMethod]
 		public void AddCircleTest()
 		{
-			Test.AreEqual(true, false);
-			//PhysicalSystem world = new PhysicalSystem();
-			//for (int i = 1; i <= 10; i++)
-			//{
-			//	Circle circle = new Circle();
-			//	world.AddCircle(circle);
-			//Test.AreEqual(true, world.Circles.Contains(circle));
-			//Test.AreEqual(i, world.Circles.Count);
-			//Test.AreEqual(true, world.Tree.Circles.Contains(circle));
-			//Test.AreEqual(i, world.Tree.Circles.Count);
-			//}
+			PhysicalSystem world = new PhysicalSystem();
+			for (int i = 1; i <= 10; i++)
+			{
+				Circle circle = new Circle();
+				world.AddCircle(circle);
+			Test.AreEqual(true, world.Circles.Contains(circle));
+			Test.AreEqual(i, world.Circles.Count);
+			Test.AreEqual(true, world.Tree.Circles.Contains(circle));
+			Test.AreEqual(i, world.Tree.Circles.Count);
+			}
 		}
 
 		[TestMethod]
 		public void RemoveCircleTest()
 		{
-			Test.AreEqual(true, false);
-			//PhysicalSystem world = new PhysicalSystem();
-			//List<Circle> circles = new List<Circle>();
-			//int count = 10;
-			//for (int i = 1; i <= count; i++)
-			//{
-			//	Circle circle = new Circle();
-			//	world.AddCircle(circle);
-			//	circles.Add(circle);
-			//}
-			//Test.AreEqual(false, world.RemoveCircle(new Circle()));
-			//for (int i = count - 1; i >= 0; i--)
-			//{
-			//	Circle circle = circles[i];
-			//	world.RemoveCircle(circle);
-			//	Test.AreEqual(false, world.Circles.Contains(circle));
-			//	Test.AreEqual(i, world.Circles.Count);
-			//	Test.AreEqual(false, world.Tree.Circles.Contains(circle));
-			//	Test.AreEqual(i, world.Tree.Circles.Count);
-			//}
+			PhysicalSystem world = new PhysicalSystem();
+			List<Circle> circles = new List<Circle>();
+			int count = 10;
+			for (int i = 1; i <= count; i++)
+			{
+				Circle circle = new Circle();
+				world.AddCircle(circle);
+				circles.Add(circle);
+			}
+			Test.AreEqual(false, world.RemoveCircle(new Circle()));
+			for (int i = count - 1; i >= 0; i--)
+			{
+				Circle circle = circles[i];
+				world.RemoveCircle(circle);
+				Test.AreEqual(false, world.Circles.Contains(circle));
+				Test.AreEqual(i, world.Circles.Count);
+				Test.AreEqual(false, world.Tree.Circles.Contains(circle));
+				Test.AreEqual(i, world.Tree.Circles.Count);
+			}
 		}
 
 		[TestMethod]
