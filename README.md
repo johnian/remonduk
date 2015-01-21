@@ -16,40 +16,13 @@ Floid
 
 for juliono:
 
-tethers are like springs - try to keep at an equilibrium point -
-pull when too far away - push when too close
-
-things that don't move
-anchor them to boundaries
-world boundaries
-
-send the quad tree a circle, and the time
-
-forces should have a boolean field - Constant
-
-check- if Constant, no need to recalculate force
-
-randomize tests
-add checks for valid paremeters?
-update comments	
-optimize code
-finish test cases
-utilize quad tree in collision detection
-
-change lists to hashsets where it makes sense
-
-update comments
-add file comments at top
-
-things that don't move
-anchor them to boundaries
-world boundaries
-
-randomize tests
-optimize code
-finish test cases
-change lists to hashsets where it makes sense
-
+1] make collision detection work in pairs
+2] refactor tether to be spring
+3] comments / @author, etc.
+4] default forces?
+5] additional quad tree tests
+6] anchors
+7] randomize tests where possible
 
 implement a max velocity for the world
 - utilize this in quad tree ->
@@ -60,11 +33,8 @@ draw a box that's 2x the max velocity in any direction
 - a number great than max count
 
 store qtrees as an array
-make count correspond only correspond to unique circles? non colliding?
 
 make collision detection and quad tree take into account whether a circle "exists"
-
-update qtree properly with new positions
 
 do collisions in pairs -
 make a list of circles ->
@@ -75,26 +45,7 @@ take the first circle
 now explore the collisions for that circle
 repeat
 
-if the spring force is what holds everything together,
-we should at least design the system to handle that properly
-
-partial ghostiness? what if a circle can pass through some things, but not others
-ie. pass through people, but not through environment
-
-test classes
-make it work with quad tree
-
 flag for whether the stage wraps around or has hard boundaries
-
-3 types of physical interactions:
-collision (when actual boundaries are crossed)
-repulsion
-following
-
-grouping - leashing
-- anchoring (multiple anchoring pairings that connect two circles)
-
-tests for gui
 
 <div id="1"></div>
 # 1 basic graphics and i/o {

@@ -162,7 +162,20 @@ namespace Remonduk.Physics
 			{
 				collisionMap.Add(circle, collisions);
 			}
-			collisions.Add(that);
+			if (!collisionMap[circle].Contains(that))
+			{
+				collisionMap[circle].Add(that);
+			}
+			// check to see if the collision is already in the dictionary
+
+			if (!collisionMap.ContainsKey(circle))
+			{
+				collisionMap.Add(that, new List<Circle>());
+			}
+			if (!collisionMap[that].Contains(circle))
+			{
+				collisionMap[that].Add(circle);
+			}
 		}
 
 		public void NewCollisionMap(ref Dictionary<Circle, List<Circle>> collisionMap,
@@ -275,6 +288,7 @@ namespace Remonduk.Physics
 				Dictionary<Circle, List<Circle>> collisionMap = new Dictionary<Circle, List<Circle>>();
 				double min = CheckCollisions(ref collisionMap, time, overlapped);
 				overlapped = (min == 0);
+
 				UpdateCircles(min, collisionMap);
 				time -= min;
 			}
