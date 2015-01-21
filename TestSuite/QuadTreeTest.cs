@@ -66,66 +66,66 @@ namespace TestSuite
             tree.Insert(c1);
             Test.AreEqual(1, tree.Circles.Count);
             Test.AreEqual(0, tree.Nodes.Count);
-            Test.AreEqual(false, tree.HeadNode.split);
+            Test.AreEqual(false, tree.HeadNode.Split);
 
             tree.Insert(c2);
             Test.AreEqual(2, tree.Circles.Count);
             Test.AreEqual(0, tree.Nodes.Count);
-            Test.AreEqual(false, tree.HeadNode.split);
+            Test.AreEqual(false, tree.HeadNode.Split);
 
             tree.Insert(c3);
             Test.AreEqual(3, tree.Circles.Count);
             Test.AreEqual(0, tree.Nodes.Count);
-            Test.AreEqual(false, tree.HeadNode.split);
+            Test.AreEqual(false, tree.HeadNode.Split);
 
             tree.Insert(c4);
             Test.AreEqual(4, tree.Circles.Count);
             Test.AreEqual(4, tree.Nodes.Count);
-            Test.AreEqual(true, tree.HeadNode.split);
+            Test.AreEqual(true, tree.HeadNode.Split);
 
             List<QTreeNode> nodes = new List<QTreeNode>();
 
             nodes = tree.GetNodes(c1);
-            Test.AreEqual(0, tree.HeadNode.NorthWest.pos.X);
-            Test.AreEqual(0, tree.HeadNode.NorthWest.pos.Y);
-            Test.AreEqual(50, tree.HeadNode.NorthWest.dim.X);
-            Test.AreEqual(50, tree.HeadNode.NorthWest.dim.Y);
+            Test.AreEqual(0, tree.HeadNode.NorthWest.Pos.X);
+            Test.AreEqual(0, tree.HeadNode.NorthWest.Pos.Y);
+            Test.AreEqual(50, tree.HeadNode.NorthWest.Dim.X);
+            Test.AreEqual(50, tree.HeadNode.NorthWest.Dim.Y);
             Test.AreEqual(1, nodes.Count);
             Out.WriteLine(nodes.ElementAt(0).ToString());
-            Test.AreEqual(true, nodes.ElementAt(0).name.Equals(tree.HeadNode.NorthWest.name));
+            Test.AreEqual(true, nodes.ElementAt(0).Name.Equals(tree.HeadNode.NorthWest.Name));
 
             nodes.Clear();
 
             nodes = tree.GetNodes(c2);
-            Test.AreEqual(50, tree.HeadNode.NorthEast.pos.X);
-            Test.AreEqual(0, tree.HeadNode.NorthEast.pos.Y);
-            Test.AreEqual(50, tree.HeadNode.NorthEast.dim.X);
-            Test.AreEqual(50, tree.HeadNode.NorthEast.dim.Y);
+            Test.AreEqual(50, tree.HeadNode.NorthEast.Pos.X);
+            Test.AreEqual(0, tree.HeadNode.NorthEast.Pos.Y);
+            Test.AreEqual(50, tree.HeadNode.NorthEast.Dim.X);
+            Test.AreEqual(50, tree.HeadNode.NorthEast.Dim.Y);
             Test.AreEqual(1, nodes.Count);
             Out.WriteLine(nodes.ElementAt(0).ToString());
-            Test.AreEqual(true, nodes.ElementAt(0).name.Equals(tree.HeadNode.NorthEast.name));
+            Test.AreEqual(true, nodes.ElementAt(0).Name.Equals(tree.HeadNode.NorthEast.Name));
 
             nodes.Clear();
 
             nodes = tree.GetNodes(c3);
-            Test.AreEqual(0, tree.HeadNode.SouthWest.pos.X);
-            Test.AreEqual(50, tree.HeadNode.SouthWest.pos.Y);
-            Test.AreEqual(50, tree.HeadNode.SouthWest.dim.X);
-            Test.AreEqual(50, tree.HeadNode.SouthWest.dim.Y);
+            Test.AreEqual(0, tree.HeadNode.SouthWest.Pos.X);
+            Test.AreEqual(50, tree.HeadNode.SouthWest.Pos.Y);
+            Test.AreEqual(50, tree.HeadNode.SouthWest.Dim.X);
+            Test.AreEqual(50, tree.HeadNode.SouthWest.Dim.Y);
             Test.AreEqual(1, nodes.Count);
             Out.WriteLine(nodes.ElementAt(0).ToString());
-            Test.AreEqual(true, nodes.ElementAt(0).name.Equals(tree.HeadNode.SouthWest.name));
+            Test.AreEqual(true, nodes.ElementAt(0).Name.Equals(tree.HeadNode.SouthWest.Name));
 
             nodes.Clear();
 
             nodes = tree.GetNodes(c4);
-            Test.AreEqual(50, tree.HeadNode.SouthEast.pos.X);
-            Test.AreEqual(50, tree.HeadNode.SouthEast.pos.Y);
-            Test.AreEqual(50, tree.HeadNode.SouthEast.dim.X);
-            Test.AreEqual(50, tree.HeadNode.SouthEast.dim.Y);
+            Test.AreEqual(50, tree.HeadNode.SouthEast.Pos.X);
+            Test.AreEqual(50, tree.HeadNode.SouthEast.Pos.Y);
+            Test.AreEqual(50, tree.HeadNode.SouthEast.Dim.X);
+            Test.AreEqual(50, tree.HeadNode.SouthEast.Dim.Y);
             Test.AreEqual(1, nodes.Count);
             Out.WriteLine(nodes.ElementAt(0).ToString());
-            Test.AreEqual(true, nodes.ElementAt(0).name.Equals(tree.HeadNode.SouthEast.name));
+            Test.AreEqual(true, nodes.ElementAt(0).Name.Equals(tree.HeadNode.SouthEast.Name));
 
         }
 
@@ -146,13 +146,13 @@ namespace TestSuite
             tree.Insert(c3);
             tree.Insert(c4);
             Test.AreEqual(4, tree.Nodes.Count);
-            Test.AreEqual(true, tree.HeadNode.split);
+            Test.AreEqual(true, tree.HeadNode.Split);
 
             tree.Insert(c5);
             tree.Insert(c6);
             List<QTreeNode> node7 = tree.Insert(c7);
             Test.AreEqual(8, tree.Nodes.Count);
-            Test.AreEqual(true, tree.HeadNode.NorthWest.split);
+            Test.AreEqual(true, tree.HeadNode.NorthWest.Split);
 
             List<QTreeNode> nodes = new List<QTreeNode>();
             nodes = tree.GetNodes(c5);
@@ -178,24 +178,24 @@ namespace TestSuite
 
             List<QTreeNode> nodes1 = tree.Insert(c1);
             List<QTreeNode> nodes2 = tree.Insert(c2);
-            Test.AreEqual(false, tree.HeadNode.split);
+            Test.AreEqual(false, tree.HeadNode.Split);
 
             List<QTreeNode> nodes3 = tree.Insert(c3);
-            Test.AreEqual(true, tree.HeadNode.split);
+            Test.AreEqual(true, tree.HeadNode.Split);
 
             nodes1 = tree.GetNodes(c1);
             Test.AreEqual(4, nodes1.Count);
             Out.WriteLine("Checking Northwest");
-            Out.WriteLine(nodes1.ElementAt(0).name);
+            Out.WriteLine(nodes1.ElementAt(0).Name);
             Test.AreEqual(true, nodes1.Contains(tree.HeadNode.NorthWest));
             Out.WriteLine("Checking Northeast");
-            Out.WriteLine(nodes1.ElementAt(1).name);
+            Out.WriteLine(nodes1.ElementAt(1).Name);
             Test.AreEqual(true, nodes1.Contains(tree.HeadNode.NorthEast));
             Out.WriteLine("Checking Southwest");
-            Out.WriteLine(nodes1.ElementAt(2).name);
+            Out.WriteLine(nodes1.ElementAt(2).Name);
             Test.AreEqual(true, nodes1.Contains(tree.HeadNode.SouthWest));
             Out.WriteLine("Checking Southeast");
-            Out.WriteLine(nodes1.ElementAt(3).name);
+            Out.WriteLine(nodes1.ElementAt(3).Name);
             Test.AreEqual(true, nodes1.Contains(tree.HeadNode.SouthEast));
         }
 
@@ -219,12 +219,12 @@ namespace TestSuite
             tree.Insert(c3);
             tree.Insert(c4);
 
-            Test.AreEqual(true, tree.HeadNode.split);
+            Test.AreEqual(true, tree.HeadNode.Split);
 
             tree.Remove(c2);
             Test.AreEqual(false, tree.Circles.Contains(c2));
             Test.AreEqual(0, tree.GetNodes(c2).Count);
-            Test.AreEqual(false, tree.HeadNode.split);
+            Test.AreEqual(false, tree.HeadNode.Split);
         }
 
         [TestMethod]
