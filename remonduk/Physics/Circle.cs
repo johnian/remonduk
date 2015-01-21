@@ -4,7 +4,7 @@ using System.Drawing;
 namespace Remonduk.Physics
 {
 	/// <summary>
-	/// Building blocks.
+	/// Circles are the atomic pieces of the game world.
 	/// </summary>
 	public partial class Circle
 	{
@@ -30,29 +30,29 @@ namespace Remonduk.Physics
 		/// </summary>
 		public const double PY = 0;
 		/// <summary>
-		/// Default Vx.
+		/// Default vx.
 		/// </summary>
 		public const double VX = 0;
 		/// <summary>
-		/// Default Vy.
+		/// Default vy.
 		/// </summary>
 		public const double VY = 0;
 		/// <summary>
-		/// Default Ax.
+		/// Default ax.
 		/// </summary>
 		public const double AX = 0;
 		/// <summary>
-		/// Default Ay.
+		/// Default ay.
 		/// </summary>
 		public const double AY = 0;
 
 		/// <summary>
-		/// Default Exists.
+		/// Default exists.
 		/// </summary>
 		public const bool EXISTS = true;
 
 		/// <summary>
-		/// Default Color.
+		/// Default color.
 		/// </summary>
 		public Color COLOR = Color.Chartreuse;	//Need to rework this for loading / saving.  Save to string and load from there
 
@@ -81,11 +81,11 @@ namespace Remonduk.Physics
 		/// </summary>
 		public OrderedPair Acceleration;
 		/// <summary>
-		/// Shorthand for position.X.
+		/// Shorthand for Position.X.
 		/// </summary>
 		public double Px { get { return Position.X; } }
 		/// <summary>
-		/// Shorthand for position.Y.
+		/// Shorthand for Position.Y.
 		/// </summary>
 		public double Py { get { return Position.Y; } }
 		/// <summary>
@@ -106,7 +106,7 @@ namespace Remonduk.Physics
 		public double Ay { get { return Acceleration.Y; } }
 
 		/// <summary>
-		/// Whether this circle exists (if other objects in the physical system can interact with it).
+		/// Flag for whether this circle can physically interact with other circles.
 		/// </summary>
 		public bool Exists;
 
@@ -135,44 +135,45 @@ namespace Remonduk.Physics
 		/// <summary>
 		/// Creates a circle with the specified radius and optional mass.
 		/// </summary>
-		/// <param name="radius">The radius of the circle.</param>
-		/// <param name="mass">The mass of the circle.</param>
+		/// <param name="radius">The circle's radius.</param>
+		/// <param name="mass">The circle's mass.</param>
 		public Circle(double radius, double mass = MASS) :
 			this(radius, PX, PY, mass) { }
 
 		/// <summary>
-		/// 
+		/// Creates a circle with the specified radius, position, and optional mass.
 		/// </summary>
-		/// <param name="radius"></param>
-		/// <param name="px"></param>
-		/// <param name="py"></param>
-		/// <param name="mass"></param>
+		/// <param name="radius">The circle's radius.</param>
+		/// <param name="px">The circle's x position.</param>
+		/// <param name="py">The circle's y position.</param>
+		/// <param name="mass">The circle's mass.</param>
 		public Circle(double radius, double px, double py, double mass = MASS) :
 			this(radius, px, py, VX, VY, mass) { }
 
 		/// <summary>
-		/// 
+		/// Creates a circle with the specified radius, position, velocity, and optional mass.
 		/// </summary>
-		/// <param name="radius"></param>
-		/// <param name="px"></param>
-		/// <param name="py"></param>
-		/// <param name="vx"></param>
-		/// <param name="vy"></param>
-		/// <param name="mass"></param>
+		/// <param name="radius">The circle's radius.</param>
+		/// <param name="px">The circle's x position.</param>
+		/// <param name="py">The circle's y position.</param>
+		/// <param name="vx">The circle's x velocity.</param>
+		/// <param name="vy">The circle's y velocity.</param>
+		/// <param name="mass">The circle's mass.</param>
 		public Circle(double radius, double px, double py, double vx, double vy, double mass = MASS) :
 			this(radius, px, py, vx, vy, AX, AY, mass) { }
 
 		/// <summary>
-		/// 
+		/// Creates a circle with the specified radius, position, velocity, acceleration,
+		/// and optional mass.
 		/// </summary>
-		/// <param name="radius"></param>
-		/// <param name="px"></param>
-		/// <param name="py"></param>
-		/// <param name="vx"></param>
-		/// <param name="vy"></param>
-		/// <param name="ax"></param>
-		/// <param name="ay"></param>
-		/// <param name="mass"></param>
+		/// <param name="radius">The circle's radius.</param>
+		/// <param name="px">The circle's x position.</param>
+		/// <param name="py">The circle's y position.</param>
+		/// <param name="vx">The circle's x velocity.</param>
+		/// <param name="vy">The circle's y velocity.</param>
+		/// <param name="ax">The circle's x acceleration.</param>
+		/// <param name="ay">The circle's y acceleration.</param>
+		/// <param name="mass">The circle's mass.</param>
 		public Circle(double radius, double px, double py,
 			double vx, double vy, double ax, double ay, double mass = MASS)
 		{
@@ -187,14 +188,12 @@ namespace Remonduk.Physics
 			//Follow(TARGET);
 
 			Color = COLOR;
-
-			//QTreePos = new QuadTreePositionItem<Circle>(this, new Tuple<double, double>(Position.X, Position.Y), new Tuple<double, double>(radius, radius));
 		}
 
 		/// <summary>
-		/// Sets the radius.
+		/// Sets the circle's radius.
 		/// </summary>
-		/// <param name="radius">The new value for this circle's radius.</param>
+		/// <param name="radius">The new value for the circle's radius.</param>
 		public void SetRadius(double radius)
 		{
 			if (radius < RADIUS)
@@ -205,29 +204,29 @@ namespace Remonduk.Physics
 		}
 
 		/// <summary>
-		/// Set this circles mass.
+		/// Set the circle's mass.
 		/// </summary>
-		/// <param name="mass">The value to set this circles mass to.</param>
+		/// <param name="mass">The new value for the circle's mass.</param>
 		public void SetMass(double mass)
 		{
 			Mass = mass;
 		}
 
 		/// <summary>
-		/// 
+		/// Sets the circle's position.
 		/// </summary>
-		/// <param name="px"></param>
-		/// <param name="py"></param>
+		/// <param name="px">The new value for the circle's x position.</param>
+		/// <param name="py">The new value for the circle's y position.</param>
 		public void SetPosition(double px, double py)
 		{
 			Position.SetXY(px, py);
 		}
 
 		/// <summary>
-		/// 
+		/// Set the circle's velocity.
 		/// </summary>
-		/// <param name="vx"></param>
-		/// <param name="vy"></param>
+		/// <param name="vx">The new value for the circle's x velocity.</param>
+		/// <param name="vy">The new value for the circle's y velocity.</param>
 		public void SetVelocity(double vx, double vy)
 		{
 			Velocity.SetXY(vx, vy);
@@ -238,39 +237,39 @@ namespace Remonduk.Physics
 		}
 
 		/// <summary>
-		/// 
+		/// Sets the circle's acceleration.
 		/// </summary>
-		/// <param name="ax"></param>
-		/// <param name="ay"></param>
+		/// <param name="ax">The new value for the circle's x acceleration.</param>
+		/// <param name="ay">The new value for the circle's y acceleration.</param>
 		public void SetAcceleration(double ax, double ay)
 		{
 			Acceleration.SetXY(ax, ay);
 		}
 
 		/// <summary>
-		/// 
+		/// Updates the circle's velocity by its acceleration based on the time step.
 		/// </summary>
-		/// <param name="time"></param>
+		/// <param name="time">The time step by which the velocity should update.</param>
 		public void UpdateVelocity(double time)
 		{
 			SetVelocity(Ax * time + Vx, Ay * time + Vy);
 		}
 
 		/// <summary>
-		/// 
+		/// Updates the circle's position by its velocity and
+		/// acceleration based on the time step.
 		/// </summary>
-		/// <param name="time"></param>
+		/// <param name="time">The time step by which the position should update.</param>
 		public void UpdatePosition(double time)
 		{
 			SetPosition((Ax * time / 2 + Vx) * time + Px,
 				(Ay * time / 2 + Vy) * time + Py);
-			//QTreePos.Position = new Tuple<double, double>(Position.X, Position.Y);
 		}
 
 		/// <summary>
-		/// 
+		/// Updates the circle's position and velocity based on the time step.
 		/// </summary>
-		/// <param name="time"></param>
+		/// <param name="time">The time step by which the circle should update.</param>
 		public void Update(double time)
 		{
 			UpdatePosition(time);
@@ -280,27 +279,27 @@ namespace Remonduk.Physics
 		}
 
 		/// <summary>
-		/// Draws this circle.
+		/// Draws the circle.
 		/// </summary>
-		/// <param name="g">The graphics object to draw this circle on.</param>
-		public void Draw(Graphics g)
+		/// <param name="graphics">The graphics object upon which the circle will be drawn.</param>
+		public void Draw(Graphics graphics)
 		{
 			Brush brush = new SolidBrush(Color.Chartreuse);
-			g.FillEllipse(brush, (float)(Px - Radius), (float)(Py - Radius), (float)(2 * Radius), (float)(2 * Radius));
+			graphics.FillEllipse(brush, (float)(Px - Radius), (float)(Py - Radius), (float)(2 * Radius), (float)(2 * Radius));
 		}
 
-		public bool Contains(OrderedPair point)
-		{
-			return (point.X < Px + Radius &&
-					point.X > Px - Radius &&
-					point.Y < Py + Radius &&
-					point.Y > Py - Radius);
-		}
+		//public bool Contains(OrderedPair point)
+		//{
+		//	return (point.X < Px + Radius &&
+		//			point.X > Px - Radius &&
+		//			point.Y < Py + Radius &&
+		//			point.Y > Py - Radius);
+		//}
 
 		/// <summary>
-		/// 
+		/// Returns the circle's data as a string.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>The circle's data.</returns>
 		public override String ToString()
 		{
 			return "{" + base.ToString() + "}\n" +
@@ -313,17 +312,17 @@ namespace Remonduk.Physics
 		}
 
 		/// <summary>
-		/// 
+		/// Returns whether two circles are the same object.
 		/// </summary>
-		/// <param name="obj"></param>
-		/// <returns></returns>
+		/// <param name="obj">The circle to check.</param>
+		/// <returns>Whether the circles are the same object.</returns>
 		public override bool Equals(object obj)
 		{
 			return base.Equals(obj);
 		}
 
 		/// <summary>
-		/// 
+		/// Returns the 
 		/// </summary>
 		/// <returns></returns>
 		public override int GetHashCode()
