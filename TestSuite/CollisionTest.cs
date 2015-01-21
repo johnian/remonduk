@@ -290,59 +290,59 @@ namespace TestSuite
 
 			OrderedPair collisionPoint = new OrderedPair(0, 0);
 			OrderedPair referenceV = new OrderedPair(0, 0);
-			Test.AreEqual(0, circle.TimeTo(collisionPoint, referenceV));
+			Test.AreEqual(0, circle.TimeTill(collisionPoint, referenceV));
 
 			collisionPoint = new OrderedPair(0, 3);
 			referenceV = new OrderedPair(0, 0);
-			Test.AreEqual(true, Double.IsInfinity(circle.TimeTo(collisionPoint, referenceV)));
+			Test.AreEqual(true, Double.IsInfinity(circle.TimeTill(collisionPoint, referenceV)));
 
 			collisionPoint = new OrderedPair(3, 0);
 			referenceV = new OrderedPair(0, 0);
-			Test.AreEqual(true, Double.IsInfinity(circle.TimeTo(collisionPoint, referenceV)));
+			Test.AreEqual(true, Double.IsInfinity(circle.TimeTill(collisionPoint, referenceV)));
 
 			collisionPoint = new OrderedPair(0, 0);
 			referenceV = new OrderedPair(0, 3);
-			Test.AreEqual(0, circle.TimeTo(collisionPoint, referenceV));
+			Test.AreEqual(0, circle.TimeTill(collisionPoint, referenceV));
 
 			collisionPoint = new OrderedPair(0, 0);
 			referenceV = new OrderedPair(3, 0);
-			Test.AreEqual(0, circle.TimeTo(collisionPoint, referenceV));
+			Test.AreEqual(0, circle.TimeTill(collisionPoint, referenceV));
 
 			collisionPoint = new OrderedPair(3, 3);
 			referenceV = new OrderedPair(0, 0);
-			Test.AreEqual(true, Double.IsInfinity(circle.TimeTo(collisionPoint, referenceV)));
+			Test.AreEqual(true, Double.IsInfinity(circle.TimeTill(collisionPoint, referenceV)));
 
 			collisionPoint = new OrderedPair(0, 0);
 			referenceV = new OrderedPair(3, 3);
-			Test.AreEqual(0, circle.TimeTo(collisionPoint, referenceV));
+			Test.AreEqual(0, circle.TimeTill(collisionPoint, referenceV));
 
 			collisionPoint = new OrderedPair(3, 0);
 			referenceV = new OrderedPair(3, 0);
-			Test.AreEqual(1, circle.TimeTo(collisionPoint, referenceV));
+			Test.AreEqual(1, circle.TimeTill(collisionPoint, referenceV));
 
 			collisionPoint = new OrderedPair(0, 3);
 			referenceV = new OrderedPair(0, 3);
-			Test.AreEqual(1, circle.TimeTo(collisionPoint, referenceV));
+			Test.AreEqual(1, circle.TimeTill(collisionPoint, referenceV));
 
 			collisionPoint = new OrderedPair(3, 0);
 			referenceV = new OrderedPair(3, 3);
-			Test.AreEqual(1, circle.TimeTo(collisionPoint, referenceV));
+			Test.AreEqual(1, circle.TimeTill(collisionPoint, referenceV));
 
 			collisionPoint = new OrderedPair(0, 3);
 			referenceV = new OrderedPair(3, 3);
-			Test.AreEqual(1, circle.TimeTo(collisionPoint, referenceV));
+			Test.AreEqual(1, circle.TimeTill(collisionPoint, referenceV));
 
 			collisionPoint = new OrderedPair(3, 3);
 			referenceV = new OrderedPair(0, 3);
-			Test.AreEqual(true, Double.IsInfinity(circle.TimeTo(collisionPoint, referenceV)));
+			Test.AreEqual(true, Double.IsInfinity(circle.TimeTill(collisionPoint, referenceV)));
 
 			collisionPoint = new OrderedPair(3, 3);
 			referenceV = new OrderedPair(3, 0);
-			Test.AreEqual(true, Double.IsInfinity(circle.TimeTo(collisionPoint, referenceV)));
+			Test.AreEqual(true, Double.IsInfinity(circle.TimeTill(collisionPoint, referenceV)));
 
 			collisionPoint = new OrderedPair(3, 3);
 			referenceV = new OrderedPair(3, 3);
-			Test.AreEqual(1, circle.TimeTo(collisionPoint, referenceV));
+			Test.AreEqual(1, circle.TimeTill(collisionPoint, referenceV));
 		}
 
 		[TestMethod]

@@ -3,14 +3,18 @@ using System.Collections.Generic;
 
 namespace Remonduk.Physics
 {
+	/// <summary>
+	/// Collisions is a part of the Circle class.
+	/// Any functionality related to collisions can be found here.
+	/// </summary>
 	public partial class Circle
 	{
 		/// <summary>
-		/// 
+		/// Returns the circle's next velocity if it were to be updated by the time step.
 		/// </summary>
-		/// <param name="time"></param>
-		/// <returns></returns>
-		public OrderedPair NextVelocity(double time)
+		/// <param name="time">The time step by which to update the velocity.</param>
+		/// <returns>The circle's next velocity.</returns>
+		public OrderedPair NextVelocity(double time = PhysicalSystem.TIME_STEP)
 		{
 			double thisVx = Ax * time + Vx;
 			double thisVy = Ay * time + Vy;
@@ -18,22 +22,11 @@ namespace Remonduk.Physics
 		}
 
 		/// <summary>
-		/// 
+		/// Returns the circle's next position if it were to be updated by the time step.
 		/// </summary>
-		/// <returns></returns>
-		public OrderedPair NextPosition()
-		{
-			double potentialX = Ax / 2 + Vx + Px;
-			double potentialY = Ay / 2 + Vy + Py;
-			return new OrderedPair(potentialX, potentialY);
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="time"></param>
-		/// <returns></returns>
-		public OrderedPair NextPosition(double time)
+		/// <param name="time">The time step by which to update the position.</param>
+		/// <returns>The circle's next position.</returns>
+		public OrderedPair NextPosition(double time = PhysicalSystem.TIME_STEP)
 		{
 			double potentialX = Ax * time * time / 2 + Vx * time + Px;
 			double potentialY = Ay * time * time / 2 + Vy * time + Py;
@@ -41,88 +34,33 @@ namespace Remonduk.Physics
 		}
 
 		/// <summary>
-		/// 
+		/// Returns the distance squared from this circle to that.
 		/// </summary>
-		/// <param name="that"></param>
-		/// <returns></returns>
+		/// <param name="that">The circle used as the end point for the calculation.</param>
+		/// <returns>The distance squared from this circle to that.</returns>
 		public double DistanceSquared(Circle that)
 		{
 			return Position.MagnitudeSquared(that.Position);
 		}
 
 		/// <summary>
-		/// Calculates the distance from this circle to that circle.
+		/// Returns the distance from this circle to that.
 		/// </summary>
-		/// <param name="that">The other circle to calculate distance to.</param>
-		/// <returns>The distance to the other circle.</returns>
+		/// <param name="that">The circle used as the end point for the calculation.</param>
+		/// <returns>The distance from this circle to that.</returns>
 		public double Distance(Circle that)
 		{
 			return Position.Magnitude(that.Position);
 		}
 
 		/// <summary>
-		/// 
+		/// Returns the time till the center of this circle reaches the collision point.
 		/// </summary>
-		/// <param name="that"></param>
-		/// <param name="time"></param>
-		/// <returns></returns>
-		public OrderedPair ReferenceVelocity(Circle that, double time)
-		{
-			OrderedPair thisV = NextVelocity(time);
-			OrderedPair thatV = that.NextVelocity(time);
-			double referenceVx = thisV.X - thatV.X;
-			double referenceVy = thisV.Y - thatV.Y;
-			return new OrderedPair(referenceVx, referenceVy);
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="that"></param>
-		/// <param name="referenceV"></param>
-		/// <returns></returns>
-		public OrderedPair ClosestPoint(Circle that, OrderedPair referenceV)
-		{
-			double thisConstant = referenceV.Y * Px - referenceV.X * Py;
-			double thatConstant = referenceV.X * that.Px + referenceV.Y * that.Py;
-			double determinant = referenceV.X * referenceV.X + referenceV.Y * referenceV.Y;
-
-			if (determinant == 0)
-			{
-				return new OrderedPair(Px, Py);
-			}
-			double intersectionX = (thisConstant * referenceV.Y + thatConstant * referenceV.X) / determinant;
-			double intersectionY = (thatConstant * referenceV.Y - thisConstant * referenceV.X) / determinant;
-			return new OrderedPair(intersectionX, intersectionY);
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="closest"></param>
-		/// <param name="referenceV"></param>
-		/// <param name="that"></param>
-		/// <returns></returns>
-		public OrderedPair CollisionPoint(OrderedPair closest, OrderedPair referenceV, Circle that)
-		{
-			//double distanceFromThat = OrderedPair.Magnitude(point.X - that.Px, point.Y - that.Py);
-
-			double distanceFromThat = closest.Magnitude(that.Position);
-			double radiiSum = that.Radius + Radius;
-			double distanceFromCollision = Math.Sqrt(radiiSum * radiiSum - distanceFromThat * distanceFromThat);
-			double referenceVelocity = referenceV.Magnitude();
-			double collisionX = closest.X - referenceV.X * distanceFromCollision / referenceVelocity;
-			double collisionY = closest.Y - referenceV.Y * distanceFromCollision / referenceVelocity;
-			return new OrderedPair(collisionX, collisionY);
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="collisionPoint"></param>
-		/// <param name="referenceV"></param>
-		/// <returns></returns>
-		public double TimeTo(OrderedPair collisionPoint, OrderedPair referenceV)
+		/// <param name="collisionPoint">The center point of this circle when it first collides with that circle.</param>
+		/// <param name="referenceV">The reference velocity of this circle.</param>
+		/// <returns>The time till the center of this circle reaches the collision point.
+		/// Returns positive infinity if this circle cannot reach the collision point.</returns>
+		public double TimeTill(OrderedPair collisionPoint, OrderedPair referenceV)
 		{
 			OrderedPair distance = new OrderedPair(collisionPoint.X - Px, collisionPoint.Y - Py);
 			if (distance.X == 0 && distance.Y == 0)
@@ -144,19 +82,76 @@ namespace Remonduk.Physics
 		}
 
 		/// <summary>
-		/// 
+		/// Returns the center point of this circle when it first collides with that circle.
 		/// </summary>
-		/// <param name="closest"></param>
-		/// <param name="referenceV"></param>
-		/// <param name="that"></param>
-		/// <param name="time"></param>
-		/// <returns></returns>
+		/// <param name="closest">The closest point from that circle to this circle's movement vector.</param>
+		/// <param name="referenceV">The reference velocity of this circle.</param>
+		/// <param name="that">The circle that is considered motionless in reference to this.</param>
+		/// <returns>The center point of this circle when it first collides with that circle.</returns>
+		public OrderedPair CollisionPoint(OrderedPair closest, OrderedPair referenceV, Circle that)
+		{
+			//double distanceFromThat = OrderedPair.Magnitude(point.X - that.Px, point.Y - that.Py);
+
+			double distanceFromThat = closest.Magnitude(that.Position);
+			double radiiSum = that.Radius + Radius;
+			double distanceFromCollision = Math.Sqrt(radiiSum * radiiSum - distanceFromThat * distanceFromThat);
+			double referenceVelocity = referenceV.Magnitude();
+			double collisionX = closest.X - referenceV.X * distanceFromCollision / referenceVelocity;
+			double collisionY = closest.Y - referenceV.Y * distanceFromCollision / referenceVelocity;
+			return new OrderedPair(collisionX, collisionY);
+		}
+
+		/// <summary>
+		/// Returns the time this circle takes to collide with that circle bounded by a time step.
+		/// </summary>
+		/// <param name="closest">The intersection of this circle and that circle's movement vectors.</param>
+		/// <param name="referenceV">The reference velocity of this circle.</param>
+		/// <param name="that">The circle that this circle may be colliding with.</param>
+		/// <param name="time">The time frame in which to check for a collision.</param>
+		/// <returns>The time of collision between this and that.
+		/// Returns Positive infinity if they do not collide in the time frame.</returns>
 		public double CollisionTime(OrderedPair closest, OrderedPair referenceV,
 			Circle that, double time)
 		{
 			OrderedPair collisionPoint = CollisionPoint(closest, referenceV, that);
-			double t = TimeTo(collisionPoint, referenceV);
+			double t = TimeTill(collisionPoint, referenceV);
 			return (t >= 0 && t <= time) ? t : Double.PositiveInfinity;
+		}
+
+		/// <summary>
+		/// Returns the closest point from that circle to this circle's movement vector.
+		/// </summary>
+		/// <param name="that">The circle that is considered motionless in reference to this.</param>
+		/// <param name="referenceV">The reference velocity of this circle.</param>
+		/// <returns>The closest point from that circle to this circle's movement vector.</returns>
+		public OrderedPair ClosestPoint(Circle that, OrderedPair referenceV)
+		{
+			double thisConstant = referenceV.Y * Px - referenceV.X * Py;
+			double thatConstant = referenceV.X * that.Px + referenceV.Y * that.Py;
+			double determinant = referenceV.X * referenceV.X + referenceV.Y * referenceV.Y;
+
+			if (determinant == 0)
+			{
+				return new OrderedPair(Px, Py);
+			}
+			double intersectionX = (thisConstant * referenceV.Y + thatConstant * referenceV.X) / determinant;
+			double intersectionY = (thatConstant * referenceV.Y - thisConstant * referenceV.X) / determinant;
+			return new OrderedPair(intersectionX, intersectionY);
+		}
+
+		/// <summary>
+		/// Returns a reference velocity using this circle as a frame of reference.
+		/// </summary>
+		/// <param name="that">The circle that is considered motionless in reference to this.</param>
+		/// <param name="time">The time step by which to update the two circles.</param>
+		/// <returns></returns>
+		public OrderedPair ReferenceVelocity(Circle that, double time)
+		{
+			OrderedPair thisV = NextVelocity(time);
+			OrderedPair thatV = that.NextVelocity(time);
+			double referenceVx = thisV.X - thatV.X;
+			double referenceVy = thisV.Y - thatV.Y;
+			return new OrderedPair(referenceVx, referenceVy);
 		}
 
 		/// <summary>
@@ -228,37 +223,11 @@ namespace Remonduk.Physics
 			foreach (Circle that in circles)
 			{
 				if (that == this) continue;
-				//double totalV = (Velocity.Magnitude() * (Mass - that.Mass) + 2 * that.Velocity.Magnitude() * that.Mass) / (Mass + that.Mass);
 				double totalV = that.Mass * that.Velocity.Magnitude() / Mass;
 
 				double angle = that.Position.Angle(Position);
-				//double orthogonal = angle + Math.PI / 2;
-				//double delta = Velocity.Angle() - orthogonal;
-				//double reflection = orthogonal + delta;
-
-				//reflection = 2 * angle + Math.PI - Velocity.Angle();
-				//Out.WriteLine("");
-				//Out.WriteLine("angle: " + angle);
-				//Out.WriteLine("orthogonal: " + orthogonal);
-				//Out.WriteLine("delta: " + delta);
-				//Out.WriteLine("reflection: " + reflection);
-				//Out.WriteLine("total V: " + totalV);
-				//Out.WriteLine("that velocity: " + that.Velocity.Magnitude());
-
 				totalVx += totalV * Math.Cos(angle);
 				totalVy += totalV * Math.Sin(angle);
-
-
-				//totalVx += (thisV.X * (Mass - that.Mass) + 2 * thatV.X * that.Mass) / (Mass + that.Mass);
-				//totalVy += (thisV.Y * (Mass - that.Mass) + 2 * thatV.Y * that.Mass) / (Mass + that.Mass);
-
-				//Out.WriteLine("momentum = " + Math.Sqrt((totalVx * totalVx + totalVy * totalVy)));
-				//Out.WriteLine("" + totalVx + ", " + totalVy);
-
-
-				//totalVx += (Vx * (Mass - that.Mass) + 2 * that.Vx * that.Mass) / (Mass + that.Mass);
-				//totalVy += (Vy * (Mass - that.Mass) + 2 * that.Vy * that.Mass) / (Mass + that.Mass);
-				// modify for elasticity
 				// use average elasticity between two Colliding objects for simplicity
 				// try to derive a formula for it
 			}
