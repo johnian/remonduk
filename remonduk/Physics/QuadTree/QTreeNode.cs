@@ -13,11 +13,11 @@ namespace Remonduk.Physics.QuadTree
 		/// <summary>
 		/// If this node has been split.  Turns some single rectangle into 4.
 		/// </summary>
-		public bool split;
+		public bool Split;
 		/// <summary>
 		/// This nodes position and dimensions.
 		/// </summary>
-		public OrderedPair pos, dim;
+		public OrderedPair Pos, Dim;
 		/// <summary>
 		/// The list of circles in this node.
 		/// </summary>
@@ -25,12 +25,22 @@ namespace Remonduk.Physics.QuadTree
 		/// <summary>
 		/// The QuadTree this node belongs to.
 		/// </summary>
-		QTree parent;
-		public String name;
+		QTree Parent;
 
+        /// <summary>
+        /// This quad tree's name - Head.NorthWest.SouthEast
+        /// </summary>
+		public String Name;
+
+        /// <summary>
+        /// The maximum count of circles this node can have before splitting.
+        /// </summary>
 		public int MaxCount;
 
-        int level;
+        /// <summary>
+        /// The level of this node - how many splits it represents.
+        /// </summary>
+        int Level;
 
 		/// <summary>
 		/// QTreeNode Constructor.
@@ -38,39 +48,40 @@ namespace Remonduk.Physics.QuadTree
 		/// <param name="pos">The position for this node (top left)</param>
 		/// <param name="dim">The dimensions for this node (width, height)</param>
 		/// <param name="parent">The Quad Tree this node belongs to.</param>
-		/// <param name="name"></param>
+		/// <param name="name">The name for this quad tree.</param>
+        /// <param name="level">The level of this quad tree.</param>
 		public QTreeNode(OrderedPair pos, OrderedPair dim, QTree parent, String name, int level)
 		{
-			this.pos = pos;
-			this.dim = dim;
-			this.parent = parent;
-			this.split = false;
+			Pos = pos;
+			Dim = dim;
+			Parent = parent;
+			Split = false;
 			Circles = new HashSet<Circle>();
 			this.MaxCount = parent.MaxCount;
-			this.name = name;
-            this.level = level;
+			Name = name;
+            Level = level;
 		}
 
 		/// <summary>
 		/// Splits this node into 4 quadrants.  Called when the number of circles is greater than limit.
 		/// </summary>
-		public void Split()
+		public void SplitNode()
 		{
-			if (!split)
+			if (!Split)
 			{
 				//Can probably do this a little cleaner
-				OrderedPair NewDim = new OrderedPair(dim.X / 2.0, dim.Y / 2.0);
+				OrderedPair NewDim = new OrderedPair(Dim.X / 2.0, Dim.Y / 2.0);
 
-				NorthWest = new QTreeNode(pos, NewDim, parent, name + ".NorthWest", level + 1);
-				parent.Nodes.Add(NorthWest);
-				NorthEast = new QTreeNode(new OrderedPair(pos.X + NewDim.X, pos.Y), NewDim, parent, name + ".NorthEast", level + 1);
-				parent.Nodes.Add(NorthEast);
-				SouthWest = new QTreeNode(new OrderedPair(pos.X, pos.Y + NewDim.Y), NewDim, parent, name + ".SouthWest", level + 1);
-				parent.Nodes.Add(SouthWest);
-				SouthEast = new QTreeNode(new OrderedPair(pos.X + NewDim.X, pos.Y + NewDim.Y), NewDim, parent, name + ".SouthEast", level + 1);
-				parent.Nodes.Add(SouthEast);
+				NorthWest = new QTreeNode(Pos, NewDim, Parent, Name + ".NorthWest", Level + 1);
+				Parent.Nodes.Add(NorthWest);
+				NorthEast = new QTreeNode(new OrderedPair(Pos.X + NewDim.X, Pos.Y), NewDim, Parent, Name + ".NorthEast", Level + 1);
+				Parent.Nodes.Add(NorthEast);
+				SouthWest = new QTreeNode(new OrderedPair(Pos.X, Pos.Y + NewDim.Y), NewDim, Parent, Name + ".SouthWest", Level + 1);
+				Parent.Nodes.Add(SouthWest);
+				SouthEast = new QTreeNode(new OrderedPair(Pos.X + NewDim.X, Pos.Y + NewDim.Y), NewDim, Parent, Name + ".SouthEast", Level + 1);
+				Parent.Nodes.Add(SouthEast);
 
-				split = true;
+				Split = true;
 
 				foreach (Circle c in Circles)
 				{
@@ -79,14 +90,17 @@ namespace Remonduk.Physics.QuadTree
 			}
 		}
 
+        /// <summary>
+        /// Returns this node to an unsplit state.  Removes all child nodes.
+        /// </summary>
 		public void UnSplit()
 		{
 			//Out.WriteLine("UNSPLITTING");
-			split = false;
-			parent.Nodes.Remove(NorthWest);
-			parent.Nodes.Remove(NorthEast);
-			parent.Nodes.Remove(SouthWest);
-			parent.Nodes.Remove(SouthEast);
+			Split = false;
+			Parent.Nodes.Remove(NorthWest);
+			Parent.Nodes.Remove(NorthEast);
+			Parent.Nodes.Remove(SouthWest);
+			Parent.Nodes.Remove(SouthEast);
 		}
 
 		/// <summary>
@@ -97,7 +111,7 @@ namespace Remonduk.Physics.QuadTree
 		public List<QTreeNode> Insert(Circle c)
 		{
 			List<QTreeNode> nodes = new List<QTreeNode>();
-			if (split)
+			if (Split)
 			{
 				nodes.AddRange(NorthWest.Insert(c));
 				nodes.AddRange(NorthEast.Insert(c));
@@ -108,9 +122,9 @@ namespace Remonduk.Physics.QuadTree
 			{
 				if (Contains(c))
 				{
-					if (Circles.Count + 1 >= MaxCount && level < parent.MaxLevel)
+					if (Circles.Count + 1 >= MaxCount && Level < Parent.MaxLevel)
 					{
-						Split();
+						SplitNode();
 						////
 						// this causes an infinite loop when inserting circles at the same point
 						////
@@ -127,14 +141,19 @@ namespace Remonduk.Physics.QuadTree
 			return nodes;
 		}
 
+        /// <summary>
+        /// Removes a circle from this node.
+        /// </summary>
+        /// <param name="c">The circle to remove</param>
+        /// <returns>A list of nodes this circle was removed from.</returns>
 		public List<QTreeNode> Remove(Circle c)
 		{
 			List<QTreeNode> nodes = new List<QTreeNode>();
-			if (split)
+			if (Split)
 			{
 				if (HasA(c))
 				{
-					if (Circles.Count - 1 < MaxCount && split)
+					if (Circles.Count - 1 < MaxCount && Split)
 					{
 						Circles.Remove(c);
 						UnSplit();
@@ -165,21 +184,21 @@ namespace Remonduk.Physics.QuadTree
 		/// We can make sure this never actually happens but probably would be safe to have this.  Unless we decide that if it ever does happen
 		/// something is horribly wrong.
 		/// </summary>
-		/// <param name="pos"></param>
-		/// <param name="dim"></param>
+		/// <param name="pos">The new position.</param>
+		/// <param name="dim">The new dimensions.</param>
 		public void Resize(OrderedPair pos, OrderedPair dim)
 		{
-
+            //Pretty sure we decided we weren't going to do this.
 		}
 
 		/// <summary>
 		/// If this node has the given circle in it's list of circles.
 		/// </summary>
 		/// <param name="c">The circle to check.</param>
-		/// <returns></returns>
+		/// <returns>True if this circle is contained in this node.  False if not.</returns>
 		public bool HasA(Circle c)
 		{
-			if (split)
+			if (Split)
 			{
 				return (NorthWest.HasA(c) || NorthEast.HasA(c) ||
 						SouthWest.HasA(c) || SouthEast.HasA(c));
@@ -194,10 +213,10 @@ namespace Remonduk.Physics.QuadTree
 		/// <returns></returns>
 		public bool Contains(Circle c)
 		{
-			return (pos.X <= c.Px + c.Radius &&
-					pos.Y <= c.Py + c.Radius &&
-					pos.X + dim.X >= c.Px - c.Radius &&
-					pos.Y + dim.Y >= c.Py - c.Radius);
+			return (Pos.X <= c.Px + c.Radius &&
+					Pos.Y <= c.Py + c.Radius &&
+					Pos.X + Dim.X >= c.Px - c.Radius &&
+					Pos.Y + Dim.Y >= c.Py - c.Radius);
 		}
 
 		/// <summary>
@@ -208,7 +227,7 @@ namespace Remonduk.Physics.QuadTree
 		public List<QTreeNode> GetAllNodes(Circle c)
 		{
 			List<QTreeNode> nodes = new List<QTreeNode>();
-			if (split)
+			if (Split)
 			{
 				if (NorthWest.HasA(c))
 				{
@@ -237,9 +256,13 @@ namespace Remonduk.Physics.QuadTree
 			return nodes;
 		}
 
+        /// <summary>
+        /// Draws this quad tree.
+        /// </summary>
+        /// <param name="g">The graphics object to draw this quad tree on.</param>
 		public void Draw(Graphics g)
 		{
-			if (split)
+			if (Split)
 			{
 				NorthWest.Draw(g);
 				NorthEast.Draw(g);
@@ -249,7 +272,7 @@ namespace Remonduk.Physics.QuadTree
 			else
 			{
 				Pen pen = new Pen(Color.Black);
-				g.DrawRectangle(pen, (float)pos.X, (float)pos.Y, (float)dim.X, (float)dim.Y);
+				g.DrawRectangle(pen, (float)Pos.X, (float)Pos.Y, (float)Dim.X, (float)Dim.Y);
 			}
 		}
 
@@ -257,7 +280,7 @@ namespace Remonduk.Physics.QuadTree
 		{
 			List<Circle> possible = new List<Circle>();
 
-			if (split)
+			if (Split)
 			{
 				possible.AddRange(NorthWest.Possible(start, end));
 				possible.AddRange(NorthEast.Possible(start, end));
@@ -280,9 +303,9 @@ namespace Remonduk.Physics.QuadTree
 					MinY = end.Y;
 					MaxY = start.Y;
 				}
-				if (MinX <= pos.X + dim.X &&
-					MinY <= pos.Y + dim.Y &&
-					MaxX >= pos.X && MaxY >= pos.Y)
+				if (MinX <= Pos.X + Dim.X &&
+					MinY <= Pos.Y + Dim.Y &&
+					MaxX >= Pos.X && MaxY >= Pos.Y)
 				{
 					possible.AddRange(Circles);
 				}
@@ -292,7 +315,7 @@ namespace Remonduk.Physics.QuadTree
 
 		public override String ToString()
 		{
-			return name;
+			return Name;
 		}
 	}
 }
