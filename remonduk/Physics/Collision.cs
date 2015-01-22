@@ -10,30 +10,6 @@ namespace Remonduk.Physics
 	public partial class Circle
 	{
 		/// <summary>
-		/// Returns the circle's next velocity if it were to be updated by the time step.
-		/// </summary>
-		/// <param name="time">The time step by which to update the velocity.</param>
-		/// <returns>The circle's next velocity.</returns>
-		public OrderedPair NextVelocity(double time = PhysicalSystem.TIME_STEP)
-		{
-			double thisVx = Ax * time + Vx;
-			double thisVy = Ay * time + Vy;
-			return new OrderedPair(thisVx, thisVy);
-		}
-
-		/// <summary>
-		/// Returns the circle's next position if it were to be updated by the time step.
-		/// </summary>
-		/// <param name="time">The time step by which to update the position.</param>
-		/// <returns>The circle's next position.</returns>
-		public OrderedPair NextPosition(double time = PhysicalSystem.TIME_STEP)
-		{
-			double potentialX = Ax * time * time / 2 + Vx * time + Px;
-			double potentialY = Ay * time * time / 2 + Vy * time + Py;
-			return new OrderedPair(potentialX, potentialY);
-		}
-
-		/// <summary>
 		/// Returns the distance squared from this circle to that.
 		/// </summary>
 		/// <param name="that">The circle used as the end point for the calculation.</param>
@@ -144,7 +120,7 @@ namespace Remonduk.Physics
 		/// </summary>
 		/// <param name="that">The circle that is considered motionless in reference to this.</param>
 		/// <param name="time">The time step by which to update the two circles.</param>
-		/// <returns></returns>
+		/// <returns>A reference velocity using this circle as a frame of reference.</returns>
 		public OrderedPair ReferenceVelocity(Circle that, double time)
 		{
 			OrderedPair thisV = NextVelocity(time);
@@ -155,11 +131,11 @@ namespace Remonduk.Physics
 		}
 
 		/// <summary>
-		/// 
+		/// Returns the time when this circle crosses paths with that circle.
 		/// </summary>
-		/// <param name="that"></param>
-		/// <param name="time"></param>
-		/// <returns></returns>
+		/// <param name="that">The circle that this circle checks for crossing paths.</param>
+		/// <param name="time">The time frame to check for crossing paths.</param>
+		/// <returns>The time when this circle crosses paths with that circle.</returns>
 		public double Crossing(Circle that, double time)
 		{
 			OrderedPair referenceV = ReferenceVelocity(that, time);
@@ -176,11 +152,11 @@ namespace Remonduk.Physics
 		}
 
 		/// <summary>
-		/// 
+		/// Returns the time when this circle and that circle collide.
 		/// </summary>
-		/// <param name="that"></param>
-		/// <param name="time"></param>
-		/// <returns></returns>
+		/// <param name="that">The circle that this circle is checking for a collision.</param>
+		/// <param name="time">The time frame for which to check a collision.</param>
+		/// <returns>The time when this circle and that circle collide.</returns>
 		public double Colliding(Circle that, double time)
 		{
 			if (that == this) return Double.PositiveInfinity;
@@ -200,10 +176,10 @@ namespace Remonduk.Physics
 		}
 
 		/// <summary>
-		/// 
+		/// Returns whether two circles are overlapping or touching.
 		/// </summary>
-		/// <param name="that"></param>
-		/// <returns></returns>
+		/// <param name="that">The circle to check if this is overlapping or touching.</param>
+		/// <returns>Whether two circles are overlapping or touching.</returns>
 		public bool Colliding(Circle that)
 		{
 			if (that == this) return false;
@@ -211,10 +187,10 @@ namespace Remonduk.Physics
 		}
 
 		/// <summary>
-		/// 
+		/// Returns the resultant velocity of this circle after a collision.
 		/// </summary>
-		/// <param name="circles"></param>
-		/// <returns></returns>
+		/// <param name="circles">The list of circles that this circle is colliding with.</param>
+		/// <returns>The resultant velocity of this circle after a collision.</returns>
 		public OrderedPair CollideWith(List<Circle> circles)
 		{
 			double totalVx = 0;

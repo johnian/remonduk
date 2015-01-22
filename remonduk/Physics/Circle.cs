@@ -247,12 +247,37 @@ namespace Remonduk.Physics
 		}
 
 		/// <summary>
+		/// Returns the circle's next velocity if it were to be updated by the time step.
+		/// </summary>
+		/// <param name="time">The time step by which to update the velocity.</param>
+		/// <returns>The circle's next velocity.</returns>
+		public OrderedPair NextVelocity(double time = PhysicalSystem.TIME_STEP)
+		{
+			double nextX = Ax * time + Vx;
+			double nextY = Ay * time + Vy;
+			return new OrderedPair(nextX, nextY);
+		}
+
+		/// <summary>
 		/// Updates the circle's velocity by its acceleration based on the time step.
 		/// </summary>
 		/// <param name="time">The time step by which the velocity should update.</param>
 		public void UpdateVelocity(double time)
 		{
-			SetVelocity(Ax * time + Vx, Ay * time + Vy);
+			OrderedPair nextVelocity = NextVelocity(time);
+			SetVelocity(nextVelocity.X, nextVelocity.Y);
+		}
+
+		/// <summary>
+		/// Returns the circle's next position if it were to be updated by the time step.
+		/// </summary>
+		/// <param name="time">The time step by which to update the position.</param>
+		/// <returns>The circle's next position.</returns>
+		public OrderedPair NextPosition(double time = PhysicalSystem.TIME_STEP)
+		{
+			double nextX = (Ax * time / 2 + Vx) * time + Px;
+			double nextY = (Ay * time / 2 + Vy) * time + Py;
+			return new OrderedPair(nextX, nextY);
 		}
 
 		/// <summary>
@@ -262,8 +287,8 @@ namespace Remonduk.Physics
 		/// <param name="time">The time step by which the position should update.</param>
 		public void UpdatePosition(double time)
 		{
-			SetPosition((Ax * time / 2 + Vx) * time + Px,
-				(Ay * time / 2 + Vy) * time + Py);
+			OrderedPair nextPosition = NextPosition(time);
+			SetPosition(nextPosition.X, nextPosition.Y);
 		}
 
 		/// <summary>
@@ -322,9 +347,9 @@ namespace Remonduk.Physics
 		}
 
 		/// <summary>
-		/// Returns the 
+		/// Returns the base hash code of the object.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>The base hash code of the object.</returns>
 		public override int GetHashCode()
 		{
 			return base.GetHashCode();
