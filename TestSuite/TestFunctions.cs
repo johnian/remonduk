@@ -50,9 +50,9 @@ namespace TestSuite
 			Assert.AreEqual(expected, actual);
 		}
 
-		public static double round(double value)
-		{
-			return Math.Round(value, Constants.PRECISION);
-		}
+		//public static double round(double value)
+		//{
+		//	return Math.Round(value, Constants.PRECISION);
+		//}
 	}
 }

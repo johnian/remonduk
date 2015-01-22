@@ -3,7 +3,7 @@ using System;
 namespace Remonduk.Physics
 {
 	/// <summary>
-	/// Constants to be used by the PhysicalSystem.  Eventually to be loaded from a file.
+	/// Constants for the physical system.
 	/// </summary>
 	public class Constants
 	{
@@ -13,7 +13,9 @@ namespace Remonduk.Physics
 		/// </summary>
 		private static Constants instance;
 
-		public const int PRECISION = 8;
+		/// <summary>
+		/// The maximum acceptable error value for calculations.
+		/// </summary>
 		public const double EPSILON = .00000001;
 
 		/// <summary>
@@ -47,16 +49,16 @@ namespace Remonduk.Physics
 		public bool STATIC_RADIUS = false;
 
 		/// <summary>
-		/// Default constructor.
+		/// Private constructor to prevent manual instantiation.
 		/// </summary>
-		public Constants()
-		{ }
+		private Constants() { }
 
 		/// <summary>
 		/// Returns the singleton instance of constants or creates one if this is the first call.
 		/// </summary>
 		public static Constants Instance
 		{
+			// make this read from a file
 			get
 			{
 				if (instance == null)

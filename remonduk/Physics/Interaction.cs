@@ -3,27 +3,34 @@ using System.Drawing;
 namespace Remonduk.Physics
 {
 	/// <summary>
-	/// An interaction represents an ongoing (or momentary?) connection between two circles (a tether).
+	/// Interaction is how a force affects two circles.
 	/// </summary>
 	public class Interaction
 	{
 		/// <summary>
-		/// The first circle involved in this interaction.
+		/// The first circle involved in the interaction.
 		/// </summary>
 		public Circle First;
 		/// <summary>
-		/// The second circle involved in this interaction.
+		/// The second circle involved in the interaction.
 		/// </summary>
 		public Circle Second;
 		/// <summary>
-		/// The force exerted in this interaction.
+		/// The force acting between the two circles.
 		/// </summary>
 		public Force ActingForce;
 		/// <summary>
-		/// A scalar to modify the force for this interaction.
+		/// The scalar to modify the force on the first circle.
 		/// </summary>
 		public double Scalar;
 
+		/// <summary>
+		/// Constructor for creating an interaction.
+		/// </summary>
+		/// <param name="first">The first circle in the interaction.</param>
+		/// <param name="second">The second circle in the interaction.</param>
+		/// <param name="force">The force acting between the two circles.</param>
+		/// <param name="scalar">The scalar modifying the force on the first circle.</param>
 		public Interaction(Circle first, Circle second, Force force, double scalar = 1)
 		{
 			First = first;
@@ -32,6 +39,11 @@ namespace Remonduk.Physics
 			Scalar = scalar;
 		}
 
+		/// <summary>
+		/// Returns the other circle in the interaction not specified.
+		/// </summary>
+		/// <param name="circle">The circle to not return.</param>
+		/// <returns>The other circle in the interaction not specified.</returns>
 		public Circle GetOther(Circle circle)
 		{
 			if (circle == First)
@@ -42,9 +54,9 @@ namespace Remonduk.Physics
 		}
 
 		/// <summary>
-		/// Calculates the force exterted on the first circle.
+		/// Returns the values of the force on the first circle modified by the scalar.
 		/// </summary>
-		/// <returns>The force on the first circle.</returns>
+		/// <returns>The values of the fortce on the first circle.</returns>
 		public OrderedPair ForceOnFirst()
 		{
 			OrderedPair f = ActingForce.Calculate(First, Second);
@@ -52,25 +64,25 @@ namespace Remonduk.Physics
 		}
 
 		/// <summary>
-		/// Calculates the force exerted on the second circle.
+		/// Returns the values of the force on the second circle.
 		/// </summary>
-		/// <returns>The force on the second circle.</returns>
+		/// <returns>The values of the force on the second circle.</returns>
 		public OrderedPair ForceOnSecond()
 		{
 			return ActingForce.Calculate(Second, First);
 		}
 
 		/// <summary>
-		/// Draws this interaction.
+		/// Draws the interaction.
 		/// </summary>
-		/// <param name="g">The graphics object to draw this interaction on.</param>
-		/// <param name="color">The color to draw this interaction.</param>
-		public void Draw(Graphics g, Color color)
+		/// <param name="graphics">The graphics object to draw this interaction on.</param>
+		/// <param name="color">The color to use for drawing the interaction.</param>
+		public void Draw(Graphics graphics, Color color)
 		{
 			Pen pen = new Pen(color);
 			Point p1 = new Point((int)First.Px, (int)First.Py);
 			Point p2 = new Point((int)Second.Px, (int)Second.Py);
-			g.DrawLine(pen, p1, p2);
+			graphics.DrawLine(pen, p1, p2);
 		}
 	}
 }

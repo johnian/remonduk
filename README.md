@@ -16,13 +16,14 @@ Floid
 
 for juliono:
 
-1] make collision detection work in pairs
+1] optimize collision detection by removing redundant checks
 2] refactor tether to be spring
-3] comments / @author, etc.
-4] default forces?
-5] additional quad tree tests
-6] anchors
-7] randomize tests where possible
+3] refactor gravity to be electromagnetic?? need a better name
+4] comments / @author, etc.
+5] default forces?
+6] additional quad tree tests
+7] anchors
+8] randomize tests where possible
 
 implement a max velocity for the world
 - utilize this in quad tree ->

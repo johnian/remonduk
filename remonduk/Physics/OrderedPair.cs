@@ -107,8 +107,10 @@ namespace Remonduk.Physics
 		/// <returns>tan(y, x) from 0 to 2PI</returns>
 		public static double Angle(double x, double y)
 		{
-			if (Math.Round(y, Constants.PRECISION) == 0 &&
-				Math.Round(x, Constants.PRECISION) == 0)
+			if (Math.Abs(x) <= Constants.EPSILON &&
+				Math.Abs(y) <= Constants.EPSILON)
+			//if (Math.Round(y, Constants.PRECISION) == 0 &&
+			//	Math.Round(x, Constants.PRECISION) == 0)
 			{
 				return 0;
 			}
