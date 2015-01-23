@@ -19,7 +19,7 @@ for juliono:
 1] optimize collision detection by removing redundant checks
 2] refactor tether to be spring
 3] refactor gravity to be electromagnetic?? need a better name
-4] comments / @author, etc.
+4] comments
 5] default forces?
 6] additional quad tree tests
 7] anchors
@@ -47,6 +47,11 @@ now explore the collisions for that circle
 repeat
 
 flag for whether the stage wraps around or has hard boundaries
+
+circle should have a friction constant alongside elasticity
+elasticity redfuces the total magnitude, so the angle is unaffected
+friction determines the angle of impact,
+and then reduces the x and y values separately according to the angle of impact
 
 <div id="1"></div>
 # 1 basic graphics and i/o {

@@ -3,7 +3,7 @@ using System.Drawing;
 namespace Remonduk.Physics
 {
 	/// <summary>
-	/// Interaction is how a force affects two circles.
+	/// Interaction is the pairing of two circles and the force acting between them.
 	/// </summary>
 	public class Interaction
 	{

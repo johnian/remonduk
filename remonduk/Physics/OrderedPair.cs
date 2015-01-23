@@ -8,29 +8,29 @@ namespace Remonduk.Physics
 	public class OrderedPair
 	{
 		/// <summary>
-		/// 
+		/// The x component of the ordered pair.
 		/// </summary>
 		public double X;
 		/// <summary>
-		/// 
+		/// The y component of the ordered pair.
 		/// </summary>
 		public double Y;
 
 		/// <summary>
-		/// 
+		/// Constructor that takes x and y values.
 		/// </summary>
-		/// <param name="x"></param>
-		/// <param name="y"></param>
+		/// <param name="x">The x component of the ordered pair.</param>
+		/// <param name="y">The y component of the ordered pair.</param>
 		public OrderedPair(double x = 0, double y = 0)
 		{
 			SetXY(x, y);
 		}
 
 		/// <summary>
-		/// 
+		/// Sets both the x and y values of the ordered pair.
 		/// </summary>
-		/// <param name="x"></param>
-		/// <param name="y"></param>
+		/// <param name="x">The x component of the ordered pair.</param>
+		/// <param name="y">The y component of the ordered pair.</param>
 		public void SetXY(double x, double y)
 		{
 			X = x;
@@ -38,9 +38,9 @@ namespace Remonduk.Physics
 		}
 
 		/// <summary>
-		/// 
+		/// Adjusts the x and y components of the ordered pair according to the angle.
 		/// </summary>
-		/// <param name="angle"></param>
+		/// <param name="angle">The angle to use for readjusting the x and y components.</param>
 		public void SetXY(double angle)
 		{
 			double magnitude = Magnitude();
@@ -49,7 +49,7 @@ namespace Remonduk.Physics
 		}
 
 		/// <summary>
-		/// 
+		/// Returns the magnitude of the x and y values but squared.
 		/// </summary>
 		/// <param name="x"></param>
 		/// <param name="y"></param>
