@@ -24,43 +24,53 @@ for juliono:
 6] additional quad tree tests
 7] anchors
 8] randomize tests where possible
+9] multiple quad trees, remove 'exists' from circle
 
 implement a max velocity for the world
-- utilize this in quad tree ->
-draw a box that's 2x the max velocity in any direction
-- or take the current velocity
-- also, any circle that spans multiple nodes should be kept in parent node
-- also, what happens if multiple circles are added at the same exact spot
-- a number great than max count
+- utilize this in quad tree
 
 store qtrees as an array
-
-make collision detection and quad tree take into account whether a circle "exists"
-
-do collisions in pairs -
-make a list of circles ->
-take the first circle
-- check that for all of its collisions
-- find the smallest of those
-- remove this circle from the list
-now explore the collisions for that circle
-repeat
 
 flag for whether the stage wraps around or has hard boundaries
 
 circle should have a friction constant alongside elasticity
-elasticity redfuces the total magnitude, so the angle is unaffected
+elasticity reduces the total magnitude, so the angle is unaffected
 friction determines the angle of impact,
 and then reduces the x and y values separately according to the angle of impact
+
+should be able to have multiple quad trees
+	- that way we can have only certain things interact with each other
+		- bullets only collide with bullets
+should only have circles contained in smallest containing node
+	- if something falls on a boundary, it'll be contained in the parent node
+	
+when placing circles in the quad tree, place them with a modified size based on max velocity
+max velocity - 128 -> every frame can move 128, + radius
+	-> .25 seconds to travel distance of screen
+	
+figure out a decent max velocity
+
+how to set up different quad trees
+dictionary - give it a name:: "Bullets"
+-- if we're worried about many layers, find a better way - use arrays
+
+does it make sense to have a game that has certain things that don't collide with each other
+things that are purely visual -- weather overlays
+
+different depths / backgrounds
+
+can our game handle things that stick to walls
+negative friction value? if you assume -- cause circle to lose all kinetic energy
+-.5 plus +.5 cancel to 0 to kill all kinetic energy
+-- if negative, cap at value of 0
+
+figure out how inelastic collisions typically work
 
 <div id="1"></div>
 # 1 basic graphics and i/o {
 	implementation {
 		draw circles {
 			group circles {
-				//chasing "leaders"
-				//dragging "followers"
-				//group motion
 				tethering
 			}
 		}

@@ -10,26 +10,15 @@ namespace Remonduk.Physics
 		/// <summary>
 		/// The function used to calculate the value of the force.
 		/// </summary>
-		public Func<Circle, Circle, OrderedPair> ForceFunction;
+		public Func<Circle, Circle, OrderedPair> Calculate;
 
 		/// <summary>
 		/// Constructor for creating a force object.
 		/// </summary>
-		/// <param name="forceFunction">The function used to calculate the value of the force.</param>
-		public Force(Func<Circle, Circle, OrderedPair> forceFunction)
+		/// <param name="calculate">The function used to calculate the value of the force.</param>
+		public Force(Func<Circle, Circle, OrderedPair> calculate)
 		{
-			ForceFunction = forceFunction;
-		}
-
-		/// <summary>
-		/// Returns the force components as an ordered pair.
-		/// </summary>
-		/// <param name="first">The first circle in the force interaction.</param>
-		/// <param name="second">The second circle in the force interaction.</param>
-		/// <returns>The force components as anm ordered pair.</returns>
-		public OrderedPair Calculate(Circle first, Circle second)
-		{
-			return ForceFunction(first, second);
+			Calculate = calculate;
 		}
 	}
 }

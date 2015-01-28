@@ -168,58 +168,58 @@ namespace TestSuite
 			Test.AreEqual(0, world.InteractionMap[two].Count);
 		}
 
-		//[TestMethod]
-		//public void CollisionVelocitiesTest()
-		//{
-		//	Test.AreEqual(true, false);
-		//}
+		[TestMethod]
+		public void CollisionVelocitiesTest()
+		{
+			Test.AreEqual(true, false);
+		}
 
-		//[TestMethod]
-		//public void UpdateCirclesTest()
-		//{
-		//	Test.AreEqual(true, false);
-		//}
+		[TestMethod]
+		public void UpdateCirclesTest()
+		{
+			Test.AreEqual(true, false);
+		}
 
-		//[TestMethod]
-		//public void UpdateCollisionMapTest()
-		//{
-		//	Test.AreEqual(true, false);
-		//}
+		[TestMethod]
+		public void UpdateCollisionMapTest()
+		{
+			Test.AreEqual(true, false);
+		}
 
-		//[TestMethod]
-		//public void NewCollisionMapTest()
-		//{
-		//	Test.AreEqual(true, false);
-		//}
+		[TestMethod]
+		public void NewCollisionMapTest()
+		{
+			Test.AreEqual(true, false);
+		}
 
-		//[TestMethod]
-		//public void FirstCollisionTest()
-		//{
-		//	Test.AreEqual(true, false);
-		//}
+		[TestMethod]
+		public void FirstCollisionTest()
+		{
+			Test.AreEqual(true, false);
+		}
 
-		//[TestMethod]
-		//public void CheckCollisionsTest()
-		//{
-		//	Test.AreEqual(true, false);
-		//}
+		[TestMethod]
+		public void CheckCollisionsTest()
+		{
+			Test.AreEqual(true, false);
+		}
 
-		//[TestMethod]
-		//public void CalculateAccelerationTest()
-		//{
-		//	Test.AreEqual(true, false);
-		//}
+		[TestMethod]
+		public void CalculateAccelerationTest()
+		{
+			Test.AreEqual(true, false);
+		}
 
-		//[TestMethod]
-		//public void CalculateAccelerationsTest()
-		//{
-		//	Test.AreEqual(true, false);
-		//}
+		[TestMethod]
+		public void CalculateAccelerationsTest()
+		{
+			Test.AreEqual(true, false);
+		}
 
-		//[TestMethod]
-		//public void UpdateTest()
-		//{
-		//	Test.AreEqual(true, false);
-		//}
+		[TestMethod]
+		public void UpdateTest()
+		{
+			Test.AreEqual(true, false);
+		}
 	}
 }

@@ -7,7 +7,6 @@ namespace Remonduk.Physics
 	/// </summary>
 	public class Constants
 	{
-
 		/// <summary>
 		/// The singleton instance of the Constants.
 		/// </summary>
