@@ -16,20 +16,7 @@ namespace Remonduk.Physics
 		/// The maximum acceptable error value for calculations.
 		/// </summary>
 		public const double EPSILON = .00000001;
-
-		/// <summary>
-		/// Magnitude used for calculating gravity.
-		/// </summary>
-		public double GRAVITY = 1;
-		/// <summary>
-		/// Angle used for calculating gravity.
-		/// </summary>
-		public double GRAVITY_ANGLE = Math.PI / 2.0;
-		/// <summary>
-		/// Global flag for enabling or diasbling gravity.
-		/// </summary>
-		public bool GRAVITY_ACTIVE = false;
-
+		
 		/// <summary>
 		/// The default radius for a circle..
 		/// </summary>

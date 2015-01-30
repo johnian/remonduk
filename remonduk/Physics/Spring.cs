@@ -23,13 +23,15 @@ namespace Remonduk.Physics
 			: base(
 				delegate(Circle first, Circle second)
 				{
-					double equilibrium = first.Radius + second.Radius;
+					if (first.Position.Equals(second.Position)) {
+						return new OrderedPair(0, 0);
+					}
+					double distance = first.Distance(second) - first.Radius - second.Radius;
+					distance /= 2;
 					double angle = first.Position.Angle(second.Position);
-					double ex = equilibrium * Math.Cos(angle);
-					double ey = equilibrium * Math.Sin(angle);
 
-					double fx = k * (second.Px - first.Px - ex) - c * (first.Vx - second.Vx);
-					double fy = k * (second.Py - first.Py - ey) - c * (first.Vy - second.Vy);
+					double fx = k * distance * Math.Cos(angle) - c * (first.Vx - second.Vx);
+					double fy = k * distance * Math.Sin(angle) - c * (first.Vy - second.Vy);
 					return new OrderedPair(fx, fy);
 				}
 			)
@@ -46,6 +48,9 @@ namespace Remonduk.Physics
 			: base(
 				delegate(Circle first, Circle second)
 				{
+					if (first.Position.Equals(second.Position)) {
+						return new OrderedPair(0, 0);
+					}
 					double angle = first.Position.Angle(second.Position);
 					double ex = equilibrium * Math.Cos(angle);
 					double ey = equilibrium * Math.Sin(angle);
@@ -71,6 +76,9 @@ namespace Remonduk.Physics
 			: base(
 				delegate(Circle first, Circle second)
 				{
+					if (first.Position.Equals(second.Position)) {
+						return new OrderedPair(0, 0);
+					}
 					if (first.Distance(second) > max)
 					{
 						return null;

@@ -301,7 +301,7 @@ namespace TestSuite
 				Test.AreEqual(0, circle.Vy);
 			}
 
-			double gravity = constants.GRAVITY;
+			double gravity = 9.8;
 			double gravityAngle = Math.PI / 4;
 			double gx = gravity * Math.Cos(gravityAngle);
 			double gy = gravity * Math.Sin(gravityAngle);
@@ -434,7 +434,7 @@ namespace TestSuite
 			double px = circle.Px;
 			double py = circle.Py;
 
-			double gravity = constants.GRAVITY;
+			double gravity = 9.8;
 			double gravityAngle = Math.PI / 4;
 			double gx = gravity * Math.Cos(gravityAngle);
 			double gy = gravity * Math.Sin(gravityAngle);
