@@ -12,14 +12,19 @@ namespace Remonduk.Physics
 		/// Default c value.
 		/// </summary>
 		public const double C = K / 2;
+		/// <summary>
+		/// Default offset value.
+		/// </summary>
+		public const double OFFSET = 0;
 
 		/// <summary>
 		/// Constructor that creates a spring that holds two circles
 		/// at a distance such that they are just barely touching.
 		/// </summary>
-		/// <param name="k">The value that determines the spring's strength.</param>
+		/// <param name="k">The value that determines the spring strength.</param>
 		/// <param name="c">The value that determines the damping strength.</param>
-		public Spring(double k = K, double c = C)
+		/// <param name="offset">The distance to keep between the two circles.</param>
+		public Spring(double k = K, double c = C, double offset = OFFSET)
 			: base(
 				delegate(Circle first, Circle second)
 				{
@@ -28,6 +33,7 @@ namespace Remonduk.Physics
 					}
 					double distance = first.Distance(second) - first.Radius - second.Radius;
 					distance /= 2;
+					distance -= offset;
 					double angle = first.Position.Angle(second.Position);
 
 					double fx = k * distance * Math.Cos(angle) - c * (first.Vx - second.Vx);
@@ -39,56 +45,32 @@ namespace Remonduk.Physics
 
 		/// <summary>
 		/// Constructor that creates a spring that holds two circles
-		/// at a distance specified by the equilibrium value.
-		/// </summary>
-		/// <param name="k">The value that determines the spring's strength.</param>
-		/// <param name="c">The value that determines the damping strength.</param>
-		/// <param name="equilibrium">The distance to hold the two circles at.</param>
-		public Spring(double k, double c, double equilibrium)
-			: base(
-				delegate(Circle first, Circle second)
-				{
-					if (first.Position.Equals(second.Position)) {
-						return new OrderedPair(0, 0);
-					}
-					double angle = first.Position.Angle(second.Position);
-					double ex = equilibrium * Math.Cos(angle);
-					double ey = equilibrium * Math.Sin(angle);
-
-					double fx = k * (second.Px - first.Px - ex) - c * (first.Vx - second.Vx);
-					double fy = k * (second.Py - first.Py - ey) - c * (first.Vy - second.Vy);
-					return new OrderedPair(fx, fy);
-				}
-			)
-		{ }
-
-		/// <summary>
-		/// Constructor that creates a spring that holds two circles
-		/// at a distance specified by the equilibrium value,
+		/// at a distance specified by the offset value,
 		/// and breaks when the distance between the two circles
 		/// exceeds the max value.
 		/// </summary>
-		/// <param name="k">The value that determines the spring's strength.</param>
+		/// <param name="k">The value that determines the spring strength.</param>
 		/// <param name="c">The value that determines the damping strength.</param>
-		/// <param name="equilibrium">The distance to hold the two circles at.</param>
+		/// <param name="offset">The distance to keep between the two circles.</param>
 		/// <param name="max">The max distance the spring can be stretched before breaking.</param>
-		public Spring(double k, double c, double equilibrium, double max)
+		public Spring(double k, double c, double offset, double max)
 			: base(
 				delegate(Circle first, Circle second)
 				{
-					if (first.Position.Equals(second.Position)) {
-						return new OrderedPair(0, 0);
-					}
 					if (first.Distance(second) > max)
 					{
 						return null;
 					}
+					if (first.Position.Equals(second.Position)) {
+						return new OrderedPair(0, 0);
+					}
+					double distance = first.Distance(second) - first.Radius - second.Radius;
+					distance /= 2;
+					distance -= offset;
 					double angle = first.Position.Angle(second.Position);
-					double ex = equilibrium * Math.Cos(angle);
-					double ey = equilibrium * Math.Sin(angle);
 
-					double fx = k * (second.Px - first.Px - ex) - c * (first.Vx - second.Vx);
-					double fy = k * (second.Py - first.Py - ey) - c * (first.Vy - second.Vy);
+					double fx = k * distance * Math.Cos(angle) - c * (first.Vx - second.Vx);
+					double fy = k * distance * Math.Sin(angle) - c * (first.Vy - second.Vy);
 					return new OrderedPair(fx, fy);
 				}
 			)

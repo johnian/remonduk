@@ -53,11 +53,13 @@
   <ItemGroup>
     <Compile Include="CircleTest.cs" />
     <Compile Include="CollisionTest.cs" />
-    <Compile Include="ForcesTest.cs" />
+    <Compile Include="ForceTest.cs" />
+    <Compile Include="GravityTest.cs" />
     <Compile Include="OrderedPairTest.cs" />
     <Compile Include="PhysicalSystemTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuadTreeTest.cs" />
+    <Compile Include="SpringTest.cs" />
     <Compile Include="TestFunctions.cs" />
   </ItemGroup>
   <ItemGroup>
