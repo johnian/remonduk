@@ -194,21 +194,22 @@
             // 
             this.groupToolStripMenuItem.Name = "groupToolStripMenuItem";
             this.groupToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.G)));
-            this.groupToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.groupToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.groupToolStripMenuItem.Text = "Group";
+            this.groupToolStripMenuItem.Click += new System.EventHandler(this.groupToolStripMenuItem_Click);
             // 
             // shape_menu_item
             // 
             this.shape_menu_item.Name = "shape_menu_item";
             this.shape_menu_item.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.S)));
-            this.shape_menu_item.Size = new System.Drawing.Size(138, 22);
+            this.shape_menu_item.Size = new System.Drawing.Size(152, 22);
             this.shape_menu_item.Text = "Shape";
             // 
             // circle_menu_item
             // 
             this.circle_menu_item.Name = "circle_menu_item";
             this.circle_menu_item.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.C)));
-            this.circle_menu_item.Size = new System.Drawing.Size(138, 22);
+            this.circle_menu_item.Size = new System.Drawing.Size(152, 22);
             this.circle_menu_item.Text = "Circle";
             // 
             // worldToolStripMenuItem

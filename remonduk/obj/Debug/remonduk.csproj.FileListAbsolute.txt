@@ -23,3 +23,4 @@ C:\Users\julian\johnian\remonduk\remonduk\obj\Debug\remonduk.Properties.Resource
 C:\Users\julian\johnian\remonduk\remonduk\obj\Debug\Remonduk.csproj.GenerateResource.Cache
 C:\Users\julian\johnian\remonduk\remonduk\obj\Debug\remonduk.exe
 C:\Users\julian\johnian\remonduk\remonduk\obj\Debug\remonduk.pdb
+C:\Users\Sid\documents\visual studio 2013\Projects\Remonduk\remonduk\bin\Debug\Images\duck.jpg

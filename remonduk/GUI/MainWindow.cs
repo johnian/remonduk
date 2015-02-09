@@ -11,6 +11,10 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using Remonduk.Physics;
 using Remonduk.Physics.QuadTree;
+using System.IO;
+using Remonduk.Properties;
+using System.Drawing.Imaging;
+using System.Diagnostics;
 
 namespace Remonduk
 {
@@ -35,6 +39,7 @@ namespace Remonduk
         bool pause;
         bool tethering;
         bool drag;
+        bool GroupDrawing;
 
         QTree tree;
 
@@ -53,6 +58,7 @@ namespace Remonduk
             pause = false;
             drag = false;
             tethering = false;
+            GroupDrawing = false;
 
             selected_circle = null;
             selected_interaction = null;
@@ -216,6 +222,11 @@ namespace Remonduk
         //actually on mouseup
         private void MainWindow_MouseClick(object sender, MouseEventArgs e)
         {
+            if(GroupDrawing == true)
+            {
+
+                return;
+            }
             if (e.Button == MouseButtons.Right)
                 return; //will implement soon
 
@@ -424,6 +435,98 @@ namespace Remonduk
         {
             idw = new GUI.Interaction_Detail_Window(selected_interaction);
             idw.Show();
+        }
+
+        private void groupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Title = "Load Image";
+
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
+            string sep = "";
+
+            foreach (ImageCodecInfo codec in codecs)
+            {
+                string codecName = codec.CodecName.Substring(8).Replace("Codec", "Files").Trim();
+                ofd.Filter = String.Format("{0}{1}{2} ({3})|{3}", ofd.Filter, sep, codecName, codec.FilenameExtension);
+                sep = "|";
+            }
+
+            ofd.Filter = String.Format("{0}{1}{2} ({3})|{3}", ofd.Filter, sep, "All Files", "*.*");
+
+            ofd.ShowDialog();
+
+            Bitmap image = (Bitmap)Bitmap.FromFile(ofd.FileName);
+            Out.WriteLine("Image loaded..." + image.ToString());
+            Out.WriteLine("Dim: (" + image.Height + "," + image.Width + ")");
+
+            HashSet<OrderedPair> points = new HashSet<OrderedPair>();
+            List<Circle> ImageCircles = new List<Circle>();
+
+            float minR = 1F;
+            float maxR = 7F;
+
+
+            Color bgColor = Color.FromArgb(255, 0, 0, 0);
+            Graphics g = Graphics.FromImage(image);
+
+            for(int x = 0; x < image.Width; x++)
+            {
+                for(int y = 0; y < image.Height; y++)
+                {
+                    points.Add(new OrderedPair(x+200, y+50));
+                }
+            }
+
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
+            while (points.Count > 0)
+            {
+                Random rand = new Random();
+                bool add = true;
+                float radius = (float)rand.NextDouble() * maxR + minR;
+                OrderedPair point = points.ElementAt(rand.Next(points.Count));
+                Color pointColor = image.GetPixel((int)point.X - 200, (int)point.Y - 50);
+                if(pointColor == bgColor)
+                {
+                   add = false;
+                }
+                if (add)
+                {
+                    foreach (Circle circle in ps.Tree.Possible(new Circle(radius, point.X, point.Y), 0))
+                    {
+                        if (point.Magnitude(circle.Position) < radius + circle.Radius)
+                        {
+                            add = false;
+                            break;
+                        }
+
+                    }
+                }
+                if (add)
+                {
+                    Circle newcircle = new Circle(radius, point.X, point.Y);
+                    newcircle.COLOR = pointColor;
+
+                    Brush brush = new SolidBrush(bgColor);
+                    g.FillEllipse(brush, (float)point.X-200 - radius, (float)point.Y-50 - radius, radius*2, radius*2);
+
+                    ps.AddCircle(newcircle);
+                }
+                points.Remove(point);
+                //Out.WriteLine("Points left " + points.Count);
+            }
+            image.Save("out.bmp");
+            timer.Stop();
+            TimeSpan ts = timer.Elapsed;
+
+            // Format and display the TimeSpan value. 
+            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                ts.Hours, ts.Minutes, ts.Seconds,
+                ts.Milliseconds / 10);
+            Out.WriteLine("Time taken: " + elapsedTime);
+
+
         }
     }
 }

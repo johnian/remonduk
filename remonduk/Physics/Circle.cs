@@ -309,7 +309,7 @@ namespace Remonduk.Physics
 		/// <param name="graphics">The graphics object upon which the circle will be drawn.</param>
 		public void Draw(Graphics graphics)
 		{
-			Brush brush = new SolidBrush(Color.Chartreuse);
+			Brush brush = new SolidBrush(COLOR);
 			graphics.FillEllipse(brush, (float)(Px - Radius), (float)(Py - Radius), (float)(2 * Radius), (float)(2 * Radius));
 		}
 
