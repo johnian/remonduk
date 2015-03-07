@@ -495,12 +495,16 @@ namespace Remonduk
                 {
                     foreach (Circle circle in ps.Tree.Possible(new Circle(radius, point.X, point.Y), 0))
                     {
-                        if (point.Magnitude(circle.Position) < radius + circle.Radius)
+                        double dist = point.Magnitude(circle.Position);
+                        while (dist < radius + circle.Radius && radius > minR + .5F)
+                        {
+                            radius -= .5F;
+                        }
+                        if (dist < radius + circle.Radius)
                         {
                             add = false;
                             break;
                         }
-
                     }
                 }
                 if (add)
