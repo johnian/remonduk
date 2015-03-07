@@ -1,6 +1,6 @@
 ﻿namespace Remonduk.GUI
 {
-    partial class Physical_System_Detail_Window
+    partial class PhysicalSystemDetailWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -171,7 +171,7 @@
             this.button3.TabIndex = 10;
             this.button3.UseVisualStyleBackColor = true;
             // 
-            // Physical_System_Detail_Window
+            // PhysicalSystemDetailWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -189,7 +189,7 @@
             this.Controls.Add(this.interactions_list);
             this.Controls.Add(this.circle_list_label);
             this.Controls.Add(this.circle_list);
-            this.Name = "Physical_System_Detail_Window";
+            this.Name = "PhysicalSystemDetailWindow";
             this.Text = "Physical System Detail Window";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);

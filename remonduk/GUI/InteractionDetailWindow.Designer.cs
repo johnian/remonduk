@@ -1,6 +1,6 @@
 ﻿namespace Remonduk.GUI
 {
-    partial class Interaction_Detail_Window
+    partial class InteractionDetailWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -338,7 +338,7 @@
             this.label10.TabIndex = 41;
             this.label10.Text = "K";
             // 
-            // Interaction_Detail_Window
+            // InteractionDetailWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -365,8 +365,8 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.circle_1_acceleration_angle_up_down);
             this.Controls.Add(this.circle_1_velocity_angle_up_down);
-            this.Name = "Interaction_Detail_Window";
-            this.Text = "Interaction_Detail_Window";
+            this.Name = "InteractionDetailWindow";
+            this.Text = "InteractionDetailWindow";
             ((System.ComponentModel.ISupportInitialize)(this.circle_1_acceleration_angle_up_down)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.circle_1_velocity_angle_up_down)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.circle_1_acceleration_up_down)).EndInit();

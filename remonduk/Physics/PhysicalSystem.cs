@@ -13,15 +13,19 @@ namespace Remonduk.Physics
 		/// <summary>
 		/// 
 		/// </summary>
-		public const double TIME_STEP = 1;
-		/// <summary>
-		/// 
-		/// </summary>
 		public const double WIDTH = 800;
 		/// <summary>
 		/// 
 		/// </summary>
 		public const double HEIGHT = 800;
+		/// <summary>
+		/// 
+		/// </summary>
+		public const double TIME_STEP = 1;
+		/// <summary>
+		/// 
+		/// </summary>
+		public const double MAX_SPEED = 150;
 
 		/// <summary>
 		/// 
@@ -56,9 +60,14 @@ namespace Remonduk.Physics
 		public QTree Tree;
 
 		/// <summary>
+		/// The max speed a circle in the Physical System can travel.
+		/// </summary>
+		public double MaxSpeed;
+
+		/// <summary>
 		/// No-arg constructor to create a new physical system.  Inits lists, sets GravityOn to default.
 		/// </summary>
-		public PhysicalSystem(double width = WIDTH, double height = HEIGHT, double timeStep = TIME_STEP)
+		public PhysicalSystem(double width = WIDTH, double height = HEIGHT, double timeStep = TIME_STEP, double maxSpeed = MAX_SPEED)
 		{
 			Circles = new List<Circle>();
 			Forces = new Dictionary<String, Force>();
@@ -67,7 +76,7 @@ namespace Remonduk.Physics
 
 			TimeStep = timeStep;
 			Dimensions = new OrderedPair(width, height);
-			Tree = new QTree(Dimensions);
+			Tree = new QTree(this);
 		}
 
 		/// <summary>

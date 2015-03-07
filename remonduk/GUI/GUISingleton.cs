@@ -6,27 +6,27 @@ using System.Threading.Tasks;
 
 namespace Remonduk.GUI
 {
-    public class GUI_Singleton
+    public class GUISingleton
     {
-        public static GUI_Singleton instance;
+        private static GUISingleton instance;
 
-        public Circle_Detail_Window cdw = new Circle_Detail_Window();
-        public Physical_System_Detail_Window psdw = new Physical_System_Detail_Window();
-        public Interaction_Detail_Window idw = new Interaction_Detail_Window();
+        public CircleDetailWindow Cdw = new CircleDetailWindow();
+        public PhysicalSystemDetailWindow Psdw = new PhysicalSystemDetailWindow();
+        public InteractionDetailWindow Idw = new InteractionDetailWindow();
 
-        public GUI_Singleton()
+        public GUISingleton()
         {
             Out.WriteLine("SINGLETON CONSTRUCTOR");
         }
 
-        public static GUI_Singleton Instance
+        public static GUISingleton Instance
         {
             get 
             {
                 if (instance == null)
                 {
                     Out.WriteLine("INSTANCE == NULL");
-                    instance = new GUI_Singleton();
+                    instance = new GUISingleton();
                 }
                 return instance;
             }

@@ -14,6 +14,18 @@ Floid
 [networking] (#7)  
 [sound] (#8)  
 
+quad tree - try changing recursive structure to array structure
+	-> figure out index formula for this
+
+for test cases - randomize the inputs / circles and
+build the collision list with the optimized algorithm -
+and then do the same with the non optimizied n^2 algorithm,
+and verify that the two lists are the same
+
+
+camera - things going off screen don't disappear from world -
+	just disappear from camera
+
 for juliono:
 
 1] optimize collision detection by removing redundant checks

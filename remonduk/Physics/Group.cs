@@ -4,15 +4,15 @@ using System.Linq;
 
 namespace Remonduk.Physics
 {
-	class Group
+	public class Group
 	{
 		public HashSet<Circle> group;
 		public HashSet<Circle> anchors;
 
-		double x_min, x_min_y;
-		double x_max, x_max_y;
-		double y_min, y_min_x;
-		double y_max, y_max_x;
+		public double x_min, x_min_y;
+		public double x_max, x_max_y;
+		public double y_min, y_min_x;
+		public double y_max, y_max_x;
 
 		//public HashSet<Tether> tethers;
 

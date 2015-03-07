@@ -51,24 +51,24 @@
     <Compile Include="Physics\Force.cs" />
     <Compile Include="Physics\Gravity.cs" />
     <Compile Include="Physics\Group.cs" />
-    <Compile Include="GUI\Circle_Detail_Window.cs">
+    <Compile Include="GUI\CircleDetailWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\Circle_Detail_Window.Designer.cs">
-      <DependentUpon>Circle_Detail_Window.cs</DependentUpon>
+    <Compile Include="GUI\CircleDetailWindow.Designer.cs">
+      <DependentUpon>CircleDetailWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\GUI_Singleton.cs" />
-    <Compile Include="GUI\Interaction_Detail_Window.cs">
+    <Compile Include="GUI\GUISingleton.cs" />
+    <Compile Include="GUI\InteractionDetailWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\Interaction_Detail_Window.Designer.cs">
-      <DependentUpon>Interaction_Detail_Window.cs</DependentUpon>
+    <Compile Include="GUI\InteractionDetailWindow.Designer.cs">
+      <DependentUpon>InteractionDetailWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\Physical_System_Detail_Window.cs">
+    <Compile Include="GUI\PhysicalSystemDetailWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\Physical_System_Detail_Window.Designer.cs">
-      <DependentUpon>Physical_System_Detail_Window.cs</DependentUpon>
+    <Compile Include="GUI\PhysicalSystemDetailWindow.Designer.cs">
+      <DependentUpon>PhysicalSystemDetailWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Physics\Interaction.cs" />
     <Compile Include="GUI\MainWindow.cs">
@@ -85,17 +85,17 @@
     <Compile Include="Physics\QuadTree\QTree.cs" />
     <Compile Include="Physics\QuadTree\QTreeNode.cs" />
     <Compile Include="Physics\Spring.cs" />
-    <EmbeddedResource Include="GUI\Circle_Detail_Window.resx">
-      <DependentUpon>Circle_Detail_Window.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\CircleDetailWindow.resx">
+      <DependentUpon>CircleDetailWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Interaction_Detail_Window.resx">
-      <DependentUpon>Interaction_Detail_Window.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\InteractionDetailWindow.resx">
+      <DependentUpon>InteractionDetailWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Physical_System_Detail_Window.resx">
-      <DependentUpon>Physical_System_Detail_Window.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\PhysicalSystemDetailWindow.resx">
+      <DependentUpon>PhysicalSystemDetailWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

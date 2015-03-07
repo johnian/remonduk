@@ -1,6 +1,6 @@
 ﻿namespace Remonduk
 {
-    partial class MainWindow
+    public partial class MainWindow
     {
         /// <summary>
         /// Required designer variable.

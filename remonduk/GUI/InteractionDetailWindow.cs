@@ -11,17 +11,17 @@ using Remonduk.Physics;
 
 namespace Remonduk.GUI
 {
-    public partial class Interaction_Detail_Window : Form
+    public partial class InteractionDetailWindow : Form
     {
         Interaction interaction;
 
-        public Interaction_Detail_Window()
+        public InteractionDetailWindow()
         {
             InitializeComponent();
             interaction = null;
 
         }
-        public Interaction_Detail_Window(Interaction interaction)
+        public InteractionDetailWindow(Interaction interaction)
         {
             InitializeComponent();
             this.interaction = interaction;
