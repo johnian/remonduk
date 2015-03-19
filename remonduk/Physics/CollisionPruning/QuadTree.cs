@@ -7,12 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Remonduk.Physics.QuadTree
+namespace Remonduk.Physics.CollisionPruning
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public class QTree
+	public class QuadTree
 	{
 		/// <summary>
 		/// The default value for the maximum count of circles before splitting.
@@ -26,13 +26,13 @@ namespace Remonduk.Physics.QuadTree
 		/// <summary>
 		/// The root node of the Quad Tree.
 		/// </summary>
-		public QTreeNode Root;
+		public QuadTreeNode Root;
 
 		/// <summary>
 		/// All of the nodes contained in the Quad Tree.
 		/// Used as an efficient way to gather the list of nodes.
 		/// </summary>
-		public HashSet<QTreeNode> Nodes;
+		public HashSet<QuadTreeNode> Nodes;
 		/// <summary>
 		/// All of the circles contained in the Quad Tree.
 		/// Used as an efficient way to gather the list of circles.
@@ -81,18 +81,18 @@ namespace Remonduk.Physics.QuadTree
 		/// <param name="dim">This quad tree's dimensions.</param>
 		/// <param name="maxCount">The max count before splitting</param>
 		/// <param name="maxDepth">The max number of levels this tree will split to.</param>
-		public QTree(PhysicalSystem physicalSystem, int maxCount = MAX_COUNT, int maxDepth = MAX_DEPTH)
+		public QuadTree(PhysicalSystem physicalSystem, int maxCount = MAX_COUNT, int maxDepth = MAX_DEPTH)
 		{
 			Dimensions = physicalSystem.Dimensions;
 			MaxSpeed = physicalSystem.MaxSpeed;
-			
-			Nodes = new HashSet<QTreeNode>();
+
+			Nodes = new HashSet<QuadTreeNode>();
 			Circles = new HashSet<Circle>();
 
 			MaxCount = maxCount;
 			MaxDepth = maxDepth;
 
-			Root = new QTreeNode(this, 0, new OrderedPair(), Dimensions);
+			Root = new QuadTreeNode(this, 0, new OrderedPair(), Dimensions);
 			//Root = new QTreeNode(new OrderedPair(), Dimensions, this, "Head", 0);
 			Nodes.Add(Root); // might be removing this
 		}
@@ -121,15 +121,14 @@ namespace Remonduk.Physics.QuadTree
 		/// </summary>
 		/// <param name="c">The circle to insert into the quad tree.</param>
 		/// <returns>All of the nodes this circle was inserted into.</returns>
-		public List<QTreeNode> Insert(Circle c)
+		public List<QuadTreeNode> Insert(Circle c)
 		{
 			// do we want to insert circles into multiple nodes
-			List<QTreeNode> nodes = Root.Insert(c);
+			List<QuadTreeNode> nodes = Root.Insert(c);
 			if (nodes.Count > 0)
 			{
 				Circles.Add(c);
 			}
-			
 			return nodes;
 		}
 
@@ -138,13 +137,13 @@ namespace Remonduk.Physics.QuadTree
 		/// </summary>
 		/// <param name="c">The circles to remove from this quad tree.</param>
 		/// <returns>All of the nodes that had this circle removed from them.</returns>
-		public List<QTreeNode> Remove(Circle c)
+		public List<QuadTreeNode> Remove(Circle c)
 		{
 			if (Circles.Remove(c))
 			{
 				return Root.Remove(c);
 			}
-			return new List<QTreeNode>();
+			return new List<QuadTreeNode>();
 		}
 
 		/// <summary>
@@ -152,7 +151,7 @@ namespace Remonduk.Physics.QuadTree
 		/// </summary>
 		/// <param name="c">The circle to get all nodes for.</param>
 		/// <returns>A list of nodes that has the given circle.</returns>
-		public List<QTreeNode> GetNodes(Circle c)
+		public List<QuadTreeNode> GetNodes(Circle c)
 		{
 			return Root.GetAllNodes(c);
 		}
@@ -174,12 +173,12 @@ namespace Remonduk.Physics.QuadTree
 		/// </summary>
 		/// <param name="c">The circle to move</param>
 		/// <returns>A list of nodes this circle was inserted into.</returns>
-		public List<QTreeNode> Move(Circle c)
+		public List<QuadTreeNode> Move(Circle c)
 		{
 			// Maybe check to see if we cross boundaries before removing and inserting.
 			// is there a better way to do this?
 			Root.Remove(c);
-			List<QTreeNode> nodes = Insert(c);
+			List<QuadTreeNode> nodes = Insert(c);
 			return nodes;
 		}
 

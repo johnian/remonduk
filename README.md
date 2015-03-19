@@ -14,6 +14,17 @@ Floid
 [networking] (#7)  
 [sound] (#8)  
 
+spatial hashing vs quad tree
+
+let everything move once
+	-- tells us where things might be
+
+max speed is a parameter you can give the game --
+use a smaller max speed to make the game run faster
+
+no point in splitting a quadtree past a certain point because of
+	max speed constraint
+
 quad tree - try changing recursive structure to array structure
 	-> figure out index formula for this
 

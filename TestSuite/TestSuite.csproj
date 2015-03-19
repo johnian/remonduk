@@ -52,7 +52,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CircleTest.cs" />
-    <Compile Include="CollisionTest.cs" />
+    <Compile Include="CircleCollisionTest.cs" />
     <Compile Include="ForceTest.cs" />
     <Compile Include="GravityTest.cs" />
     <Compile Include="OrderedPairTest.cs" />

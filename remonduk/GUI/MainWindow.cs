@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using Remonduk.Physics;
-using Remonduk.Physics.QuadTree;
+using Remonduk.Physics.CollisionPruning;
 using Remonduk.Properties;
 
 namespace Remonduk
@@ -40,7 +40,7 @@ namespace Remonduk
 		public bool Drag;
 		public bool GroupDrawing;
 
-		public QTree Tree;
+		public QuadTree Tree;
 
 		public MainWindow()
 		{
@@ -67,7 +67,7 @@ namespace Remonduk
 
 			FrameCount = 0;
 			Out.WriteLine("MAIN WINDOW CREATED");
-			Tree = new QTree(Ps);
+			Tree = new QuadTree(Ps);
 		}
 
 		public void HandleApplicationIdle(object sender, EventArgs e)

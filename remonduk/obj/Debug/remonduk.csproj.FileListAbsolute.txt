@@ -25,3 +25,4 @@ C:\Users\julian\johnian\remonduk\remonduk\bin\Debug\Images\duck.jpg
 C:\Users\julian\johnian\remonduk\remonduk\obj\Debug\Remonduk.GUI.CircleDetailWindow.resources
 C:\Users\julian\johnian\remonduk\remonduk\obj\Debug\Remonduk.GUI.InteractionDetailWindow.resources
 C:\Users\julian\johnian\remonduk\remonduk\obj\Debug\Remonduk.GUI.PhysicalSystemDetailWindow.resources
+C:\Users\julian\johnian\remonduk\remonduk\obj\Debug\Remonduk.csprojResolveAssemblyReference.cache

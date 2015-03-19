@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace Remonduk.Physics.QuadTree
+namespace Remonduk.Physics.CollisionPruning
 {
-	public class QTreeNode
+	public class QuadTreeNode
 	{
 		public const int NODE_COUNT = 4;
 
 		/// <summary>
 		/// The QuadTree this node belongs to.
 		/// </summary>
-		public QTree Tree;
+		public QuadTree Tree;
 		/// <summary>
 		/// The depth of this node - how many splits it represents.
 		/// </summary>
@@ -28,23 +28,23 @@ namespace Remonduk.Physics.QuadTree
 		/// <summary>
 		/// The list of the nodes.
 		/// </summary>
-		public QTreeNode[] Nodes;
-		public QTreeNode NW
+		public QuadTreeNode[] Nodes;
+		public QuadTreeNode NW
 		{
 			set { Nodes[0] = value; }
 			get { return Nodes[0]; }
 		}
-		public QTreeNode NE
+		public QuadTreeNode NE
 		{
 			set { Nodes[1] = value; }
 			get { return Nodes[1]; }
 		}
-		public QTreeNode SW
+		public QuadTreeNode SW
 		{
 			set { Nodes[2] = value; }
 			get { return Nodes[2]; }
 		}
-		public QTreeNode SE
+		public QuadTreeNode SE
 		{
 			set { Nodes[3] = value; }
 			get { return Nodes[3]; }
@@ -78,14 +78,14 @@ namespace Remonduk.Physics.QuadTree
 		/// <param name="tree">The Quad Tree this node belongs to.</param>
 		/// <param name="name">The name for this quad tree.</param>
 		/// <param name="depth">The depth of this quad tree.</param>
-		public QTreeNode(QTree tree, int depth, OrderedPair position, OrderedPair dimensions)
+		public QuadTreeNode(QuadTree tree, int depth, OrderedPair position, OrderedPair dimensions)
 		{
 			Tree = tree;
 			Depth = depth;
 			Position = position;
 			Dimensions = dimensions;
 
-			Nodes = new QTreeNode[NODE_COUNT];
+			Nodes = new QuadTreeNode[NODE_COUNT];
 			Circles = new HashSet<Circle>();
 
 			MaxCount = Tree.MaxCount;
@@ -102,14 +102,14 @@ namespace Remonduk.Physics.QuadTree
 				//Can probably do this a little cleaner
 				OrderedPair NewDim = new OrderedPair(Dimensions.X / 2.0, Dimensions.Y / 2.0);
 
-				NW = new QTreeNode(Tree, Depth + 1, Position, NewDim);
-				NE = new QTreeNode(Tree, Depth + 1,
+				NW = new QuadTreeNode(Tree, Depth + 1, Position, NewDim);
+				NE = new QuadTreeNode(Tree, Depth + 1,
 					new OrderedPair(Position.X + NewDim.X, Position.Y), NewDim);
-				SW = new QTreeNode(Tree, Depth + 1,
+				SW = new QuadTreeNode(Tree, Depth + 1,
 					new OrderedPair(Position.X, Position.Y + NewDim.Y), NewDim);
-				SE = new QTreeNode(Tree, Depth + 1,
+				SE = new QuadTreeNode(Tree, Depth + 1,
 					new OrderedPair(Position.X + NewDim.X, Position.Y + NewDim.Y), NewDim);
-				foreach (QTreeNode node in Nodes)
+				foreach (QuadTreeNode node in Nodes)
 				{
 					Tree.Nodes.Add(node);
 				}
@@ -161,9 +161,9 @@ namespace Remonduk.Physics.QuadTree
 		/// </summary>
 		/// <param name="c">The circle to be inserted.</param>
 		/// <returns>Returns a list of nodes this circle was inserted into.</returns>
-		public List<QTreeNode> Insert(Circle c)
+		public List<QuadTreeNode> Insert(Circle c)
 		{
-			List<QTreeNode> nodes = new List<QTreeNode>();
+			List<QuadTreeNode> nodes = new List<QuadTreeNode>();
 			if (NotSplit())
 			{
 				if (Contains(c))
@@ -185,7 +185,7 @@ namespace Remonduk.Physics.QuadTree
 			}
 			else
 			{
-				foreach (QTreeNode n in Nodes)
+				foreach (QuadTreeNode n in Nodes)
 				{
 					nodes.AddRange(n.Insert(c));
 				}
@@ -202,9 +202,9 @@ namespace Remonduk.Physics.QuadTree
 		/// </summary>
 		/// <param name="c">The circle to remove</param>
 		/// <returns>A list of nodes this circle was removed from.</returns>
-		public List<QTreeNode> Remove(Circle c)
+		public List<QuadTreeNode> Remove(Circle c)
 		{
-			List<QTreeNode> nodes = new List<QTreeNode>();
+			List<QuadTreeNode> nodes = new List<QuadTreeNode>();
 			if (NotSplit())
 			{
 				if (HasA(c))
@@ -226,7 +226,7 @@ namespace Remonduk.Physics.QuadTree
 				}
 				else
 				{
-					foreach (QTreeNode n in Nodes)
+					foreach (QuadTreeNode n in Nodes)
 					{
 						nodes.AddRange(n.Remove(c));
 					}
@@ -284,9 +284,9 @@ namespace Remonduk.Physics.QuadTree
 		/// </summary>
 		/// <param name="c">The circle to check.</param>
 		/// <returns>The nodes containing this circle.</returns>
-		public List<QTreeNode> GetAllNodes(Circle c)
+		public List<QuadTreeNode> GetAllNodes(Circle c)
 		{
-			List<QTreeNode> nodes = new List<QTreeNode>();
+			List<QuadTreeNode> nodes = new List<QuadTreeNode>();
 			if (NotSplit())
 			{
 				if (HasA(c))
@@ -296,7 +296,7 @@ namespace Remonduk.Physics.QuadTree
 			}
 			else
 			{
-				foreach (QTreeNode n in Nodes)
+				foreach (QuadTreeNode n in Nodes)
 				{
 					if (n.HasA(c))
 					{
@@ -351,7 +351,7 @@ namespace Remonduk.Physics.QuadTree
 			}
 			else
 			{
-				foreach (QTreeNode n in Nodes)
+				foreach (QuadTreeNode n in Nodes)
 				{
 					possible.AddRange(n.Possible(start, end));
 				}
@@ -383,7 +383,7 @@ namespace Remonduk.Physics.QuadTree
 			}
 			else
 			{
-				foreach (QTreeNode n in Nodes)
+				foreach (QuadTreeNode n in Nodes)
 				{
 					n.Draw(g);
 				}

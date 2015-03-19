@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Physics\Circle.cs" />
-    <Compile Include="Physics\Collision.cs" />
+    <Compile Include="Physics\CircleCollision.cs" />
     <Compile Include="Physics\Constants.cs" />
     <Compile Include="Physics\Force.cs" />
     <Compile Include="Physics\Gravity.cs" />
@@ -82,8 +82,8 @@
     <Compile Include="Physics\PhysicalSystem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Physics\QuadTree\QTree.cs" />
-    <Compile Include="Physics\QuadTree\QTreeNode.cs" />
+    <Compile Include="Physics\CollisionPruning\QuadTree.cs" />
+    <Compile Include="Physics\CollisionPruning\QuadTreeNode.cs" />
     <Compile Include="Physics\Spring.cs" />
     <EmbeddedResource Include="GUI\CircleDetailWindow.resx">
       <DependentUpon>CircleDetailWindow.cs</DependentUpon>

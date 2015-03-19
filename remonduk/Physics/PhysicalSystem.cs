@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Remonduk.Physics.QuadTree;
+using Remonduk.Physics.CollisionPruning;
 
 namespace Remonduk.Physics
 {
@@ -57,7 +57,7 @@ namespace Remonduk.Physics
 		/// <summary>
 		/// 
 		/// </summary>
-		public QTree Tree;
+		public QuadTree Tree;
 
 		/// <summary>
 		/// The max speed a circle in the Physical System can travel.
@@ -76,7 +76,7 @@ namespace Remonduk.Physics
 
 			TimeStep = timeStep;
 			Dimensions = new OrderedPair(width, height);
-			Tree = new QTree(this);
+			Tree = new QuadTree(this);
 		}
 
 		/// <summary>
@@ -177,7 +177,7 @@ namespace Remonduk.Physics
 			}
 			// check to see if the collision is already in the dictionary
 
-			if (!collisionMap.ContainsKey(circle))
+			if (!collisionMap.ContainsKey(that))
 			{
 				collisionMap.Add(that, new List<Circle>());
 			}
@@ -200,7 +200,8 @@ namespace Remonduk.Physics
 			double time, bool overlapped, Circle circle, double min)
 		{
 			List<Circle> collisions = new List<Circle>();
-			foreach (Circle that in Tree.Possible(circle, time))
+			//foreach (Circle that in Tree.Possible(circle, time))
+			foreach (Circle that in Circles)
 			{
 				double collisionTime = circle.Colliding(that, time);
 				if (!Double.IsInfinity(collisionTime) && (collisionTime != 0 || !overlapped))
@@ -219,6 +220,30 @@ namespace Remonduk.Physics
 			}
 			return min;
 		}
+
+		//public double FirstCollision(ref Dictionary<Circle, List<Circle>> collisionMap,
+		//	double time, bool overlapped, Circle circle, double min)
+		//{
+		//	List<Circle> collisions = new List<Circle>();
+		//	foreach (Circle that in Tree.Possible(circle, time))
+		//	{
+		//		double collisionTime = circle.Colliding(that, time);
+		//		if (!Double.IsInfinity(collisionTime) && (collisionTime != 0 || !overlapped))
+		//		{
+		//			double delta = collisionTime - min;
+		//			if (delta < -Constants.EPSILON)
+		//			{
+		//				min = collisionTime;
+		//				NewCollisionMap(ref collisionMap, ref collisions, circle, that);
+		//			}
+		//			else if (Math.Abs(delta) <= Constants.EPSILON)
+		//			{
+		//				UpdateCollisionMap(ref collisionMap, ref collisions, circle, that);
+		//			}
+		//		}
+		//	}
+		//	return min;
+		//}
 
 		public double CheckCollisions(ref Dictionary<Circle, List<Circle>> collisionMap,
 			double time, bool overlapped)
