@@ -160,6 +160,7 @@ namespace Remonduk.Physics
 			foreach (Circle circle in Circles)
 			{
 				circle.Update(time);
+				Tree.Move(circle);
 			}
 			CollisionVelocities(collisionMap);
 		}
@@ -200,6 +201,31 @@ namespace Remonduk.Physics
 			double time, bool overlapped, Circle circle, double min)
 		{
 			List<Circle> collisions = new List<Circle>();
+			foreach (Circle that in Tree.Possible(circle, time))
+			//foreach (Circle that in Circles)
+			{
+				double collisionTime = circle.Colliding(that, time);
+				if (!Double.IsInfinity(collisionTime) && (collisionTime != 0 || !overlapped))
+				{
+					double delta = collisionTime - min;
+					if (delta < -Constants.EPSILON)
+					{
+						min = collisionTime;
+						NewCollisionMap(ref collisionMap, ref collisions, circle, that);
+					}
+					else if (Math.Abs(delta) <= Constants.EPSILON)
+					{
+						UpdateCollisionMap(ref collisionMap, ref collisions, circle, that);
+					}
+				}
+			}
+			return min;
+		}
+
+		public double FirstCollision2(ref Dictionary<Circle, List<Circle>> collisionMap,
+			double time, bool overlapped, Circle circle, double min)
+		{
+			List<Circle> collisions = new List<Circle>();
 			//foreach (Circle that in Tree.Possible(circle, time))
 			foreach (Circle that in Circles)
 			{
@@ -220,30 +246,6 @@ namespace Remonduk.Physics
 			}
 			return min;
 		}
-
-		//public double FirstCollision(ref Dictionary<Circle, List<Circle>> collisionMap,
-		//	double time, bool overlapped, Circle circle, double min)
-		//{
-		//	List<Circle> collisions = new List<Circle>();
-		//	foreach (Circle that in Tree.Possible(circle, time))
-		//	{
-		//		double collisionTime = circle.Colliding(that, time);
-		//		if (!Double.IsInfinity(collisionTime) && (collisionTime != 0 || !overlapped))
-		//		{
-		//			double delta = collisionTime - min;
-		//			if (delta < -Constants.EPSILON)
-		//			{
-		//				min = collisionTime;
-		//				NewCollisionMap(ref collisionMap, ref collisions, circle, that);
-		//			}
-		//			else if (Math.Abs(delta) <= Constants.EPSILON)
-		//			{
-		//				UpdateCollisionMap(ref collisionMap, ref collisions, circle, that);
-		//			}
-		//		}
-		//	}
-		//	return min;
-		//}
 
 		public double CheckCollisions(ref Dictionary<Circle, List<Circle>> collisionMap,
 			double time, bool overlapped)

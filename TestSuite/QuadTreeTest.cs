@@ -86,28 +86,59 @@ namespace TestSuite
 		public void PossibleTest()
 		{
 			PhysicalSystem physicalSystem = new PhysicalSystem();
-			QuadTree quadTree = new QuadTree(physicalSystem, 1);
+			QuadTree quadTree = new QuadTree(physicalSystem, 4);
 			List<Circle> circles = new List<Circle>();
+
+			Dictionary<Circle, List<Circle>> collisionMap = new Dictionary<Circle, List<Circle>>();
+			Dictionary<Circle, List<Circle>> collisionMap2 = new Dictionary<Circle, List<Circle>>();
+			
+
+
+			// add the circles to the physical system
+			// build 2 separate collision maps
+			// compare the values from FirstCollision and FirstCollision2
+			// they should be the same
 
 			Random random = new Random();
 			for (int i = 0; i < 100; i++) {
-				circles.Add(
+				physicalSystem.AddCircle(
 					new Circle(
 						random.Next(1, 5),
 						random.Next(0, (int)physicalSystem.Dimensions.X),
 						random.Next(0, (int)physicalSystem.Dimensions.Y),
-						random.Next(0, (int)physicalSystem.MaxSpeed),
-						random.Next(0, (int)physicalSystem.MaxSpeed)
+						random.Next((int)physicalSystem.MaxSpeed * -1, (int)physicalSystem.MaxSpeed),
+						random.Next((int)physicalSystem.MaxSpeed * -1, (int)physicalSystem.MaxSpeed)
 					)
 				);
 			}
+			for (int i = 0; i < 100000; i++) {
+				double expected = physicalSystem.FirstCollision(ref collisionMap, 1, false,
+					new Circle(
+							random.Next(1, 5),
+							random.Next(0, (int)physicalSystem.Dimensions.X),
+							random.Next(0, (int)physicalSystem.Dimensions.Y),
+							random.Next((int)physicalSystem.MaxSpeed * -1, (int)physicalSystem.MaxSpeed),
+							random.Next((int)physicalSystem.MaxSpeed * -1, (int)physicalSystem.MaxSpeed)
+					),
+				Double.PositiveInfinity);
+				double actual = physicalSystem.FirstCollision2(ref collisionMap2, 1, false,
+					new Circle(
+							random.Next(1, 5),
+							random.Next(0, (int)physicalSystem.Dimensions.X),
+							random.Next(0, (int)physicalSystem.Dimensions.Y),
+							random.Next((int)physicalSystem.MaxSpeed * -1, (int)physicalSystem.MaxSpeed),
+							random.Next((int)physicalSystem.MaxSpeed * -1, (int)physicalSystem.MaxSpeed)
+					),
+				Double.PositiveInfinity);
+				Test.AreEqual(expected, actual);
+			}
 			List<Circle> possibleCollisions = quadTree.Possible(new Circle(), 1);
 			String line = "";
-			foreach(Circle c in possibleCollisions) {
-				line += c.ToString() + ", ";
-			}
-			Test.AreEqual("things", line);
-			Test.AreEqual(quadTree.MaxCount, possibleCollisions.Count());
+			//foreach(Circle c in possibleCollisions) {
+			//	line += c.ToString() + ", ";
+			//}
+			//Test.AreEqual("things", line);
+			//Test.AreEqual(quadTree.MaxCount, possibleCollisions.Count());
 
 			//quadTree = new QuadTree(new PhysicalSystem());
 			//for (int i = 0; i <= quadTree.MaxCount; i++) {
